@@ -1,1 +1,0 @@
-{"pipeline": [{"name": "sample0", "id": "0", "src": "sample.py", "info": "A pipline for testing. It will printout 'Hello World! from 0'", "addDate": "26/06/2019", "modDate": "26/06/2019"}, {"name": "sample1", "id": "1", "src": "sample.py", "info": "A pipline for testing. It will printout 'Hello World! from 1'", "addDate": "26/06/2019", "modDate": "26/06/2019"}]}

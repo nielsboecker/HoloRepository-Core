@@ -1,0 +1,1 @@
+{"s0": [{"name": "sample0", "src": "sample0.py", "info": "A pipline for testing. It will printout 'Hello World! from 0'", "addDate": "26/06/2019", "modDate": "26/06/2019"}], "s1": [{"name": "sample1", "src": "sample1.py", "info": "A pipline for testing. It will printout 'Hello World! from 1'", "addDate": "26/06/2019", "modDate": "26/06/2019"}]}

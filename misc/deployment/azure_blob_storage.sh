@@ -1,6 +1,9 @@
+#!/bin/bash
+
 RES_GRP="holorepository-rg"
 LOC="uksouth"
 BLOB_STORE_NAME="holoblob"
+CONTAINERS=('3dmodels' 'attachments')
 
 az login
 
@@ -20,5 +23,6 @@ KEY=$(az storage account keys list \
     --resource-group ${RES_GRP} \
     --output table | grep "key1" | awk '{print $3}')
 
-az storage container create --account-key ${KEY} --account-name ${BLOB_STORE_NAME} --name "3dmodels"
-az storage container create --account-key ${KEY} --account-name ${BLOB_STORE_NAME} --name "attachments"
+for name in "${CONTAINERS[@]}"; do
+    az storage container create --account-key ${KEY} --account-name ${BLOB_STORE_NAME} --name "${name}"
+done

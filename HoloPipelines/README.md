@@ -14,6 +14,8 @@ Python 3.7 or above
 - Skit-image https://scikit-image.org/
 - Sklearn https://scikit-learn.org/stable/
 - NiBabel https://nipy.org/nibabel/
+- Nilean https://nilearn.github.io/
+- new marching cubes with smoothing (?) https://github.com/ilastik/marching_cubes
 
 ## Usage:
 - The code works by first converting Dicom or Nifti images to a Numpy array, then generate a .obj mesh from it.

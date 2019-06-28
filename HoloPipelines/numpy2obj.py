@@ -66,7 +66,7 @@ def makeObj(fPath, thisThreshold, objOutput):
 			print("Something went wrong with the numpy loading process, exiting...")
 			exit()
 
-	v, f, n = make_mesh(tempnumpy, int(thisThreshold), 1)#350
+	v, f, n = make_mesh(tempnumpy, float(thisThreshold), 1)#350
 
 
 	f=f+1#not sure why we need this. the mesh looks 'weird' without it      solution ref >>>>>>   https://stackoverflow.com/questions/48844778/create-a-obj-file-from-3d-array-in-python      18/06/19

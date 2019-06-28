@@ -53,10 +53,19 @@ data["p0"] = []
 data["p0"].append({
 	"name": "nifti2obj",
 	"src": "nifti2obj.py",
-	"info": "Generate mesh from numpy",
-	"addDate": "26/06/2019",
-	"modDate": "26/06/2019",
-	"param": "1"
+	"info": "Generate obj mesh from nifti",
+	"addDate": "27/06/2019",
+	"modDate": "27/06/2019",
+	"param": "2"
+	})
+data["p1"] = []
+data["p1"].append({
+	"name": "nifti2glb",
+	"src": "nifti2glb.py",
+	"info": "Generate glb mesh from nifti",
+	"addDate": "28/06/2019",
+	"modDate": "28/06/2019",
+	"param": "2"
 	})
 
 with open("json/pipelineList.json", "w") as outfile:

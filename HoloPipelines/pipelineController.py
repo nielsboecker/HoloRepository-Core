@@ -2,6 +2,7 @@
 #TODO: add sample.py to test out pipeline
 #component installer? api?
 #what do we do with the id?
+#are we strictly working with just medical imgs in the piplines?
 import json
 import os
 import argparse#change to this when almost done. rn lrts just assume that all users know the id of the pipeline they wanna use.
@@ -38,17 +39,11 @@ with open("json/pipelineList.json") as json_file:
 				print("date last modified: " + data["modDate"])
 		exit()
 
-	os.system('python %s' % lsPipe[args.src][0]['src'])#need to change this!!!!!!
+	temp = ""
+	#if len(args.param) doesnt match with param req from json?
+	for i in args.param:
+		temp = temp + str(i) + " "
+	temp = temp[:len(temp) - 1]
+	os.system('python ' + lsPipe[args.src][0]['src'] + " " + temp)#need to change this!!!!!!
 
-	#print(lsPipe["s0"])
-	#get id from a name of a pipeline?
-	'''for k, v in lsPipe.items():
-		data = v[0]
-		#print(type(data))
-		if str(k) == args.src:#change to user input soon pls
-			print("ID is: " + k)
-			os.system('python %s' % data['src'])
-			break'''
 json_file.close()
-
-#os.system('python file.py')

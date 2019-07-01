@@ -55,6 +55,7 @@ class Holoblob:
             print(e)
 
     def list_containers(self):
+        """List all containers in the blob storage"""
         try:
             containers = self.service.list_containers()
             for container in containers:
@@ -63,6 +64,7 @@ class Holoblob:
             print(e)
 
     def delete_blob(self, container_name, filename):
+        """Delete a blob within a container"""
         try:
             self.service.delete_blob(container_name, filename)
             print(f"Successful: {filename} deleted")
@@ -71,6 +73,7 @@ class Holoblob:
             print(e)
 
     def delete_container(self, container_name):
+        """Triggers Azure to start the deletion of the container from storage, this may not be instant"""
         try:
             self.service.delete_container(container_name)
             print(f"Successful: {container_name} sent for deletion")

@@ -1,8 +1,14 @@
 import React, { Component } from "react";
+import { RouteComponentProps } from "@reach/router";
 
-class PatientDetailPage extends Component {
+interface IPatientDetailPageProps
+  extends RouteComponentProps<{
+    id: string;
+  }> {}
+
+class PatientDetailPage extends Component<IPatientDetailPageProps> {
   render() {
-    return <div>PatientDetailPage</div>;
+    return <div>PatientDetailPage for {this.props.id}</div>;
   }
 }
 

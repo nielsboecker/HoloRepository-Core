@@ -1,8 +1,16 @@
 import React, { Component } from "react";
+import { RouteComponentProps } from "@reach/router";
+import Menu from "./Menu";
 
-class AuthContainer extends Component {
+class AuthContainer extends Component<RouteComponentProps> {
   render() {
-    return <div>AuthContainer</div>;
+    return (
+      <div>
+        <Menu />
+        AuthContainer
+        {this.props.children}
+      </div>
+    );
   }
 }
 

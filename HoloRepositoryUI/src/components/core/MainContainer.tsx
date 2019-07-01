@@ -15,8 +15,6 @@ class MainContainer extends Component {
   render() {
     return (
       <>
-        <p>MainContainer</p>
-
         <Router>
           <PublicContainer path="/">
             <LandingPage default path="start" />

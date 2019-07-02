@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import { Menu, Layout } from "antd";
-import { Image, IImageProps, ImageFit } from "office-ui-fabric-react/lib/Image";
+import {
+  Image,
+  IImageProps,
+  ImageFit
+} from "office-ui-fabric-react/lib-commonjs/Image";
 
 import "antd/dist/antd.css";
 import "./MenuHeader.scss";
 import appLogo from "../../../assets/logo/2x/logo_and_font@2x.png";
 import { Link, navigate } from "@reach/router";
-import { Practitioner } from "../../../types";
 
 const { Header } = Layout;
 const { SubMenu } = Menu;

@@ -1,6 +1,5 @@
 import React from "react";
-import Enzyme, { mount, ReactWrapper } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { mount, ReactWrapper } from "enzyme";
 import MainContainer from "../../components/core/MainContainer";
 import AuthContainer from "../../components/authenticated/core/AuthContainer";
 import PublicContainer from "../../components/public/PublicContainer";
@@ -12,8 +11,6 @@ import {
 import LandingPage from "../../components/public/LandingPage";
 import PatientListPage from "../../components/authenticated/PatientListPage";
 import ErrorPage from "../../components/public/ErrorPage";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 it("should render PublicContainer for route '/'", () => {
   const underTest = prepareAndMountComponent("/");

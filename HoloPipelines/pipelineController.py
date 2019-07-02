@@ -44,6 +44,8 @@ with open("json/pipelineList.json") as json_file:
 	for i in args.param:
 		temp = temp + str(i) + " "
 	temp = temp[:len(temp) - 1]
+	print("starting task...")
+	#print('python ' + lsPipe[args.src][0]['src'] + " " + temp)
 	os.system('python ' + lsPipe[args.src][0]['src'] + " " + temp)#need to change this!!!!!!
 
 json_file.close()

@@ -17,6 +17,7 @@ def getIO():
 	return [tempPath, fName]
 
 def load_scan(scanPath=fileHandler.dicomPath + "samples" + slash):
+	#print(os.listdir(scanPath))
 	slices = [dicom.read_file(scanPath + slash + s) for s in os.listdir(scanPath)]
 	slices.sort(key = lambda x: int(x.InstanceNumber))
 	try:

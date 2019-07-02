@@ -61,11 +61,38 @@ data["p0"].append({
 data["p1"] = []
 data["p1"].append({
 	"name": "nifti2glb",
-	"src": "nifti2glb.py",
+	"src": "nifti2glb0.py",
+	"info": "Generate glb mesh from nifti",
+	"addDate": "28/06/2019",
+	"modDate": "28/06/2019",
+	"param": "3"
+	})
+data["p2"] = []
+data["p2"].append({
+	"name": "nifti2glb",
+	"src": "nifti2glb1.py",
 	"info": "Generate glb mesh from nifti",
 	"addDate": "28/06/2019",
 	"modDate": "28/06/2019",
 	"param": "2"
+	})
+data["p3"] = []
+data["p3"].append({
+	"name": "dicom2glb",
+	"src": "dicom2glb.py",
+	"info": "Generate glb mesh from dicom",
+	"addDate": "01/07/2019",
+	"modDate": "01/07/2019",
+	"param": "2"
+	})
+data["p4"] = []
+data["p4"].append({
+	"name": "lungDicom2glb",
+	"src": "lungDicom2glb.py",
+	"info": "Generate segmented lungs (without air way) glb mesh from dicom",
+	"addDate": "01/07/2019",
+	"modDate": "01/07/2019",
+	"param": "1"
 	})
 
 with open("json/pipelineList.json", "w") as outfile:

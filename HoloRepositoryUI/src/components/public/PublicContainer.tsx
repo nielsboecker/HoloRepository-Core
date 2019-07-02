@@ -3,12 +3,7 @@ import { RouteComponentProps } from "@reach/router";
 
 class PublicContainer extends Component<RouteComponentProps> {
   render() {
-    return (
-      <div>
-        PublicContainer
-        {this.props.children}
-      </div>
-    );
+    return <div>{this.props.children}</div>;
   }
 }
 

@@ -17,7 +17,7 @@ class PatientListPage extends Component<RouteComponentProps> {
         ]}
       >
         {this.patients.map(patient => (
-          <div>
+          <div key={patient.id}>
             <h1>{patient.name.first}</h1>
             <ul>
               <li>{patient.email ? patient.email : "No mail"}</li>

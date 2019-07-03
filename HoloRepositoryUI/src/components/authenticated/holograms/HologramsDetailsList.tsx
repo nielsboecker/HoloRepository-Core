@@ -15,7 +15,7 @@ import { IHologram, IPractitioner, UNKNOWN_PERSON_NAME } from "../../../types";
 
 // TODO move
 import { initializeIcons } from "@uifabric/icons";
-import { Icon } from "office-ui-fabric-react/lib/Icon";
+import { Icon } from "office-ui-fabric-react/lib-commonjs/Icon";
 import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
 
 initializeIcons();

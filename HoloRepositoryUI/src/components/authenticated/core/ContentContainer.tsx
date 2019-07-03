@@ -13,8 +13,8 @@ class ContentContainer extends Component<IContentContainerProps> {
       <div className="ContentContainer">
         <h1>{this.props.title}</h1>
 
-        {this.props.description.map(description => (
-          <p>{description}</p>
+        {this.props.description.map((description, index) => (
+          <p key={index}>{description}</p>
         ))}
 
         <Divider />

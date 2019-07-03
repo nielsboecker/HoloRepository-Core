@@ -74,9 +74,9 @@ export interface Hologram {
   };
   author: {
     id: string;
-    name?: string;
+    name?: PersonName;
   };
-  createdAtDate?: string;
+  createdDate: string;
   fileSizeInKb?: number;
   imagingStudySeriesId?: string;
   // annotations?: Annotation[];

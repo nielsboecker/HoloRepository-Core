@@ -5,6 +5,8 @@ interface PersonName {
   full?: string;
 }
 
+type Gender = "male" | "female" | "other";
+
 /**
  * Common attributes of Patients and Practitioners.
  * Semantics is similar to the corresponding FHIR resource.
@@ -12,6 +14,7 @@ interface PersonName {
 interface Person {
   id: string;
   name: PersonName;
+  gender: Gender;
   email?: string;
   phone: string;
   dateOfBirth: string;

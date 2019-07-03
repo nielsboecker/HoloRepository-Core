@@ -2,10 +2,11 @@
   {
     "id": "5d1bf4f1d7429b38ce499c61",
     "name": {
-      "title": "Mr",
+      "title": "Mrs",
       "first": ["Lorraine"],
       "last": "Cline"
     },
+    "gender": "female",
     "email": "lorraine.cline@corepan.us",
     "phone": "+1 (890) 502-2502",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
@@ -22,10 +23,11 @@
   {
     "id": "5d1bf4f17322a9283482fe7e",
     "name": {
-      "title": "Mr",
+      "title": "Mrs",
       "first": ["Beverly"],
       "last": "Cole"
     },
+    "gender": "female",
     "email": "beverly.cole@miraclis.name",
     "phone": "+1 (951) 427-3709",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
@@ -46,6 +48,7 @@
       "first": ["Roy"],
       "last": "Santana"
     },
+    "gender": "male",
     "email": "roy.santana@kenegy.biz",
     "phone": "+1 (907) 420-3224",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
@@ -62,10 +65,11 @@
   {
     "id": "5d1bf4f17c56d264ea85264d",
     "name": {
-      "title": "Mr",
+      "title": "Mrs",
       "first": ["Wendi"],
       "last": "Conway"
     },
+    "gender": "female",
     "email": "wendi.conway@diginetic.biz",
     "phone": "+1 (821) 492-3370",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
@@ -82,10 +86,11 @@
   {
     "id": "5d1bf4f164f57d1ff4656a8f",
     "name": {
-      "title": "Mr",
+      "title": "Mrw",
       "first": ["Alicia"],
       "last": "English"
     },
+    "gender": "female",
     "email": "alicia.english@geeknet.me",
     "phone": "+1 (876) 554-2406",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
@@ -102,10 +107,11 @@
   {
     "id": "5d1bf4f10bdc74c71822416d",
     "name": {
-      "title": "Mr",
+      "title": "Dr",
       "first": ["Mayer"],
       "last": "Farmer"
     },
+    "gender": "other",
     "email": "mayer.farmer@teraprene.net",
     "phone": "+1 (972) 583-3316",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
@@ -122,10 +128,11 @@
   {
     "id": "5d1bf4f13934e5f5d01063d8",
     "name": {
-      "title": "Mr",
+      "title": "Mrs",
       "first": ["Barbara"],
       "last": "Holland"
     },
+    "gender": "female",
     "email": "barbara.holland@lexicondo.io",
     "phone": "+1 (884) 486-3899",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
@@ -142,10 +149,11 @@
   {
     "id": "5d1bf4f130cf68a37bd647a2",
     "name": {
-      "title": "Mr",
+      "title": "Mrs",
       "first": ["Melanie"],
       "last": "Dodson"
     },
+    "gender": "female",
     "email": "melanie.dodson@zeam.org",
     "phone": "+1 (946) 470-2876",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
@@ -166,6 +174,7 @@
       "first": ["Myers"],
       "last": "Lamb"
     },
+    "gender": "male",
     "email": "myers.lamb@kaggle.ca",
     "phone": "+1 (955) 521-3518",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
@@ -186,6 +195,7 @@
       "first": ["Bolton"],
       "last": "Sanders"
     },
+    "gender": "male",
     "email": "bolton.sanders@pyramis.com",
     "phone": "+1 (945) 530-3859",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
@@ -202,10 +212,11 @@
   {
     "id": "5d1bf4f1d32c1f6bf52331b9",
     "name": {
-      "title": "Mr",
+      "title": "Mrs",
       "first": ["Cora"],
       "last": "Santiago"
     },
+    "gender": "female",
     "email": "cora.santiago@portalis.tv",
     "phone": "+1 (993) 495-2119",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
@@ -226,6 +237,7 @@
       "first": ["Morton"],
       "last": "Adams"
     },
+    "gender": "male",
     "email": "morton.adams@zboo.co.uk",
     "phone": "+1 (940) 496-2933",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",

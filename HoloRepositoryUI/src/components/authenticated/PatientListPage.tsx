@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { RouteComponentProps } from "@reach/router";
-import { Patient, Practitioner } from "../../types/index.jsx";
+import { Patient } from "../../types/index.jsx";
 import samplePatients from "../../__tests__/samples/samplePatients.json";
 
 class PatientListPage extends Component<RouteComponentProps> {

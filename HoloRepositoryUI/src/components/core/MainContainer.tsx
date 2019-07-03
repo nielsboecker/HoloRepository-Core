@@ -6,7 +6,7 @@ import AboutPage from "../public/AboutPage";
 import LandingPage from "../public/LandingPage";
 import ErrorPage from "../public/ErrorPage";
 import DeviceConnectorPage from "../authenticated/DeviceConnectorPage";
-import HologramListPage from "../authenticated/HologramListPage";
+import HologramsListPage from "../authenticated/holograms/HologramsListPage";
 import PatientListPage from "../authenticated/PatientListPage";
 import PatientDetailPage from "../authenticated/patient/PatientDetailPage";
 import ProfileInformationPage from "../authenticated/ProfileInformationPage";
@@ -25,7 +25,7 @@ class MainContainer extends Component {
             <PatientListPage path="patients" />
             <PatientDetailPage path="patient/:id" />
             <DeviceConnectorPage path="devices" />
-            <HologramListPage path="holograms" />
+            <HologramsListPage path="holograms" />
             <ProfileInformationPage path="profile" />
             <ErrorPage default />
           </AuthContainer>

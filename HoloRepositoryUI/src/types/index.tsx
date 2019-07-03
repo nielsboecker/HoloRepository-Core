@@ -1,4 +1,6 @@
-interface PersonName {
+export const UNKNOWN_PERSON_NAME = "Unknown";
+
+interface IPersonName {
   full: string;
   title?: string;
   first?: string;
@@ -11,9 +13,9 @@ type Gender = "male" | "female" | "other";
  * Common attributes of Patients and Practitioners.
  * Semantics is similar to the corresponding FHIR resource.
  */
-interface Person {
+interface IPerson {
   id: string;
-  name: PersonName;
+  name: IPersonName;
   gender: Gender;
   email?: string;
   phone: string;
@@ -31,28 +33,28 @@ interface Person {
  * Interface representing the users of the system.
  * Semantics is similar to the corresponding FHIR resource, apart from the "patients" attribute.
  */
-export interface Practitioner extends Person {
-  patients: Patient[];
+export interface IPractitioner extends IPerson {
+  patients: IPatient[];
 }
 
 /**
  * Interface representing the subjects of the system.
  * Semantics is similar to the corresponding FHIR resource.
  */
-export interface Patient extends Person {
-  imagingStudySeries?: ImagingStudySeries[];
-  holograms?: Hologram[];
+export interface IPatient extends IPerson {
+  imagingStudySeries?: IImagingStudySeries[];
+  holograms?: IHologram[];
 }
 
 /**
  * Interface representing one image series in a DICOM imaging study.
  * Semantics is similar to the corresponding FHIR resource.
  */
-export interface ImagingStudySeries {
+export interface IImagingStudySeries {
   id: string;
   subject: {
     id: string;
-    name?: PersonName;
+    name?: IPersonName;
   };
   previewPictureUrl?: string;
   modality?: string;
@@ -64,27 +66,27 @@ export interface ImagingStudySeries {
  * Interface for a Hologram. Note that, similar to FHIR's ImagingStudy, the actual
  * binary data is not included, just an endpoint where it can be retreived.
  */
-export interface Hologram {
+export interface IHologram {
   id: string;
   endpoint: string;
   title: string;
   subject: {
     id: string;
-    name?: PersonName;
+    name?: IPersonName;
   };
   author: {
     id: string;
-    name?: PersonName;
+    name?: IPersonName;
   };
   createdDate: string;
-  fileSizeInKb?: number;
+  fileSizeInKb: number;
   imagingStudySeriesId?: string;
-  // annotations?: Annotation[];
+  // annotations?: IAnnotation[];
 }
 
 /**
  * Placeholder. Could be used for Annotator integration.
  */
-interface Annotation {
+interface IAnnotation {
   // Intentionally left blank
 }

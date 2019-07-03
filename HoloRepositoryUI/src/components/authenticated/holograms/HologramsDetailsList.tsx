@@ -12,13 +12,16 @@ import {
 import { MarqueeSelection } from "office-ui-fabric-react/lib-commonjs/MarqueeSelection";
 import { mergeStyleSets } from "office-ui-fabric-react/lib-commonjs/Styling";
 import sampleHolograms from "../../../__tests__/samples/sampleHolograms.json";
-import { Hologram } from "../../../types/index.jsx";
+import { IHologram, IPractitioner, UNKNOWN_PERSON_NAME } from "../../../types";
 
 // TODO move
 import { initializeIcons } from "@uifabric/icons";
 import { Icon } from "office-ui-fabric-react/lib/Icon";
+import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
 
 initializeIcons();
+
+const practitioner = samplePractitioner as IPractitioner;
 
 const classNames = mergeStyleSets({
   fileIconHeaderIcon: {
@@ -63,41 +66,39 @@ const controlStyles = {
   }
 };
 
-export interface IDetailsListDocumentsExampleState {
+export interface IHologramsDetailsListState {
   columns: IColumn[];
-  items: IDocument[];
+  items: IHologramDocument[];
   selectionDetails: string;
   isModalSelection: boolean;
-  isCompactMode: boolean;
 }
 
-export interface IDocument {
-  name: string;
-  value: string;
-  iconName: string;
-  fileType: string;
-  modifiedBy: string;
-  dateModified: string;
-  dateModifiedValue: number;
-  fileSize: string;
-  fileSizeRaw: number;
+export interface IHologramDocument {
+  wrappedHologram: IHologram;
+  titleReadable: string;
+  authorReadable: string;
+  subjectReadable: string;
+  createdDateReadable: string;
+  createdDateValue: number;
+  fileSizeInKbValue: number;
+  fileSizeInKbReadable: string;
 }
 
 class HologramsDetailsList extends React.Component<
   {},
-  IDetailsListDocumentsExampleState
+  IHologramsDetailsListState
 > {
   private _selection: Selection;
-  private _allItems: IDocument[];
+  private _allItems: IHologramDocument[];
 
   constructor(props: {}) {
     super(props);
 
-    this._allItems = _generateDocuments();
+    this._allItems = _mapHologramsToDocuments();
 
     const columns: IColumn[] = [
       {
-        key: "column1",
+        key: "col:fileType",
         name: "File Type",
         className: classNames.fileIconCell,
         iconClassName: classNames.fileIconHeaderIcon,
@@ -105,25 +106,20 @@ class HologramsDetailsList extends React.Component<
           "Column operations for File type, Press to sort on File type",
         iconName: "Page",
         isIconOnly: true,
-        fieldName: "name",
+        fieldName: undefined, // overwrite with onRender()
         minWidth: 16,
         maxWidth: 16,
         onColumnClick: this._onColumnClick,
-        onRender: (item: IDocument) => {
-          return (
-            <img
-              src={item.iconName}
-              className={classNames.fileIconImg}
-              alt={item.fileType + " file icon"}
-            />
-          );
-        }
+        onRender: (item: IHologramDocument) => (
+          <Icon iconName="HealthSolid" className={classNames.fileIconImg} />
+        )
       },
+
       {
-        key: "column2",
-        name: "Name",
-        fieldName: "name",
-        minWidth: 210,
+        key: "col:subject",
+        name: "Subject",
+        fieldName: "subjectReadable",
+        minWidth: 150,
         maxWidth: 350,
         isRowHeader: true,
         isResizable: true,
@@ -135,47 +131,67 @@ class HologramsDetailsList extends React.Component<
         data: "string",
         isPadded: true
       },
+
       {
-        key: "column3",
-        name: "Date Modified",
-        fieldName: "dateModifiedValue",
+        key: "col:title",
+        name: "Title",
+        fieldName: "titleReadable",
+        minWidth: 150,
+        maxWidth: 350,
+        isRowHeader: true,
+        isResizable: true,
+        isSorted: true,
+        isSortedDescending: false,
+        sortAscendingAriaLabel: "Sorted A to Z",
+        sortDescendingAriaLabel: "Sorted Z to A",
+        onColumnClick: this._onColumnClick,
+        data: "string",
+        isPadded: true
+      },
+
+      {
+        key: "col:date",
+        name: "Date created",
+        fieldName: "createdDateValue",
         minWidth: 70,
         maxWidth: 90,
         isResizable: true,
         onColumnClick: this._onColumnClick,
         data: "number",
-        onRender: (item: IDocument) => {
-          return <span>{item.dateModified}</span>;
+        onRender: (item: IHologramDocument) => {
+          return <span>{item.createdDateReadable}</span>;
         },
         isPadded: true
       },
+
       {
-        key: "column4",
-        name: "Modified By",
-        fieldName: "modifiedBy",
+        key: "col:author",
+        name: "Created by",
+        fieldName: "authorReadable",
         minWidth: 70,
         maxWidth: 90,
         isResizable: true,
         isCollapsible: true,
         data: "string",
         onColumnClick: this._onColumnClick,
-        onRender: (item: IDocument) => {
-          return <span>{item.modifiedBy}</span>;
+        onRender: (item: IHologramDocument) => {
+          return <span>{item.authorReadable}</span>;
         },
         isPadded: true
       },
+
       {
-        key: "column5",
-        name: "File Size",
-        fieldName: "fileSizeRaw",
+        key: "col:size",
+        name: "File size",
+        fieldName: "fileSizeInKbValue",
         minWidth: 70,
         maxWidth: 90,
         isResizable: true,
         isCollapsible: true,
         data: "number",
         onColumnClick: this._onColumnClick,
-        onRender: (item: IDocument) => {
-          return <span>{item.fileSize}</span>;
+        onRender: (item: IHologramDocument) => {
+          return <span>{item.fileSizeInKbReadable}</span>;
         }
       }
     ];
@@ -192,31 +208,16 @@ class HologramsDetailsList extends React.Component<
       items: this._allItems,
       columns: columns,
       selectionDetails: this._getSelectionDetails(),
-      isModalSelection: false,
-      isCompactMode: false
+      isModalSelection: false
     };
   }
 
   public render() {
-    const {
-      columns,
-      isCompactMode,
-      items,
-      selectionDetails,
-      isModalSelection
-    } = this.state;
+    const { columns, items, selectionDetails, isModalSelection } = this.state;
 
     return (
       <Fabric>
         <div className={classNames.controlWrapper}>
-          <Toggle
-            label="Enable compact mode"
-            checked={isCompactMode}
-            onChange={this._onChangeCompactMode}
-            onText="Compact"
-            offText="Normal"
-            styles={controlStyles}
-          />
           <Toggle
             label="Enable modal selection"
             checked={isModalSelection}
@@ -226,7 +227,7 @@ class HologramsDetailsList extends React.Component<
             styles={controlStyles}
           />
           <TextField
-            label="Filter by name:"
+            label="Filter by subject name:"
             onChange={this._onChangeText}
             styles={controlStyles}
           />
@@ -235,7 +236,6 @@ class HologramsDetailsList extends React.Component<
         <MarqueeSelection selection={this._selection}>
           <DetailsList
             items={items}
-            compact={isCompactMode}
             columns={columns}
             selectionMode={
               isModalSelection ? SelectionMode.multiple : SelectionMode.none
@@ -257,7 +257,7 @@ class HologramsDetailsList extends React.Component<
 
   public componentDidUpdate(
     previousProps: any,
-    previousState: IDetailsListDocumentsExampleState
+    previousState: IHologramsDetailsListState
   ) {
     if (
       previousState.isModalSelection !== this.state.isModalSelection &&
@@ -266,13 +266,6 @@ class HologramsDetailsList extends React.Component<
       this._selection.setAllSelected(false);
     }
   }
-
-  private _onChangeCompactMode = (
-    ev: React.MouseEvent<HTMLElement>,
-    checked: boolean = false
-  ): void => {
-    this.setState({ isCompactMode: checked });
-  };
 
   private _onChangeModalSelection = (
     ev: React.MouseEvent<HTMLElement>,
@@ -287,7 +280,10 @@ class HologramsDetailsList extends React.Component<
   ): void => {
     this.setState({
       items: text
-        ? this._allItems.filter(i => i.name.toLowerCase().indexOf(text) > -1)
+        ? this._allItems.filter(
+            i =>
+              i.subjectReadable.toLowerCase().indexOf(text.toLowerCase()) > -1
+          )
         : this._allItems
     });
   };
@@ -305,7 +301,8 @@ class HologramsDetailsList extends React.Component<
       case 1:
         return (
           "1 item selected: " +
-          (this._selection.getSelection()[0] as IDocument).name
+          (this._selection.getSelection()[0] as IHologramDocument)
+            .wrappedHologram.title
         );
       default:
         return `${selectionCount} items selected`;
@@ -355,40 +352,43 @@ function _copyAndSort<T>(
     );
 }
 
-function _generateDocuments() {
-  const holograms = sampleHolograms as Hologram[];
-  const items: IDocument[] = [];
+function _mapHologramsToDocuments(): IHologramDocument[] {
+  const holograms = sampleHolograms as IHologram[];
 
-  for (const hologram of holograms) {
-    const randomDate = hologram.createdDate;
-    const randomFileSize = hologram.fileSizeInKb ? hologram.fileSizeInKb : 0;
-    const randomFileType = _randomFileIcon();
-    let fileName = hologram.title;
-    fileName =
-      fileName.charAt(0).toUpperCase() +
-      fileName.slice(1).concat(`.${randomFileType.docType}`);
-    let userName = hologram.author.name ? hologram.author.name.full : "no name";
-    items.push({
-      name: fileName,
-      value: fileName,
-      iconName: randomFileType.url,
-      fileType: randomFileType.docType,
-      modifiedBy: userName,
-      dateModified: randomDate,
-      dateModifiedValue: new Date(randomDate).valueOf(),
-      fileSize: randomFileSize + " Kb",
-      fileSizeRaw: randomFileSize
-    });
-  }
-  return items;
+  return holograms.map(hologram => {
+    const createdDate = new Date(hologram.createdDate);
+
+    return {
+      titleReadable: hologram.title,
+      authorReadable: _getReadableAuthorName(hologram),
+      subjectReadable: _getReadableSubjectName(hologram),
+      wrappedHologram: hologram,
+      createdDateReadable: createdDate.toLocaleDateString(),
+      createdDateValue: createdDate.valueOf(),
+      fileSizeInKbValue: hologram.fileSizeInKb,
+      fileSizeInKbReadable: `${hologram.fileSizeInKb} kB`
+    };
+  });
 }
 
-function _randomFileIcon(): { docType: string; url: string } {
-  const docType: string = "hologram";
-  return {
-    docType,
-    url: `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/csv_16x1.svg`
-  };
+function _getReadableAuthorName(hologram: IHologram): string {
+  let authorName;
+  if (!hologram.author) {
+    authorName = UNKNOWN_PERSON_NAME;
+  } else if (hologram.author.id === practitioner.id) {
+    authorName = "You";
+  } else {
+    authorName = hologram.author.id;
+  }
+  return authorName;
+}
+
+function _getReadableSubjectName(hologram: IHologram): string {
+  if (!hologram.subject.name) {
+    return UNKNOWN_PERSON_NAME;
+  } else {
+    return hologram.subject.name.full;
+  }
 }
 
 export default HologramsDetailsList;

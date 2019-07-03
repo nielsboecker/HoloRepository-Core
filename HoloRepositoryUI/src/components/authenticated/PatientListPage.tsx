@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { RouteComponentProps } from "@reach/router";
-import { Patient } from "../../types/index.jsx";
+import { IPatient } from "../../types/index.jsx";
 import samplePatients from "../../__tests__/samples/samplePatients.json";
 
 class PatientListPage extends Component<RouteComponentProps> {
-  patients = samplePatients as Patient[];
+  patients = samplePatients as IPatient[];
 
   render() {
     return (

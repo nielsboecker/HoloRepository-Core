@@ -34,7 +34,7 @@ class MenuHeader extends Component {
           theme="light"
           mode="horizontal"
           defaultSelectedKeys={["patients"]}
-          style={{ lineHeight: "64px" }}
+          style={{ lineHeight: "66px" }}
         >
           <Menu.Item key="patients" onClick={({ key }) => this.doNavigate(key)}>
             Patients

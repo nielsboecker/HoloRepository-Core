@@ -9,7 +9,6 @@ import {
   SelectionMode,
   IColumn
 } from "office-ui-fabric-react/lib-commonjs/DetailsList";
-import { MarqueeSelection } from "office-ui-fabric-react/lib-commonjs/MarqueeSelection";
 import { mergeStyleSets } from "office-ui-fabric-react/lib-commonjs/Styling";
 import sampleHolograms from "../../../__tests__/samples/sampleHolograms.json";
 import { IHologram, IPractitioner, UNKNOWN_PERSON_NAME } from "../../../types";
@@ -109,7 +108,7 @@ class HologramsDetailsList extends React.Component<
         fieldName: undefined, // overwrite with onRender()
         minWidth: 16,
         maxWidth: 16,
-        onColumnClick: this._onColumnClick,
+        // onColumnClick: this._onColumnClick,
         onRender: (item: IHologramDocument) => (
           <Icon iconName="HealthSolid" className={classNames.fileIconImg} />
         )
@@ -233,24 +232,22 @@ class HologramsDetailsList extends React.Component<
           />
         </div>
         <div className={classNames.selectionDetails}>{selectionDetails}</div>
-        <MarqueeSelection selection={this._selection}>
-          <DetailsList
-            items={items}
-            columns={columns}
-            selectionMode={
-              isModalSelection ? SelectionMode.multiple : SelectionMode.none
-            }
-            setKey="set"
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible={true}
-            selection={this._selection}
-            selectionPreservedOnEmptyClick={true}
-            onItemInvoked={this._onItemInvoked}
-            enterModalSelectionOnTouch={true}
-            ariaLabelForSelectionColumn="Toggle selection"
-            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-          />
-        </MarqueeSelection>
+        <DetailsList
+          items={items}
+          columns={columns}
+          selectionMode={
+            isModalSelection ? SelectionMode.multiple : SelectionMode.none
+          }
+          setKey="set"
+          layoutMode={DetailsListLayoutMode.justified}
+          isHeaderVisible={true}
+          selection={this._selection}
+          selectionPreservedOnEmptyClick={true}
+          onItemInvoked={this._onItemInvoked}
+          enterModalSelectionOnTouch={true}
+          ariaLabelForSelectionColumn="Toggle selection"
+          ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+        />
       </Fabric>
     );
   }

@@ -367,9 +367,7 @@ function _generateDocuments() {
     fileName =
       fileName.charAt(0).toUpperCase() +
       fileName.slice(1).concat(`.${randomFileType.docType}`);
-    let userName = hologram.author.name
-      ? hologram.author.name.first[0]
-      : "No name";
+    let userName = hologram.author.name ? hologram.author.name.full : "no name";
     items.push({
       name: fileName,
       value: fileName,

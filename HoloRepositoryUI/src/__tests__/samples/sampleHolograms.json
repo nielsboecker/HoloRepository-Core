@@ -6,16 +6,18 @@
     "subject": {
       "id": "5d1bf4f1d7429b38ce499c61",
       "name": {
-        "title": "Mr",
-        "first": ["Lorraine"],
+        "title": "Mrs",
+        "full": "Lorraine Cline",
+        "first": "Lorraine",
         "last": "Cline"
       }
     },
     "author": {
       "id": "5d1bf414a5e95c2a1e2813a6",
       "name": {
-        "title": "Mr",
-        "first": ["Noreen"],
+        "title": "Mrs",
+        "full": "Noreen Spence",
+        "first": "Noreen",
         "last": "Spence"
       }
     },
@@ -30,16 +32,18 @@
     "subject": {
       "id": "5d1bf4f1d7429b38ce499c61",
       "name": {
-        "title": "Mr",
-        "first": ["Lorraine"],
+        "title": "Mrs",
+        "full": "Lorraine Cline",
+        "first": "Lorraine",
         "last": "Cline"
       }
     },
     "author": {
       "id": "5d1bf414a5e95c2a1e2813a6",
       "name": {
-        "title": "Mr",
-        "first": ["Noreen"],
+        "title": "Mrs",
+        "full": "Noreen Spence",
+        "first": "Noreen",
         "last": "Spence"
       }
     },
@@ -54,16 +58,18 @@
     "subject": {
       "id": "5d1bf4f1d7429b38ce499c61",
       "name": {
-        "title": "Mr",
-        "first": ["Lorraine"],
+        "title": "Mrs",
+        "full": "Lorraine Cline",
+        "first": "Lorraine",
         "last": "Cline"
       }
     },
     "author": {
       "id": "5d1bf414a5e95c2a1e2813a6",
       "name": {
-        "title": "Mr",
-        "first": ["Noreen"],
+        "title": "Mrs",
+        "full": "Noreen Spence",
+        "first": "Noreen",
         "last": "Spence"
       }
     },

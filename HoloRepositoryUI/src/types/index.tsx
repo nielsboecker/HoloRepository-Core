@@ -1,8 +1,8 @@
 interface PersonName {
-  title: string;
-  first: string[];
-  last: string;
-  full?: string;
+  full: string;
+  title?: string;
+  first?: string;
+  last?: string;
 }
 
 type Gender = "male" | "female" | "other";

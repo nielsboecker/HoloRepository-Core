@@ -1,8 +1,9 @@
 {
   "id": "5d1bf414a5e95c2a1e2813a6",
   "name": {
-    "title": "MrS",
-    "first": ["Noreen"],
+    "title": "Mrs",
+    "full": "Noreen Spence",
+    "first": "Noreen",
     "last": "Spence"
   },
   "gender": "female",

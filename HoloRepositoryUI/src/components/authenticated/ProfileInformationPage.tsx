@@ -7,11 +7,7 @@ class ProfileInformationPage extends Component<RouteComponentProps> {
   practitioner = samplePractitioner as Practitioner;
 
   render() {
-    return (
-      <div>
-        {`Hello, ${this.practitioner.name.first[0]} ${this.practitioner.name.last}!`}
-      </div>
-    );
+    return <div>{`Hello, ${this.practitioner.name.full}!`}</div>;
   }
 }
 

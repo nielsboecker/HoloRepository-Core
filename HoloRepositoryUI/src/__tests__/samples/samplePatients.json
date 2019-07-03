@@ -3,7 +3,8 @@
     "id": "5d1bf4f1d7429b38ce499c61",
     "name": {
       "title": "Mrs",
-      "first": ["Lorraine"],
+      "full": "Lorraine Cline",
+      "first": "Lorraine",
       "last": "Cline"
     },
     "gender": "female",
@@ -24,7 +25,8 @@
     "id": "5d1bf4f17322a9283482fe7e",
     "name": {
       "title": "Mrs",
-      "first": ["Beverly"],
+      "full": "Beverly Cole",
+      "first": "Beverly",
       "last": "Cole"
     },
     "gender": "female",
@@ -45,7 +47,8 @@
     "id": "5d1bf4f14c342b1d560679e6",
     "name": {
       "title": "Mr",
-      "first": ["Roy"],
+      "full": "Roy Santana",
+      "first": "Roy",
       "last": "Santana"
     },
     "gender": "male",
@@ -66,7 +69,8 @@
     "id": "5d1bf4f17c56d264ea85264d",
     "name": {
       "title": "Mrs",
-      "first": ["Wendi"],
+      "full": "Wendi Conway",
+      "first": "Wendi",
       "last": "Conway"
     },
     "gender": "female",
@@ -87,7 +91,8 @@
     "id": "5d1bf4f164f57d1ff4656a8f",
     "name": {
       "title": "Mrw",
-      "first": ["Alicia"],
+      "full": "Alicia English",
+      "first": "Alicia",
       "last": "English"
     },
     "gender": "female",
@@ -108,7 +113,8 @@
     "id": "5d1bf4f10bdc74c71822416d",
     "name": {
       "title": "Dr",
-      "first": ["Mayer"],
+      "full": "Mayer Farmer",
+      "first": "Mayer",
       "last": "Farmer"
     },
     "gender": "other",
@@ -129,7 +135,8 @@
     "id": "5d1bf4f13934e5f5d01063d8",
     "name": {
       "title": "Mrs",
-      "first": ["Barbara"],
+      "full": "Barbara Holland",
+      "first": "Barbara",
       "last": "Holland"
     },
     "gender": "female",
@@ -150,7 +157,8 @@
     "id": "5d1bf4f130cf68a37bd647a2",
     "name": {
       "title": "Mrs",
-      "first": ["Melanie"],
+      "full": "Melanie Dodson",
+      "first": "Melanie",
       "last": "Dodson"
     },
     "gender": "female",
@@ -171,7 +179,8 @@
     "id": "5d1bf4f1a377e11e1139f70e",
     "name": {
       "title": "Mr",
-      "first": ["Myers"],
+      "full": "Myers Lamb",
+      "first": "Myers",
       "last": "Lamb"
     },
     "gender": "male",
@@ -192,7 +201,8 @@
     "id": "5d1bf4f19a85bec370eb838f",
     "name": {
       "title": "Mr",
-      "first": ["Bolton"],
+      "full": "Bolton Sanders",
+      "first": "Bolton",
       "last": "Sanders"
     },
     "gender": "male",
@@ -213,7 +223,8 @@
     "id": "5d1bf4f1d32c1f6bf52331b9",
     "name": {
       "title": "Mrs",
-      "first": ["Cora"],
+      "full": "Cora Santiago",
+      "first": "Cora",
       "last": "Santiago"
     },
     "gender": "female",
@@ -234,7 +245,8 @@
     "id": "5d1bf4f1cca3d9f787bd80fd",
     "name": {
       "title": "Mr",
-      "first": ["Morton"],
+      "full": "Morton Adams",
+      "first": "Morton",
       "last": "Adams"
     },
     "gender": "male",

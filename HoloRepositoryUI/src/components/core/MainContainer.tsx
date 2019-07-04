@@ -7,7 +7,7 @@ import LandingPage from "../public/LandingPage";
 import ErrorPage from "../public/ErrorPage";
 import DeviceConnectorPage from "../authenticated/DeviceConnectorPage";
 import HologramsListPage from "../authenticated/holograms/HologramsListPage";
-import PatientListPage from "../authenticated/PatientListPage";
+import PatientListPage from "../authenticated/patients/PatientListPage";
 import PatientDetailPage from "../authenticated/patient/PatientDetailPage";
 import ProfileInformationPage from "../authenticated/ProfileInformationPage";
 

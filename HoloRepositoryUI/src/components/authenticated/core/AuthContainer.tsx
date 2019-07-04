@@ -15,7 +15,14 @@ class AuthContainer extends Component<RouteComponentProps> {
       <Layout style={{ ...this.backgroundStyle, height: "100vh" }}>
         <MenuHeader />
 
-        <Layout.Content style={{ padding: "0 50px", marginTop: "50px" }}>
+        <Layout.Content
+          style={{
+            padding: "0 50px",
+            marginTop: "50px",
+            display: "flex",
+            justifyContent: "center"
+          }}
+        >
           {this.props.children}
         </Layout.Content>
 

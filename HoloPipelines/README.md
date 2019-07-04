@@ -1,5 +1,4 @@
-# dicom2mesh
-A simple Python script which utilises marching cubes algorithm(skimage library) to generate 3D mesh from Dicom/Nifti image stack, which then can be output to .obj file(can be previewed using 3D viewer from microsoft store).
+# PIPELINE
 
 ## Requirements:
 Python 3.7 or above
@@ -14,26 +13,16 @@ Python 3.7 or above
 - Skit-image https://scikit-image.org/
 - Sklearn https://scikit-learn.org/stable/
 - NiBabel https://nipy.org/nibabel/
-- Nilean https://nilearn.github.io/
-- new marching cubes with smoothing (?) https://github.com/ilastik/marching_cubes
+- Nilearn https://nilearn.github.io/
+- (optional) new marching cubes with smoothing (?) https://github.com/ilastik/marching_cubes
 
 ## Usage:
-- The code works by first converting Dicom or Nifti images to a Numpy array, then generate a .obj mesh from it.
-- dicom2numpy.py, nifti2numpy.py and numpy2obj.py can be run independently:
-> python3 dicom2numpy.py
+> python pipelineController.py p4 -p 3_Axial_CE
+- p4: pipeline ID. In this case to segment lung and generate glb from it
+- -p 3_Axial_CE: param(s) for the specific pipeline, in this case a directory for an upper ct scan from medicalScans/dicom
 
-- For a one way Dicom/Nifti to obj mesh, main.py can be used.
-    - An example usage of main.py: 
-> python3 main.py "d" "samples" 300 "abdomen_mesh"
-
-   - "d", first argument being the option used for conversion. {"d":dicom to obj, "n":nifti to obj, "num"numpy to obj}
-   - "samples", input directory of the Dicom files. Please note that the script can only take input from a fixed directory according           to its conversion option at the moment. {"d": imgs/dicom/(sub dir name), "n": imgs/nifti/(.nii file name), "num": numpy/(.npy             filename)}
-   - 300, third argument being the Housfield used for the thresholding in marching cube algorithm. In this example, 300 is used for             bones. For the sample Nifti file please use 30 or above as it has already been segmented.
-   - "abdomen_mesh", the fourth argument. Once the mesh has successfully generated, it will be saved in output/OBJs with the given             name.
-
-## OBJ conversion to GLTF/GLB
-https://github.com/AnalyticalGraphicsInc/obj2gltf
-Make sure to have the latest version of Node.js 
+> python pipelineController.py -h
+- this script has a built in help
 
 ### Refs:
 - https://www.raddq.com/dicom-processing-segmentation-visualization-in-python/      14/06/19

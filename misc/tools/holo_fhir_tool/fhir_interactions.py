@@ -48,8 +48,8 @@ class FHIRInteraction(object):
                 self._request(url, 'POST', entry['resource']) 
 
 
-    def delete_all(self):
-        next_url = self._base_url
+    def delete_all(self, resource: str = ""):
+        next_url = urljoin(self._base_url, resource)
         while next_url:
             r = self._request(next_url, 'GET')
             data = r.json()

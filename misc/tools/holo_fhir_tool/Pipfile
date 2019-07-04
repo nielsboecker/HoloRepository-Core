@@ -1,0 +1,15 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+
+[packages]
+fhirclient = {editable = true,git = "https://github.com/smart-on-fhir/client-py.git",ref = "v4.0.0"}
+requests = "*"
+fire = "*"
+
+[requires]
+python_version = "3.7"

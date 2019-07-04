@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import sys
 import json
@@ -10,14 +12,15 @@ class Holoblob:
     """A tool to manage data in azure holoblob storage"""
 
     def __init__(self, configfile="config.cfg"):
-        """Create the BlockBlockService that is used to call the Blob service for the storage account"""
+        """Create BlockBlockService object to access the Azure Blob service"""
         if configfile:
             with open(configfile, 'r') as f:
                 configs = json.load(f)
         else:
             sys.exit('Config file not found')
 
-        self.service = BlockBlobService(account_name=configs['account_name'], account_key=configs['account_key'])
+        self.service = BlockBlobService(account_name=configs['account_name'],
+                                        account_key=configs['account_key'])
 
     def create_container(self, container_name, public_access=False):
         """Creates containers within storage account"""
@@ -73,7 +76,10 @@ class Holoblob:
             print(e)
 
     def delete_container(self, container_name):
-        """Triggers Azure to start the deletion of the container from storage, this may not be instant"""
+        """Triggers Azure to start the deletion of the container from storage.
+
+        This operation may not be instant
+        """
         try:
             self.service.delete_container(container_name)
             print(f"Successful: {container_name} sent for deletion")

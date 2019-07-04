@@ -1,10 +1,9 @@
 #TODO: clean this up?
-
-import dicom2numpy#this import stuff in the future will be dockerized
-import numpy2obj
-import obj2gltfWrapper
-
-import fileHandler#you can stay?
+import os
+from components import dicom2numpy#this import stuff in the future will be dockerized
+from components import numpy2obj
+from components import obj2gltfWrapper
+from components import fileHandler#you can stay?
 import sys
 
 slash = fileHandler.slash

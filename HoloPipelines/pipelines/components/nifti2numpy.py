@@ -4,7 +4,7 @@ import numpy as np
 import nibabel as nib
 from nilearn.image import resample_img
 import scipy
-import fileHandler
+from components import fileHandler
 import platform
 
 cwd = fileHandler.cwd
@@ -31,13 +31,13 @@ def resample(dataPath, new_spacing=[1,1,1]):#was:   def resample(image, scan, ne
 	#TODO: add timer
 	# Determine current pixel spacing
 	header = image.header
-	print(type(image.header.get_zooms()))
+	#print(type(image.header.get_zooms()))
 	#print(header)
 	image._affline = None
 	#spacing = map(float, [image.header.get_zooms()])
 	spacing = map(float, ([list(image.header.get_zooms())[2]] + [list(image.header.get_zooms())[0], list(image.header.get_zooms())[1]]))
 	spacing = np.array(list(spacing))
-	print (str(spacing))
+	#print (str(spacing))
 
 	resize_factor = spacing / new_spacing
 	new_real_shape = image.shape * resize_factor
@@ -45,8 +45,8 @@ def resample(dataPath, new_spacing=[1,1,1]):#was:   def resample(image, scan, ne
 	real_resize_factor = new_shape / image.shape
 	new_spacing = spacing / real_resize_factor
 
-	print (real_resize_factor)
-	print (new_spacing)
+	#print (real_resize_factor)
+	#print (new_spacing)
 	
 	#image = scipy.ndimage.interpolation.zoom(image, real_resize_factor)
 	print ("Shape before resampling\t", originalShape)
@@ -59,7 +59,7 @@ def resample(dataPath, new_spacing=[1,1,1]):#was:   def resample(image, scan, ne
 def main(mainPath=tempPath, tempFname=fName, option=0):
 	#https://github.com/nipy/nibabel/issues/626
 	nib.Nifti1Header.quaternion_threshold = -1e-06
-	print("yooooooooooooooo >>>>>>>>>>:          " + mainPath)
+	#print("yooooooooooooooo >>>>>>>>>>:          " + mainPath)
 	img = nib.load(mainPath)
 
 

@@ -5,7 +5,7 @@ import os
 from glob import glob
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import scipy.ndimage
-import fileHandler
+from components  import fileHandler
 import time
 
 slash = fileHandler.slash

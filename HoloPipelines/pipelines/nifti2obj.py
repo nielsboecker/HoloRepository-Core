@@ -2,10 +2,10 @@
 #from DB(ref to diagram)?
 #who's our target user? for pipeline dev
 
-import nifti2numpy#this import stuff in the future will be dockerized
+from components import nifti2numpy#this import stuff in the future will be dockerized
 import numpy2obj
 
-import fileHandler#you can stay?
+from components import fileHandler#you can stay?
 import sys
 
 slash = fileHandler.slash

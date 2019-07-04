@@ -1,6 +1,6 @@
 #todo return the file then del?
 import dicom2nifti
-import fileHandler as fileHand
+from components import fileHandler as fileHand
 #import dicom2nifti.settings as settings
 
 dicomPath = fileHand.dicomPath

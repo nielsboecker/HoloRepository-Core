@@ -20,7 +20,7 @@ from skimage import morphology
 from skimage import measure
 from skimage.transform import resize
 from sklearn.cluster import KMeans
-import fileHandler
+from components import fileHandler
 
 nib.Nifti1Header.quaternion_threshold = -1e-06
 
@@ -28,6 +28,7 @@ slash = fileHandler.slash
 cwd = os.getcwd() + slash
 
 imgPath = cwd + "imgs" + slash
+objPath = fileHandler.objPath
 outputPath = cwd + "outputs" + slash
 numpyPath = cwd + "numpys" + slash
 
@@ -73,7 +74,7 @@ def makeObj(fPath, thisThreshold, objOutput):
 
 
 	#objOutput = input("Please enter name for 'obj' file(without .obj extension):  ")
-	newObj = open(outputPath + 'OBJs/%s.obj' % objOutput, 'w')
+	newObj = open(objPath + '%s.obj' % objOutput, 'w')
 	for item in v:
 		newObj.write("v {0} {1} {2}\n".format(item[0],item[1],item[2]))
 

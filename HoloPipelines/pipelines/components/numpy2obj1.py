@@ -20,7 +20,7 @@ from skimage import morphology
 from skimage import measure
 from skimage.transform import resize
 from sklearn.cluster import KMeans
-import fileHandler
+from components import fileHandler
 
 nib.Nifti1Header.quaternion_threshold = -1e-06
 

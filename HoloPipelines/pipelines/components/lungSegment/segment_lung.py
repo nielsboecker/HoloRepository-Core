@@ -48,7 +48,8 @@ def segment_lung(params, I, I_affine):
 	M     = ndimage.binary_closing(M, structure = struct_m, iterations = 1)
 	M     = ndimage.binary_fill_holes(M)
 	Mlung = np.int8(M)
-	nib.Nifti1Image(Mlung,I_affine).to_filename('./result/sample_lungaw.nii.gz')
+	#nib.Nifti1Image(Mlung,I_affine).to_filename('./result/sample_lungaw.nii.gz')
+	nib.Nifti1Image(Mlung,I_affine).to_filename('pipelines/components/lungSegment/result/sample_lungaw.nii.gz')
 	
 	return Mlung
 

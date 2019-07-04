@@ -1,6 +1,6 @@
 import numpy as np
 import nibabel as nib
-import fileHandler#****************
+from components import fileHandler#****************
 '''from utils import *
 from segment_lung import segment_lung
 from segment_airway import segment_airway'''
@@ -8,6 +8,7 @@ niftiPath = fileHandler.niftiPath
 
 
 def main(fname):
+	fname = str(fname).lower()#?
 	import components.lungSegment.utils as utils
 	from components.lungSegment.segment_lung import segment_lung
 	from components.lungSegment.segment_airway import segment_airway

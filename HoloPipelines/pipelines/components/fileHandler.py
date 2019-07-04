@@ -10,10 +10,12 @@ if runningPlatform == "Windows":
 
 cwd = os.getcwd() + slash
 
-dicomPath = cwd + "imgs" + slash + "dicom" + slash
-niftiPath = cwd + "imgs" + slash + "nifti" + slash
-outputPath = cwd + "outputs" + slash
-numpyPath = cwd + "numpys" + slash
+dicomPath = cwd + "medicalScans" + slash + "dicom" + slash
+niftiPath = cwd + "medicalScans" + slash + "nifti" + slash
+outputPath = cwd + "output" + slash
+objPath = outputPath + "OBJ" + slash
+glbPath = outputPath + "GLB" + slash
+numpyPath = cwd + "numpy" + slash
 
 
 def getFname(reqFileType=".npy", fPath=os.getcwd() + slash):
@@ -36,4 +38,7 @@ def getFname(reqFileType=".npy", fPath=os.getcwd() + slash):
 		print("Not a valid file choice, exiting...")
 		exit()
 	return fileChoice
+
+#def main(location, fname):
+	#rainbowifififififififikdidkfdidfksfsidfsdfsfkslfjsfstlsldslslfssfjslsfksklfskflskfliwannadiehelpmeplsokimhungry
 

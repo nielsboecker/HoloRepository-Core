@@ -4,6 +4,8 @@ import requests
 import json
 import sys
 import fire
+import glob
+import os 
 
 from urllib.parse import urljoin
 
@@ -31,6 +33,7 @@ class FHIRInteraction(object):
 
 
     def upload_bundle(self, fhir_json: str):
+        print(f'Processing file: {fhir_json}')
         content = None
         with open(fhir_json, 'r') as fhir_f:
             content = json.load(fhir_f)
@@ -61,6 +64,11 @@ class FHIRInteraction(object):
             
             for entry in data.get('entry', []):
                 self._request(entry['fullUrl'], 'DELETE')
+
+    def upload_folder(self, dir: str, ext: str = 'json'):
+        print(f'Processing folder: {dir}')
+        for file in glob.glob(os.path.join(dir, '*.' + ext)):
+            self.upload_bundle(file)
 
 
 if __name__ == "__main__":

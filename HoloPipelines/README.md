@@ -2,6 +2,8 @@
 
 ## Requirements:
 Python 3.7 or above
+Dependencies can be installed by using or can be installed individually using the list from the section below
+> pip install -r requirements.txt
 
 ## Dependencies:
 - Anaconda https://www.anaconda.com/distribution/ (or alternatively, each dependencies can be install separately)
@@ -14,6 +16,7 @@ Python 3.7 or above
 - Sklearn https://scikit-learn.org/stable/
 - NiBabel https://nipy.org/nibabel/
 - Nilearn https://nilearn.github.io/
+- Dicom2Nifti (pip install dicom2nifti)
 - (optional) new marching cubes with smoothing (?) https://github.com/ilastik/marching_cubes
 
 ## Usage:

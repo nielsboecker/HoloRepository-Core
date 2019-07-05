@@ -11,7 +11,6 @@
     "email": "lorraine.cline@corepan.us",
     "phone": "+1 (890) 502-2502",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
-    "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "867 Dumont Avenue",
       "city": "Fillmore",
@@ -55,7 +54,6 @@
     "email": "roy.santana@kenegy.biz",
     "phone": "+1 (907) 420-3224",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
-    "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "509 Oliver Street",
       "city": "Rockbridge",
@@ -121,7 +119,6 @@
     "email": "mayer.farmer@teraprene.net",
     "phone": "+1 (972) 583-3316",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
-    "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "899 Fillmore Avenue",
       "city": "Guthrie",
@@ -143,7 +140,6 @@
     "email": "barbara.holland@lexicondo.io",
     "phone": "+1 (884) 486-3899",
     "dateOfBirth": "1989-07-07T00:00:00.000Z",
-    "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "162 Portal Street",
       "city": "Topanga",

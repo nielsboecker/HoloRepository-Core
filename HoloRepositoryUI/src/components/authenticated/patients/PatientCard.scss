@@ -1,0 +1,17 @@
+.PatientCard {
+  min-height: 10rem;
+  padding: 16px;
+
+  border-bottom: 1px solid #edebe9;
+
+  &:hover {
+    background: #eee;
+    cursor: pointer;
+
+    h2 {
+      text-decoration: underline !important;
+      text-decoration-color: #660066;
+      text-decoration-skip: box-decoration;
+    }
+  }
+}

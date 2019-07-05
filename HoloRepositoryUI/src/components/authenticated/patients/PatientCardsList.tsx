@@ -22,7 +22,7 @@ export default class PatientCardsList extends Component<any, IPatientCardsListSt
   state = {
     filterPatientNameText: "",
     isShowWithHologramsOnly: false,
-    patients: this.allPatients
+    patients: this.allPatients.sort((a, b) => a.name.full.localeCompare(b.name.full))
   };
 
   render(): JSX.Element {

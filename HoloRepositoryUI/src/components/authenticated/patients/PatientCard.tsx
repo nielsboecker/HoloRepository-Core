@@ -3,7 +3,12 @@ import { Icon } from "office-ui-fabric-react/lib-commonjs/Icon";
 import { PersonaSize, Persona } from "office-ui-fabric-react/lib-commonjs";
 import { Row, Col } from "antd";
 import { Link } from "@reach/router";
-import { IHologram, IPatient } from "../../../types";
+import { IPatient } from "../../../types";
+import {
+  capitaliseString,
+  getAgeFromDobString,
+  getNumberOfHolograms
+} from "../../../util/PatientUtil";
 import "./PatientCard.scss";
 
 export interface IPatientCardProps {
@@ -32,11 +37,9 @@ export default class PatientCard extends Component<IPatientCardProps, object> {
                 <h3 className="name">{patient.name.full}</h3>
 
                 <ul>
-                  <li className="age">Age: {PatientCard._getAge(patient.dateOfBirth)}</li>
-                  <li className="gender">Gender: {PatientCard._capitalize(patient.gender)}</li>
-                  <li className="numberOfHolograms">
-                    {PatientCard._getNumberOfHologramsLabel(patient.holograms)}
-                  </li>
+                  <li className="age">Age: {getAgeFromDobString(patient.dateOfBirth)}</li>
+                  <li className="gender">Gender: {capitaliseString(patient.gender)}</li>
+                  <li className="numberOfHolograms">{getNumberOfHolograms(patient.holograms)}</li>
                 </ul>
               </div>
             </Col>
@@ -48,22 +51,5 @@ export default class PatientCard extends Component<IPatientCardProps, object> {
         </Link>
       </div>
     );
-  }
-
-  static _capitalize(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  static _getAge(dobString: string) {
-    const dateOfBirth = new Date(dobString);
-    const ageDiffMs = Date.now() - dateOfBirth.getTime();
-    const ageDate = new Date(ageDiffMs); // milliseconds from epoch
-    return Math.abs(ageDate.getUTCFullYear() - 1970);
-  }
-
-  static _getNumberOfHologramsLabel(holograms?: IHologram[] | undefined) {
-    const numOfHolograms: number | string =
-      holograms && holograms.length >= 1 ? holograms.length : "No";
-    return `${numOfHolograms} hologram${numOfHolograms != 1 ? "s" : ""} available`;
   }
 }

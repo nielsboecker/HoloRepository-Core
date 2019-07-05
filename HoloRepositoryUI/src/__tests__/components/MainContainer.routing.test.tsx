@@ -3,13 +3,9 @@ import { mount, ReactWrapper } from "enzyme";
 import MainContainer from "../../components/core/MainContainer";
 import AuthContainer from "../../components/authenticated/core/AuthContainer";
 import PublicContainer from "../../components/public/PublicContainer";
-import {
-  LocationProvider,
-  createHistory,
-  createMemorySource
-} from "@reach/router";
+import { LocationProvider, createHistory, createMemorySource } from "@reach/router";
 import LandingPage from "../../components/public/LandingPage";
-import PatientListPage from "../../components/authenticated/PatientListPage";
+import PatientListPage from "../../components/authenticated/patients/PatientListPage";
 import ErrorPage from "../../components/public/ErrorPage";
 
 it("should render PublicContainer for route '/'", () => {

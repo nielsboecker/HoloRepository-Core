@@ -12,13 +12,8 @@ import {
 import { mergeStyleSets } from "office-ui-fabric-react/lib-commonjs/Styling";
 import sampleHolograms from "../../../__tests__/samples/sampleHolograms.json";
 import { IHologram, IPractitioner, UNKNOWN_PERSON_NAME } from "../../../types";
-
-// TODO move
-import { initializeIcons } from "@uifabric/icons";
 import { Icon } from "office-ui-fabric-react/lib-commonjs/Icon";
 import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
-
-initializeIcons();
 
 const practitioner = samplePractitioner as IPractitioner;
 
@@ -83,10 +78,7 @@ export interface IHologramDocument {
   fileSizeInKbReadable: string;
 }
 
-class HologramsDetailsList extends React.Component<
-  {},
-  IHologramsDetailsListState
-> {
+class HologramsDetailsList extends React.Component<{}, IHologramsDetailsListState> {
   private _selection: Selection;
   private _allItems: IHologramDocument[];
 
@@ -101,8 +93,7 @@ class HologramsDetailsList extends React.Component<
         name: "File Type",
         className: classNames.fileIconCell,
         iconClassName: classNames.fileIconHeaderIcon,
-        ariaLabel:
-          "Column operations for File type, Press to sort on File type",
+        ariaLabel: "Column operations for File type, Press to sort on File type",
         iconName: "Page",
         isIconOnly: true,
         fieldName: undefined, // overwrite with onRender()
@@ -235,9 +226,7 @@ class HologramsDetailsList extends React.Component<
         <DetailsList
           items={items}
           columns={columns}
-          selectionMode={
-            isModalSelection ? SelectionMode.multiple : SelectionMode.none
-          }
+          selectionMode={isModalSelection ? SelectionMode.multiple : SelectionMode.none}
           setKey="set"
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible={true}
@@ -252,10 +241,7 @@ class HologramsDetailsList extends React.Component<
     );
   }
 
-  public componentDidUpdate(
-    previousProps: any,
-    previousState: IHologramsDetailsListState
-  ) {
+  public componentDidUpdate(previousProps: any, previousState: IHologramsDetailsListState) {
     if (
       previousState.isModalSelection !== this.state.isModalSelection &&
       !this.state.isModalSelection
@@ -278,8 +264,7 @@ class HologramsDetailsList extends React.Component<
     this.setState({
       items: text
         ? this._allItems.filter(
-            i =>
-              i.subjectReadable.toLowerCase().indexOf(text.toLowerCase()) > -1
+            i => i.subjectReadable.toLowerCase().indexOf(text.toLowerCase()) > -1
           )
         : this._allItems
     });
@@ -298,23 +283,17 @@ class HologramsDetailsList extends React.Component<
       case 1:
         return (
           "1 item selected: " +
-          (this._selection.getSelection()[0] as IHologramDocument)
-            .wrappedHologram.title
+          (this._selection.getSelection()[0] as IHologramDocument).wrappedHologram.title
         );
       default:
         return `${selectionCount} items selected`;
     }
   }
 
-  private _onColumnClick = (
-    ev: React.MouseEvent<HTMLElement>,
-    column: IColumn
-  ): void => {
+  private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     const { columns, items } = this.state;
     const newColumns: IColumn[] = columns.slice();
-    const currColumn: IColumn = newColumns.filter(
-      currCol => column.key === currCol.key
-    )[0];
+    const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
     newColumns.forEach((newCol: IColumn) => {
       if (newCol === currColumn) {
         currColumn.isSortedDescending = !currColumn.isSortedDescending;
@@ -324,11 +303,7 @@ class HologramsDetailsList extends React.Component<
         newCol.isSortedDescending = true;
       }
     });
-    const newItems = _copyAndSort(
-      items,
-      currColumn.fieldName!,
-      currColumn.isSortedDescending
-    );
+    const newItems = _copyAndSort(items, currColumn.fieldName!, currColumn.isSortedDescending);
     this.setState({
       columns: newColumns,
       items: newItems
@@ -336,17 +311,11 @@ class HologramsDetailsList extends React.Component<
   };
 }
 
-function _copyAndSort<T>(
-  items: T[],
-  columnKey: string,
-  isSortedDescending?: boolean
-): T[] {
+function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
   const key = columnKey as keyof T;
   return items
     .slice(0)
-    .sort((a: T, b: T) =>
-      (isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1
-    );
+    .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
 }
 
 function _mapHologramsToDocuments(): IHologramDocument[] {
@@ -370,12 +339,12 @@ function _mapHologramsToDocuments(): IHologramDocument[] {
 
 function _getReadableAuthorName(hologram: IHologram): string {
   let authorName;
-  if (!hologram.author) {
+  if (!hologram.author || !hologram.author.name) {
     authorName = UNKNOWN_PERSON_NAME;
   } else if (hologram.author.id === practitioner.id) {
     authorName = "You";
   } else {
-    authorName = hologram.author.id;
+    authorName = hologram.author.name.full;
   }
   return authorName;
 }

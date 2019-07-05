@@ -7,7 +7,7 @@ interface IPersonName {
   last?: string;
 }
 
-type Gender = "male" | "female" | "other";
+export type Gender = "male" | "female" | "other";
 
 /**
  * Common attributes of Patients and Practitioners.

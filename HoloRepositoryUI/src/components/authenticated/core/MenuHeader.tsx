@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import { Menu, Layout } from "antd";
-import {
-  Image,
-  IImageProps,
-  ImageFit
-} from "office-ui-fabric-react/lib-commonjs/Image";
+import { Image, IImageProps, ImageFit } from "office-ui-fabric-react/lib-commonjs/Image";
 import {
   IPersonaSharedProps,
   Persona,
@@ -58,10 +54,7 @@ class MenuHeader extends Component {
           <Menu.Item key="patients" onClick={({ key }) => this.doNavigate(key)}>
             Patients
           </Menu.Item>
-          <Menu.Item
-            key="holograms"
-            onClick={({ key }) => this.doNavigate(key)}
-          >
+          <Menu.Item key="holograms" onClick={({ key }) => this.doNavigate(key)}>
             Holograms
           </Menu.Item>
           <Menu.Item key="devices" onClick={({ key }) => this.doNavigate(key)}>
@@ -81,10 +74,7 @@ class MenuHeader extends Component {
             }
             style={{ float: "right", padding: "16px 0" }}
           >
-            <Menu.Item
-              key="profile"
-              onClick={({ key }) => this.doNavigate(key)}
-            >
+            <Menu.Item key="profile" onClick={({ key }) => this.doNavigate(key)}>
               Show profile
             </Menu.Item>
             <Menu.Item key="logout" onClick={() => this.doLogout()}>

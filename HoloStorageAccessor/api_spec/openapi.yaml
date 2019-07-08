@@ -19,6 +19,7 @@ paths:
           description: ID of patient to return
           schema:
             type: string
+            example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
       responses:
         200:
           description: Successful pulling of patients metadata
@@ -26,6 +27,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Patients'
+        400:
+          description: Unaccepted input
         404:
           description: Metadata of patients were not found
 
@@ -36,7 +39,7 @@ paths:
         - in: path
           name: id
           required: true
-          description: ID of patient to the employee
+          description: ID of patient to return
           schema:
             type: string
             example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
@@ -47,8 +50,57 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Patient'
+        400:
+          description: Unaccepted input
         404:
           description: Patient id cannot be found
+
+  /holograms:
+    get:
+      summary: "Get holograms metadata based on id"
+      description: "Obtain hologram information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients"
+      parameters:
+        - name: Hologram ID
+          in: query
+          description: ID of hologram to return
+          schema:
+            type: string
+            example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+      responses:
+        200:
+          description: Successfully found all hologram metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Holograms'
+        400:
+          description: Unaccepted input
+        404:
+          description: Metadata of holograms were not found
+
+  /holograms/{id}:
+    get:
+      summary: "Get details of a single hologram"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of hologram to return
+          schema:
+            type: string
+            example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hologram'
+        400:
+          description: Unaccepted input
+        404:
+          description: Patient id cannot be found
+
 
 components:
   schemas:
@@ -70,10 +122,10 @@ components:
         name:
           type: string
           example: Bob Dylan
-        first_name:
+        firstName:
           type: string
           example: Bob
-        last_name:
+        lastName:
           type: string
           example: Dylan
         gender:
@@ -83,6 +135,12 @@ components:
           type: string
           format: date
 
+    Holograms:
+      title: Holograms
+      type: array
+      items:
+        $ref: '#/components/schemas/Hologram'
+
     Hologram:
       title: Hologram
       type: object
@@ -90,19 +148,29 @@ components:
         id:
           type: string
           example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+        title:
+          type: string
+          example: Malformed hip bones
+        author:
+          type: string
+          description: Who and/or what authored the Hologram
+          example: Bone segmentation pipeline
         description:
           type: string
-          example:
+          example: Malformed hip bones on a 8 year old child
         modality:
           type: string
-          example:
-        uri:
+          example: CT scan
+        size:
+          type: integer
+          example: 5120
+        creation:
           type: string
-          example: https://holostorage.azurewebsites.net/v1/
-
-    Error:
-      title: Error Information
-      description: Holds error information for API calls
-      type: object
-      properties:
-        id:
+          format: date-time
+          example: 5120
+        uriEndpoint:
+          type: string
+          example: https://holoblob.blob.core.windows.net/test/BrainScan-18486331-1234-5678-9101-fcac6b7d8c29.glb
+        contentType:
+          type: string
+          example: application/octet-stream

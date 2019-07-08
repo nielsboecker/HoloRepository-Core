@@ -1,0 +1,108 @@
+openapi: "3.0.2"
+
+info:
+  version: 1.0.0
+  title: HoloStorage Accessor API
+  description: APIs to access the FHIR resources and 3D models from HoloStorage
+
+servers:
+  - url: http://holostorage.azurewebsites.net/v1/
+
+paths:
+  /patients:
+    get:
+      summary: "Get patient's metadata based on id"
+      description: "Obtain patient's information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients"
+      parameters:
+        - name: Patient ID
+          in: query
+          description: ID of patient to return
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful pulling of patients metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patients'
+        404:
+          description: Metadata of patients were not found
+
+  /patients/{id}:
+    get:
+      summary: "Get details of a single patient"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of patient to the employee
+          schema:
+            type: string
+            example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        404:
+          description: Patient id cannot be found
+
+components:
+  schemas:
+    Patients:
+      title: Array of patients
+      description: An array of patients metadata
+      type: array
+      items:
+        $ref: '#/components/schemas/Patient'
+
+    Patient:
+      title: Patient metadata
+      description: Metadata of a single patient
+      type: object
+      properties:
+        id:
+          type: string
+          example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+        name:
+          type: string
+          example: Bob Dylan
+        first_name:
+          type: string
+          example: Bob
+        last_name:
+          type: string
+          example: Dylan
+        gender:
+          type: string
+          example:
+        birthDate:
+          type: string
+          format: date
+
+    Hologram:
+      title: Hologram
+      type: object
+      properties:
+        id:
+          type: string
+          example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+        description:
+          type: string
+          example:
+        modality:
+          type: string
+          example:
+        uri:
+          type: string
+          example: https://holostorage.azurewebsites.net/v1/
+
+    Error:
+      title: Error Information
+      description: Holds error information for API calls
+      type: object
+      properties:
+        id:

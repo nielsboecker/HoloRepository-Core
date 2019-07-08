@@ -25,4 +25,4 @@ if flipNpy:
 	tempNpy = np.flip(tempNpy, 0)
 	tempNpy = np.flip(tempNpy, 1)
 numpy2obj.main(tempNpy, threshold, "heyitsyaboi_nifti2obj_comdelmepls")
-print("Task finished")
+print("nifti2obj: done")

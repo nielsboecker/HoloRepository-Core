@@ -17,7 +17,6 @@ def getIO():
 	return [tempPath, fName]
 
 def load_scan(scanPath=fileHandler.dicomPath + "samples" + slash):
-	#print(os.listdir(scanPath))
 	slices = [dicom.read_file(scanPath + slash + s) for s in os.listdir(scanPath)]
 	slices.sort(key = lambda x: int(x.InstanceNumber))
 	try:
@@ -33,15 +32,10 @@ def load_scan(scanPath=fileHandler.dicomPath + "samples" + slash):
 
 def get_pixels_hu(scans):
 	image = np.stack([s.pixel_array for s in scans])
-	# Convert to int16 (from sometimes int16), 
-	# should be possible as values should always be low enough (<32k)
 	image = image.astype(np.int16)
 
-	# Set outside-of-scan pixels to 1
-	# The intercept is usually -1024, so air is approximately 0
 	image[image == -2000] = 0
 	
-	# Convert to Hounsfield units (HU)
 	intercept = scans[0].RescaleIntercept
 	slope = scans[0].RescaleSlope
 	
@@ -69,7 +63,7 @@ def resample(dataPath=fileHandler.dicomPath + slash + "samples", new_spacing=[1,
 	except:
 		print(len(scan[0].PixelSpacing))
 		print ("Pixel Spacing (row, col): (%f, %f) " % (scan[0].PixelSpacing[0], scan[0].PixelSpacing[1]))
-		print("something went sooooooooooooooooooooooooooooo wrong")
+		print("dicom2numpy: error loading scan")
 		exit()
 
 	resize_factor = spacing / new_spacing

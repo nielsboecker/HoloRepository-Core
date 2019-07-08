@@ -39,6 +39,3 @@ def getFname(reqFileType=".npy", fPath=os.getcwd() + slash):
 		exit()
 	return fileChoice
 
-#def main(location, fname):
-	#rainbowifififififififikdidkfdidfksfsidfsdfsfkslfjsfstlsldslslfssfjslsfksklfskflskfliwannadiehelpmeplsokimhungry
-

@@ -1,0 +1,14 @@
+@import "~antd/dist/antd.css";
+
+.App {
+  height: 100vh;
+
+  background-image: url("../../assets/background/DRIVE_glow@0,5x.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  // background-attachment: fixed;
+  background-size: cover;
+  background-color: blue;
+
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}

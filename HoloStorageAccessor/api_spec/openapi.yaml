@@ -103,6 +103,30 @@ paths:
         404:
           description: Metadata of holograms were not found
 
+    post:
+      summary: 'Upload hologram to HoloStorage'
+      description: 'Hologram and associated metadata to be uploaded onto HoloStorage. The UUID will be generated automatically by the accessor'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/HologramUploadData'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The UUID of the uploaded hologram
+                    example: 32853d69-3e71-4c87-abf9-56f0eddefefc
+        400:
+          description: Unaccepted input
+
   /holograms/{id}:
     get:
       summary: "Get details of a single hologram"
@@ -202,9 +226,6 @@ components:
         description:
           type: string
           example: Malformed hip bones on a 8 year old child
-        size:
-          type: integer
-          example: 5120
         creation:
           type: string
           format: date-time
@@ -215,6 +236,27 @@ components:
         contentType:
           type: string
           example: application/octet-stream
+        size:
+          type: integer
+          example: 5120
+
+    HologramUploadData:
+      title: Hologram
+      type: object
+      properties:
+        title:
+          type: string
+          example: Malformed hip bones
+        patient:
+          $ref: '#/components/schemas/Patient'
+        author:
+          $ref: "#/components/schemas/Author"
+        description:
+          type: string
+          example: Malformed hip bones on a 8 year old child
+        hologramFile:
+          type: string
+          format: binary
 
     Author:
       title: Author

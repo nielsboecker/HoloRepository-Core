@@ -1,6 +1,5 @@
-import * as React from "react";
+import React, { Component } from "react";
 import { TextField } from "office-ui-fabric-react/lib-commonjs/TextField";
-import { Toggle } from "office-ui-fabric-react/lib-commonjs/Toggle";
 import { Fabric } from "office-ui-fabric-react/lib-commonjs/Fabric";
 import {
   DetailsList,
@@ -11,48 +10,29 @@ import {
 } from "office-ui-fabric-react/lib-commonjs/DetailsList";
 import { mergeStyleSets } from "office-ui-fabric-react/lib-commonjs/Styling";
 import sampleHolograms from "../../../__tests__/samples/sampleHolograms.json";
-import { IHologram, IPractitioner, UNKNOWN_PERSON_NAME } from "../../../types";
-import { Icon } from "office-ui-fabric-react/lib-commonjs/Icon";
+import { IHologram, IPractitioner, unknownPersonName } from "../../../types";
+import {
+  fileTypeCol,
+  subjectCol,
+  titleCol,
+  dateCol,
+  authorCol,
+  fileSizeCol
+} from "./HologramsDetailsListColumns";
 import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
 
 const practitioner = samplePractitioner as IPractitioner;
 
 const classNames = mergeStyleSets({
-  fileIconHeaderIcon: {
-    padding: 0,
-    fontSize: "16px"
-  },
-  fileIconCell: {
-    textAlign: "center",
-    selectors: {
-      "&:before": {
-        content: ".",
-        display: "inline-block",
-        verticalAlign: "middle",
-        height: "100%",
-        width: "0px",
-        visibility: "hidden"
-      }
-    }
-  },
-  fileIconImg: {
-    verticalAlign: "middle",
-    maxHeight: "16px",
-    maxWidth: "16px"
-  },
   controlWrapper: {
     display: "flex",
     flexWrap: "wrap"
-  },
-  exampleToggle: {
-    display: "inline-block",
-    marginBottom: "10px",
-    marginRight: "30px"
   },
   selectionDetails: {
     marginBottom: "20px"
   }
 });
+
 const controlStyles = {
   root: {
     margin: "0 30px 20px 0",
@@ -60,11 +40,25 @@ const controlStyles = {
   }
 };
 
+const defaultColumns: IColumn[] = [
+  fileTypeCol,
+  subjectCol,
+  titleCol,
+  dateCol,
+  authorCol,
+  fileSizeCol
+];
+
 export interface IHologramsDetailsListState {
   columns: IColumn[];
   items: IHologramDocument[];
   selectionDetails: string;
-  isModalSelection: boolean;
+}
+
+export interface IHologramsDetailsListProps {
+  columns?: IColumn[];
+  showFilters: boolean;
+  patientId?: string;
 }
 
 export interface IHologramDocument {
@@ -78,155 +72,49 @@ export interface IHologramDocument {
   fileSizeInKbReadable: string;
 }
 
-class HologramsDetailsList extends React.Component<{}, IHologramsDetailsListState> {
-  private _selection: Selection;
-  private _allItems: IHologramDocument[];
+class HologramsDetailsList extends Component<
+  IHologramsDetailsListProps,
+  IHologramsDetailsListState
+> {
+  private _selection: Selection = new Selection({
+    onSelectionChanged: () => {
+      this.setState({
+        selectionDetails: this._getSelectionDetails()
+      });
+    }
+  });
 
-  constructor(props: {}) {
-    super(props);
+  private _allItems: IHologramDocument[] = _mapHologramsToDocuments();
 
-    this._allItems = _mapHologramsToDocuments();
-
-    const columns: IColumn[] = [
-      {
-        key: "col:fileType",
-        name: "File Type",
-        className: classNames.fileIconCell,
-        iconClassName: classNames.fileIconHeaderIcon,
-        ariaLabel: "Column operations for File type, Press to sort on File type",
-        iconName: "Page",
-        isIconOnly: true,
-        fieldName: undefined, // overwrite with onRender()
-        minWidth: 16,
-        maxWidth: 16,
-        // onColumnClick: this._onColumnClick,
-        onRender: (item: IHologramDocument) => (
-          <Icon iconName="HealthSolid" className={classNames.fileIconImg} />
-        )
-      },
-
-      {
-        key: "col:subject",
-        name: "Subject",
-        fieldName: "subjectReadable",
-        minWidth: 150,
-        maxWidth: 350,
-        isRowHeader: true,
-        isResizable: true,
-        isSorted: true,
-        isSortedDescending: false,
-        sortAscendingAriaLabel: "Sorted A to Z",
-        sortDescendingAriaLabel: "Sorted Z to A",
-        onColumnClick: this._onColumnClick,
-        data: "string",
-        isPadded: true
-      },
-
-      {
-        key: "col:title",
-        name: "Title",
-        fieldName: "titleReadable",
-        minWidth: 150,
-        maxWidth: 350,
-        isRowHeader: true,
-        isResizable: true,
-        isSorted: true,
-        isSortedDescending: false,
-        sortAscendingAriaLabel: "Sorted A to Z",
-        sortDescendingAriaLabel: "Sorted Z to A",
-        onColumnClick: this._onColumnClick,
-        data: "string",
-        isPadded: true
-      },
-
-      {
-        key: "col:date",
-        name: "Date created",
-        fieldName: "createdDateValue",
-        minWidth: 70,
-        maxWidth: 90,
-        isResizable: true,
-        onColumnClick: this._onColumnClick,
-        data: "number",
-        onRender: (item: IHologramDocument) => {
-          return <span>{item.createdDateReadable}</span>;
-        },
-        isPadded: true
-      },
-
-      {
-        key: "col:author",
-        name: "Created by",
-        fieldName: "authorReadable",
-        minWidth: 70,
-        maxWidth: 90,
-        isResizable: true,
-        isCollapsible: true,
-        data: "string",
-        onColumnClick: this._onColumnClick,
-        onRender: (item: IHologramDocument) => {
-          return <span>{item.authorReadable}</span>;
-        },
-        isPadded: true
-      },
-
-      {
-        key: "col:size",
-        name: "File size",
-        fieldName: "fileSizeInKbValue",
-        minWidth: 70,
-        maxWidth: 90,
-        isResizable: true,
-        isCollapsible: true,
-        data: "number",
-        onColumnClick: this._onColumnClick,
-        onRender: (item: IHologramDocument) => {
-          return <span>{item.fileSizeInKbReadable}</span>;
-        }
-      }
-    ];
-
-    this._selection = new Selection({
-      onSelectionChanged: () => {
-        this.setState({
-          selectionDetails: this._getSelectionDetails()
-        });
-      }
-    });
-
-    this.state = {
-      items: this._allItems,
-      columns: columns,
-      selectionDetails: this._getSelectionDetails(),
-      isModalSelection: false
-    };
-  }
+  state = {
+    items: this._allItems,
+    columns: this.props.columns ? this.props.columns : defaultColumns,
+    selectionDetails: this._getSelectionDetails()
+  };
 
   public render() {
-    const { columns, items, selectionDetails, isModalSelection } = this.state;
+    const { columns, items, selectionDetails } = this.state;
 
     return (
       <Fabric>
-        <div className={classNames.controlWrapper}>
-          <Toggle
-            label="Enable modal selection"
-            checked={isModalSelection}
-            onChange={this._onChangeModalSelection}
-            onText="Modal"
-            offText="Normal"
-            styles={controlStyles}
-          />
-          <TextField
-            label="Filter by subject name:"
-            onChange={this._onChangeText}
-            styles={controlStyles}
-          />
-        </div>
-        <div className={classNames.selectionDetails}>{selectionDetails}</div>
+        {this.props.showFilters && (
+          <div className="filters">
+            <div className={classNames.controlWrapper}>
+              <TextField
+                label="Filter by subject name:"
+                onChange={this._onChangeText}
+                styles={controlStyles}
+              />
+            </div>
+            <div className={classNames.selectionDetails}>{selectionDetails}</div>
+          </div>
+        )}
+
         <DetailsList
           items={items}
           columns={columns}
-          selectionMode={isModalSelection ? SelectionMode.multiple : SelectionMode.none}
+          onColumnHeaderClick={this._onColumnHeaderClick}
+          selectionMode={SelectionMode.single}
           setKey="set"
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible={true}
@@ -240,22 +128,6 @@ class HologramsDetailsList extends React.Component<{}, IHologramsDetailsListStat
       </Fabric>
     );
   }
-
-  public componentDidUpdate(previousProps: any, previousState: IHologramsDetailsListState) {
-    if (
-      previousState.isModalSelection !== this.state.isModalSelection &&
-      !this.state.isModalSelection
-    ) {
-      this._selection.setAllSelected(false);
-    }
-  }
-
-  private _onChangeModalSelection = (
-    ev: React.MouseEvent<HTMLElement>,
-    checked: boolean = false
-  ): void => {
-    this.setState({ isModalSelection: checked });
-  };
 
   private _onChangeText = (
     ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -290,10 +162,10 @@ class HologramsDetailsList extends React.Component<{}, IHologramsDetailsListStat
     }
   }
 
-  private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
+  private _onColumnHeaderClick = (_: any, column: IColumn | undefined): void => {
     const { columns, items } = this.state;
     const newColumns: IColumn[] = columns.slice();
-    const currColumn: IColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
+    const currColumn: IColumn = newColumns.filter(currCol => column!.key === currCol.key)[0];
     newColumns.forEach((newCol: IColumn) => {
       if (newCol === currColumn) {
         currColumn.isSortedDescending = !currColumn.isSortedDescending;
@@ -340,7 +212,7 @@ function _mapHologramsToDocuments(): IHologramDocument[] {
 function _getReadableAuthorName(hologram: IHologram): string {
   let authorName;
   if (!hologram.author || !hologram.author.name) {
-    authorName = UNKNOWN_PERSON_NAME;
+    authorName = unknownPersonName;
   } else if (hologram.author.id === practitioner.id) {
     authorName = "You";
   } else {
@@ -351,7 +223,7 @@ function _getReadableAuthorName(hologram: IHologram): string {
 
 function _getReadableSubjectName(hologram: IHologram): string {
   if (!hologram.subject.name) {
-    return UNKNOWN_PERSON_NAME;
+    return unknownPersonName;
   } else {
     return hologram.subject.name.full;
   }

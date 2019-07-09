@@ -14,8 +14,8 @@ paths:
       summary: "Get patient's metadata based on search parameters"
       description: "Obtain patient's information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients"
       parameters:
-        - name: Patient ID
-          in: query
+        - in: query
+          name: pid
           description: ID of patient to return
           schema:
             $ref: '#/components/schemas/UUID'
@@ -135,6 +135,14 @@ paths:
           description: ID of hologram to get annotation information
           schema:
             type: string
+      responses:
+        200:
+          description: Success
+          # TODO: Contents of annotations
+        400:
+          description: Unaccepted input
+        404:
+          description: Hologram ID is not found
 
 components:
   schemas:
@@ -163,15 +171,10 @@ components:
         name:
           type: string
           example: Bob Dylan
-        family:
-          type: string
-          example: Bob
-        lastName:
-          type: string
-          example: Dylan
         gender:
           type: string
-          example:
+          example: male
+          enum: [male, female, unknown, other]
         birthDate:
           type: string
           format: date
@@ -192,16 +195,13 @@ components:
         title:
           type: string
           example: Malformed hip bones
-        subject:
-          $ref: "#/components/schemas/Subject"
+        patient:
+          $ref: '#/components/schemas/Patient'
         author:
           $ref: "#/components/schemas/Author"
         description:
           type: string
           example: Malformed hip bones on a 8 year old child
-        modality:
-          type: string
-          example: CT scan
         size:
           type: integer
           example: 5120
@@ -226,19 +226,4 @@ components:
           example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
         name:
           type: string
-          example: Dr. Jens Krinke
-
-    Subject:
-      title: Subject
-      description: Who/what is the subject
-      type: object
-      properties:
-        id:
-          type: string
-          example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
-        type:
-          type: string
-          enum:
-            - patient
-            - device
-          example:
+          example: Jens Krinke

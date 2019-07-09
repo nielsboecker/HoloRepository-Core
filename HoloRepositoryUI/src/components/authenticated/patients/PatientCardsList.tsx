@@ -13,6 +13,7 @@ import samplePatientsWithHolograms from "../../../__tests__/samples/samplePatien
 
 export interface IPatientCardsListState {
   filterPatientNameText?: string;
+  isShowWithHologramsOnly: boolean;
   patients?: IPatient[];
 }
 
@@ -51,7 +52,7 @@ export default class PatientCardsList extends Component<any, IPatientCardsListSt
               </Col>
             </Row>
 
-            {this.state.patients != this.allPatients && (
+            {this.state.patients !== this.allPatients && (
               <MessageBar>
                 {`Showing ${patients.length} of ${this.allPatients.length} patients.`}
               </MessageBar>
@@ -82,8 +83,8 @@ export default class PatientCardsList extends Component<any, IPatientCardsListSt
   };
 
   private _handleShowWithHologramsOnlyToggleChange = () => {
-    this.state.isShowWithHologramsOnly = !this.state.isShowWithHologramsOnly;
     this.setState({
+      isShowWithHologramsOnly: !this.state.isShowWithHologramsOnly,
       patients: this.state.isShowWithHologramsOnly
         ? this.allPatients.filter(patient => patient.holograms && patient.holograms.length > 0)
         : this.allPatients

@@ -14,7 +14,7 @@ const getAgeFromDobString = (dobString: string) => {
 const getNumberOfHolograms = (holograms?: IHologram[] | undefined) => {
   const numOfHolograms: number | string =
     holograms && holograms.length >= 1 ? holograms.length : "No";
-  return `${numOfHolograms} hologram${numOfHolograms != 1 ? "s" : ""} available`;
+  return `${numOfHolograms} hologram${numOfHolograms !== 1 ? "s" : ""} available`;
 };
 
 export { capitaliseString, getAgeFromDobString, getNumberOfHolograms };

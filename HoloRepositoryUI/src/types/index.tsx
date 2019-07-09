@@ -1,4 +1,4 @@
-export const UNKNOWN_PERSON_NAME = "Unknown";
+export const unknownPersonName = "Unknown";
 
 interface IPersonName {
   full: string;
@@ -81,12 +81,4 @@ export interface IHologram {
   createdDate: string;
   fileSizeInKb: number;
   imagingStudySeriesId?: string;
-  // annotations?: IAnnotation[];
-}
-
-/**
- * Placeholder. Could be used for Annotator integration.
- */
-interface IAnnotation {
-  // Intentionally left blank
 }

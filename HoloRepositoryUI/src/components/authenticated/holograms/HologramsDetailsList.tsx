@@ -21,7 +21,6 @@ import {
 } from "./HologramsDetailsListColumns";
 import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
 import HologramsCommandBar from "./HologramsCommandBar";
-import { Divider } from "antd";
 
 const practitioner = samplePractitioner as IPractitioner;
 
@@ -65,13 +64,13 @@ export interface IHologramsDetailsListProps {
 
 export interface IHologramDocument {
   wrappedHologram: IHologram;
-  titleReadable: string;
-  authorReadable: string;
-  subjectReadable: string;
-  createdDateReadable: string;
+  titleDisplay: string;
+  authorDisplay: string;
+  subjectDisplay: string;
+  createdDateDisplay: string;
   createdDateValue: number;
   fileSizeInKbValue: number;
-  fileSizeInKbReadable: string;
+  fileSizeInKbDisplay: string;
 }
 
 class HologramsDetailsList extends Component<
@@ -109,8 +108,6 @@ class HologramsDetailsList extends Component<
               />
             </div>
             <div className={classNames.selectionDetails}>{selectionDetails}</div>
-
-            <Divider />
           </div>
         )}
 
@@ -133,7 +130,7 @@ class HologramsDetailsList extends Component<
         </div>
 
         <div className="commands" style={{ marginTop: "24px" }}>
-          <HologramsCommandBar />
+          <HologramsCommandBar selection={this._selection} />
         </div>
       </Fabric>
     );
@@ -146,7 +143,7 @@ class HologramsDetailsList extends Component<
     this.setState({
       items: text
         ? this._allItems.filter(
-            i => i.subjectReadable.toLowerCase().indexOf(text.toLowerCase()) > -1
+            i => i.subjectDisplay.toLowerCase().indexOf(text.toLowerCase()) > -1
           )
         : this._allItems
     });
@@ -207,19 +204,19 @@ function _mapHologramsToDocuments(): IHologramDocument[] {
     const createdDate = new Date(hologram.createdDate);
 
     return {
-      titleReadable: hologram.title,
-      authorReadable: _getReadableAuthorName(hologram),
-      subjectReadable: _getReadableSubjectName(hologram),
+      titleDisplay: hologram.title,
+      authorDisplay: _getDisplayAuthorName(hologram),
+      subjectDisplay: _getDisplaySubjectName(hologram),
       wrappedHologram: hologram,
-      createdDateReadable: createdDate.toLocaleDateString(),
+      createdDateDisplay: createdDate.toLocaleDateString(),
       createdDateValue: createdDate.valueOf(),
       fileSizeInKbValue: hologram.fileSizeInKb,
-      fileSizeInKbReadable: `${hologram.fileSizeInKb} kB`
+      fileSizeInKbDisplay: `${hologram.fileSizeInKb} kB`
     };
   });
 }
 
-function _getReadableAuthorName(hologram: IHologram): string {
+function _getDisplayAuthorName(hologram: IHologram): string {
   let authorName;
   if (!hologram.author || !hologram.author.name) {
     authorName = unknownPersonName;
@@ -231,7 +228,7 @@ function _getReadableAuthorName(hologram: IHologram): string {
   return authorName;
 }
 
-function _getReadableSubjectName(hologram: IHologram): string {
+function _getDisplaySubjectName(hologram: IHologram): string {
   if (!hologram.subject.name) {
     return unknownPersonName;
   } else {

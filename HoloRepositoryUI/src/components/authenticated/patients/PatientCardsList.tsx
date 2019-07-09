@@ -18,12 +18,14 @@ export interface IPatientCardsListState {
 }
 
 export default class PatientCardsList extends Component<any, IPatientCardsListState> {
-  allPatients = [...samplePatients, ...samplePatientsWithHolograms] as IPatient[];
+  allPatients = [...samplePatients, ...samplePatientsWithHolograms].sort((a, b) =>
+    a.name.full.localeCompare(b.name.full)
+  ) as IPatient[];
 
-  state = {
+  state: IPatientCardsListState = {
     filterPatientNameText: "",
     isShowWithHologramsOnly: false,
-    patients: this.allPatients.sort((a, b) => a.name.full.localeCompare(b.name.full))
+    patients: this.allPatients
   };
 
   render(): JSX.Element {
@@ -32,17 +34,15 @@ export default class PatientCardsList extends Component<any, IPatientCardsListSt
     return (
       <>
         <FocusZone direction={FocusZoneDirection.vertical} defaultActiveElement=".nameFilter">
-          <h2>Search and filter</h2>
-
           <div className="Filters" style={{ marginBottom: "24px" }}>
             <Row>
               <Col span={12} style={{ padding: "0 24px" }}>
-                <TextField label="Filter by name" onChange={this._onFilterChanged} />
+                <TextField label="Filter by name" onChange={this._handleNameFilterChanged} />
               </Col>
 
               <Col span={12} style={{ padding: "0 24px" }}>
                 <Toggle
-                  label="Filter patients holograms"
+                  label="Only patients with holograms"
                   checked={this.state.isShowWithHologramsOnly}
                   onChange={this._handleShowWithHologramsOnlyToggleChange}
                   onText="Showing only patients with existing holograms"
@@ -52,7 +52,7 @@ export default class PatientCardsList extends Component<any, IPatientCardsListSt
               </Col>
             </Row>
 
-            {this.state.patients !== this.allPatients && (
+            {patients.length !== this.allPatients.length && (
               <MessageBar>
                 {`Showing ${patients.length} of ${this.allPatients.length} patients.`}
               </MessageBar>
@@ -67,27 +67,42 @@ export default class PatientCardsList extends Component<any, IPatientCardsListSt
     );
   }
 
-  private _onFilterChanged = (_: any = null, text: string = ""): void => {
-    this.setState({
-      filterPatientNameText: text,
-      patients: text
-        ? this.allPatients.filter(
-            patient => patient.name.full.toLowerCase().indexOf(text.toLowerCase()) >= 0
-          )
-        : this.allPatients
-    });
-  };
+  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<IPatientCardsListState>): void {
+    if (
+      prevState.filterPatientNameText !== this.state.filterPatientNameText ||
+      prevState.isShowWithHologramsOnly !== this.state.isShowWithHologramsOnly
+    ) {
+      let patients = this.allPatients.slice();
+      if (this.state.filterPatientNameText) {
+        patients = patients.filter(
+          patient =>
+            patient.name.full
+              .toLowerCase()
+              .indexOf(this.state.filterPatientNameText!.toLowerCase()) >= 0
+        );
+      }
+
+      if (this.state.isShowWithHologramsOnly) {
+        patients = patients.filter(patient => patient.holograms && patient.holograms.length > 0);
+      }
+
+      this.setState({ patients });
+    }
+  }
 
   private _onRenderCell = (patient: IPatient | undefined): JSX.Element => {
-    return patient ? <PatientCard patient={patient} /> : <div />;
+    return <PatientCard patient={patient!} />;
+  };
+
+  private _handleNameFilterChanged = (_: any = null, text: string = ""): void => {
+    this.setState({
+      filterPatientNameText: text
+    });
   };
 
   private _handleShowWithHologramsOnlyToggleChange = () => {
-    this.setState({
-      isShowWithHologramsOnly: !this.state.isShowWithHologramsOnly,
-      patients: this.state.isShowWithHologramsOnly
-        ? this.allPatients.filter(patient => patient.holograms && patient.holograms.length > 0)
-        : this.allPatients
-    });
+    this.setState(state => ({
+      isShowWithHologramsOnly: !state.isShowWithHologramsOnly
+    }));
   };
 }

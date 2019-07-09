@@ -48,7 +48,7 @@ const fileTypeCol: IColumn = {
 const subjectCol: IColumn = {
   key: "col:subject",
   name: "Subject",
-  fieldName: "subjectReadable",
+  fieldName: "subjectDisplay",
   minWidth: 150,
   maxWidth: 350,
   isRowHeader: true,
@@ -64,7 +64,7 @@ const subjectCol: IColumn = {
 const titleCol: IColumn = {
   key: "col:title",
   name: "Title",
-  fieldName: "titleReadable",
+  fieldName: "titleDisplay",
   minWidth: 150,
   maxWidth: 350,
   isRowHeader: true,
@@ -86,7 +86,7 @@ const dateCol: IColumn = {
   isResizable: true,
   data: "number",
   onRender: (item: IHologramDocument) => {
-    return <span>{item.createdDateReadable}</span>;
+    return <span>{item.createdDateDisplay}</span>;
   },
   isPadded: true
 };
@@ -94,14 +94,14 @@ const dateCol: IColumn = {
 const authorCol: IColumn = {
   key: "col:author",
   name: "Created by",
-  fieldName: "authorReadable",
+  fieldName: "authorDisplay",
   minWidth: 70,
   maxWidth: 90,
   isResizable: true,
   isCollapsible: true,
   data: "string",
   onRender: (item: IHologramDocument) => {
-    return <span>{item.authorReadable}</span>;
+    return <span>{item.authorDisplay}</span>;
   },
   isPadded: true
 };
@@ -116,7 +116,7 @@ const fileSizeCol: IColumn = {
   isCollapsible: true,
   data: "number",
   onRender: (item: IHologramDocument) => {
-    return <span>{item.fileSizeInKbReadable}</span>;
+    return <span>{item.fileSizeInKbDisplay}</span>;
   }
 };
 

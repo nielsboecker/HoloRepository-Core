@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { RouteComponentProps } from "@reach/router";
 import samplePractitioner from "../../__tests__/samples/samplePractitioner.json";
-import { IPractitioner } from "../../types/index.jsx";
+import { IPractitioner } from "../../types";
 import { Col, Row, Divider } from "antd";
 import { Persona, PersonaSize } from "office-ui-fabric-react/lib-commonjs";
 import { capitaliseString, getAgeFromDobString } from "../../util/PatientUtil";

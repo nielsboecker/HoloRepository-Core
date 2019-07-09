@@ -1,13 +1,18 @@
 export const unknownPersonName = "Unknown";
 
-interface IPersonName {
+export type Gender = "male" | "female" | "other" | "unknown";
+
+/**
+ * Interface representing a human name.
+ * Semantics is similar to the corresponding FHIR resource; however, the structure
+ * here is purposefully kept much simpler to avoid unnecessary complexity.
+ */
+interface IHumanName {
   full: string;
   title?: string;
-  first?: string;
-  last?: string;
+  given?: string;
+  family?: string;
 }
-
-export type Gender = "male" | "female" | "other";
 
 /**
  * Common attributes of Patients and Practitioners.
@@ -15,7 +20,7 @@ export type Gender = "male" | "female" | "other";
  */
 interface IPerson {
   id: string;
-  name: IPersonName;
+  name: IHumanName;
   gender: Gender;
   email?: string;
   phone: string;
@@ -34,7 +39,7 @@ interface IPerson {
  * Semantics is similar to the corresponding FHIR resource, apart from the "patients" attribute.
  */
 export interface IPractitioner extends IPerson {
-  patients: IPatient[];
+  patients?: IPatient[];
 }
 
 /**
@@ -54,7 +59,7 @@ export interface IImagingStudySeries {
   id: string;
   subject: {
     id: string;
-    name?: IPersonName;
+    name?: IHumanName;
   };
   previewPictureUrl?: string;
   modality?: string;
@@ -64,7 +69,7 @@ export interface IImagingStudySeries {
 
 /**
  * Interface for a Hologram. Note that, similar to FHIR's ImagingStudy, the actual
- * binary data is not included, just an endpoint where it can be retreived.
+ * binary data is not included, just an endpoint where it can be retrieved.
  */
 export interface IHologram {
   id: string;
@@ -72,11 +77,11 @@ export interface IHologram {
   title: string;
   subject: {
     id: string;
-    name?: IPersonName;
+    name?: IHumanName;
   };
   author: {
     id: string;
-    name?: IPersonName;
+    name?: IHumanName;
   };
   createdDate: string;
   fileSizeInKb: number;

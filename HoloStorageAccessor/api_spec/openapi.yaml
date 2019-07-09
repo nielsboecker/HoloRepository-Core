@@ -1,4 +1,4 @@
-openapi: "3.0.2"
+openapi: '3.0.2'
 
 info:
   version: 1.0.0
@@ -11,14 +11,16 @@ servers:
 paths:
   /patients:
     get:
-      summary: "Get patient's metadata based on search parameters"
-      description: "Obtain patient's information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients"
+      summary: Get patient's metadata based on search parameters
+
+      description: Obtain patient's information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients
       parameters:
         - in: query
           name: pid
           description: ID of patient to return
           schema:
             $ref: '#/components/schemas/UUID'
+
       responses:
         200:
           description: Successful pulling of patients metadata
@@ -29,52 +31,15 @@ paths:
         400:
           description: Unaccepted input
         404:
-          description: Metadata of patients were not found
-    post:
-      summary: Add new patient information
-      description: "Add new patient to be stored within HoloStorage"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Patient'
-      responses:
-        200:
-          description: Successfully added
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The UUID of the uploaded hologram
-                    example: 32853d69-3e71-4c87-abf9-56f0eddefefc
-        400:
-          description: Unaccepted input
+          description: Failure to find all patients' metadata
+
+# Download Holograms via Hologram ID(s)
+# Get Holograms Metadata via Patients ID(s)
+# Get Holograms Metadata via Hologram ID(s)
+# Delete Holograms via Hologram ID(s)
+# Annotations operations (POST/PUT/DELETE)
 
   /patients/{id}:
-    get:
-      summary: "Get details of a single patient"
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID of patient to return
-          schema:
-            $ref: '#/components/schemas/UUID'
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Patient'
-        400:
-          description: Unaccepted input
-        404:
-          description: Patient id cannot be found
     put:
       summary: Add/Update patient information
       parameters:
@@ -98,41 +63,14 @@ paths:
         400:
           description: Unaccepted input
 
-  /patients/{id}/holograms:
-    get:
-      summary: Get all holograms associated to a patient
-      description: Return all holograms associated with a patient
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
-      responses:
-        200:
-          description: Successfully found all hologram metadata for a patient
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Holograms'
-        400:
-          description: Unaccepted input
-        404:
-          description: Patient id cannot be found
-
   /holograms:
     get:
-      summary: "Get holograms metadata based on search parameters"
-      description: "Obtain hologram information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients"
+      summary: 'Get holograms metadata based on hologram ids'
+      description: 'Obtain hologram information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients'
       parameters:
         - in: query
-          name: hid
+          name: id
           description: ID of hologram to return
-          schema:
-            $ref: '#/components/schemas/UUID'
-        - in: query
-          name: pid
-          description: ID of patient to return
           schema:
             $ref: '#/components/schemas/UUID'
 
@@ -172,27 +110,52 @@ paths:
         400:
           description: Unaccepted input
 
-  /holograms/{id}:
+  /holograms/patients:
     get:
-      summary: "Get details of a single hologram"
+      summary: 'Get holograms metadata based on search parameters'
+      description: 'Obtain hologram information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients'
       parameters:
-        - in: path
+        - in: query
           name: id
-          required: true
           description: ID of hologram to return
+          schema:
+            $ref: '#/components/schemas/UUID'
+
+      responses:
+        200:
+          description: Successfully found all hologram metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Holograms'
+        400:
+          description: Unaccepted input
+        404:
+          description: Metadata of holograms were not found
+
+  /content:
+    get:
+      summary: Download holograms based on id
+      parameters:
+        - in: query
+          name: id
+          description: ID of hologram to download
           schema:
             $ref: '#/components/schemas/UUID'
       responses:
         200:
-          description: Success
+          description: Zipped file containing multiple holograms or uncompressed of single hologram
           content:
-            application/json:
+            application/zip:
               schema:
-                $ref: '#/components/schemas/Hologram'
-        400:
-          description: Unaccepted input
+                type: string
+                format: binary
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
         404:
-          description: Patient id cannot be found
+          description: Not all hologram ids are found
 
   /holograms/{id}/annotations:
     get:
@@ -215,6 +178,22 @@ paths:
 
 components:
   schemas:
+    PersonName:
+      description: Components that make up the name of the
+      properties:
+        full:
+          type: string
+          example: Jens Krinke
+        title:
+          type: string
+          example: Dr
+        given:
+          type: string
+          example: Jens
+        family:
+          type: string
+          example: Krinke
+
     UUID:
       title: Resource UUID
       description: The UUID assigned to the specific requested resource (e.g. Patient, Hologram)
@@ -223,7 +202,6 @@ components:
       format: uuid
 
     Patients:
-      title: Patient Array
       description: An array of patients metadata
       type: array
       items:
@@ -238,8 +216,7 @@ components:
           type: string
           example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
         name:
-          type: string
-          example: Bob Dylan
+          $ref: '#/components/schemas/PersonName'
         gender:
           type: string
           example: male
@@ -249,13 +226,13 @@ components:
           format: date
 
     Holograms:
-      title: Hologram Array
+      description: An array of hologram metadata
       type: array
       items:
         $ref: '#/components/schemas/Hologram'
 
     Hologram:
-      title: Hologram
+      description: Metadata of a hologram
       type: object
       properties:
         id:
@@ -267,17 +244,14 @@ components:
         patient:
           $ref: '#/components/schemas/Patient'
         author:
-          $ref: "#/components/schemas/Author"
+          $ref: '#/components/schemas/Author'
         description:
           type: string
           example: Malformed hip bones on a 8 year old child
         creation:
           type: string
           format: date-time
-          example: 2017-07-21T17:32:28Z
-        uriEndpoint:
-          type: string
-          example: https://holoblob.blob.core.windows.net/test/BrainScan-18486331-1234-5678-9101-fcac6b7d8c29.glb
+          example: '2017-07-21T17:32:28Z'
         contentType:
           type: string
           example: application/octet-stream
@@ -286,7 +260,7 @@ components:
           example: 5120
 
     HologramUploadData:
-      title: Hologram
+      description: Components required to upload a new Hologram
       type: object
       properties:
         title:
@@ -295,7 +269,7 @@ components:
         patient:
           $ref: '#/components/schemas/Patient'
         author:
-          $ref: "#/components/schemas/Author"
+          $ref: '#/components/schemas/Author'
         description:
           type: string
           example: Malformed hip bones on a 8 year old child
@@ -312,5 +286,4 @@ components:
           type: string
           example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
         name:
-          type: string
-          example: Jens Krinke
+          $ref: '#/components/schemas/PersonName'

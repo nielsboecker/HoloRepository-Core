@@ -30,6 +30,29 @@ paths:
           description: Unaccepted input
         404:
           description: Metadata of patients were not found
+    post:
+      summary: Add new patient information
+      description: "Add new patient to be stored within HoloStorage"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+      responses:
+        200:
+          description: Successfully added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The UUID of the uploaded hologram
+                    example: 32853d69-3e71-4c87-abf9-56f0eddefefc
+        400:
+          description: Unaccepted input
 
   /patients/{id}:
     get:

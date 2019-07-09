@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { CommandBar, ICommandBarItemProps } from "office-ui-fabric-react/lib/CommandBar";
+import { CommandBar, ICommandBarItemProps } from "office-ui-fabric-react/lib-commonjs/CommandBar";
 import { Selection } from "office-ui-fabric-react/lib-commonjs/DetailsList";
 
 export interface IHologramsCommandBarProps {
@@ -8,7 +8,39 @@ export interface IHologramsCommandBarProps {
 
 class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
   public render(): JSX.Element {
-    const _items: ICommandBarItemProps[] = [
+    const _selectionItems: ICommandBarItemProps[] = [
+      {
+        key: "preview",
+        name: "Preview",
+        iconProps: {
+          iconName: "View"
+        },
+        disabled: this.props.selection.count < 1,
+        onClick: () => console.log("View")
+      },
+
+      {
+        key: "download",
+        name: "Download",
+        iconProps: {
+          iconName: "Download"
+        },
+        disabled: this.props.selection.count < 1,
+        onClick: () => console.log("Download")
+      },
+
+      {
+        key: "delete",
+        name: "Delete",
+        iconProps: {
+          iconName: "Delete"
+        },
+        disabled: this.props.selection.count < 1,
+        onClick: () => console.log("Delete")
+      }
+    ];
+
+    const _createItem: ICommandBarItemProps[] = [
       {
         key: "newItem",
         name: "New",
@@ -35,33 +67,14 @@ class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
             }
           ]
         }
-      },
-
-      {
-        key: "download",
-        name: "Download",
-        iconProps: {
-          iconName: "Download"
-        },
-        disabled: this.props.selection.count < 1,
-        onClick: () => console.log("Download")
-      },
-
-      {
-        key: "delete",
-        name: "Delete",
-        iconProps: {
-          iconName: "Delete"
-        },
-        disabled: this.props.selection.count < 1,
-        onClick: () => console.log("Delete")
       }
     ];
 
     return (
       <div>
         <CommandBar
-          items={_items}
+          items={_selectionItems}
+          farItems={_createItem}
           ariaLabel={"Use left and right arrow keys to navigate between commands"}
         />
       </div>

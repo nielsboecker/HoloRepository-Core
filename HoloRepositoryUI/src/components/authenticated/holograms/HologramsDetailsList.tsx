@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { TextField } from "office-ui-fabric-react/lib-commonjs/TextField";
 import { Fabric } from "office-ui-fabric-react/lib-commonjs/Fabric";
 import {
   DetailsList,
@@ -8,8 +7,10 @@ import {
   SelectionMode,
   IColumn
 } from "office-ui-fabric-react/lib-commonjs/DetailsList";
-import { mergeStyleSets } from "office-ui-fabric-react/lib-commonjs/Styling";
-import sampleHolograms from "../../../__tests__/samples/sampleHolograms.json";
+import { SearchBox } from "office-ui-fabric-react/lib-commonjs/SearchBox";
+import { Label } from "office-ui-fabric-react/lib-commonjs/Label";
+import { getId } from "office-ui-fabric-react/lib-commonjs/Utilities";
+import { Col, Row } from "antd";
 import { IHologram, IPractitioner, unknownPersonName } from "../../../types";
 import {
   fileTypeCol,
@@ -19,21 +20,13 @@ import {
   authorCol,
   fileSizeCol
 } from "./HologramsDetailsListColumns";
-import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
 import HologramsCommandBar from "./HologramsCommandBar";
-import FilterStatusMessageBar from "../patients/FilterStatusMessageBar";
+import FilterStatusMessageBar from "../core/FilterStatusMessageBar";
+
+import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
+import sampleHolograms from "../../../__tests__/samples/sampleHolograms.json";
 
 const practitioner = samplePractitioner as IPractitioner;
-
-const classNames = mergeStyleSets({
-  controlWrapper: {
-    display: "flex",
-    flexWrap: "wrap"
-  },
-  selectionDetails: {
-    marginBottom: "20px"
-  }
-});
 
 const controlStyles = {
   root: {
@@ -97,17 +90,26 @@ class HologramsDetailsList extends Component<
   public render() {
     const { columns, items, selectionDetails } = this.state;
 
+    // Ensure that the ID is unique on the page.
+    const filterSubjectId = getId("filterSubject");
+
     return (
       <Fabric>
         {this.props.showFilters && (
           <div className="filters">
-            <div className={classNames.controlWrapper}>
-              <TextField
-                label="Filter by subject name:"
-                onChange={this._onChangeText}
-                styles={controlStyles}
-              />
-            </div>
+            <Row>
+              <Col span={12} style={{ padding: "0 24px" }}>
+                <div>
+                  <Label htmlFor={filterSubjectId}>Filter by subject</Label>
+                  <SearchBox
+                    id={filterSubjectId}
+                    placeholder="Filter holograms..."
+                    onChange={this._onChangeText}
+                    styles={controlStyles}
+                  />
+                </div>
+              </Col>
+            </Row>
 
             <FilterStatusMessageBar
               totalCount={this._allItems.length}
@@ -118,8 +120,6 @@ class HologramsDetailsList extends Component<
         )}
 
         <div className="list">
-          <div className={classNames.selectionDetails}>{selectionDetails}</div>
-
           <DetailsList
             items={items}
             columns={columns}
@@ -138,16 +138,14 @@ class HologramsDetailsList extends Component<
         </div>
 
         <div className="commands" style={{ marginTop: "24px" }}>
+          <div>{selectionDetails}</div>
           <HologramsCommandBar selection={this._selection} />
         </div>
       </Fabric>
     );
   }
 
-  private _onChangeText = (
-    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    text: string = ""
-  ): void => {
+  private _onChangeText = (_: any, text: string = ""): void => {
     this.setState({
       items: text
         ? this._allItems.filter(

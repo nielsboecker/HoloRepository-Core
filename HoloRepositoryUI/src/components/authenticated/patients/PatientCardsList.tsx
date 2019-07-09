@@ -1,15 +1,17 @@
 import React, { Component } from "react";
-import { FocusZone, FocusZoneDirection } from "office-ui-fabric-react/lib/FocusZone";
-import { TextField } from "office-ui-fabric-react/lib/TextField";
+import { FocusZone, FocusZoneDirection } from "office-ui-fabric-react/lib-commonjs/FocusZone";
 import { Toggle } from "office-ui-fabric-react/lib-commonjs/Toggle";
-import { List } from "office-ui-fabric-react/lib/List";
-import { Row, Col } from "antd";
+import { List } from "office-ui-fabric-react/lib-commonjs/List";
+import { SearchBox } from "office-ui-fabric-react/lib-commonjs/SearchBox";
+import { Label } from "office-ui-fabric-react/lib-commonjs/Label";
+import { getId } from "office-ui-fabric-react/lib-commonjs/Utilities";
+import { Col, Row } from "antd";
 import { IPatient } from "../../../types";
 import PatientCard from "./PatientCard";
 
 import samplePatients from "../../../__tests__/samples/samplePatients.json";
 import samplePatientsWithHolograms from "../../../__tests__/samples/samplePatientsWithHolograms.json";
-import FilterStatusMessageBar from "./FilterStatusMessageBar";
+import FilterStatusMessageBar from "../core/FilterStatusMessageBar";
 
 export interface IPatientCardsListState {
   filterPatientNameText?: string;
@@ -29,7 +31,10 @@ export default class PatientCardsList extends Component<any, IPatientCardsListSt
   };
 
   render(): JSX.Element {
-    const { patients = [] } = this.state;
+    const { patients = [], isShowWithHologramsOnly } = this.state;
+
+    // Ensure that the ID is unique on the page.
+    const filterNameId = getId("filterName");
 
     return (
       <>
@@ -37,16 +42,22 @@ export default class PatientCardsList extends Component<any, IPatientCardsListSt
           <div className="Filters" style={{ marginBottom: "24px" }}>
             <Row>
               <Col span={12} style={{ padding: "0 24px" }}>
-                <TextField label="Filter by name" onChange={this._handleNameFilterChanged} />
+                <Label htmlFor={filterNameId}>Filter by name</Label>
+                <SearchBox
+                  id={filterNameId}
+                  placeholder="Filter patients..."
+                  onChange={this._handleNameFilterChanged}
+                  iconProps={{ iconName: "Filter" }}
+                />
               </Col>
 
               <Col span={12} style={{ padding: "0 24px" }}>
                 <Toggle
-                  label="Only patients with holograms"
-                  checked={this.state.isShowWithHologramsOnly}
+                  label="Filter patients with holograms"
+                  checked={isShowWithHologramsOnly}
                   onChange={this._handleShowWithHologramsOnlyToggleChange}
-                  onText="Showing only patients with existing holograms"
-                  offText="Showing all patients"
+                  onText="Only patients with existing holograms"
+                  offText="All patients"
                   style={{ margin: "0 30px 20px 0", maxWidth: "300px" }}
                 />
               </Col>

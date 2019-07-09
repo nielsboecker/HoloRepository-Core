@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { MessageBar } from "office-ui-fabric-react";
-// import { MessageBar } from "office-ui-fabric-react/lib/MessageBar";
+// import { MessageBar } from "office-ui-fabric-react/lib-commonjs/MessageBar";
 
 export interface IFilterStatusMessageBarProps {
   totalCount: number;

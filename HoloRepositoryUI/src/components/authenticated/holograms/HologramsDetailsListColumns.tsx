@@ -40,7 +40,6 @@ const fileTypeCol: IColumn = {
   fieldName: undefined, // overwrite with onRender()
   minWidth: 16,
   maxWidth: 16,
-  // // onColumnClick: this._onColumnClick,
   onRender: (item: IHologramDocument) => (
     <Icon iconName="HealthSolid" className={classNames.fileIconImg} />
   )

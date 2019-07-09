@@ -20,6 +20,8 @@ import {
   fileSizeCol
 } from "./HologramsDetailsListColumns";
 import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
+import HologramsCommandBar from "./HologramsCommandBar";
+import { Divider } from "antd";
 
 const practitioner = samplePractitioner as IPractitioner;
 
@@ -107,24 +109,32 @@ class HologramsDetailsList extends Component<
               />
             </div>
             <div className={classNames.selectionDetails}>{selectionDetails}</div>
+
+            <Divider />
           </div>
         )}
 
-        <DetailsList
-          items={items}
-          columns={columns}
-          onColumnHeaderClick={this._onColumnHeaderClick}
-          selectionMode={SelectionMode.single}
-          setKey="set"
-          layoutMode={DetailsListLayoutMode.justified}
-          isHeaderVisible={true}
-          selection={this._selection}
-          selectionPreservedOnEmptyClick={true}
-          onItemInvoked={this._onItemInvoked}
-          enterModalSelectionOnTouch={true}
-          ariaLabelForSelectionColumn="Toggle selection"
-          ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-        />
+        <div className="list">
+          <DetailsList
+            items={items}
+            columns={columns}
+            onColumnHeaderClick={this._onColumnHeaderClick}
+            selectionMode={SelectionMode.multiple}
+            setKey="set"
+            layoutMode={DetailsListLayoutMode.justified}
+            isHeaderVisible={true}
+            selection={this._selection}
+            selectionPreservedOnEmptyClick={true}
+            onItemInvoked={this._onItemInvoked}
+            enterModalSelectionOnTouch={true}
+            ariaLabelForSelectionColumn="Toggle selection"
+            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+          />
+        </div>
+
+        <div className="commands" style={{ marginTop: "24px" }}>
+          <HologramsCommandBar />
+        </div>
       </Fabric>
     );
   }

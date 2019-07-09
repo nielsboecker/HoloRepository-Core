@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { FocusZone, FocusZoneDirection } from "office-ui-fabric-react/lib/FocusZone";
 import { TextField } from "office-ui-fabric-react/lib/TextField";
 import { Toggle } from "office-ui-fabric-react/lib-commonjs/Toggle";
-import { MessageBar } from "office-ui-fabric-react/lib/MessageBar";
 import { List } from "office-ui-fabric-react/lib/List";
 import { Row, Col } from "antd";
 import { IPatient } from "../../../types";
@@ -10,6 +9,7 @@ import PatientCard from "./PatientCard";
 
 import samplePatients from "../../../__tests__/samples/samplePatients.json";
 import samplePatientsWithHolograms from "../../../__tests__/samples/samplePatientsWithHolograms.json";
+import FilterStatusMessageBar from "./FilterStatusMessageBar";
 
 export interface IPatientCardsListState {
   filterPatientNameText?: string;
@@ -52,11 +52,11 @@ export default class PatientCardsList extends Component<any, IPatientCardsListSt
               </Col>
             </Row>
 
-            {patients.length !== this.allPatients.length && (
-              <MessageBar>
-                {`Showing ${patients.length} of ${this.allPatients.length} patients.`}
-              </MessageBar>
-            )}
+            <FilterStatusMessageBar
+              totalCount={this.allPatients.length}
+              filteredCount={patients.length}
+              itemEntityName="patient"
+            />
           </div>
         </FocusZone>
 

@@ -21,6 +21,7 @@ import {
 } from "./HologramsDetailsListColumns";
 import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
 import HologramsCommandBar from "./HologramsCommandBar";
+import FilterStatusMessageBar from "../patients/FilterStatusMessageBar";
 
 const practitioner = samplePractitioner as IPractitioner;
 
@@ -107,11 +108,18 @@ class HologramsDetailsList extends Component<
                 styles={controlStyles}
               />
             </div>
-            <div className={classNames.selectionDetails}>{selectionDetails}</div>
+
+            <FilterStatusMessageBar
+              totalCount={this._allItems.length}
+              filteredCount={this.state.items.length}
+              itemEntityName="hologram"
+            />
           </div>
         )}
 
         <div className="list">
+          <div className={classNames.selectionDetails}>{selectionDetails}</div>
+
           <DetailsList
             items={items}
             columns={columns}

@@ -52,6 +52,28 @@ paths:
           description: Unaccepted input
         404:
           description: Patient id cannot be found
+    put:
+      summary: Add/Update patient information
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of patient to put into HoloStorage
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+      responses:
+        200:
+          description: Successful modification
+        201:
+          description: Successful created
+        400:
+          description: Unaccepted input
 
   /patients/{id}/holograms:
     get:

@@ -7,7 +7,6 @@ import {
   DatePicker,
   DayOfWeek,
   Dropdown,
-  IDatePickerStrings,
   IStackProps,
   Stack,
   TextField
@@ -16,36 +15,6 @@ import {
 const columnProps: Partial<IStackProps> = {
   tokens: { childrenGap: 15 },
   styles: { root: { width: 300 } }
-};
-
-const DayPickerStrings: IDatePickerStrings = {
-  months: [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ],
-
-  shortMonths: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-
-  days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-
-  shortDays: ["S", "M", "T", "W", "T", "F", "S"],
-
-  goToToday: "Go to today",
-  prevMonthAriaLabel: "Go to previous month",
-  nextMonthAriaLabel: "Go to next month",
-  prevYearAriaLabel: "Go to previous year",
-  nextYearAriaLabel: "Go to next year",
-  closeButtonAriaLabel: "Close date picker"
 };
 
 class DetailsDeclarationStep extends Component {
@@ -59,25 +28,34 @@ class DetailsDeclarationStep extends Component {
         <Stack horizontal tokens={{ childrenGap: 50 }} styles={{ root: { width: 650 } }}>
           <Stack {...columnProps}>
             <Dropdown
-              placeholder="Select an option"
-              label="Patient"
+              label="Corresponding patient"
+              placeholder="Select a patient"
               options={this._mapPatientsToDropdownOptions(this._allPatients)}
               required={true}
               styles={{ dropdown: { width: 300 } }}
             />
 
-            <TextField label="Hologram title" required />
+            <TextField
+              label="Hologram title"
+              placeholder={`For example, "Renal tumour"`}
+              required
+            />
 
-            <TextField label="Description" multiline autoAdjustHeight />
+            <TextField
+              label="Description"
+              placeholder={"Add a short description"}
+              multiline
+              autoAdjustHeight
+            />
           </Stack>
 
           <Stack {...columnProps}>
-            <TextField label="Body site" />
+            <TextField label="Body site" placeholder={`For example, "Right kidney"`} />
 
             <DatePicker
-              strings={DayPickerStrings}
               label="Date of original encounter"
               ariaLabel="Date of original encounter"
+              placeholder="Pick a date"
               firstDayOfWeek={DayOfWeek.Monday}
               maxDate={new Date()}
             />

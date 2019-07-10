@@ -26,14 +26,8 @@ import FilterStatusMessageBar from "../core/FilterStatusMessageBar";
 import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
 import sampleHolograms from "../../../__tests__/samples/sampleHolograms.json";
 
+const holograms = sampleHolograms as IHologram[];
 const practitioner = samplePractitioner as IPractitioner;
-
-const controlStyles = {
-  root: {
-    margin: "0 30px 20px 0",
-    maxWidth: "300px"
-  }
-};
 
 const defaultColumns: IColumn[] = [
   fileTypeCol,
@@ -79,13 +73,13 @@ class HologramsDetailsList extends Component<
     }
   });
 
-  private _sampleHolograms = sampleHolograms as IHologram[];
-  private _allItems: IHologramDocument[] = _mapToDocuments(this._sampleHolograms);
+  private _sampleHolograms = this.props.patientId
+    ? holograms.filter(item => item.subject.id === this.props.patientId)
+    : holograms;
+  private _allHologramDocuments: IHologramDocument[] = _mapToDocuments(this._sampleHolograms);
 
   state = {
-    items: this.props.patientId
-      ? this._allItems.filter(item => item.wrappedHologram.subject.id === this.props.patientId)
-      : this._allItems,
+    items: this._allHologramDocuments,
     columns: this.props.columns ? this.props.columns : defaultColumns,
     selectionDetails: this._getSelectionDetails()
   };
@@ -108,40 +102,47 @@ class HologramsDetailsList extends Component<
                     id={filterSubjectId}
                     placeholder="Filter holograms..."
                     onChange={this._onChangeText}
-                    styles={controlStyles}
+                    iconProps={{ iconName: "Filter" }}
                   />
                 </div>
               </Col>
             </Row>
 
             <FilterStatusMessageBar
-              totalCount={this._allItems.length}
+              totalCount={this._allHologramDocuments.length}
               filteredCount={this.state.items.length}
               itemEntityName="hologram"
             />
           </div>
         )}
 
-        <div className="list">
-          <DetailsList
-            items={items}
-            columns={columns}
-            onColumnHeaderClick={this._onColumnHeaderClick}
-            selectionMode={SelectionMode.multiple}
-            setKey="set"
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible={true}
-            selection={this._selection}
-            selectionPreservedOnEmptyClick={true}
-            onItemInvoked={this._onItemInvoked}
-            enterModalSelectionOnTouch={true}
-            ariaLabelForSelectionColumn="Toggle selection"
-            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-          />
-        </div>
+        {this.state.items.length === 0 ? (
+          <div>
+            <p>No holograms available. Try changing filter settings or create a new hologram.</p>
+          </div>
+        ) : (
+          <div className="list">
+            <DetailsList
+              items={items}
+              columns={columns}
+              onColumnHeaderClick={this._onColumnHeaderClick}
+              selectionMode={SelectionMode.multiple}
+              setKey="set"
+              layoutMode={DetailsListLayoutMode.justified}
+              isHeaderVisible={true}
+              selection={this._selection}
+              selectionPreservedOnEmptyClick={true}
+              onItemInvoked={this._onItemInvoked}
+              enterModalSelectionOnTouch={true}
+              ariaLabelForSelectionColumn="Toggle selection"
+              ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+            />
+
+            <div>{selectionDetails}</div>
+          </div>
+        )}
 
         <div className="commands" style={{ marginTop: "24px" }}>
-          <div>{selectionDetails}</div>
           <HologramsCommandBar selection={this._selection} />
         </div>
       </Fabric>
@@ -151,10 +152,10 @@ class HologramsDetailsList extends Component<
   private _onChangeText = (_: any, text: string = ""): void => {
     this.setState({
       items: text
-        ? this._allItems.filter(
+        ? this._allHologramDocuments.filter(
             i => i.subjectDisplay.toLowerCase().indexOf(text.toLowerCase()) > -1
           )
-        : this._allItems
+        : this._allHologramDocuments
     });
   };
 

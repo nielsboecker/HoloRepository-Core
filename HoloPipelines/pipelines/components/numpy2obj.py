@@ -68,9 +68,11 @@ def makeObj(fPath, thisThreshold, objOutput):
 
 def main(mainFchoice, mainThreshold):
 	makeObj(mainFchoice, mainThreshold)
+	print ("numpy2obj: done")
 
 def main(mainFchoice, mainThreshold, outputName):
 	makeObj(mainFchoice, mainThreshold, outputName)
+	print ("numpy2obj: done")
 
 if __name__ == '__main__':
 	lsIO = getIO()

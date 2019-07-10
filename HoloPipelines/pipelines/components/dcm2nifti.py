@@ -9,9 +9,9 @@ niftiPath = fileHand.niftiPath
 
 def main(fname):
 	dicom2nifti.convert_directory(dicomPath + fname + slash, niftiPath)
-	print("nifti generated")
+	print("dcm2nifti: done")
 
 if __name__ == '__main__':
 	import sys
-	dicom2nifti.convert_directory(dicomPath + sys.argv[1] + slash, niftiPath, compression=True, reorient=True)
+	dicom2nifti.convert_directory(dicomPath + sys.argv[1] + slash, niftiPath)
 	print("dcm2nifti: done")

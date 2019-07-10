@@ -3,10 +3,10 @@
 #who's our target user? for pipeline dev
 
 from components import nifti2numpy#this import stuff in the future will be dockerized
-import numpy2obj
-
+from components import numpy2obj
 from components import fileHandler#you can stay?
 import sys
+import numpy as np
 
 slash = fileHandler.slash
 argCount = len(sys.argv)
@@ -24,5 +24,5 @@ tempNpy = nifti2numpy.main(fileHandler.niftiPath + fileHandler.slash + niftiData
 if flipNpy:
 	tempNpy = np.flip(tempNpy, 0)
 	tempNpy = np.flip(tempNpy, 1)
-numpy2obj.main(tempNpy, threshold, "heyitsyaboi_nifti2obj_comdelmepls")
+numpy2obj.main(tempNpy, threshold, niftiData.replace(".nii.gz", "").replace(".nii", ""))
 print("nifti2obj: done")

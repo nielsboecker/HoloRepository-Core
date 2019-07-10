@@ -24,6 +24,6 @@ if __name__ == "__main__":
 	dcm2nifti.main(str(fname))
 	lungSegment.main(fname + ".nii.gz")
 	sucess = subprocess.run(["mv", str(fileHandler.cwd + "pipelines" + slash + "components" + slash + "lungSegment" + slash + "result" + slash + "sample_lung.nii.gz"), fileHandler.niftiPath])
-	nifti2glb.main("sample_lung.nii.gz", 0.5)
+	nifti2glb.main("sample_lung.nii.gz", 0.5, fname + "_lungSegmented")
 	success = subprocess.run(["rm", str(fileHandler.niftiPath + "sample_lung.nii.gz")])
 	print("lungDicom2glb: done")

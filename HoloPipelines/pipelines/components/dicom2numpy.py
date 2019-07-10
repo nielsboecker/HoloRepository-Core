@@ -79,7 +79,9 @@ def resample(dataPath=fileHandler.dicomPath + slash + "samples", new_spacing=[1,
 	return image, new_spacing
 
 def main(inputPath=fileHandler.dicomPath + slash + "samples", mainFname="samples", option=0):
+	print("dicom2numpy: resampling dicom...")
 	imgs_after_resamp, spacing = resample(inputPath)
+	print("dicom2numpy: resampling done")
 	if option == 1:
 		np.save(fileHandler.numpyPath + "%s.npy" % mainFname, imgs_after_resamp)
 		return 0

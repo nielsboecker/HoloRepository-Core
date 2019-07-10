@@ -6,7 +6,13 @@ import PlainContentContainer from "../core/PlainContentContainer";
 import samplePatients from "../../../__tests__/samples/samplePatients.json";
 import samplePatientsWithHolograms from "../../../__tests__/samples/samplePatientsWithHolograms.json";
 import { HologramCreationMode, IPatient } from "../../../types";
-import HologramCreationModeSelectionStep from "./HologramCreationModeSelectionStep";
+import CreationModeSelectionStep from "./CreationModeSelectionStep";
+import ImagingStudySelectionStep from "./generate/ImagingStudySelectionStep";
+import PipelineSelectionStep from "./generate/PipelineSelectionStep";
+import DetailsDeclarationStep from "./DetailsDeclarationStep";
+import PipelineProcessingStep from "./generate/PipelineProcessingStep";
+import FileUploadStep from "./upload/FileUploadStep";
+import UploadProcessingStep from "./upload/UploadProcessingStep";
 
 const { Step } = Steps;
 
@@ -46,41 +52,41 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
     [HologramCreationMode.generateFromImagingStudy]: [
       {
         title: "Select mode",
-        content: <HologramCreationModeSelectionStep handleModeChange={this._handleModeChange} />
+        content: <CreationModeSelectionStep handleModeChange={this._handleModeChange} />
       },
       {
         title: "Select input data",
-        content: <strong>Hello!</strong>
+        content: <ImagingStudySelectionStep />
       },
       {
         title: "Select processing pipeline",
-        content: <strong>Hello!</strong>
+        content: <PipelineSelectionStep />
       },
       {
         title: "Enter details",
-        content: <strong>Hello!</strong>
+        content: <DetailsDeclarationStep />
       },
       {
         title: "Process",
-        content: <strong>Hello!</strong>
+        content: <PipelineProcessingStep />
       }
     ],
     [HologramCreationMode.uploadExistingModel]: [
       {
         title: "Select mode",
-        content: <HologramCreationModeSelectionStep handleModeChange={this._handleModeChange} />
+        content: <CreationModeSelectionStep handleModeChange={this._handleModeChange} />
       },
       {
         title: "Upload file",
-        content: <strong>Hello!</strong>
+        content: <FileUploadStep />
       },
       {
         title: "Enter details",
-        content: <strong>Hello!</strong>
+        content: <DetailsDeclarationStep />
       },
       {
         title: "Process",
-        content: <strong>Hello!</strong>
+        content: <UploadProcessingStep />
       }
     ]
   };

@@ -34,7 +34,7 @@ export interface IHologramCreationModeSelectionStepProps {
   handleModeChange: (creationMode: HologramCreationMode) => void;
 }
 
-class HologramCreationModeSelectionStep extends Component<IHologramCreationModeSelectionStepProps> {
+class CreationModeSelectionStep extends Component<IHologramCreationModeSelectionStepProps> {
   render() {
     return (
       <ChoiceGroup
@@ -51,4 +51,4 @@ class HologramCreationModeSelectionStep extends Component<IHologramCreationModeS
   };
 }
 
-export default HologramCreationModeSelectionStep;
+export default CreationModeSelectionStep;

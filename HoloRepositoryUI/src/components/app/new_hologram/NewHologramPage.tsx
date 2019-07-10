@@ -3,14 +3,14 @@ import { RouteComponentProps } from "@reach/router";
 import PlainContentContainer from "../core/PlainContentContainer";
 
 import { HologramCreationMode } from "../../../types";
-import CreationModeSelectionStep from "./CreationModeSelectionStep";
+import CreationModeSelectionStep from "./shared/CreationModeSelectionStep";
 import ImagingStudySelectionStep from "./generate/ImagingStudySelectionStep";
 import PipelineSelectionStep from "./generate/PipelineSelectionStep";
-import DetailsDeclarationStep from "./DetailsDeclarationStep";
+import DetailsDeclarationStep from "./shared/DetailsDeclarationStep";
 import PipelineProcessingStep from "./generate/PipelineProcessingStep";
 import FileUploadStep from "./upload/FileUploadStep";
 import UploadProcessingStep from "./upload/UploadProcessingStep";
-import NewHologramControlsAndProgress from "./NewHologramControlsAndProgress";
+import NewHologramControlsAndProgress from "./shared/NewHologramControlsAndProgress";
 
 export interface IHologramCreationStep {
   title: string;
@@ -53,12 +53,12 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
         )
       },
       {
-        title: "Select input data",
-        content: <ImagingStudySelectionStep />
-      },
-      {
         title: "Select pipeline",
         content: <PipelineSelectionStep />
+      },
+      {
+        title: "Select input data",
+        content: <ImagingStudySelectionStep />
       },
       {
         title: "Enter details",

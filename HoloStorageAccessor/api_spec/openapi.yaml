@@ -6,14 +6,15 @@ info:
   description: APIs to access the FHIR resources and 3D models from HoloStorage
 
 servers:
+# Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/boonwj/HoloAccessor-API/1.0.0
   - url: http://holostorage.azurewebsites.net/v1/
 
 paths:
   /patients:
     get:
-      summary: Get patient's metadata based on search parameters
-
-      description: Obtain patient's information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients
+      summary: Get patient and associated holograms metadata from HoloStorage
       parameters:
         - in: query
           name: pid
@@ -33,15 +34,16 @@ paths:
         404:
           description: Failure to find all patients' metadata
 
-# Download Holograms via Hologram ID(s)
-# Get Holograms Metadata via Patients ID(s)
-# Get Holograms Metadata via Hologram ID(s)
-# Delete Holograms via Hologram ID(s)
+# Download Holograms via Hologram ID(s) - GET /models
+# Get Holograms Metadata via Patients ID(s) - GET /patients
+# Get Holograms Metadata via Hologram ID(s) - GET /holograms
+# Delete Holograms via Hologram ID(s) - DELETE /holograms
 # Annotations operations (POST/PUT/DELETE)
 
   /patients/{id}:
     put:
-      summary: Add/Update patient information
+      summary: Add/Update basic patient information
+      description: This endpoint allows you to add new patient only information, holograms will be added
       parameters:
         - in: path
           name: id
@@ -109,33 +111,26 @@ paths:
                     example: 32853d69-3e71-4c87-abf9-56f0eddefefc
         400:
           description: Unaccepted input
-
-  /holograms/patients:
-    get:
-      summary: 'Get holograms metadata based on search parameters'
-      description: 'Obtain hologram information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients'
+    delete:
+      summary: 'Delete hologram entries in HoloStorage'
+      description: 'Delete holograms based on ID'
       parameters:
         - in: query
           name: id
-          description: ID of hologram to return
+          description: ID of hologram to delete
           schema:
             $ref: '#/components/schemas/UUID'
-
       responses:
         200:
-          description: Successfully found all hologram metadata
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Holograms'
-        400:
-          description: Unaccepted input
+          description: Successful deletion
         404:
-          description: Metadata of holograms were not found
+          description: Error locating all holograms
+        500:
+          description: Errors during deletion process
 
-  /content:
+  /models:
     get:
-      summary: Download holograms based on id
+      summary: Download holograms models based on id
       parameters:
         - in: query
           name: id
@@ -178,28 +173,28 @@ paths:
 
 components:
   schemas:
-    PersonName:
-      description: Components that make up the name of the
-      properties:
-        full:
-          type: string
-          example: Jens Krinke
-        title:
-          type: string
-          example: Dr
-        given:
-          type: string
-          example: Jens
-        family:
-          type: string
-          example: Krinke
-
     UUID:
       title: Resource UUID
       description: The UUID assigned to the specific requested resource (e.g. Patient, Hologram)
       example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
       type: string
       format: uuid
+
+    PersonName:
+      description: Components that make up the name of the
+      properties:
+        full:
+          type: string
+          example: Marvin Portebello
+        title:
+          type: string
+          example: Mr
+        given:
+          type: string
+          example: Marvin
+        family:
+          type: string
+          example: Portebello
 
     Patients:
       description: An array of patients metadata
@@ -224,6 +219,8 @@ components:
         birthDate:
           type: string
           format: date
+        holograms:
+          $ref: '#/components/schemas/Holograms'
 
     Holograms:
       description: An array of hologram metadata

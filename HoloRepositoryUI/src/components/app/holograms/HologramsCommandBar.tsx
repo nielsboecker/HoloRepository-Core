@@ -53,14 +53,14 @@ class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
           items: [
             {
               key: "fromImagingStudy",
-              name: "Generate from imaging study",
+              name: "Generate from an imaging studyy",
               iconProps: {
                 iconName: "Blur"
               }
             },
             {
               key: "uploadExisting",
-              name: "Upload existing 3D model",
+              name: "Upload an existing 3D model",
               iconProps: {
                 iconName: "Upload"
               }

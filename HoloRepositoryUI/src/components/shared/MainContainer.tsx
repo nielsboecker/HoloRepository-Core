@@ -10,6 +10,7 @@ import HologramsListPage from "../app/holograms/HologramsListPage";
 import PatientListPage from "../app/patients/PatientListPage";
 import PatientDetailPage from "../app/patient/PatientDetailPage";
 import ProfileInformationPage from "../app/ProfileInformationPage";
+import NewHologramPage from "../app/new_hologram/NewHologramPage";
 
 class MainContainer extends Component {
   render() {
@@ -26,6 +27,7 @@ class MainContainer extends Component {
             <PatientDetailPage path="patient/:id" />
             <DeviceConnectorPage path="devices" />
             <HologramsListPage path="holograms" />
+            <NewHologramPage path="holograms/new" />
             <ProfileInformationPage path="profile" />
             <ErrorPage default />
           </AppContainer>

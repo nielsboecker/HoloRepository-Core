@@ -87,3 +87,9 @@ export interface IHologram {
   fileSizeInKb: number;
   imagingStudySeriesId?: string;
 }
+
+// TODO: separate technical entities
+export enum HologramCreationMode {
+  generateFromImagingStudy = "GENERATE_FROM_IMAGING_STUDY",
+  uploadExistingModel = "UPLOAD_EXISTING_MODEL"
+}

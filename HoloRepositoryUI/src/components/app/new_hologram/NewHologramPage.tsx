@@ -23,14 +23,14 @@ export interface IHologramCreationSteps {
 }
 
 interface IAddHologramPageState {
-  current: number;
+  currentStep: number;
   creationMode: HologramCreationMode;
   //steps: IHologramCreationStep[];
 }
 
 class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageState> {
   state = {
-    current: 0,
+    currentStep: 0,
     creationMode:
       (this.props.location!.state.mode as HologramCreationMode) ||
       HologramCreationMode.generateFromImagingStudy
@@ -39,7 +39,6 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
 
   private _handleModeChange = (creationMode: HologramCreationMode) => {
     this.setState({ creationMode });
-    console.log(creationMode, this.state);
   };
 
   private _steps: IHologramCreationSteps = {
@@ -96,7 +95,7 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
   };
 
   render() {
-    const { current } = this.state;
+    const { currentStep } = this.state;
     const steps = this._steps[this.state.creationMode];
 
     return (
@@ -104,11 +103,11 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
         <h1>Create new hologram</h1>
 
         <div className="steps-content" style={{ minHeight: "500px" }}>
-          {steps[current].content}
+          {steps[currentStep].content}
         </div>
 
         <NewHologramControlsAndProgress
-          current={current}
+          current={currentStep}
           steps={steps}
           handlePrevious={this._prev}
           handleNext={this._next}
@@ -118,14 +117,15 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
   }
 
   private _next = () => {
-    // TODO: use other setState
-    const current: number = this.state.current + 1;
-    this.setState({ current });
+    this.setState((state: Readonly<IAddHologramPageState>) => ({
+      currentStep: state.currentStep + 1
+    }));
   };
 
   private _prev = () => {
-    const current = this.state.current - 1;
-    this.setState({ current });
+    this.setState((state: Readonly<IAddHologramPageState>) => ({
+      currentStep: state.currentStep - 1
+    }));
   };
 }
 

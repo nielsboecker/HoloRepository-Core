@@ -32,6 +32,7 @@ const choiceGroupOptions: IChoiceGroupOption[] = [
 
 export interface IHologramCreationModeSelectionStepProps {
   handleModeChange: (creationMode: HologramCreationMode) => void;
+  selected: HologramCreationMode;
 }
 
 class CreationModeSelectionStep extends Component<IHologramCreationModeSelectionStepProps> {
@@ -39,7 +40,7 @@ class CreationModeSelectionStep extends Component<IHologramCreationModeSelection
     return (
       <ChoiceGroup
         options={choiceGroupOptions}
-        defaultSelectedKey={HologramCreationMode.generateFromImagingStudy}
+        defaultSelectedKey={this.props.selected}
         onChange={this._handleChoiceGroupChange}
         label="Select the mode for creating a new hologram"
       />

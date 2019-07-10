@@ -31,7 +31,9 @@ interface IAddHologramPageState {
 class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageState> {
   state = {
     current: 0,
-    creationMode: HologramCreationMode.generateFromImagingStudy
+    creationMode:
+      (this.props.location!.state.mode as HologramCreationMode) ||
+      HologramCreationMode.generateFromImagingStudy
     //steps: allSteps[HologramCreationMode.generateFromImagingStudy]
   };
 
@@ -44,7 +46,12 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
     [HologramCreationMode.generateFromImagingStudy]: [
       {
         title: "Select mode",
-        content: <CreationModeSelectionStep handleModeChange={this._handleModeChange} />
+        content: (
+          <CreationModeSelectionStep
+            selected={this.state.creationMode}
+            handleModeChange={this._handleModeChange}
+          />
+        )
       },
       {
         title: "Select input data",
@@ -66,7 +73,12 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
     [HologramCreationMode.uploadExistingModel]: [
       {
         title: "Select mode",
-        content: <CreationModeSelectionStep handleModeChange={this._handleModeChange} />
+        content: (
+          <CreationModeSelectionStep
+            selected={this.state.creationMode}
+            handleModeChange={this._handleModeChange}
+          />
+        )
       },
       {
         title: "Upload file",

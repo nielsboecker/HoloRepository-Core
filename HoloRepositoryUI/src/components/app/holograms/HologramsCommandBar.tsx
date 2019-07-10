@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { CommandBar, ICommandBarItemProps, Selection } from "office-ui-fabric-react";
+import { navigate } from "@reach/router";
+import { HologramCreationMode } from "../../../types";
 
 export interface IHologramsCommandBarProps {
   selection: Selection;
@@ -55,14 +57,22 @@ class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
               name: "Generate from an imaging studyy",
               iconProps: {
                 iconName: "Blur"
-              }
+              },
+              onClick: () =>
+                navigate("/app/holograms/new", {
+                  state: { mode: HologramCreationMode.generateFromImagingStudy }
+                })
             },
             {
               key: "uploadExisting",
               name: "Upload an existing 3D model",
               iconProps: {
                 iconName: "Upload"
-              }
+              },
+              onClick: () =>
+                navigate("/app/holograms/new", {
+                  state: { mode: HologramCreationMode.uploadExistingModel }
+                })
             }
           ]
         }

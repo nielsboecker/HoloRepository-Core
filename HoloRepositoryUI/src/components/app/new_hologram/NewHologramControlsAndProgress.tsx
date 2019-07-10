@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Button, Steps } from "antd";
+import { DefaultButton, PrimaryButton } from "office-ui-fabric-react";
+import { Steps } from "antd";
 import { IHologramCreationStep } from "./NewHologramPage";
 
 const { Step } = Steps;
@@ -26,17 +27,13 @@ class NewHologramControlsAndProgress extends Component<INewHologramControlsAndPr
         <div className="steps-action" style={{ marginTop: "24px" }}>
           {current > 0 && (
             <div style={{ float: "left" }}>
-              <Button style={{ marginLeft: 8 }} onClick={() => handlePrevious()}>
-                Previous
-              </Button>
+              <DefaultButton text="Previous" onClick={() => handlePrevious()} />
             </div>
           )}
 
           {current < steps.length - 1 && (
             <div style={{ float: "right" }}>
-              <Button type="primary" onClick={() => handleNext()}>
-                Next
-              </Button>
+              <PrimaryButton text="Next" onClick={() => handleNext()} />
             </div>
           )}
         </div>

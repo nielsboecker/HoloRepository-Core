@@ -2,12 +2,15 @@
 
 ## Requirements:
 Python 3.7 or above
-Dependencies can be installed by using or can be installed individually using the list from the section below
+
+## Dependencies and installation:
+Dependencies can be installed by using pip command as follow
 ```
 pip install -r requirements.txt
 ```
 
-## Dependencies:
+Some dependencies are not available through pip, they are listed below with their installation instructions
+
 **GDCM (Unix)**
 ```
  git clone --branch release git://git.code.sf.net/p/gdcm/gdcm
@@ -30,7 +33,18 @@ or
 ```
 If command is not found then please make sure to add to PATH
 
+**obj2gltf**  https://github.com/AnalyticalGraphicsInc/OBJ2GLTF
+You will need Node.js package manager for this
+```
+ npm install -g obj2gltf
+```
+
+Finally please run *setup.py* to download sample dicom and nifti files which can be used for testing.
+
+Downloaded files from *setup.py* can be deleted by running *cleanUp.py*
+
 ## Usage:
+Example
 ```
 python pipelineController.py p4 -p 3_Axial_CE
 ```
@@ -41,6 +55,17 @@ python pipelineController.py p4 -p 3_Axial_CE
 python pipelineController.py -h
 ```
 - this script has a built in help
+
+## Testing:
+Testing has a 77% code coverage. Testing can be done by using pytest:
+```
+pip install pytest
+```
+Then navigate to /HoloRepository-Core/HoloPipelines and run:
+```
+pytest
+```
+This however will not display the coverage percentage. (ill write a batch or script for this later. pytest --cov doesnt work for me for some reason)
 
 ### Refs:
 - https://www.raddq.com/dicom-processing-segmentation-visualization-in-python/      14/06/19

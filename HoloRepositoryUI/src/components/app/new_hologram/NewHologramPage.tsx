@@ -51,7 +51,7 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
         content: <ImagingStudySelectionStep />
       },
       {
-        title: "Select processing pipeline",
+        title: "Select pipeline",
         content: <PipelineSelectionStep />
       },
       {

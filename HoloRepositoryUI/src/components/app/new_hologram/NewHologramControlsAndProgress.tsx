@@ -18,7 +18,7 @@ class NewHologramControlsAndProgress extends Component<INewHologramControlsAndPr
 
     return (
       <>
-        <Steps current={current}>
+        <Steps current={current} progressDot>
           {steps.map(step => (
             <Step key={step.title} title={step.title} />
           ))}

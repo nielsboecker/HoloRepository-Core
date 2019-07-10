@@ -13,8 +13,8 @@ export interface IImagingStudySeries {
   previewPictureUrl?: string;
   description?: string;
   bodySite?: string;
-  modality?: string;
   encounterDate?: string;
+  modality?: string;
 }
 
 /**
@@ -38,6 +38,5 @@ export interface IHologram {
   imagingStudySeriesId?: string;
   description?: string;
   bodySite?: string;
-  modality?: string;
   encounterDate?: string;
 }

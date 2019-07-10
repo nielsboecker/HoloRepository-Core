@@ -2,9 +2,7 @@ import React, { Component, ReactNode } from "react";
 import { RouteComponentProps } from "@reach/router";
 import PlainContentContainer from "../core/PlainContentContainer";
 
-import samplePatients from "../../../__tests__/samples/samplePatients.json";
-import samplePatientsWithHolograms from "../../../__tests__/samples/samplePatientsWithHolograms.json";
-import { HologramCreationMode, IPatient } from "../../../types";
+import { HologramCreationMode } from "../../../types";
 import CreationModeSelectionStep from "./CreationModeSelectionStep";
 import ImagingStudySelectionStep from "./generate/ImagingStudySelectionStep";
 import PipelineSelectionStep from "./generate/PipelineSelectionStep";
@@ -36,10 +34,6 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
     creationMode: HologramCreationMode.generateFromImagingStudy
     //steps: allSteps[HologramCreationMode.generateFromImagingStudy]
   };
-
-  private _allPatients = [...samplePatients, ...samplePatientsWithHolograms].sort((a, b) =>
-    a.name.full.localeCompare(b.name.full)
-  ) as IPatient[];
 
   private _handleModeChange = (creationMode: HologramCreationMode) => {
     this.setState({ creationMode });

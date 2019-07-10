@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { CommandBar, ICommandBarItemProps } from "office-ui-fabric-react/lib-commonjs/CommandBar";
-import { Selection } from "office-ui-fabric-react/lib-commonjs/DetailsList";
+import { CommandBar, ICommandBarItemProps, Selection } from "office-ui-fabric-react";
 
 export interface IHologramsCommandBarProps {
   selection: Selection;

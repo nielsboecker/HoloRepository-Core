@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Icon } from "office-ui-fabric-react/lib-commonjs/Icon";
+import { Icon } from "office-ui-fabric-react";
 
 export interface ExtendedChoiceGroupLabelProps {
   title: string;

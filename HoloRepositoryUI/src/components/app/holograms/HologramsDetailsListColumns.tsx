@@ -1,7 +1,5 @@
 import React from "react";
-import { IColumn } from "office-ui-fabric-react/lib-commonjs/DetailsList";
-import { mergeStyleSets } from "office-ui-fabric-react/lib-commonjs/Styling";
-import { Icon } from "office-ui-fabric-react/lib-commonjs/Icon";
+import { IColumn, Icon, mergeStyleSets } from "office-ui-fabric-react";
 import { IHologramDocument } from "./HologramsDetailsList";
 
 const classNames = mergeStyleSets({

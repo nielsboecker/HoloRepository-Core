@@ -1,24 +1,24 @@
 import React, { Component } from "react";
-import { Fabric } from "office-ui-fabric-react/lib-commonjs/Fabric";
 import {
   DetailsList,
   DetailsListLayoutMode,
+  Fabric,
+  getId,
+  IColumn,
+  Label,
+  SearchBox,
   Selection,
-  SelectionMode,
-  IColumn
-} from "office-ui-fabric-react/lib-commonjs/DetailsList";
-import { SearchBox } from "office-ui-fabric-react/lib-commonjs/SearchBox";
-import { Label } from "office-ui-fabric-react/lib-commonjs/Label";
-import { getId } from "office-ui-fabric-react/lib-commonjs/Utilities";
+  SelectionMode
+} from "office-ui-fabric-react";
 import { Col, Row } from "antd";
 import { IHologram, IPractitioner, unknownPersonName } from "../../../types";
 import {
+  authorCol,
+  dateCol,
+  fileSizeCol,
   fileTypeCol,
   subjectCol,
-  titleCol,
-  dateCol,
-  authorCol,
-  fileSizeCol
+  titleCol
 } from "./HologramsDetailsListColumns";
 import HologramsCommandBar from "./HologramsCommandBar";
 import FilterStatusMessageBar from "../core/FilterStatusMessageBar";

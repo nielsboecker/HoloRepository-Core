@@ -1,19 +1,21 @@
 import React, { Component } from "react";
-import { Menu, Layout } from "antd";
-import { Image, IImageProps, ImageFit } from "office-ui-fabric-react/lib-commonjs/Image";
+import { Link, navigate } from "@reach/router";
 import {
+  IImageProps,
+  Image,
+  ImageFit,
   IPersonaSharedProps,
   Persona,
-  PersonaSize,
-  PersonaPresence
-} from "office-ui-fabric-react/lib-commonjs/Persona";
-
-import "antd/dist/antd.css";
+  PersonaPresence,
+  PersonaSize
+} from "office-ui-fabric-react";
+import { Layout, Menu } from "antd";
 import "./MenuHeader.scss";
-import { Link, navigate } from "@reach/router";
 import appLogo from "../../../assets/logo/2x/logo_and_font@2x.png";
-import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
 import { IPractitioner } from "../../../types";
+
+import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
+//import "antd/dist/antd.css";
 
 const { Header } = Layout;
 const { SubMenu } = Menu;

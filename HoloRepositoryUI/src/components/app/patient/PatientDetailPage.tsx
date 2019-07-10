@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { RouteComponentProps } from "@reach/router";
-import { Persona, PersonaSize } from "office-ui-fabric-react/lib-commonjs";
+import { Persona, PersonaSize } from "office-ui-fabric-react";
 import { Col, Divider, Row } from "antd";
 import { capitaliseString, getAgeFromDobString } from "../../../util/PatientUtil";
 import PlainContentContainer from "../core/PlainContentContainer";

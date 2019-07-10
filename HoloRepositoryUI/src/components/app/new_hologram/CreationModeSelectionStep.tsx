@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib-commonjs/ChoiceGroup";
+import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
 import ExtendedChoiceGroupLabel from "./ExtendedChoiceGroupLabel";
 import { HologramCreationMode } from "../../../types";
 

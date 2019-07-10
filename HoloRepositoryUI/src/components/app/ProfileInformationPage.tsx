@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { RouteComponentProps } from "@reach/router";
-import samplePractitioner from "../../__tests__/samples/samplePractitioner.json";
-import { IPractitioner } from "../../types";
-import { Col, Row, Divider } from "antd";
-import { Persona, PersonaSize } from "office-ui-fabric-react/lib-commonjs";
-import { capitaliseString, getAgeFromDobString } from "../../util/PatientUtil";
+import { Persona, PersonaSize } from "office-ui-fabric-react";
+import { Col, Divider, Row } from "antd";
 import PlainContentContainer from "./core/PlainContentContainer";
+import { capitaliseString, getAgeFromDobString } from "../../util/PatientUtil";
+import { IPractitioner } from "../../types";
+
+import samplePractitioner from "../../__tests__/samples/samplePractitioner.json";
 
 class ProfileInformationPage extends Component<RouteComponentProps> {
   practitioner = samplePractitioner as IPractitioner;

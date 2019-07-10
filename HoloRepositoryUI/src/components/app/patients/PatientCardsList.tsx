@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import { FocusZone, FocusZoneDirection } from "office-ui-fabric-react/lib-commonjs/FocusZone";
-import { Toggle } from "office-ui-fabric-react/lib-commonjs/Toggle";
-import { List } from "office-ui-fabric-react/lib-commonjs/List";
-import { SearchBox } from "office-ui-fabric-react/lib-commonjs/SearchBox";
-import { Label } from "office-ui-fabric-react/lib-commonjs/Label";
-import { getId } from "office-ui-fabric-react/lib-commonjs/Utilities";
+import {
+  FocusZone,
+  FocusZoneDirection,
+  getId,
+  Label,
+  List,
+  SearchBox,
+  Toggle
+} from "office-ui-fabric-react";
 import { Col, Row } from "antd";
 import { IPatient } from "../../../types";
 import PatientCard from "./PatientCard";

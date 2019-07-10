@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { Icon } from "office-ui-fabric-react/lib-commonjs/Icon";
-import { PersonaSize, Persona } from "office-ui-fabric-react/lib-commonjs";
-import { Row, Col } from "antd";
+import { Icon, Persona, PersonaSize } from "office-ui-fabric-react";
+import { Col, Row } from "antd";
 import { Link } from "@reach/router";
 import { IPatient } from "../../../types";
 import {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Breadcrumb, IBreadcrumbItem } from "office-ui-fabric-react/lib-commonjs/Breadcrumb";
+import { Breadcrumb, IBreadcrumbItem } from "office-ui-fabric-react";
 import { navigate } from "@reach/router";
 
 export interface IPatientBreadcrumbProps {

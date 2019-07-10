@@ -1,17 +1,23 @@
 openapi: '3.0.2'
 
 info:
-  version: 1.0.0
+  version: 0.1.0
   title: HoloStorage Accessor API
   description: APIs to access the FHIR resources and 3D models from HoloStorage
 
 servers:
 # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/boonwj/HoloAccessor-API/1.0.0
+    url: https://virtserver.swaggerhub.com/boonwj/HoloAccessor-API/0.1.0
   - url: http://holostorage.azurewebsites.net/v1/
 
+
 paths:
+# Download Holograms via Hologram ID(s) - GET /models
+# Get Holograms Metadata via Patients ID(s) - GET /patients
+# Get Holograms Metadata via Hologram ID(s) - GET /holograms
+# Delete Holograms via Hologram ID(s) - DELETE /holograms
+# Annotations operations - (TODO POST/PUT/DELETE)
   /patients:
     get:
       summary: Get patient and associated holograms metadata from HoloStorage
@@ -33,12 +39,6 @@ paths:
           description: Unaccepted input
         404:
           description: Failure to find all patients' metadata
-
-# Download Holograms via Hologram ID(s) - GET /models
-# Get Holograms Metadata via Patients ID(s) - GET /patients
-# Get Holograms Metadata via Hologram ID(s) - GET /holograms
-# Delete Holograms via Hologram ID(s) - DELETE /holograms
-# Annotations operations (POST/PUT/DELETE)
 
   /patients/{id}:
     put:

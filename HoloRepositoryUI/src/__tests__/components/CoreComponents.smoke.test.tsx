@@ -1,8 +1,8 @@
 import React from "react";
 import { shallow } from "enzyme";
-import App from "../../components/core/App";
-import MainContainer from "../../components/core/MainContainer";
-import MainFooter from "../../components/core/MainFooter";
+import App from "../../components/shared/App";
+import MainContainer from "../../components/shared/MainContainer";
+import MainFooter from "../../components/shared/MainFooter";
 
 it("renders App without crashing", () => {
   shallow(<App />);

@@ -1,5 +1,5 @@
 import React from "react";
-import PatientCard from "../../components/authenticated/patients/PatientCard";
+import PatientCard from "../../components/app/patients/PatientCard";
 import { shallow } from "enzyme";
 
 import samplePatientsWithHolograms from "../samples/samplePatientsWithHolograms.json";

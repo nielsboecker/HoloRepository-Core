@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Layout } from "antd";
 import MenuHeader from "./MenuHeader";
-import MainFooter from "../../core/MainFooter";
+import MainFooter from "../../shared/MainFooter";
 
-class AuthContainer extends Component<RouteComponentProps> {
+class AppContainer extends Component<RouteComponentProps> {
   backgroundStyle = {
     //background: "radial-gradient(black, transparent)"
     background: "rgba(1,1,1,0.2)"
@@ -32,4 +32,4 @@ class AuthContainer extends Component<RouteComponentProps> {
   }
 }
 
-export default AuthContainer;
+export default AppContainer;

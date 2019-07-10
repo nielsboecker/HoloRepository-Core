@@ -79,10 +79,13 @@ class HologramsDetailsList extends Component<
     }
   });
 
-  private _allItems: IHologramDocument[] = _mapHologramsToDocuments();
+  private _sampleHolograms = sampleHolograms as IHologram[];
+  private _allItems: IHologramDocument[] = _mapToDocuments(this._sampleHolograms);
 
   state = {
-    items: this._allItems,
+    items: this.props.patientId
+      ? this._allItems.filter(item => item.wrappedHologram.subject.id === this.props.patientId)
+      : this._allItems,
     columns: this.props.columns ? this.props.columns : defaultColumns,
     selectionDetails: this._getSelectionDetails()
   };
@@ -203,9 +206,7 @@ function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boo
     .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
 }
 
-function _mapHologramsToDocuments(): IHologramDocument[] {
-  const holograms = sampleHolograms as IHologram[];
-
+function _mapToDocuments(holograms: IHologram[]): IHologramDocument[] {
   return holograms.map(hologram => {
     const createdDate = new Date(hologram.createdDate);
 

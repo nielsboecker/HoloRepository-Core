@@ -1,5 +1,4 @@
 import React, { Component, ReactNode } from "react";
-import { Steps, Button, message } from "antd";
 import { RouteComponentProps } from "@reach/router";
 import PlainContentContainer from "../core/PlainContentContainer";
 
@@ -13,8 +12,7 @@ import DetailsDeclarationStep from "./DetailsDeclarationStep";
 import PipelineProcessingStep from "./generate/PipelineProcessingStep";
 import FileUploadStep from "./upload/FileUploadStep";
 import UploadProcessingStep from "./upload/UploadProcessingStep";
-
-const { Step } = Steps;
+import NewHologramControlsAndProgress from "./NewHologramControlsAndProgress";
 
 export interface IHologramCreationStep {
   title: string;
@@ -39,16 +37,16 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
     //steps: allSteps[HologramCreationMode.generateFromImagingStudy]
   };
 
-  private allPatients = [...samplePatients, ...samplePatientsWithHolograms].sort((a, b) =>
+  private _allPatients = [...samplePatients, ...samplePatientsWithHolograms].sort((a, b) =>
     a.name.full.localeCompare(b.name.full)
   ) as IPatient[];
 
-  _handleModeChange = (creationMode: HologramCreationMode) => {
+  private _handleModeChange = (creationMode: HologramCreationMode) => {
     this.setState({ creationMode });
     console.log(creationMode, this.state);
   };
 
-  private _allSteps: IHologramCreationSteps = {
+  private _steps: IHologramCreationSteps = {
     [HologramCreationMode.generateFromImagingStudy]: [
       {
         title: "Select mode",
@@ -93,7 +91,7 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
 
   render() {
     const { current } = this.state;
-    const steps = this._allSteps[this.state.creationMode];
+    const steps = this._steps[this.state.creationMode];
 
     return (
       <PlainContentContainer>
@@ -103,43 +101,26 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
           {steps[current].content}
         </div>
 
-        <Steps current={current}>
-          {steps.map(item => (
-            <Step key={item.title} title={item.title} />
-          ))}
-        </Steps>
-
-        <div className="steps-action">
-          {current < steps.length - 1 && (
-            <Button type="primary" onClick={() => this.next()}>
-              Next
-            </Button>
-          )}
-          {current === steps.length - 1 && (
-            <Button type="primary" onClick={() => message.success("Processing complete!")}>
-              Done
-            </Button>
-          )}
-          {current > 0 && (
-            <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-              Previous
-            </Button>
-          )}
-        </div>
+        <NewHologramControlsAndProgress
+          current={current}
+          steps={steps}
+          handlePrevious={this._prev}
+          handleNext={this._next}
+        />
       </PlainContentContainer>
     );
   }
 
-  next() {
+  private _next = () => {
     // TODO: use other setState
     const current: number = this.state.current + 1;
     this.setState({ current });
-  }
+  };
 
-  prev() {
+  private _prev = () => {
     const current = this.state.current - 1;
     this.setState({ current });
-  }
+  };
 }
 
 export default NewHologramPage;

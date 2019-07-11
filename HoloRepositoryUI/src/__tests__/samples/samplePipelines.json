@@ -1,0 +1,39 @@
+[
+  {
+    "id": "1",
+    "name": "Abdominal segmentation",
+    "description": "This pipeline uses a pre-trained dense VNET neural network to segment abdominal CT scans. The resulting model will provide a segmentation of 8 different organs in the abdominal area.",
+    "inputConstraints": [
+      ["Body site", "Abdominal part"],
+      ["Imaging study type", "CT scan"],
+      ["Image resolution", "144 x 144"],
+      ["Image data format", "Nifti"]
+    ],
+    "inputExampleImageUrl": "",
+    "outputExampleImageUrl": ""
+  },
+  {
+    "id": "2",
+    "name": "Brain segmentation",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "inputConstraints": [["Foo", "Bar"]],
+    "inputExampleImageUrl": "",
+    "outputExampleImageUrl": ""
+  },
+  {
+    "id": "3",
+    "name": "Pelvis segmentation",
+    "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    "inputConstraints": [["Foo", "Bar"], ["Bar", "Baz"]],
+    "inputExampleImageUrl": "",
+    "outputExampleImageUrl": ""
+  },
+  {
+    "id": "4",
+    "name": "Generic bone segmentation",
+    "description": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "inputConstraints": [["Foo", "Bar"], ["Bar", "Baz"]],
+    "inputExampleImageUrl": "",
+    "outputExampleImageUrl": ""
+  }
+]

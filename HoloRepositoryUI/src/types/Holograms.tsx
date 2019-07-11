@@ -40,3 +40,16 @@ export interface IHologram {
   bodySite?: string;
   encounterDate?: string;
 }
+
+/**
+ * Interface for a Pipeline in the HoloPipelines subsystem, corresponding to one
+ * particular image processing flow.
+ */
+export interface IPipeline {
+  id: string;
+  name: string;
+  description: string;
+  inputConstraints: [string, string][];
+  inputExampleImageUrl?: string;
+  outputExampleImageUrl?: string;
+}

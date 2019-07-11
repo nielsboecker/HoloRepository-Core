@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Divider } from "antd";
 import { IPipeline } from "../../../../types";
-import { CommandBarButton, Icon } from "office-ui-fabric-react";
+import { CommandBarButton, Icon, IconButton, Image, Modal } from "office-ui-fabric-react";
 
 const style = { backgroundColor: "#eee", padding: "24px", marginTop: "31px" };
 
@@ -9,7 +9,41 @@ export interface IPipelineProfileCardProps {
   pipeline?: IPipeline;
 }
 
-class PipelineSpecificationCard extends Component<IPipelineProfileCardProps> {
+export interface IPipelineProfileCardState {
+  showSampleInputModal: boolean;
+  showSampleOutputModal: boolean;
+}
+
+class PipelineSpecificationCard extends Component<
+  IPipelineProfileCardProps,
+  IPipelineProfileCardState
+> {
+  state = {
+    showSampleInputModal: false,
+    showSampleOutputModal: false
+  };
+
+  private _closeModal = (): void => {
+    this.setState({ showSampleInputModal: false, showSampleOutputModal: false });
+  };
+
+  private _modalCloseButton = (
+    <IconButton
+      iconProps={{ iconName: "ChromeClose" }}
+      title="Close"
+      ariaLabel="Close"
+      onClick={this._closeModal}
+      style={{
+        right: "0",
+        top: "0",
+        position: "absolute",
+        zIndex: 1,
+        margin: "12px",
+        backgroundColor: "rgba(255, 255, 255, 0.7)"
+      }}
+    />
+  );
+
   render() {
     if (this.props.pipeline) {
       const { pipeline } = this.props;
@@ -36,13 +70,42 @@ class PipelineSpecificationCard extends Component<IPipelineProfileCardProps> {
               iconProps={{ iconName: "Stack" }}
               text="Sample input"
               disabled={!pipeline.inputExampleImageUrl}
+              onClick={() => this.setState({ showSampleInputModal: true })}
               style={{ marginRight: "24px" }}
             />
+            <Modal
+              titleAriaId="Sample input"
+              isOpen={this.state.showSampleInputModal}
+              onDismiss={this._closeModal}
+              isBlocking={false}
+            >
+              {this._modalCloseButton}
+              <Image
+                src={pipeline.inputExampleImageUrl}
+                alt="Sample input"
+                style={{ maxHeight: "75vh", padding: "12px" }}
+              />
+            </Modal>
+
             <CommandBarButton
               iconProps={{ iconName: "HealthSolid" }}
               text="Sample output"
               disabled={!pipeline.outputExampleImageUrl}
+              onClick={() => this.setState({ showSampleOutputModal: true })}
             />
+            <Modal
+              titleAriaId="Sample output"
+              isOpen={this.state.showSampleOutputModal}
+              onDismiss={this._closeModal}
+              isBlocking={false}
+            >
+              {this._modalCloseButton}
+              <Image
+                src={pipeline.outputExampleImageUrl}
+                alt="Sample output"
+                style={{ maxHeight: "75vh", padding: "12px" }}
+              />
+            </Modal>
           </div>
         </div>
       );

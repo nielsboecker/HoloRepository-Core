@@ -7,10 +7,10 @@ import CreationModeSelectionStep from "./shared/CreationModeSelectionStep";
 import ImagingStudySelectionStep from "./generate/ImagingStudySelectionStep";
 import PipelineSelectionStep from "./generate/PipelineSelectionStep";
 import DetailsDeclarationStep from "./shared/DetailsDeclarationStep";
-import PipelineProcessingStep from "./generate/PipelineProcessingStep";
 import FileUploadStep from "./upload/FileUploadStep";
 import UploadProcessingStep from "./upload/UploadProcessingStep";
 import NewHologramControlsAndProgress from "./shared/NewHologramControlsAndProgress";
+import GenerationProcessingStep from "./generate/GenerationProcessingStep";
 
 export interface IHologramCreationStep {
   title: string;
@@ -66,7 +66,7 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
       },
       {
         title: "Process",
-        content: <PipelineProcessingStep />
+        content: <GenerationProcessingStep />
       }
     ],
     [HologramCreationMode.uploadExistingModel]: [

@@ -1,7 +1,7 @@
 openapi: '3.0.2'
 
 info:
-  version: 0.1.0
+  version: 0.1.1
   title: HoloStorage Accessor API
   description: APIs to access the FHIR resources and 3D models from HoloStorage
 
@@ -238,8 +238,8 @@ components:
         title:
           type: string
           example: Malformed hip bones
-        patient:
-          $ref: '#/components/schemas/Patient'
+        patientId:
+          $ref: '#/components/schemas/UUID'
         author:
           $ref: '#/components/schemas/Author'
         description:

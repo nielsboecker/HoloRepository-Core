@@ -1,17 +1,14 @@
 #todo return the file then del?
 import dicom2nifti
-from components import fileHandler as fileHand
+import pathlib
 #import dicom2nifti.settings as settings
 
-dicomPath = fileHand.dicomPath
-slash = fileHand.slash
-niftiPath = fileHand.niftiPath
+dicomPath = pathlib.Path.cwd().joinpath("medicalScans", "dicom")
+niftiPath = pathlib.Path.cwd().joinpath("medicalScans", "nifti")
 
 def main(fname):
-	dicom2nifti.convert_directory(dicomPath + fname + slash, niftiPath)
+	dicom2nifti.convert_directory(str(dicomPath.joinpath(fname)), str(niftiPath))
 	print("dcm2nifti: done")
 
 if __name__ == '__main__':
-	import sys
-	dicom2nifti.convert_directory(dicomPath + sys.argv[1] + slash, niftiPath)
-	print("dcm2nifti: done")
+	print("component can't run on its own")

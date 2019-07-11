@@ -4,11 +4,12 @@
 
 from components import nifti2numpy#this import stuff in the future will be dockerized
 from components import numpy2obj
-from components import fileHandler#you can stay?
+import pathlib
 import sys
 import numpy as np
 
-slash = fileHandler.slash
+niftiPath = pathlib.Path.cwd().joinpath("medicalScans", "nifti")
+
 argCount = len(sys.argv)
 
 if argCount != 4:#need changing
@@ -20,7 +21,7 @@ threshold = sys.argv[2]
 flipNpy = sys.argv[3]
 
 #pipeline should actually deal with data retrieval, not giving the path to them components 
-tempNpy = nifti2numpy.main(fileHandler.niftiPath + fileHandler.slash + niftiData, niftiData)
+tempNpy = nifti2numpy.main(str(niftiPath.joinpath(niftiData)), niftiData)
 if flipNpy:
 	tempNpy = np.flip(tempNpy, 0)
 	tempNpy = np.flip(tempNpy, 1)

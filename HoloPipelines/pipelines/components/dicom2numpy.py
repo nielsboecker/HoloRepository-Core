@@ -5,19 +5,14 @@ import os
 from glob import glob
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import scipy.ndimage
-from components  import fileHandler
+import pathlib
 import time
 
-slash = fileHandler.slash
-cwd = os.getcwd() + slash
+cwd = pathlib.Path.cwd()
+numpyPath = cwd.joinpath("numpy")
 
-def getIO():
-	fName = fileHandler.getFname("dir", fileHandler.dicomPath)
-	tempPath = fileHandler.dicomPath + str(fName) + slash
-	return [tempPath, fName]
-
-def load_scan(scanPath=fileHandler.dicomPath + "samples" + slash):
-	slices = [dicom.read_file(scanPath + slash + s) for s in os.listdir(scanPath)]
+def load_scan(scanPath): #default was samples from dicom
+	slices = [dicom.read_file(str(pathlib.Path(scanPath, s))) for s in os.listdir(str(scanPath))]
 	slices.sort(key = lambda x: int(x.InstanceNumber))
 	try:
 		slice_thickness = np.abs(slices[0].ImagePositionscan[2] - slices[1].ImagePositionscan[2])
@@ -50,7 +45,7 @@ def get_pixels_hu(scans):
 
 
 
-def resample(dataPath=fileHandler.dicomPath + slash + "samples", new_spacing=[1,1,1]):#was:   def resample(image, scan, new_spacing=[1,1,1], dataPath=fullPath):
+def resample(dataPath, new_spacing=[1,1,1]):#default to dataPath was samples from dicom
 	scan = load_scan(dataPath)
 	image = get_pixels_hu(scan)
 	print ("Shape before resampling\t", image.shape)
@@ -78,18 +73,16 @@ def resample(dataPath=fileHandler.dicomPath + slash + "samples", new_spacing=[1,
 	
 	return image, new_spacing
 
-def main(inputPath=fileHandler.dicomPath + slash + "samples", mainFname="samples", option=0):
+def main(inputPath, mainFname="samples", option=0):#default to inputPath was samples from dicom
 	print("dicom2numpy: resampling dicom...")
 	imgs_after_resamp, spacing = resample(inputPath)
 	print("dicom2numpy: resampling done")
 	if option == 1:
-		np.save(fileHandler.numpyPath + "%s.npy" % mainFname, imgs_after_resamp)
+		np.save(str(numpyPath.joinpath("%s.npy" % mainFname)), imgs_after_resamp)
 		return 0
 	return imgs_after_resamp
 
 if __name__ == '__main__':
-	lsIO = getIO()
-	temp = main(lsIO[0], lsIO[1], 1)
-	print(lsIO[1] + ".npy generated.")
+	print("component can't be run on its own")
 
 

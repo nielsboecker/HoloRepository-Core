@@ -1,10 +1,10 @@
 import numpy as np
 import nibabel as nib
-from components import fileHandler#****************
+import pathlib
 '''from utils import *
 from segment_lung import segment_lung
 from segment_airway import segment_airway'''
-niftiPath = fileHandler.niftiPath
+niftiPath = pathlib.Path.cwd().joinpath("medicalScans", "nifti")
 
 
 def main(fname):
@@ -19,7 +19,7 @@ def main(fname):
 # Load image 
 #####################################################
 
-	I         = nib.load(niftiPath + str(fname))
+	I         = nib.load(str(niftiPath.joinpath(str(fname))))
 	I_affine  = I.affine
 	I         = I.get_data()
 

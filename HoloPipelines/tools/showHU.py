@@ -3,19 +3,13 @@ import numpy as np
 import sys
 import os
 import platform
+import pathlib
 
-#-----------Unix uses "/", whereas Windows uses "\"-----------
-slash = "/"
-runningPlatform = platform.system()
-if runningPlatform == "Windows":
-	slash = "\\"
-#-------------------------------------------------------------
+cwd = pathlib.Path.cwd()
 
-cwd = os.getcwd() + slash
+numpyPath = cwd.parents[0].joinpath("numpy")
 
-numpyPath = cwd[:-6] + "numpys" + slash
-
-imgs_to_process = np.load(numpyPath + sys.argv[1]).astype(np.float64) 
+imgs_to_process = np.load(str(numpyPath.joinpath(sys.argv[1]))).astype(np.float64) 
 
 plt.hist(imgs_to_process.flatten(), bins=50, color='c')
 plt.xlabel("Hounsfield Units (HU)")

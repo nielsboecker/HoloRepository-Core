@@ -2,43 +2,36 @@ import numpy as np
 import nibabel as nib
 from nilearn.image import resample_img
 import scipy
-from components import fileHandler
+import pathlib
 import platform
 
-cwd = fileHandler.cwd
-slash = fileHandler.slash
+cwd = pathlib.Path.cwd()
 
-numpyPath = cwd + "numpys" + slash
-niftiPath = cwd + "imgs" + slash + "nifti" + slash
-numpyPath = cwd + "numpys" + slash
+numpyPath = cwd.joinpath("numpy")
 
 fName = ""
 tempPath = ""
 
-def getIO():
-	if niftiPath[-3:] == ".gz":
-		fName = fileHandler.getFname(".nii.gz", niftiPath)
-	else:
-		fName = fileHandler.getFname(".nii", niftiPath)
-	tempPath = niftiPath + fName
-	return [tempPath, fName]
-
 def resample(dataPath, new_spacing=[1,1,1]):
 	image = dataPath
-	originalShape = image.shape
+	originalShape = image.shape[:3]
 	header = image.header
 	image._affline = None
 	spacing = map(float, ([list(image.header.get_zooms())[2]] + [list(image.header.get_zooms())[0], list(image.header.get_zooms())[1]]))
 	spacing = np.array(list(spacing))
 
 	resize_factor = spacing / new_spacing
-	new_real_shape = image.shape * resize_factor
+	#print(type(image.shape))
+	print(image.shape[:3])
+	print(spacing)
+	#print(resize_factor)
+	new_real_shape = image.shape[:3] * resize_factor
 	new_shape = np.round(new_real_shape)
-	real_resize_factor = new_shape / image.shape
+	real_resize_factor = new_shape / image.shape[:3]
 	new_spacing = spacing / real_resize_factor
 	
 	print ("Shape before resampling\t", originalShape)
-	print ("Shape after resampling\t", image.shape)
+	print ("Shape after resampling\t", image.shape[:3])
 	
 	return image, new_spacing
 
@@ -51,11 +44,9 @@ def main(mainPath=tempPath, tempFname=fName, option=0):
 
 	a = np.array(img.dataobj)
 	if option == 1:
-		np.save(numpyPath + "%s.npy" % tempFname[:-4], a)
+		np.save(str(numpyPath.joinpath("%s.npy" % tempFname[:-4])), a)
 		return 0
 	return a
 
 if __name__ == '__main__':
-	lsIO = getIO()
-	temp = main(lsIO[0], lsIO[1], 1)
-	print(lsIO[1][:-4] + ".npy generated.")
+	print("component can't be run on its own")

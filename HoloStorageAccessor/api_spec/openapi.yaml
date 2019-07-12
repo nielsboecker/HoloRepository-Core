@@ -1,16 +1,13 @@
-openapi: '3.0.2'
-
+openapi: 3.0.2
 info:
-  version: 0.1.1
-  title: HoloStorage Accessor API
-  description: APIs to access the FHIR resources and 3D models from HoloStorage
+  version: "0.1.2"
+  title: 'HoloStorage Accessor API'
+  description: 'API to access holograms and metadata from HoloStorage'
 
-servers:
 # Added by API Auto Mocking Plugin
+servers:
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/boonwj/HoloAccessor-API/0.1.0
-  - url: http://holostorage.azurewebsites.net/v1/
-
+    url: https://virtserver.swaggerhub.com/boonwj/HoloRepository/0.1.0
 
 paths:
 # Download Holograms via Hologram ID(s) - GET /models
@@ -20,13 +17,9 @@ paths:
 # Annotations operations - (TODO POST/PUT/DELETE)
   /patients:
     get:
-      summary: Get patient and associated holograms metadata from HoloStorage
+      summary: Mass query for patients metadata in HoloStorage
       parameters:
-        - in: query
-          name: pid
-          description: ID of patient to return
-          schema:
-            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/PIDQuery'
 
       responses:
         200:
@@ -37,26 +30,38 @@ paths:
                 $ref: '#/components/schemas/Patients'
         400:
           description: Unaccepted input
-        404:
-          description: Failure to find all patients' metadata
 
-  /patients/{id}:
-    put:
-      summary: Add/Update basic patient information
-      description: This endpoint allows you to add new patient only information, holograms will be added
+  /patients/{pid}:
+    get:
+      summary: Get a single patient metadata in HoloStorage
       parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID of patient to put into HoloStorage
-          schema:
-            type: string
+        - $ref: '#/components/parameters/PIDPath'
+      responses:
+        200:
+          description: Successful pulling of patients metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        400:
+          description: Unaccepted input
+        404:
+          description: Patient cannot be found
+
+    put:
+      summary: Add or update basic patient information
+      description: |-
+        This endpoint allows you to add new patient information in HoloStorage. If PID does not exist,  a new Patient will be created else, it will be updated.
+
+        PID in path and request body will be checked as a means to ensure that the insertion is intended.
+      parameters:
+        - $ref: '#/components/parameters/PIDPath'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Patient'
+              $ref: '#/components/schemas/PatientBasic'
       responses:
         200:
           description: Successful modification
@@ -67,14 +72,10 @@ paths:
 
   /holograms:
     get:
-      summary: 'Get holograms metadata based on hologram ids'
+      summary: Mass queries for hologram metadata based on hologram ids
       description: 'Obtain hologram information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients'
       parameters:
-        - in: query
-          name: id
-          description: ID of hologram to return
-          schema:
-            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/HIDQuery'
 
       responses:
         200:
@@ -111,75 +112,119 @@ paths:
                     example: 32853d69-3e71-4c87-abf9-56f0eddefefc
         400:
           description: Unaccepted input
+
+  /holograms/{hid}:
+    get:
+      summary: 'Get a single hologram metadata based hologram ids'
+      description: 'Obtain hologram information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients'
+      parameters:
+        - $ref: '#/components/parameters/HIDPath'
+
+      responses:
+        200:
+          description: Successfully found all hologram metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Holograms'
+        400:
+          description: Unaccepted input
+        404:
+          description: Metadata of holograms were not found
+
     delete:
-      summary: 'Delete hologram entries in HoloStorage'
+      summary: 'Delete hologram in HoloStorage'
       description: 'Delete holograms based on ID'
       parameters:
-        - in: query
-          name: id
-          description: ID of hologram to delete
-          schema:
-            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/HIDPath'
       responses:
         200:
           description: Successful deletion
         404:
-          description: Error locating all holograms
+          description: Hologram cannot be located for deletion
         500:
           description: Errors during deletion process
 
-  /models:
+
+
+  /holograms/{hid}/download:
     get:
       summary: Download holograms models based on id
       parameters:
-        - in: query
-          name: id
-          description: ID of hologram to download
-          schema:
-            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/HIDPath'
       responses:
         200:
-          description: Zipped file containing multiple holograms or uncompressed of single hologram
+          description: Download a single hologram based on id
           content:
-            application/zip:
-              schema:
-                type: string
-                format: binary
-            application/octet-stream:
+            model/gltf-binary:
               schema:
                 type: string
                 format: binary
         404:
-          description: Not all hologram ids are found
+          description: Hologram id is not found
 
-  /holograms/{id}/annotations:
-    get:
-      summary: Get all annotations associated with a hologram
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID of hologram to get annotation information
-          schema:
-            type: string
-      responses:
-        200:
-          description: Success
-          # TODO: Contents of annotations
-        400:
-          description: Unaccepted input
-        404:
-          description: Hologram ID is not found
+  # /holograms/{hid}/annotations:
+  #   get:
+  #     summary: Get all annotations associated with a hologram
+  #     parameters:
+  #       - in: path
+  #         name: hid
+  #         required: true
+  #         description: ID of hologram to get annotation information
+  #         schema:
+  #           type: string
+  #     responses:
+  #       200:
+  #         description: Success
+  #         # TODO: Contents of annotations
+  #       400:
+  #         description: Unaccepted input
+  #       404:
+  #         description: Hologram ID is not found
 
 components:
-  schemas:
-    UUID:
-      title: Resource UUID
-      description: The UUID assigned to the specific requested resource (e.g. Patient, Hologram)
-      example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
-      type: string
-      format: uuid
+  parameters:
+    PIDQuery:
+      in: query
+      name: pid
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+      description: The UUID assigned to the specific patient
 
+    PIDPath:
+      in: path
+      name: pid
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+      description: The UUID assigned to the specific patient
+
+    HIDQuery:
+      in: query
+      name: hid
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: abcdef12-3456-7890-ccbb-eeffaabbcc
+      description: The UUID assigned to a hologram
+
+    HIDPath:
+      in: path
+      name: hid
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: abcdef12-3456-7890-ccbb-eeffaabbcc
+      description: The UUID assigned to a hologram
+
+  schemas:
     PersonName:
       description: Components that make up the name of the
       properties:
@@ -203,8 +248,17 @@ components:
         $ref: '#/components/schemas/Patient'
 
     Patient:
-      title: Patient
+      title: Full Patient Info
       description: Metadata of a single patient
+      allOf:
+        - $ref: '#/components/schemas/PatientBasic'
+        - type: object
+          properties:
+            holograms:
+              $ref: '#/components/schemas/Holograms'
+
+    PatientBasic:
+      title: Basic Patient Info
       type: object
       properties:
         id:
@@ -219,8 +273,6 @@ components:
         birthDate:
           type: string
           format: date
-        holograms:
-          $ref: '#/components/schemas/Holograms'
 
     Holograms:
       description: An array of hologram metadata
@@ -238,8 +290,14 @@ components:
         title:
           type: string
           example: Malformed hip bones
-        patientId:
-          $ref: '#/components/schemas/UUID'
+        patient:
+          type: object
+          properties:
+            pid:
+              type: string
+              format: uuid
+            name:
+              $ref: '#/components/schemas/PersonName'
         author:
           $ref: '#/components/schemas/Author'
         description:
@@ -251,7 +309,7 @@ components:
           example: '2017-07-21T17:32:28Z'
         contentType:
           type: string
-          example: application/octet-stream
+          example: model/gltf-binary
         size:
           type: integer
           example: 5120

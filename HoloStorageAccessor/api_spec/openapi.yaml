@@ -72,8 +72,11 @@ paths:
 
   /holograms:
     get:
-      summary: Mass queries for hologram metadata based on hologram ids
-      description: 'Obtain hologram information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients'
+      summary: Mass query for hologram metadata based on hologram ids
+      description: |-
+        Obtain hologram information stored within HoloStorage.
+
+        Multiple IDs can be passed with the syntax `/holograms&hid=id1,id2,id3,...,idx`
       parameters:
         - $ref: '#/components/parameters/HIDQuery'
 
@@ -119,7 +122,6 @@ paths:
       description: 'Obtain hologram information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients'
       parameters:
         - $ref: '#/components/parameters/HIDPath'
-
       responses:
         200:
           description: Successfully found all hologram metadata
@@ -133,7 +135,7 @@ paths:
           description: Metadata of holograms were not found
 
     delete:
-      summary: 'Delete hologram in HoloStorage'
+      summary: 'Delete a hologram in HoloStorage'
       description: 'Delete holograms based on ID'
       parameters:
         - $ref: '#/components/parameters/HIDPath'
@@ -144,8 +146,6 @@ paths:
           description: Hologram cannot be located for deletion
         500:
           description: Errors during deletion process
-
-
 
   /holograms/{hid}/download:
     get:
@@ -162,25 +162,6 @@ paths:
                 format: binary
         404:
           description: Hologram id is not found
-
-  # /holograms/{hid}/annotations:
-  #   get:
-  #     summary: Get all annotations associated with a hologram
-  #     parameters:
-  #       - in: path
-  #         name: hid
-  #         required: true
-  #         description: ID of hologram to get annotation information
-  #         schema:
-  #           type: string
-  #     responses:
-  #       200:
-  #         description: Success
-  #         # TODO: Contents of annotations
-  #       400:
-  #         description: Unaccepted input
-  #       404:
-  #         description: Hologram ID is not found
 
 components:
   parameters:
@@ -259,6 +240,7 @@ components:
 
     PatientBasic:
       title: Basic Patient Info
+      description: The basic metadata of a patient
       type: object
       properties:
         id:
@@ -282,55 +264,54 @@ components:
 
     Hologram:
       description: Metadata of a hologram
-      type: object
-      properties:
-        id:
-          type: string
-          example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
-        title:
-          type: string
-          example: Malformed hip bones
-        patient:
-          type: object
+      allOf:
+        - type: object
           properties:
-            pid:
+            id:
               type: string
-              format: uuid
-            name:
-              $ref: '#/components/schemas/PersonName'
-        author:
-          $ref: '#/components/schemas/Author'
-        description:
-          type: string
-          example: Malformed hip bones on a 8 year old child
-        creation:
-          type: string
-          format: date-time
-          example: '2017-07-21T17:32:28Z'
-        contentType:
-          type: string
-          example: model/gltf-binary
-        size:
-          type: integer
-          example: 5120
+              example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+            createdDate:
+              type: string
+              format: date-time
+              example: '2017-07-21T17:32:28Z'
+        - $ref: '#/components/schemas/HologramBasic'
 
     HologramUploadData:
       description: Components required to upload a new Hologram
       type: object
+      allOf:
+        - $ref: '#/components/schemas/HologramBasic'
+        - type: object
+          properties:
+            hologramFile:
+              type: string
+              format: binary
+              description: The raw binary of the hologram model
+
+    HologramBasic:
+      title: Basic Hologram info
+      type: object
       properties:
         title:
           type: string
+          description: Summary of the hologram
           example: Malformed hip bones
         patient:
-          $ref: '#/components/schemas/Patient'
+          $ref: '#/components/schemas/PatientBasic'
         author:
           $ref: '#/components/schemas/Author'
         description:
           type: string
-          example: Malformed hip bones on a 8 year old child
-        hologramFile:
+          description: Further elaborations on the hologram with additional details
+          example: Malformed hip bones on an 8 year old child suffering from a birth defect
+        contentType:
           type: string
-          format: binary
+          description: The mimetype of the hologram file
+          example: model/gltf-binary
+        fileSizeInKb:
+          type: integer
+          description: The size of the hologram in KB
+          example: 5120
 
     Author:
       title: Author
@@ -339,6 +320,8 @@ components:
       properties:
         id:
           type: string
+          description: The author ID
           example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
         name:
+          description: The name of the author
           $ref: '#/components/schemas/PersonName'

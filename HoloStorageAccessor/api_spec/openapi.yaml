@@ -10,14 +10,13 @@ servers:
     url: https://virtserver.swaggerhub.com/boonwj/HoloRepository/0.1.0
 
 paths:
-# Download Holograms via Hologram ID(s) - GET /models
-# Get Holograms Metadata via Patients ID(s) - GET /patients
-# Get Holograms Metadata via Hologram ID(s) - GET /holograms
-# Delete Holograms via Hologram ID(s) - DELETE /holograms
-# Annotations operations - (TODO POST/PUT/DELETE)
   /patients:
     get:
       summary: Mass query for patients metadata in HoloStorage
+      description: |-
+        Obtain patient information stored within HoloStorage.
+
+        Multiple IDs can be passed with the syntax `/patients?pid=id1,id2,id3,...,idx`
       parameters:
         - $ref: '#/components/parameters/PIDQuery'
 
@@ -34,11 +33,12 @@ paths:
   /patients/{pid}:
     get:
       summary: Get a single patient metadata in HoloStorage
+      description: Endpoint for a singular patient lookup
       parameters:
         - $ref: '#/components/parameters/PIDPath'
       responses:
         200:
-          description: Successful pulling of patients metadata
+          description: Successful pulling of the patient's metadata
           content:
             application/json:
               schema:
@@ -51,7 +51,7 @@ paths:
     put:
       summary: Add or update basic patient information
       description: |-
-        This endpoint allows you to add new patient information in HoloStorage. If PID does not exist,  a new Patient will be created else, it will be updated.
+        This endpoint allows you to add new patient information in HoloStorage. A new Patient will be created if PID does not exist, else it will be updated.
 
         PID in path and request body will be checked as a means to ensure that the insertion is intended.
       parameters:
@@ -76,7 +76,7 @@ paths:
       description: |-
         Obtain hologram information stored within HoloStorage.
 
-        Multiple IDs can be passed with the syntax `/holograms&hid=id1,id2,id3,...,idx`
+        Multiple IDs can be passed with the syntax `/holograms?hid=id1,id2,id3,...,idx`
       parameters:
         - $ref: '#/components/parameters/HIDQuery'
 
@@ -89,8 +89,6 @@ paths:
                 $ref: '#/components/schemas/Holograms'
         400:
           description: Unaccepted input
-        404:
-          description: Metadata of holograms were not found
 
     post:
       summary: 'Upload hologram to HoloStorage'
@@ -118,8 +116,8 @@ paths:
 
   /holograms/{hid}:
     get:
-      summary: 'Get a single hologram metadata based hologram ids'
-      description: 'Obtain hologram information stored within HoloStorage, FHIR metadata and number of Holograms associated with the patients'
+      summary: Get a single hologram metadata based on the hologram id
+      description: Endpoint for a single hologram lookup
       parameters:
         - $ref: '#/components/parameters/HIDPath'
       responses:
@@ -135,21 +133,22 @@ paths:
           description: Metadata of holograms were not found
 
     delete:
-      summary: 'Delete a hologram in HoloStorage'
-      description: 'Delete holograms based on ID'
+      summary: Delete a hologram in HoloStorage
+      description: Delete holograms based on ID
       parameters:
         - $ref: '#/components/parameters/HIDPath'
       responses:
         200:
-          description: Successful deletion
+          description: Successful deletion of hologram
         404:
           description: Hologram cannot be located for deletion
         500:
-          description: Errors during deletion process
+          description: Error encountered during deletion process
 
   /holograms/{hid}/download:
     get:
-      summary: Download holograms models based on id
+      summary: Download holograms models based on the hologram id
+      description: Initiates download operation for the specified hid
       parameters:
         - $ref: '#/components/parameters/HIDPath'
       responses:
@@ -161,7 +160,7 @@ paths:
                 type: string
                 format: binary
         404:
-          description: Hologram id is not found
+          description: Hologram is not found
 
 components:
   parameters:
@@ -173,6 +172,8 @@ components:
         type: string
         format: uuid
         example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+      style: form
+      explode: false
       description: The UUID assigned to the specific patient
 
     PIDPath:
@@ -192,7 +193,9 @@ components:
       schema:
         type: string
         format: uuid
-        example: abcdef12-3456-7890-ccbb-eeffaabbcc
+        example: abcdef12-3456-7890-ccbb-eeffaabbccdd
+      style: form
+      explode: false
       description: The UUID assigned to a hologram
 
     HIDPath:
@@ -202,12 +205,12 @@ components:
       schema:
         type: string
         format: uuid
-        example: abcdef12-3456-7890-ccbb-eeffaabbcc
+        example: abcdef12-3456-7890-ccbb-eeffaabbccdd
       description: The UUID assigned to a hologram
 
   schemas:
     PersonName:
-      description: Components that make up the name of the
+      description: Components that make up the name of a person
       properties:
         full:
           type: string

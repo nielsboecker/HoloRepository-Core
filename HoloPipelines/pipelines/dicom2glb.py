@@ -1,4 +1,3 @@
-import os
 from components import dicom2numpy
 from components import numpy2obj
 from components import obj2gltfWrapper

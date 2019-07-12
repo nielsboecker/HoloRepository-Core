@@ -1,6 +1,10 @@
 import json
 import os
 import argparse
+from subprocess import call as subpro
+import pathlib
+
+newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
 parser = argparse.ArgumentParser(description='Selct pipeline to process')
 parser.add_argument('-l', '--ls', action="store_true", help="list all the available piplines")
@@ -12,7 +16,7 @@ args = parser.parse_args()
 
 def main():
 	searchCounter = 0
-	with open("pipelines/pipelineList.json") as json_file:
+	with open(str(pathlib.Path(newCwd).joinpath("pipelines/pipelineList.json"))) as json_file:
 		lsPipe = json.load(json_file)
 		if args.ls:
 			print(json.dumps(lsPipe, indent=4, sort_keys=False))
@@ -47,7 +51,7 @@ def main():
 			temp = temp + str(i) + " "
 		temp = temp[:len(temp) - 1]
 		print("starting pipeline...")
-		os.system('python ' + lsPipe[args.pipelineID][0]['src'] + " " + temp)
+		subpro('python ' + lsPipe[args.pipelineID][0]['src'] + " " + temp, cwd=newCwd, shell=True)
 
 	json_file.close()
 

@@ -159,6 +159,7 @@ paths:
               schema:
                 type: string
                 format: binary
+                example: '[file content goes here]'
         404:
           description: Hologram is not found
 
@@ -239,7 +240,9 @@ components:
         - type: object
           properties:
             holograms:
-              $ref: '#/components/schemas/Holograms'
+              type: array
+              items:
+                $ref: '#/components/schemas/HologramBasic'
 
     PatientBasic:
       title: Basic Patient Info
@@ -268,41 +271,39 @@ components:
     Hologram:
       description: Metadata of a hologram
       allOf:
+        - $ref: '#/components/schemas/HologramBasic'
         - type: object
           properties:
-            id:
-              type: string
-              example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
-            createdDate:
-              type: string
-              format: date-time
-              example: '2017-07-21T17:32:28Z'
-        - $ref: '#/components/schemas/HologramBasic'
+            patient:
+              $ref: '#/components/schemas/PatientBasic'
+            author:
+              $ref: '#/components/schemas/Author'
 
     HologramUploadData:
-      description: Components required to upload a new Hologram
+      description: Components required to upload a new Hologram.
       type: object
       allOf:
-        - $ref: '#/components/schemas/HologramBasic'
+        - $ref: '#/components/schemas/Hologram'
         - type: object
           properties:
             hologramFile:
               type: string
               format: binary
+              example: [file content goes here]
               description: The raw binary of the hologram model
 
     HologramBasic:
       title: Basic Hologram info
       type: object
       properties:
+        hid:
+          type: string
+          description: UUID of a hologram
+          example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
         title:
           type: string
           description: Summary of the hologram
           example: Malformed hip bones
-        patient:
-          $ref: '#/components/schemas/PatientBasic'
-        author:
-          $ref: '#/components/schemas/Author'
         description:
           type: string
           description: Further elaborations on the hologram with additional details
@@ -315,6 +316,11 @@ components:
           type: integer
           description: The size of the hologram in KB
           example: 5120
+        createdDate:
+          type: string
+          format: date-time
+          description: The date the hologram was generated
+          example: '2017-07-21T17:32:28Z'
 
     Author:
       title: Author

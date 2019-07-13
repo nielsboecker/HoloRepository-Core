@@ -249,7 +249,7 @@ components:
       description: The basic metadata of a patient
       type: object
       properties:
-        id:
+        pid:
           type: string
           example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
         name:
@@ -327,10 +327,9 @@ components:
       description: Who and/or what authored the Hologram
       type: object
       properties:
-        id:
+        aid:
           type: string
           description: The author ID
           example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
         name:
-          description: The name of the author
           $ref: '#/components/schemas/PersonName'

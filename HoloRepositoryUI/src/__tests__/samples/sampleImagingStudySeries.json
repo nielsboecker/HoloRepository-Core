@@ -1,0 +1,69 @@
+[
+  {
+    "id": "efd5c2bf-8499-45ef-b6bf-3d35714f5442",
+    "subject": {
+      "id": "5d1bf4f1d32c1f6bf52331b9",
+      "name": "Cora Santiago"
+    },
+    "numberOfInstances": 25,
+    "previewPictureUrl": "https://www.dicomlibrary.com/assets/img/demo1.jpg",
+    "bodySite": "Chest",
+    "date": "1999-12-12",
+    "modality": "CT"
+  },
+  {
+    "id": "836c46f7-0278-4c9f-9ed0-eb169a3ac8aa",
+    "subject": {
+      "id": "5d1bf4f1d32c1f6bf52331b9",
+      "name": "Cora Santiago"
+    },
+    "numberOfInstances": 14,
+    "previewPictureUrl": "https://www.dicomlibrary.com/assets/img/demo2.jpg",
+    "bodySite": "Knee",
+    "date": "2001-01-09",
+    "modality": "MR"
+  },
+  {
+    "id": "c0008390-1249-44f0-9a14-3a347d124edf",
+    "subject": {
+      "id": "5d1bf4f1d32c1f6bf52331b9",
+      "name": "Cora Santiago"
+    },
+    "numberOfInstances": 80,
+    "previewPictureUrl": "https://www.dicomlibrary.com/assets/img/demo3.jpg",
+    "bodySite": "Abdominal area",
+    "date": "2019-03-10",
+    "modality": "OT"
+  },
+  {
+    "id": "b1557468-2cee-49e6-992b-77cc0b508db3",
+    "subject": {
+      "id": "5d1bf4f1cca3d9f787bd80fd",
+      "name": "Morton Adams"
+    },
+    "numberOfInstances": 120,
+    "previewPictureUrl": "https://boxdicom.com/img/thumbs/53326.jpg",
+    "bodySite": "Brain",
+    "date": "2017-10-10",
+    "modality": "MRI"
+  },
+  {
+    "id": "f53a5afd-2f14-49c2-8e0b-c99d9a1268dc",
+    "subject": {
+      "id": "5d1bf4f1cca3d9f787bd80fd"
+    },
+    "numberOfInstances": 10
+  },
+  {
+    "id": "4c31e586-a49b-44cd-b447-9fe8a6d1806d",
+    "subject": {
+      "id": "5d1bf4f17c56d264ea85264d",
+      "name": "Wendi Conway"
+    },
+    "numberOfInstances": 115,
+    "previewPictureUrl": "https://boxdicom.com/img/thumbs/54718.jpg",
+    "bodySite": "Shoulder",
+    "date": "2017-10-12",
+    "modality": "X-Ray"
+  }
+]

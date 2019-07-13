@@ -43,28 +43,6 @@
     "holograms": []
   },
   {
-    "id": "5d1bf4f17c56d264ea85264d",
-    "name": {
-      "title": "Mrs",
-      "full": "Wendi Conway",
-      "first": "Wendi",
-      "last": "Conway"
-    },
-    "gender": "female",
-    "email": "wendi.conway@diginetic.biz",
-    "phone": "+1 (821) 492-3370",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
-    "pictureUrl": "http://placehold.it/64x64",
-    "address": {
-      "street": "540 Summit Street",
-      "city": "Faxon",
-      "state": "Mississippi",
-      "postcode": 688
-    },
-    "imagingStudySeries": [],
-    "holograms": []
-  },
-  {
     "id": "5d1bf4f10bdc74c71822416d",
     "name": {
       "title": "Dr",
@@ -168,50 +146,6 @@
       "city": "Gilgo",
       "state": "South Dakota",
       "postcode": 5638
-    },
-    "imagingStudySeries": [],
-    "holograms": []
-  },
-  {
-    "id": "5d1bf4f1d32c1f6bf52331b9",
-    "name": {
-      "title": "Mrs",
-      "full": "Cora Santiago",
-      "first": "Cora",
-      "last": "Santiago"
-    },
-    "gender": "female",
-    "email": "cora.santiago@portalis.tv",
-    "phone": "+1 (993) 495-2119",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
-    "pictureUrl": "http://placehold.it/64x64",
-    "address": {
-      "street": "798 Herkimer Court",
-      "city": "Lowgap",
-      "state": "Delaware",
-      "postcode": 1702
-    },
-    "imagingStudySeries": [],
-    "holograms": []
-  },
-  {
-    "id": "5d1bf4f1cca3d9f787bd80fd",
-    "name": {
-      "title": "Mr",
-      "full": "Morton Adams",
-      "first": "Morton",
-      "last": "Adams"
-    },
-    "gender": "male",
-    "email": "morton.adams@zboo.co.uk",
-    "phone": "+1 (940) 496-2933",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
-    "pictureUrl": "http://placehold.it/64x64",
-    "address": {
-      "street": "749 Franklin Street",
-      "city": "Wadsworth",
-      "state": "Arkansas",
-      "postcode": 8426
     },
     "imagingStudySeries": [],
     "holograms": []

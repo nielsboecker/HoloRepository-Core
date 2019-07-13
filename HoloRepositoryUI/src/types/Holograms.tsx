@@ -10,10 +10,10 @@ export interface IImagingStudySeries {
     id: string;
     name?: IHumanName;
   };
+  numberOfInstances: number;
   previewPictureUrl?: string;
-  description?: string;
   bodySite?: string;
-  encounterDate?: string;
+  date?: string;
   modality?: string;
 }
 
@@ -47,7 +47,7 @@ export interface IHologram {
  */
 export interface IPipeline {
   id: string;
-  name: string;
+  title: string;
   description: string;
   inputConstraints: [string, string][];
   inputExampleImageUrl?: string;

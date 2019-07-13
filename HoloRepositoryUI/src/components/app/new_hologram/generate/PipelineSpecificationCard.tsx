@@ -50,7 +50,7 @@ class PipelineSpecificationCard extends Component<
 
       return (
         <div style={style}>
-          <h2>{pipeline.name}</h2>
+          <h2>{pipeline.title}</h2>
           <p>{pipeline.description}</p>
 
           <Divider />

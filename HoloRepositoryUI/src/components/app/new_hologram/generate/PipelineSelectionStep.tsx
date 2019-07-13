@@ -10,7 +10,7 @@ const pipelines = samplePipelines as IPipeline[];
 
 const choiceGroupOptions: IChoiceGroupOption[] = pipelines.map(pipeline => ({
   key: pipeline.id,
-  text: pipeline.name
+  text: pipeline.title
 }));
 
 export interface IPipelineSelectionStepState {

@@ -24,7 +24,7 @@ interface IPerson {
   id: string;
   name: IHumanName;
   gender: Gender;
-  dateOfBirth: string;
+  birthDate: string;
   phone?: string;
   email?: string;
   address?: {

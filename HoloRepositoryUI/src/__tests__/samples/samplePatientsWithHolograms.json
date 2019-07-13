@@ -10,7 +10,7 @@
     "gender": "female",
     "email": "lorraine.cline@corepan.us",
     "phone": "+1 (890) 502-2502",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "address": {
       "street": "867 Dumont Avenue",
       "city": "Fillmore",
@@ -84,7 +84,7 @@
     "gender": "female",
     "email": "alicia.english@geeknet.me",
     "phone": "+1 (876) 554-2406",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "868 Newkirk Avenue",

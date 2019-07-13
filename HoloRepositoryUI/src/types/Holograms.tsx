@@ -18,6 +18,14 @@ export interface IImagingStudySeries {
 }
 
 /**
+ * Creation modes for holograms.
+ */
+export enum HologramCreationMode {
+  generateFromImagingStudy = "GENERATE_FROM_IMAGING_STUDY",
+  uploadExistingModel = "UPLOAD_EXISTING_MODEL"
+}
+
+/**
  * Interface for a Hologram. Note that, similar to FHIR's ImagingStudy, the actual
  * binary data is not included, just an endpoint where it can be retrieved.
  */
@@ -39,6 +47,9 @@ export interface IHologram {
   description?: string;
   bodySite?: string;
   encounterDate?: string;
+  contentType?: string;
+  pipelineId?: string;
+  creationMode?: HologramCreationMode;
 }
 
 /**

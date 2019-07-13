@@ -51,7 +51,7 @@ class PatientDetailPage extends Component<IPatientDetailPageProps> {
                 <li className="name">
                   Full name: {`${this.patient.name.title} ${this.patient.name.full}`}
                 </li>
-                <li className="age">Age: {getAgeFromDobString(this.patient.dateOfBirth)}</li>
+                <li className="age">Age: {getAgeFromDobString(this.patient.birthDate)}</li>
                 <li className="gender">Gender: {capitaliseString(this.patient.gender)}</li>
               </ul>
             </div>

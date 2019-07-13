@@ -5,8 +5,8 @@ const capitaliseString = (str: string) => {
 };
 
 const getAgeFromDobString = (dobString: string) => {
-  const dateOfBirth = new Date(dobString);
-  const ageDiffMs = Date.now() - dateOfBirth.getTime();
+  const birthDate = new Date(dobString);
+  const ageDiffMs = Date.now() - birthDate.getTime();
   const ageDate = new Date(ageDiffMs); // milliseconds from epoch
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 };

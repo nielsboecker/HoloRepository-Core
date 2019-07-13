@@ -10,7 +10,7 @@
     "gender": "female",
     "email": "beverly.cole@miraclis.name",
     "phone": "+1 (951) 427-3709",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "610 Clark Street",
@@ -32,7 +32,7 @@
     "gender": "male",
     "email": "roy.santana@kenegy.biz",
     "phone": "+1 (907) 420-3224",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "address": {
       "street": "509 Oliver Street",
       "city": "Rockbridge",
@@ -53,7 +53,7 @@
     "gender": "other",
     "email": "mayer.farmer@teraprene.net",
     "phone": "+1 (972) 583-3316",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "address": {
       "street": "899 Fillmore Avenue",
       "city": "Guthrie",
@@ -74,7 +74,7 @@
     "gender": "female",
     "email": "barbara.holland@lexicondo.io",
     "phone": "+1 (884) 486-3899",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "address": {
       "street": "162 Portal Street",
       "city": "Topanga",
@@ -95,7 +95,7 @@
     "gender": "female",
     "email": "melanie.dodson@zeam.org",
     "phone": "+1 (946) 470-2876",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "899 Lafayette Walk",
@@ -117,7 +117,7 @@
     "gender": "male",
     "email": "myers.lamb@kaggle.ca",
     "phone": "+1 (955) 521-3518",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "832 Hunts Lane",
@@ -139,7 +139,7 @@
     "gender": "male",
     "email": "bolton.sanders@pyramis.com",
     "phone": "+1 (945) 530-3859",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "548 Truxton Street",

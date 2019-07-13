@@ -36,7 +36,7 @@ export default class PatientCard extends Component<IPatientCardProps, object> {
                 <h3 className="name">{patient.name.full}</h3>
 
                 <ul>
-                  <li className="age">Age: {getAgeFromDobString(patient.dateOfBirth)}</li>
+                  <li className="age">Age: {getAgeFromDobString(patient.birthDate)}</li>
                   <li className="gender">Gender: {capitaliseString(patient.gender)}</li>
                   <li className="numberOfHolograms">{getNumberOfHolograms(patient.holograms)}</li>
                 </ul>

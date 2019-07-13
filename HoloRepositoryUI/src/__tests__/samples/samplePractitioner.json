@@ -9,7 +9,7 @@
   "gender": "female",
   "email": "noreen.spence@nhs.uk",
   "phone": "+1 (876) 557-3574",
-  "dateOfBirth": "1969-07-07T00:00:00.000Z",
+  "birthDate": "1969-07-07T00:00:00.000Z",
   "address": {
     "street": "118 Pulaski Street",
     "city": "Rowe",

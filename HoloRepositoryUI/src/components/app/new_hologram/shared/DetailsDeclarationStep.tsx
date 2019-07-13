@@ -53,8 +53,8 @@ class DetailsDeclarationStep extends Component {
             <TextField label="Body site" placeholder={`For example, "Right kidney"`} />
 
             <DatePicker
-              label="Date of original encounter"
-              ariaLabel="Date of original encounter"
+              label="Date of imaging"
+              ariaLabel="Date of imaging"
               placeholder="Pick a date"
               firstDayOfWeek={DayOfWeek.Monday}
               maxDate={new Date()}

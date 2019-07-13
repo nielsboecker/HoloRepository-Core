@@ -30,7 +30,7 @@ class ProfileInformationPage extends Component<RouteComponentProps> {
                 <li className="name">
                   Full name: {`${this.practitioner.name.title} ${this.practitioner.name.full}`}
                 </li>
-                <li className="age">Age: {getAgeFromDobString(this.practitioner.dateOfBirth)}</li>
+                <li className="age">Age: {getAgeFromDobString(this.practitioner.birthDate)}</li>
                 <li className="gender">Gender: {capitaliseString(this.practitioner.gender)}</li>
               </ul>
             </div>

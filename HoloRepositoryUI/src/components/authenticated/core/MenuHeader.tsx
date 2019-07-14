@@ -31,8 +31,6 @@ const practitionerPersona: IPersonaSharedProps = {
   imageInitials: "NS",
   text: practitioner.name.full,
   secondaryText: "Practitioner"
-  //tertiaryText: 'In a meeting',
-  //optionalText: 'Available at 4:00pm'
 };
 
 class MenuHeader extends Component {

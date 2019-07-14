@@ -14,7 +14,7 @@ class HologramsListPage extends Component<RouteComponentProps> {
           `Any new holograms you create will show up here, once they are generated.`
         ]}
       >
-        <HologramsDetailsList />
+        <HologramsDetailsList showFilters={true} />
       </ContentContainer>
     );
   }

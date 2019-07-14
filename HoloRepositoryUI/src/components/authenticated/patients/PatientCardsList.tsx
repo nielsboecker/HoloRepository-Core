@@ -1,61 +1,73 @@
 import React, { Component } from "react";
-import { FocusZone, FocusZoneDirection } from "office-ui-fabric-react/lib/FocusZone";
-import { TextField } from "office-ui-fabric-react/lib/TextField";
+import { FocusZone, FocusZoneDirection } from "office-ui-fabric-react/lib-commonjs/FocusZone";
 import { Toggle } from "office-ui-fabric-react/lib-commonjs/Toggle";
-import { MessageBar } from "office-ui-fabric-react/lib/MessageBar";
-import { List } from "office-ui-fabric-react/lib/List";
-import { Row, Col } from "antd";
+import { List } from "office-ui-fabric-react/lib-commonjs/List";
+import { SearchBox } from "office-ui-fabric-react/lib-commonjs/SearchBox";
+import { Label } from "office-ui-fabric-react/lib-commonjs/Label";
+import { getId } from "office-ui-fabric-react/lib-commonjs/Utilities";
+import { Col, Row } from "antd";
 import { IPatient } from "../../../types";
 import PatientCard from "./PatientCard";
 
 import samplePatients from "../../../__tests__/samples/samplePatients.json";
 import samplePatientsWithHolograms from "../../../__tests__/samples/samplePatientsWithHolograms.json";
+import FilterStatusMessageBar from "../core/FilterStatusMessageBar";
 
 export interface IPatientCardsListState {
   filterPatientNameText?: string;
+  isShowWithHologramsOnly: boolean;
   patients?: IPatient[];
 }
 
 export default class PatientCardsList extends Component<any, IPatientCardsListState> {
-  allPatients = [...samplePatients, ...samplePatientsWithHolograms] as IPatient[];
+  allPatients = [...samplePatients, ...samplePatientsWithHolograms].sort((a, b) =>
+    a.name.full.localeCompare(b.name.full)
+  ) as IPatient[];
 
-  state = {
+  state: IPatientCardsListState = {
     filterPatientNameText: "",
     isShowWithHologramsOnly: false,
-    patients: this.allPatients.sort((a, b) => a.name.full.localeCompare(b.name.full))
+    patients: this.allPatients
   };
 
   render(): JSX.Element {
-    const { patients = [] } = this.state;
+    const { patients = [], isShowWithHologramsOnly } = this.state;
+
+    // Ensure that the ID is unique on the page.
+    const filterNameId = getId("filterName");
 
     return (
       <>
         <FocusZone direction={FocusZoneDirection.vertical} defaultActiveElement=".nameFilter">
-          <h2>Search and filter</h2>
-
           <div className="Filters" style={{ marginBottom: "24px" }}>
             <Row>
               <Col span={12} style={{ padding: "0 24px" }}>
-                <TextField label="Filter by name" onChange={this._onFilterChanged} />
+                <Label htmlFor={filterNameId}>Filter by name</Label>
+                <SearchBox
+                  id={filterNameId}
+                  placeholder="Filter patients..."
+                  onChange={this._handleNameFilterChanged}
+                  iconProps={{ iconName: "Filter" }}
+                />
               </Col>
 
               <Col span={12} style={{ padding: "0 24px" }}>
                 <Toggle
-                  label="Filter patients holograms"
-                  checked={this.state.isShowWithHologramsOnly}
+                  label="Filter patients with holograms"
+                  checked={isShowWithHologramsOnly}
                   onChange={this._handleShowWithHologramsOnlyToggleChange}
-                  onText="Showing only patients with existing holograms"
-                  offText="Showing all patients"
+                  onText="Only patients with existing holograms"
+                  offText="All patients"
                   style={{ margin: "0 30px 20px 0", maxWidth: "300px" }}
                 />
               </Col>
             </Row>
 
-            {this.state.patients != this.allPatients && (
-              <MessageBar>
-                {`Showing ${patients.length} of ${this.allPatients.length} patients.`}
-              </MessageBar>
-            )}
+            <FilterStatusMessageBar
+              totalCount={this.allPatients.length}
+              filteredCount={patients.length}
+              itemEntityName="patient"
+            />
           </div>
         </FocusZone>
 
@@ -66,27 +78,42 @@ export default class PatientCardsList extends Component<any, IPatientCardsListSt
     );
   }
 
-  private _onFilterChanged = (_: any = null, text: string = ""): void => {
-    this.setState({
-      filterPatientNameText: text,
-      patients: text
-        ? this.allPatients.filter(
-            patient => patient.name.full.toLowerCase().indexOf(text.toLowerCase()) >= 0
-          )
-        : this.allPatients
-    });
-  };
+  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<IPatientCardsListState>): void {
+    if (
+      prevState.filterPatientNameText !== this.state.filterPatientNameText ||
+      prevState.isShowWithHologramsOnly !== this.state.isShowWithHologramsOnly
+    ) {
+      let patients = this.allPatients.slice();
+      if (this.state.filterPatientNameText) {
+        patients = patients.filter(
+          patient =>
+            patient.name.full
+              .toLowerCase()
+              .indexOf(this.state.filterPatientNameText!.toLowerCase()) >= 0
+        );
+      }
+
+      if (this.state.isShowWithHologramsOnly) {
+        patients = patients.filter(patient => patient.holograms && patient.holograms.length > 0);
+      }
+
+      this.setState({ patients });
+    }
+  }
 
   private _onRenderCell = (patient: IPatient | undefined): JSX.Element => {
-    return patient ? <PatientCard patient={patient} /> : <div />;
+    return <PatientCard patient={patient!} />;
+  };
+
+  private _handleNameFilterChanged = (_: any = null, text: string = ""): void => {
+    this.setState({
+      filterPatientNameText: text
+    });
   };
 
   private _handleShowWithHologramsOnlyToggleChange = () => {
-    this.state.isShowWithHologramsOnly = !this.state.isShowWithHologramsOnly;
-    this.setState({
-      patients: this.state.isShowWithHologramsOnly
-        ? this.allPatients.filter(patient => patient.holograms && patient.holograms.length > 0)
-        : this.allPatients
-    });
+    this.setState(state => ({
+      isShowWithHologramsOnly: !state.isShowWithHologramsOnly
+    }));
   };
 }

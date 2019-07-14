@@ -1,21 +1,23 @@
 import React, { Component } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Persona, PersonaSize } from "office-ui-fabric-react/lib-commonjs";
-import { Separator } from "office-ui-fabric-react/lib/Separator";
-import { Text } from "office-ui-fabric-react/lib/Text";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
 import { Col, Divider, Row } from "antd";
-import {
-  capitaliseString,
-  getAgeFromDobString,
-  getNumberOfHolograms
-} from "../../../util/PatientUtil";
+import { capitaliseString, getAgeFromDobString } from "../../../util/PatientUtil";
 import PlainContentContainer from "../core/PlainContentContainer";
 import PatientBreadcrumb from "./PatientBreadcrumb";
 import { IPatient } from "../../../types";
+import {
+  authorCol,
+  dateCol,
+  fileSizeCol,
+  fileTypeCol,
+  titleCol
+} from "../holograms/HologramsDetailsListColumns";
 
 import samplePatients from "../../../__tests__/samples/samplePatients.json";
 import samplePatientsWithHolograms from "../../../__tests__/samples/samplePatientsWithHolograms.json";
+import HologramsDetailsList from "../holograms/HologramsDetailsList";
+
 const allSamplePatients = [...samplePatients, ...samplePatientsWithHolograms] as IPatient[];
 
 interface IPatientDetailPageProps
@@ -55,21 +57,20 @@ class PatientDetailPage extends Component<IPatientDetailPageProps> {
             </div>
           </Col>
 
-          <Divider />
+          <Divider>Contact details</Divider>
 
           <ul>
             <li>Phone: {this.patient.phone}</li>
             <li>Mail: {this.patient.email}</li>
           </ul>
 
-          <Divider />
+          <Divider>Holograms</Divider>
 
-          {this.patient.holograms &&
-            this.patient.holograms.map(hologram => (
-              <p>
-                <pre>{JSON.stringify(hologram, null, 2)}</pre>
-              </p>
-            ))}
+          <HologramsDetailsList
+            columns={[fileTypeCol, titleCol, dateCol, authorCol, fileSizeCol]}
+            showFilters={false}
+            patientId={this.patient.id}
+          />
         </Row>
       </PlainContentContainer>
     );

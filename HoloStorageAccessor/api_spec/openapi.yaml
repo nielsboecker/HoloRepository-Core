@@ -1,13 +1,13 @@
 openapi: 3.0.2
 info:
-  version: "0.1.3"
+  version: "0.1.4"
   title: 'HoloStorage Accessor API'
   description: 'API to access holograms and metadata from HoloStorage'
 
 # Added by API Auto Mocking Plugin
 servers:
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/boonwj/HoloRepository/0.1.3
+    url: https://virtserver.swaggerhub.com/boonwj/HoloRepository/0.1.4
 
 paths:
   /patients:
@@ -324,9 +324,9 @@ components:
           example: '2017-07-21T17:32:28Z'
         creationMode:
           type: string
-          enum: [pipeline, upload]
+          enum: [GENERATE_FROM_IMAGING_STUDY, UPLOAD_EXISTING_MODEL]
           description: The way the hologram was created
-          example: pipeline
+          example: GENERATE_FROM_IMAGING_STUDY
         pipelineId:
           type: string
           description: The id to the pipeline that was used in the generation of the hologram

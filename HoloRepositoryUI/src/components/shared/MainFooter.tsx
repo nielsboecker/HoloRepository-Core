@@ -4,7 +4,7 @@ import { Layout } from "antd";
 const { Footer } = Layout;
 
 interface IMainFooterProps {
-  style: CSSProperties;
+  style?: CSSProperties;
 }
 
 class MainFooter extends Component<IMainFooterProps> {

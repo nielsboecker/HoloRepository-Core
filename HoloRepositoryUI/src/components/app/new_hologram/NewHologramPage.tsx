@@ -32,7 +32,7 @@ class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageSta
   state = {
     currentStep: 0,
     creationMode:
-      (this.props.location!.state.mode as HologramCreationMode) ||
+      (this.props.location && (this.props.location.state.mode as HologramCreationMode)) ||
       HologramCreationMode.generateFromImagingStudy
     //steps: allSteps[HologramCreationMode.generateFromImagingStudy]
   };

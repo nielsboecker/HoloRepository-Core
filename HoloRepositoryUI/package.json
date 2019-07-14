@@ -26,6 +26,7 @@
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "jest-mock-now": "^1.2.1",
     "react-test-renderer": "^16.8.6"
   },
   "scripts": {
@@ -41,7 +42,8 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/components/*.{ts, tsx}"
+      "src/components/**/*.{ts,tsx}",
+      "src/util/**/*.{ts,tsx}"
     ],
     "coverageThreshold": {
       "global": {

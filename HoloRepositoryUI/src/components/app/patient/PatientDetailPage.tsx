@@ -29,7 +29,10 @@ class PatientDetailPage extends Component<IPatientDetailPageProps> {
   patient: IPatient | undefined = allSamplePatients.find(patient => patient.id === this.props.id);
 
   render() {
-    if (!this.patient) throw new Error("No patient (only in dev prototype)");
+    if (!this.patient) {
+      //throw new Error("No patient (only in dev prototype)");
+      return <div>"No patient (only in dev prototype)"</div>;
+    }
 
     return (
       <PlainContentContainer>

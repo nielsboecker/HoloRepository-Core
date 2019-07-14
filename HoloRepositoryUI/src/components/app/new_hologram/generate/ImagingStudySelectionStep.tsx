@@ -56,7 +56,7 @@ class ImagingStudySelectionStep extends Component<any, IImagingStudySelectionSte
 
   private _mapPatientsToDropdownOptions = (): IDropdownOption[] => {
     return allPatients.map(patient => ({
-      key: patient.id,
+      key: patient.pid,
       text: `${patient.name.full} (${ImagingStudySelectionStep._getNumberOfSeries(
         patient
       )} series)`,
@@ -66,7 +66,7 @@ class ImagingStudySelectionStep extends Component<any, IImagingStudySelectionSte
 
   private _handlePatientDropdownChange = (_: any, option?: IDropdownOption) => {
     const selectedPatientId = option!.key;
-    const selectedPatient = allPatients.find(patient => patient.id === selectedPatientId);
+    const selectedPatient = allPatients.find(patient => patient.pid === selectedPatientId);
     if (selectedPatient) {
       this.setState({ selectedPatient, selectedStudy: undefined });
     }
@@ -78,7 +78,7 @@ class ImagingStudySelectionStep extends Component<any, IImagingStudySelectionSte
     }
     const selectedStudyId = option!.key;
     const selectedStudy = this.state.selectedPatient.imagingStudySeries.find(
-      series => series.id === selectedStudyId
+      series => series.issid === selectedStudyId
     );
     if (selectedStudy) {
       this.setState({ selectedStudy });
@@ -90,7 +90,7 @@ class ImagingStudySelectionStep extends Component<any, IImagingStudySelectionSte
       return [];
     }
     return this.state.selectedPatient.imagingStudySeries.map((series, index) => ({
-      key: series.id,
+      key: series.issid,
       text: `Imaging study ${index + 1} (${series.numberOfInstances} instances)`
     }));
   };

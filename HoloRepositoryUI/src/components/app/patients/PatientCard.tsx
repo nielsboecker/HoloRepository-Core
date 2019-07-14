@@ -20,7 +20,7 @@ export default class PatientCard extends Component<IPatientCardProps, object> {
 
     return (
       <div className="PatientCard" data-is-focusable={true}>
-        <Link to={`/app/patient/${patient.id}`}>
+        <Link to={`/app/patient/${patient.pid}`}>
           <Row gutter={16} type="flex" align="middle">
             <Col span={3}>
               <Persona

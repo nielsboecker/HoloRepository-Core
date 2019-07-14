@@ -66,7 +66,7 @@ class DetailsDeclarationStep extends Component {
   }
 
   private _mapPatientsToDropdownOptions = (patients: IPatient[]) => {
-    return patients.map(patient => ({ key: patient.id, text: patient.name.full }));
+    return patients.map(patient => ({ key: patient.pid, text: patient.name.full }));
   };
 }
 

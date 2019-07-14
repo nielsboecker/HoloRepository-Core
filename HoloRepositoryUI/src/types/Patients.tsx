@@ -21,7 +21,7 @@ export interface IHumanName {
  * Semantics is similar to the corresponding FHIR resource.
  */
 interface IPerson {
-  id: string;
+  pid: string;
   name: IHumanName;
   gender: Gender;
   birthDate: string;

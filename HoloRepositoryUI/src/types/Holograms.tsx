@@ -5,9 +5,9 @@ import { IHumanName } from "./Patients";
  * Semantics is similar to the corresponding FHIR resource.
  */
 export interface IImagingStudySeries {
-  id: string;
+  issid: string;
   subject: {
-    id: string;
+    pid: string;
     name?: IHumanName;
   };
   numberOfInstances: number;
@@ -30,15 +30,14 @@ export enum HologramCreationMode {
  * binary data is not included, just an endpoint where it can be retrieved.
  */
 export interface IHologram {
-  id: string;
-  endpoint: string;
+  hid: string;
   title: string;
   subject: {
-    id: string;
+    pid: string;
     name?: IHumanName;
   };
   author: {
-    id: string;
+    aid: string;
     name?: IHumanName;
   };
   createdDate: string;
@@ -57,7 +56,7 @@ export interface IHologram {
  * particular image processing flow.
  */
 export interface IPipeline {
-  id: string;
+  plid: string;
   title: string;
   description: string;
   inputConstraints: [string, string][];

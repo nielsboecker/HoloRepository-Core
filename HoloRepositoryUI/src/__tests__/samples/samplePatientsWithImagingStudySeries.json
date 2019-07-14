@@ -1,6 +1,6 @@
 [
   {
-    "id": "5d1bf4f1d32c1f6bf52331b9",
+    "pid": "5d1bf4f1d32c1f6bf52331b9",
     "name": {
       "title": "Mrs",
       "full": "Cora Santiago",
@@ -20,9 +20,9 @@
     },
     "imagingStudySeries": [
       {
-        "id": "efd5c2bf-8499-45ef-b6bf-3d35714f5442",
+        "issid": "efd5c2bf-8499-45ef-b6bf-3d35714f5442",
         "subject": {
-          "id": "5d1bf4f1d32c1f6bf52331b9",
+          "pid": "5d1bf4f1d32c1f6bf52331b9",
           "name": "Cora Santiago"
         },
         "numberOfInstances": 25,
@@ -32,9 +32,9 @@
         "modality": "CT"
       },
       {
-        "id": "836c46f7-0278-4c9f-9ed0-eb169a3ac8aa",
+        "issid": "836c46f7-0278-4c9f-9ed0-eb169a3ac8aa",
         "subject": {
-          "id": "5d1bf4f1d32c1f6bf52331b9",
+          "pid": "5d1bf4f1d32c1f6bf52331b9",
           "name": "Cora Santiago"
         },
         "numberOfInstances": 14,
@@ -44,9 +44,9 @@
         "modality": "MR"
       },
       {
-        "id": "c0008390-1249-44f0-9a14-3a347d124edf",
+        "issid": "c0008390-1249-44f0-9a14-3a347d124edf",
         "subject": {
-          "id": "5d1bf4f1d32c1f6bf52331b9",
+          "pid": "5d1bf4f1d32c1f6bf52331b9",
           "name": "Cora Santiago"
         },
         "numberOfInstances": 80,
@@ -59,7 +59,7 @@
     "holograms": []
   },
   {
-    "id": "5d1bf4f17c56d264ea85264d",
+    "pid": "5d1bf4f17c56d264ea85264d",
     "name": {
       "title": "Mrs",
       "full": "Wendi Conway",
@@ -79,9 +79,9 @@
     },
     "imagingStudySeries": [
       {
-        "id": "4c31e586-a49b-44cd-b447-9fe8a6d1806d",
+        "issid": "4c31e586-a49b-44cd-b447-9fe8a6d1806d",
         "subject": {
-          "id": "5d1bf4f17c56d264ea85264d",
+          "pid": "5d1bf4f17c56d264ea85264d",
           "name": "Wendi Conway"
         },
         "numberOfInstances": 115,
@@ -94,7 +94,7 @@
     "holograms": []
   },
   {
-    "id": "5d1bf4f1cca3d9f787bd80fd",
+    "pid": "5d1bf4f1cca3d9f787bd80fd",
     "name": {
       "title": "Mr",
       "full": "Morton Adams",
@@ -114,9 +114,9 @@
     },
     "imagingStudySeries": [
       {
-        "id": "b1557468-2cee-49e6-992b-77cc0b508db3",
+        "issid": "b1557468-2cee-49e6-992b-77cc0b508db3",
         "subject": {
-          "id": "5d1bf4f1cca3d9f787bd80fd",
+          "pid": "5d1bf4f1cca3d9f787bd80fd",
           "name": "Morton Adams"
         },
         "numberOfInstances": 120,
@@ -126,9 +126,9 @@
         "modality": "MRI"
       },
       {
-        "id": "f53a5afd-2f14-49c2-8e0b-c99d9a1268dc",
+        "issid": "f53a5afd-2f14-49c2-8e0b-c99d9a1268dc",
         "subject": {
-          "id": "5d1bf4f1cca3d9f787bd80fd"
+          "pid": "5d1bf4f1cca3d9f787bd80fd"
         },
         "numberOfInstances": 10
       }

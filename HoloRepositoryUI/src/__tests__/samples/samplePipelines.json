@@ -1,6 +1,6 @@
 [
   {
-    "id": "4c018361-5c36-4020-be91-c24cb54b3096",
+    "plid": "4c018361-5c36-4020-be91-c24cb54b3096",
     "title": "Abdominal segmentation",
     "description": "This pipeline uses a pre-trained dense VNET neural network to segment abdominal CT scans. The resulting model will provide a segmentation of 8 different organs in the abdominal area.",
     "inputConstraints": [
@@ -14,7 +14,7 @@
   },
 
   {
-    "id": "f65d394f-d5fe-4b06-8107-21921960fdeb",
+    "plid": "f65d394f-d5fe-4b06-8107-21921960fdeb",
     "title": "Generic bone segmentation",
     "description": "This pipeline utilises a marching cube algorithm to generate a 3D model from a series of CT scans. As it performs the segmentation based on Hounsfield units, it is agnostic to the specific body site.",
     "inputConstraints": [
@@ -27,7 +27,7 @@
     "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_2_output.png"
   },
   {
-    "id": "f9e64b3f-9ce3-44f8-8adc-4e5fe59ce8da",
+    "plid": "f9e64b3f-9ce3-44f8-8adc-4e5fe59ce8da",
     "title": "Lungs segmentation",
     "description": "This pipeline segments the lungs and the airway from a series of CT scans.",
     "inputConstraints": [
@@ -40,7 +40,7 @@
     "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_3_output.png"
   },
   {
-    "id": "d421a2b4-2a78-401d-9b07-03e941a0ea22",
+    "plid": "d421a2b4-2a78-401d-9b07-03e941a0ea22",
     "title": "Foo bar",
     "description": "This pipeline has no sample images provided.",
     "inputConstraints": [["Body site", "Any"]]

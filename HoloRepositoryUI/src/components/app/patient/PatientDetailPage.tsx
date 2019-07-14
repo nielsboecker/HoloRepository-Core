@@ -22,11 +22,11 @@ const allSamplePatients = [...samplePatients, ...samplePatientsWithHolograms] as
 
 interface IPatientDetailPageProps
   extends RouteComponentProps<{
-    id: string;
+    pid: string;
   }> {}
 
 class PatientDetailPage extends Component<IPatientDetailPageProps> {
-  patient: IPatient | undefined = allSamplePatients.find(patient => patient.id === this.props.id);
+  patient: IPatient | undefined = allSamplePatients.find(patient => patient.pid === this.props.pid);
 
   render() {
     if (!this.patient) {
@@ -72,7 +72,7 @@ class PatientDetailPage extends Component<IPatientDetailPageProps> {
           <HologramsDetailsList
             columns={[fileTypeCol, titleCol, dateCol, authorCol, fileSizeCol]}
             showFilters={false}
-            patientId={this.patient.id}
+            patientId={this.patient.pid}
           />
         </Row>
       </PlainContentContainer>

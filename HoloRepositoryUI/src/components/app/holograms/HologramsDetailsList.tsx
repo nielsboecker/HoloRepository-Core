@@ -74,7 +74,7 @@ class HologramsDetailsList extends Component<
   });
 
   private _sampleHolograms = this.props.patientId
-    ? holograms.filter(item => item.subject.id === this.props.patientId)
+    ? holograms.filter(item => item.subject.pid === this.props.patientId)
     : holograms;
   private _allHologramDocuments: IHologramDocument[] = _mapToDocuments(this._sampleHolograms);
 
@@ -228,7 +228,7 @@ function _getDisplayAuthorName(hologram: IHologram): string {
   let authorName;
   if (!hologram.author || !hologram.author.name) {
     authorName = unknownPersonName;
-  } else if (hologram.author.id === practitioner.id) {
+  } else if (hologram.author.aid === practitioner.pid) {
     authorName = "You";
   } else {
     authorName = hologram.author.name.full;

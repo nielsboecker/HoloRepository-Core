@@ -24,7 +24,7 @@ class MainContainer extends Component {
 
           <AppContainer path="app">
             <PatientListPage path="patients" />
-            <PatientDetailPage path="patient/:id" />
+            <PatientDetailPage path="patient/:pid" />
             <DeviceConnectorPage path="devices" />
             <HologramsListPage path="holograms" />
             <NewHologramPage path="holograms/new" />

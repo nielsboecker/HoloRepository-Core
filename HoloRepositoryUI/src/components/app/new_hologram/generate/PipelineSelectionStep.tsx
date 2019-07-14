@@ -9,7 +9,7 @@ import PipelineSpecificationCard from "./PipelineSpecificationCard";
 const pipelines = samplePipelines as IPipeline[];
 
 const choiceGroupOptions: IChoiceGroupOption[] = pipelines.map(pipeline => ({
-  key: pipeline.id,
+  key: pipeline.plid,
   text: pipeline.title
 }));
 
@@ -42,7 +42,7 @@ class PipelineSelectionStep extends Component<any, IPipelineSelectionStepState> 
   }
 
   private _handleChoiceGroupChange = (_: any, option?: IChoiceGroupOption): void => {
-    const selectedPipeline = pipelines.find(pipeline => pipeline.id === option!.key);
+    const selectedPipeline = pipelines.find(pipeline => pipeline.plid === option!.key);
     this.setState({ selectedPipeline });
   };
 }

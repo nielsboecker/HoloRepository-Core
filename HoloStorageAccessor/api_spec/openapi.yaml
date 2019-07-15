@@ -282,7 +282,6 @@ components:
     HologramUploadData:
       title: Hologram Upload
       description: Data structure to upload holograms to HoloStorage
-      type: object
       allOf:
         - $ref: '#/components/schemas/Hologram'
         - type: object

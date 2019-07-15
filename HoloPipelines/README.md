@@ -45,9 +45,9 @@ The final 2 dependencies can be installed using Node.js package manager. Please 
  npm install -g gltf-pipeline
 ```
 
-Finally please run *setupDirectory.py* to setup the directory structure and download sample dicom and nifti files which can be used for testing.
+(optional)Run *setupDirectory.py* to download sample dicom and nifti files which can be used for manual testing.
 
-Downloaded files from *setupDirectory.py* can be deleted by running *cleanUp.py*
+Downloaded files from *setupDirectory.py* and all the produced 3D models can be deleted by running *cleanUp.py*
 
 ## Usage:
 Example

@@ -1,9 +1,10 @@
-import s from 'shelljs';
+import shelljs from 'shelljs';
+
 const config = require('./tsconfig.json');
 const outDir = config.compilerOptions.outDir;
 
-s.rm('-rf', outDir);
-s.mkdir(outDir);
-s.cp('.env', `${outDir}/.env`);
-s.mkdir('-p', `${outDir}/common/swagger`);
-s.cp('server/common/api.yml', `${outDir}/common/api.yml`);
+shelljs.rm('-rf', outDir);
+shelljs.mkdir(outDir);
+shelljs.cp('.env', `${outDir}/.env`);
+shelljs.mkdir('-p', `${outDir}/common/swagger`);
+shelljs.cp('server/common/api.yml', `${outDir}/common/api.yml`);

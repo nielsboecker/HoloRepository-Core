@@ -1,5 +1,5 @@
-import ExamplesService from '../../services/examples.service';
-import { Request, Response } from 'express';
+import ExamplesService from "../../services/examples.service";
+import { Request, Response } from "express";
 
 export class ExamplesController {
   all(req: Request, res: Response): void {
@@ -18,7 +18,7 @@ export class ExamplesController {
       res
         .status(201)
         .location(`/api/v1/examples/${r.id}`)
-        .json(r),
+        .json(r)
     );
   }
 }

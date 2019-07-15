@@ -1,25 +1,22 @@
-import logger from '../../common/logger'
+import logger from "../../common/logger";
 
 let id = 0;
 interface Example {
-  id: number,
-  name: string
-};
+  id: number;
+  name: string;
+}
 
-const examples: Example[] = [
-    { id: id++, name: 'example 0' }, 
-    { id: id++, name: 'example 1' }
-];
+const examples: Example[] = [{ id: id++, name: "example 0" }, { id: id++, name: "example 1" }];
 
 export class ExamplesService {
   all(): Promise<Example[]> {
-    logger.info(examples, 'fetch all examples');
+    logger.info(examples, "fetch all examples");
     return Promise.resolve(examples);
   }
 
   byId(id: number): Promise<Example> {
     logger.info(`fetch example with id ${id}`);
-    return this.all().then(response => response[id])
+    return this.all().then(response => response[id]);
   }
 
   create(name: string): Promise<Example> {

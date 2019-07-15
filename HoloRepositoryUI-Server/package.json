@@ -9,15 +9,17 @@
     "dev": "nodemon server/index.ts | pino-pretty",
     "dev:debug": "nodemon --exec 'node -r ts-node/register --inspect-brk' server/index.ts | pino-pretty",
     "test": "mocha test/**/*.ts --exit",
-    "test:debug": "mocha --inspect-brk test/**/*.ts --exit"
+    "test:debug": "mocha --inspect-brk test/**/*.ts --exit",
+    "format:check": "prettier --list-different \"{server,test}/**/*.{js,jsx,ts,tsx,json,css,scss,md}\" ",
+    "format": "prettier --write \"{server,test}/**/*.{js,jsx,ts,tsx,json,css,scss,md}\" "
   },
   "dependencies": {
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.4",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
-    "pino": "^5.11.1",
-    "express-openapi-validator": "^0.53.3"
+    "express-openapi-validator": "^0.53.3",
+    "pino": "^5.11.1"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
@@ -29,11 +31,12 @@
     "mocha": "^6.1.4",
     "nodemon": "^1.19.0",
     "pino-pretty": "^2.6.1",
+    "prettier": "^1.18.2",
     "shelljs": "^0.8.3",
     "supertest": "^3.4.2",
-    "ts-lint": "^4.5.1",
     "ts-node": "^8.0.2",
-    "tslint": "^5.13.1",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.4.5"
   },
   "author": "Carmine DiMascio <cdimascio@gmail.com> (https://github.com/cdimascio)"

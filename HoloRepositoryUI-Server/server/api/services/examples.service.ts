@@ -1,5 +1,4 @@
-import Promise from 'bluebird';
-import L from '../../common/logger'
+import logger from '../../common/logger'
 
 let id = 0;
 interface Example {
@@ -14,22 +13,22 @@ const examples: Example[] = [
 
 export class ExamplesService {
   all(): Promise<Example[]> {
-    L.info(examples, 'fetch all examples');
+    logger.info(examples, 'fetch all examples');
     return Promise.resolve(examples);
   }
 
   byId(id: number): Promise<Example> {
-    L.info(`fetch example with id ${id}`);
-    return this.all().then(r => r[id])
+    logger.info(`fetch example with id ${id}`);
+    return this.all().then(response => response[id])
   }
 
   create(name: string): Promise<Example> {
-    L.info(`create example with name ${name}`);
+    logger.info(`create example with name ${name}`);
     const example: Example = {
       id: id++,
       name
     };
-    examples.push(example)
+    examples.push(example);
     return Promise.resolve(example);
   }
 }

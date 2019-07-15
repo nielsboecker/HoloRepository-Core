@@ -3,6 +3,9 @@ import Server from './common/server';
 import routes from './routes';
 
 const port = parseInt(process.env.PORT);
-export default new Server()
-  .router(routes)
-  .listen(port);
+
+const server = new Server()
+    .router(routes)
+    .listen(port);
+
+export default server;

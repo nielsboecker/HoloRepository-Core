@@ -1,7 +1,5 @@
-#todo return the file then del?
 import dicom2nifti
 import pathlib
-#import dicom2nifti.settings as settings
 
 dicomPath = pathlib.Path.cwd().joinpath("medicalScans", "dicom")
 niftiPath = pathlib.Path.cwd().joinpath("medicalScans", "nifti")

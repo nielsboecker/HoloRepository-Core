@@ -11,7 +11,7 @@ import time
 cwd = pathlib.Path.cwd()
 numpyPath = cwd.joinpath("numpy")
 
-def load_scan(scanPath): #default was samples from dicom
+def load_scan(scanPath):
 	slices = [dicom.read_file(str(pathlib.Path(scanPath, s))) for s in os.listdir(str(scanPath))]
 	slices.sort(key = lambda x: int(x.InstanceNumber))
 	try:
@@ -45,11 +45,10 @@ def get_pixels_hu(scans):
 
 
 
-def resample(dataPath, new_spacing=[1,1,1]):#default to dataPath was samples from dicom
+def resample(dataPath, new_spacing=[1,1,1]):
 	scan = load_scan(dataPath)
 	image = get_pixels_hu(scan)
 	print ("Shape before resampling\t", image.shape)
-	#TODO: add timer
 	start = time.clock()
 	# Determine current pixel spacing
 	try:
@@ -83,6 +82,6 @@ def main(inputPath, mainFname="samples", option=0):#default to inputPath was sam
 	return imgs_after_resamp
 
 if __name__ == '__main__':
-	print("component can't be run on its own")
+	print("component can't run on its own")
 
 

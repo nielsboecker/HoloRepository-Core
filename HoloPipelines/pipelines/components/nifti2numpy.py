@@ -49,4 +49,4 @@ def main(mainPath=tempPath, tempFname=fName, option=0):
 	return a
 
 if __name__ == '__main__':
-	print("component can't be run on its own")
+	print("component can't run on its own")

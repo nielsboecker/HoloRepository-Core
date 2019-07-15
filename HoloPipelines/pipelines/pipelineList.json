@@ -1,1 +1,42 @@
-{"s0": [{"name": "sample0", "src": "pipelines/sample0.py", "info": "A pipline for testing. It will printout 'Hello World! from 0'", "addDate": "26/06/2019", "modDate": "26/06/2019", "param": "0"}], "s1": [{"name": "sample1", "src": "pipelines/sample1.py", "info": "A pipline for testing. It will printout 'Hello World! from 1'", "addDate": "26/06/2019", "modDate": "26/06/2019", "param": "0"}], "i0": [{"name": "dicom2numpy", "src": "pipelines/components/dicom2numpy.py", "info": "Convert dicom to numpy", "addDate": "26/06/2019", "modDate": "26/06/2019", "param": "0"}], "i1": [{"name": "nifti2numpy", "src": "pipelines/components/nifti2numpy.py", "info": "Convert nifti to numpy", "addDate": "26/06/2019", "modDate": "26/06/2019", "param": "0"}], "m0": [{"name": "numpy2obj", "src": "pipelines/numpy2obj.py", "info": "Generate mesh from numpy", "addDate": "26/06/2019", "modDate": "26/06/2019", "param": "0"}], "p0": [{"name": "nifti2obj", "src": "pipelines/nifti2obj.py", "info": "Generate obj mesh from nifti", "addDate": "27/06/2019", "modDate": "27/06/2019", "param": "3"}], "p1": [{"name": "nifti2glb", "src": "pipelines/nifti2glb.py", "info": "Generate glb mesh from nifti", "addDate": "28/06/2019", "modDate": "28/06/2019", "param": "3"}], "p3": [{"name": "dicom2glb", "src": "pipelines/dicom2glb.py", "info": "Generate glb mesh from dicom", "addDate": "01/07/2019", "modDate": "01/07/2019", "param": "2"}], "p4": [{"name": "lungDicom2glb", "src": "pipelines/lungDicom2glb.py", "info": "Generate segmented lungs (without air way) glb mesh from dicom", "addDate": "01/07/2019", "modDate": "01/07/2019", "param": "1"}]}
+{
+   "p0":[
+      {
+         "name":"nifti2obj",
+         "src":"pipelines/nifti2obj.py",
+         "info":"Generate obj mesh from nifti",
+         "addDate":"27/06/2019",
+         "modDate":"27/06/2019",
+         "param":"3"
+      }
+   ],
+   "p1":[
+      {
+         "name":"nifti2glb",
+         "src":"pipelines/nifti2glb.py",
+         "info":"Generate glb mesh from nifti",
+         "addDate":"28/06/2019",
+         "modDate":"28/06/2019",
+         "param":"3"
+      }
+   ],
+   "p3":[
+      {
+         "name":"dicom2glb",
+         "src":"pipelines/dicom2glb.py",
+         "info":"Generate glb mesh from dicom",
+         "addDate":"01/07/2019",
+         "modDate":"01/07/2019",
+         "param":"2"
+      }
+   ],
+   "p4":[
+      {
+         "name":"lungDicom2glb",
+         "src":"pipelines/lungDicom2glb.py",
+         "info":"Generate segmented lungs (without air way) glb mesh from dicom",
+         "addDate":"01/07/2019",
+         "modDate":"01/07/2019",
+         "param":"1"
+      }
+   ]
+}

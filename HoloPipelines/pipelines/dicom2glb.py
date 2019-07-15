@@ -5,16 +5,15 @@ import pathlib
 import sys
 
 dicomPath = pathlib.Path.cwd().joinpath("medicalScans", "dicom")
-argCount = len(sys.argv)
 
-if argCount != 3:
-	print("Invalid number of argument")
-	exit()
+def main(dicomData, threshold):
+	tempNpy = dicom2numpy.main(str(dicomPath.joinpath(dicomData)), dicomData)
+	numpy2obj.main(tempNpy, threshold, dicomData)
+	obj2gltfWrapper.main(dicomData + ".obj", True)
+	print("dicom2glb: done")
 
-dicomData = sys.argv[1]
-threshold = sys.argv[2]
+if __name__ == "__main__":
+	dicomData = sys.argv[1]
+	threshold = sys.argv[2]
 
-tempNpy = dicom2numpy.main(str(dicomPath.joinpath(dicomData)), dicomData)
-numpy2obj.main(tempNpy, threshold, dicomData)
-obj2gltfWrapper.main(dicomData + ".obj", True)
-print("dicom2glb: done")
+	main(dicomData, threshold)

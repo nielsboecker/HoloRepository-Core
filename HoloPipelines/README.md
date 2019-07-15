@@ -11,7 +11,7 @@ pip install -r requirements.txt
 
 Some dependencies are not available through pip, they are listed below with their installation instructions
 
-**GDCM (Unix)**
+**GDCM (Unix)** *This works, but should to be replaced with pacman or other package manager for ease of use*
 ```
  git clone --branch release git://git.code.sf.net/p/gdcm/gdcm
  mkdir gdcmbin
@@ -33,15 +33,21 @@ or
 ```
 If command is not found then please make sure to add to PATH
 
+The final 2 dependencies can be installed using Node.js package manager. Please make sure to have the latest version of npm installed.
+
 **obj2gltf**  https://github.com/AnalyticalGraphicsInc/OBJ2GLTF
-You will need Node.js package manager for this
 ```
  npm install -g obj2gltf
 ```
 
-Finally please run *setup.py* to download sample dicom and nifti files which can be used for testing.
+**glTF Pipeline** https://github.com/AnalyticalGraphicsInc/gltf-pipeline
+```
+ npm install -g gltf-pipeline
+```
 
-Downloaded files from *setup.py* can be deleted by running *cleanUp.py*
+Finally please run *setupDirectory.py* to setup the directory structure and download sample dicom and nifti files which can be used for testing.
+
+Downloaded files from *setupDirectory.py* can be deleted by running *cleanUp.py*
 
 ## Usage:
 Example
@@ -57,15 +63,15 @@ python pipelineController.py -h
 - this script has a built in help
 
 ## Testing:
-Testing has a 77% code coverage. Testing can be done by using pytest:
+Testing can be done by using pytest:
 ```
 pip install pytest
+pip install pytest-cov
 ```
 Then navigate to /HoloRepository-Core/HoloPipelines and run:
 ```
-pytest
+pytest --cov
 ```
-This however will not display the coverage percentage. (ill write a batch or script for this later. pytest --cov doesnt work for me for some reason)
 
 ### Refs:
 - https://www.raddq.com/dicom-processing-segmentation-visualization-in-python/      14/06/19

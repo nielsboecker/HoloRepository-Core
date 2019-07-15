@@ -1,9 +1,7 @@
 import numpy as np
 import nibabel as nib
 import pathlib
-'''from utils import *
-from segment_lung import segment_lung
-from segment_airway import segment_airway'''
+
 niftiPath = pathlib.Path.cwd().joinpath("medicalScans", "nifti")
 
 

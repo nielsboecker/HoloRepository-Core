@@ -16,19 +16,11 @@ def main(fname, threshold, outputName=""):
 	print("nifti2glb: done")
 
 if __name__ == '__main__':
-	import sys
-
-	argCount = len(sys.argv)
-
-	if argCount != 3 and argCount != 4:
-		print("Invalid number of argument")
-		exit()
-
 	niftiData = sys.argv[1]
 	threshold = sys.argv[2]
 	outputName = niftiData
-	if argCount == 4:
-		outputName = sys.argv[3]
+	'''if argCount == 4:
+		outputName = sys.argv[3]'''
 
 	tempNii = niftiData.replace(".nii.gz", "").replace(".nii", "")
 

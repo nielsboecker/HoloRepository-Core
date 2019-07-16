@@ -1,6 +1,6 @@
 [
   {
-    "id": "5d1bf4f17322a9283482fe7e",
+    "pid": "5d1bf4f17322a9283482fe7e",
     "name": {
       "title": "Mrs",
       "full": "Beverly Cole",
@@ -10,7 +10,7 @@
     "gender": "female",
     "email": "beverly.cole@miraclis.name",
     "phone": "+1 (951) 427-3709",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "610 Clark Street",
@@ -22,7 +22,7 @@
     "holograms": []
   },
   {
-    "id": "5d1bf4f14c342b1d560679e6",
+    "pid": "5d1bf4f14c342b1d560679e6",
     "name": {
       "title": "Mr",
       "full": "Roy Santana",
@@ -32,7 +32,7 @@
     "gender": "male",
     "email": "roy.santana@kenegy.biz",
     "phone": "+1 (907) 420-3224",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "address": {
       "street": "509 Oliver Street",
       "city": "Rockbridge",
@@ -43,29 +43,7 @@
     "holograms": []
   },
   {
-    "id": "5d1bf4f17c56d264ea85264d",
-    "name": {
-      "title": "Mrs",
-      "full": "Wendi Conway",
-      "first": "Wendi",
-      "last": "Conway"
-    },
-    "gender": "female",
-    "email": "wendi.conway@diginetic.biz",
-    "phone": "+1 (821) 492-3370",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
-    "pictureUrl": "http://placehold.it/64x64",
-    "address": {
-      "street": "540 Summit Street",
-      "city": "Faxon",
-      "state": "Mississippi",
-      "postcode": 688
-    },
-    "imagingStudySeries": [],
-    "holograms": []
-  },
-  {
-    "id": "5d1bf4f10bdc74c71822416d",
+    "pid": "5d1bf4f10bdc74c71822416d",
     "name": {
       "title": "Dr",
       "full": "Mayer Farmer",
@@ -75,7 +53,7 @@
     "gender": "other",
     "email": "mayer.farmer@teraprene.net",
     "phone": "+1 (972) 583-3316",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "address": {
       "street": "899 Fillmore Avenue",
       "city": "Guthrie",
@@ -86,7 +64,7 @@
     "holograms": []
   },
   {
-    "id": "5d1bf4f13934e5f5d01063d8",
+    "pid": "5d1bf4f13934e5f5d01063d8",
     "name": {
       "title": "Mrs",
       "full": "Barbara Holland",
@@ -96,7 +74,7 @@
     "gender": "female",
     "email": "barbara.holland@lexicondo.io",
     "phone": "+1 (884) 486-3899",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "address": {
       "street": "162 Portal Street",
       "city": "Topanga",
@@ -107,7 +85,7 @@
     "holograms": []
   },
   {
-    "id": "5d1bf4f130cf68a37bd647a2",
+    "pid": "5d1bf4f130cf68a37bd647a2",
     "name": {
       "title": "Mrs",
       "full": "Melanie Dodson",
@@ -117,7 +95,7 @@
     "gender": "female",
     "email": "melanie.dodson@zeam.org",
     "phone": "+1 (946) 470-2876",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "899 Lafayette Walk",
@@ -129,7 +107,7 @@
     "holograms": []
   },
   {
-    "id": "5d1bf4f1a377e11e1139f70e",
+    "pid": "5d1bf4f1a377e11e1139f70e",
     "name": {
       "title": "Mr",
       "full": "Myers Lamb",
@@ -139,7 +117,7 @@
     "gender": "male",
     "email": "myers.lamb@kaggle.ca",
     "phone": "+1 (955) 521-3518",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "832 Hunts Lane",
@@ -151,7 +129,7 @@
     "holograms": []
   },
   {
-    "id": "5d1bf4f19a85bec370eb838f",
+    "pid": "5d1bf4f19a85bec370eb838f",
     "name": {
       "title": "Mr",
       "full": "Bolton Sanders",
@@ -161,57 +139,13 @@
     "gender": "male",
     "email": "bolton.sanders@pyramis.com",
     "phone": "+1 (945) 530-3859",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
+    "birthDate": "1989-07-07T00:00:00.000Z",
     "pictureUrl": "http://placehold.it/64x64",
     "address": {
       "street": "548 Truxton Street",
       "city": "Gilgo",
       "state": "South Dakota",
       "postcode": 5638
-    },
-    "imagingStudySeries": [],
-    "holograms": []
-  },
-  {
-    "id": "5d1bf4f1d32c1f6bf52331b9",
-    "name": {
-      "title": "Mrs",
-      "full": "Cora Santiago",
-      "first": "Cora",
-      "last": "Santiago"
-    },
-    "gender": "female",
-    "email": "cora.santiago@portalis.tv",
-    "phone": "+1 (993) 495-2119",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
-    "pictureUrl": "http://placehold.it/64x64",
-    "address": {
-      "street": "798 Herkimer Court",
-      "city": "Lowgap",
-      "state": "Delaware",
-      "postcode": 1702
-    },
-    "imagingStudySeries": [],
-    "holograms": []
-  },
-  {
-    "id": "5d1bf4f1cca3d9f787bd80fd",
-    "name": {
-      "title": "Mr",
-      "full": "Morton Adams",
-      "first": "Morton",
-      "last": "Adams"
-    },
-    "gender": "male",
-    "email": "morton.adams@zboo.co.uk",
-    "phone": "+1 (940) 496-2933",
-    "dateOfBirth": "1989-07-07T00:00:00.000Z",
-    "pictureUrl": "http://placehold.it/64x64",
-    "address": {
-      "street": "749 Franklin Street",
-      "city": "Wadsworth",
-      "state": "Arkansas",
-      "postcode": 8426
     },
     "imagingStudySeries": [],
     "holograms": []

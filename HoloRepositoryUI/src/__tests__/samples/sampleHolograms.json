@@ -1,10 +1,9 @@
 [
   {
-    "id": "5d1c926b01b4275942f15c5d",
-    "endpoint": "<accessor-url>/holograms/5d1c926b01b4275942f15c5d",
+    "hid": "5d1c926b01b4275942f15c5d",
     "title": "Left kidney",
     "subject": {
-      "id": "5d1bf4f1d7429b38ce499c61",
+      "pid": "5d1bf4f1d7429b38ce499c61",
       "name": {
         "title": "Mrs",
         "full": "Lorraine Cline",
@@ -13,7 +12,7 @@
       }
     },
     "author": {
-      "id": "5d1bf414a5e95c2a1e2813a6",
+      "aid": "5d1bf414a5e95c2a1e2813a6",
       "name": {
         "title": "Mrs",
         "full": "Noreen Spence",
@@ -26,11 +25,10 @@
     "imagingStudySeriesId": "5d1c926b89edc61de37b6a40"
   },
   {
-    "id": "5d1c926b0a38632a96dd856e",
-    "endpoint": "<accessor-url>/holograms/5d1c926b0a38632a96dd856e",
+    "hid": "5d1c926b0a38632a96dd856e",
     "title": "Right kidney",
     "subject": {
-      "id": "5d1bf4f1d7429b38ce499c61",
+      "pid": "5d1bf4f1d7429b38ce499c61",
       "name": {
         "title": "Mrs",
         "full": "Lorraine Cline",
@@ -39,7 +37,7 @@
       }
     },
     "author": {
-      "id": "afgjs2h8fj29fjssf02jfghh",
+      "aid": "afgjs2h8fj29fjssf02jfghh",
       "name": {
         "title": "Mr",
         "full": "Jens Krinke",
@@ -52,11 +50,10 @@
     "imagingStudySeriesId": "5d1c926bc7a78813a010bbc5"
   },
   {
-    "id": "5d1c926bdd204a2af1c538ec",
-    "endpoint": "<accessor-url>/holograms/5d1c926bdd204a2af1c538ec",
+    "hid": "5d1c926bdd204a2af1c538ec",
     "title": "Lungs",
     "subject": {
-      "id": "5d1bf4f164f57d1ff4656a8f",
+      "pid": "5d1bf4f164f57d1ff4656a8f",
       "name": {
         "title": "Mrs",
         "full": "Alicia English",
@@ -65,7 +62,7 @@
       }
     },
     "author": {
-      "id": "5d1bf414a5e95c2a1e2813a6",
+      "aid": "5d1bf414a5e95c2a1e2813a6",
       "name": {
         "title": "Mrs",
         "full": "Noreen Spence",

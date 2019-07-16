@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { RouteComponentProps, Link } from "@reach/router";
+import { Link, RouteComponentProps } from "@reach/router";
 
 class LandingPage extends Component<RouteComponentProps> {
   render() {

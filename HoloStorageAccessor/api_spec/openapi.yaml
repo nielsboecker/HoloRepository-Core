@@ -6,6 +6,8 @@ info:
 
 # Added by API Auto Mocking Plugin
 servers:
+  - description: HoloStorage Sample Server URL
+    url: https://holoaccessor.com/api/0.1.4
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/boonwj/HoloRepository/0.1.4
 

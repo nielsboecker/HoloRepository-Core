@@ -4,7 +4,7 @@ import { Persona, PersonaSize } from "office-ui-fabric-react";
 import { Col, Divider, Row } from "antd";
 import PlainContentContainer from "./core/PlainContentContainer";
 import { capitaliseString, getAgeFromDobString } from "../../util/PatientUtil";
-import { IPractitioner } from "../../types";
+import { IPractitioner } from "../../../../HoloRepositoryUI-Types";
 
 import samplePractitioner from "../../__tests__/samples/samplePractitioner.json";
 

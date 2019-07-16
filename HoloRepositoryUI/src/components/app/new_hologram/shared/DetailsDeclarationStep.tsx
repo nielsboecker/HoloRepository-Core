@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { IPatient } from "../../../../types";
+import { IPatient } from "../../../../../../HoloRepositoryUI-Types";
 
 import samplePatients from "../../../../__tests__/samples/samplePatients.json";
 import samplePatientsWithHolograms from "../../../../__tests__/samples/samplePatientsWithHolograms.json";

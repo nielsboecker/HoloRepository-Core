@@ -2,7 +2,6 @@ import React, { Component, ReactNode } from "react";
 import { RouteComponentProps } from "@reach/router";
 import PlainContentContainer from "../core/PlainContentContainer";
 
-import { HologramCreationMode } from "../../../types";
 import CreationModeSelectionStep from "./shared/CreationModeSelectionStep";
 import ImagingStudySelectionStep from "./generate/ImagingStudySelectionStep";
 import PipelineSelectionStep from "./generate/PipelineSelectionStep";
@@ -11,6 +10,7 @@ import FileUploadStep from "./upload/FileUploadStep";
 import UploadProcessingStep from "./upload/UploadProcessingStep";
 import NewHologramControlsAndProgress from "./shared/NewHologramControlsAndProgress";
 import GenerationProcessingStep from "./generate/GenerationProcessingStep";
+import { HologramCreationMode } from "../../../types";
 
 export interface IHologramCreationStep {
   title: string;

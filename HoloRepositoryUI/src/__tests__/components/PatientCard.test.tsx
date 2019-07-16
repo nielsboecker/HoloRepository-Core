@@ -3,8 +3,8 @@ import PatientCard from "../../components/app/patients/PatientCard";
 import { shallow } from "enzyme";
 
 import samplePatientsWithHolograms from "../samples/samplePatientsWithHolograms.json";
-import { IPatient } from "../../types";
 import { getAgeFromDobString } from "../../util/PatientUtil";
+import { IPatient } from "../../../../HoloRepositoryUI-Types";
 
 it("should render patient details correctly", () => {
   const patient = samplePatientsWithHolograms[0] as IPatient;

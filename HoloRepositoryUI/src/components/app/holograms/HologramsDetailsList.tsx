@@ -11,7 +11,6 @@ import {
   SelectionMode
 } from "office-ui-fabric-react";
 import { Col, Row } from "antd";
-import { IHologram, IPractitioner, unknownPersonName } from "../../../types";
 import {
   authorCol,
   dateCol,
@@ -22,9 +21,12 @@ import {
 } from "./HologramsDetailsListColumns";
 import HologramsCommandBar from "./HologramsCommandBar";
 import FilterStatusMessageBar from "../core/FilterStatusMessageBar";
+import { IHologram, IPractitioner } from "../../../../../HoloRepositoryUI-Types";
 
 import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
 import sampleHolograms from "../../../__tests__/samples/sampleHolograms.json";
+
+const unknownPersonName = "Unknown";
 
 const holograms = sampleHolograms as IHologram[];
 const practitioner = samplePractitioner as IPractitioner;

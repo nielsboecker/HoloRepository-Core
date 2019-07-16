@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { IImagingStudySeries } from "../../../../types";
+import { IImagingStudySeries } from "../../../../../../HoloRepositoryUI-Types";
 import { CommandBarButton, Icon, IconButton, Image, Modal } from "office-ui-fabric-react";
 import { Divider } from "antd";
 

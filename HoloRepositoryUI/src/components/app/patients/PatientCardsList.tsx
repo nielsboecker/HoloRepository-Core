@@ -9,7 +9,7 @@ import {
   Toggle
 } from "office-ui-fabric-react";
 import { Col, Row } from "antd";
-import { IPatient } from "../../../types";
+import { IPatient } from "../../../../../HoloRepositoryUI-Types";
 import PatientCard from "./PatientCard";
 
 import samplePatients from "../../../__tests__/samples/samplePatients.json";

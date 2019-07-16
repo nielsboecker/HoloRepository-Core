@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import samplePipelines from "../../../../__tests__/samples/samplePipelines.json";
-import { IPipeline } from "../../../../types";
+import { IPipeline } from "../../../../../../HoloRepositoryUI-Types";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
 import { Col, Row } from "antd";
 import PipelineSpecificationCard from "./PipelineSpecificationCard";

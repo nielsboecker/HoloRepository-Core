@@ -12,7 +12,7 @@ import {
 import { Layout, Menu } from "antd";
 import "./MenuHeader.scss";
 import appLogo from "../../../assets/logo/2x/logo_and_font@2x.png";
-import { IPractitioner } from "../../../types";
+import { IPractitioner } from "../../../../../HoloRepositoryUI-Types";
 
 import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
 //import "antd/dist/antd.css";

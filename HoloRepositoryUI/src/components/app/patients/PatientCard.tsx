@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { Icon, Persona, PersonaSize } from "office-ui-fabric-react";
 import { Col, Row } from "antd";
 import { Link } from "@reach/router";
-import { IPatient } from "../../../types";
 import {
   capitaliseString,
   getAgeFromDobString,
   getNumberOfHolograms
 } from "../../../util/PatientUtil";
 import "./PatientCard.scss";
+import { IPatient } from "../../../../../HoloRepositoryUI-Types";
 
 export interface IPatientCardProps {
   patient: IPatient;

@@ -31,7 +31,7 @@ import PipelineDetailBox from "../../components/app/PipelineDetailBox";
 import ProfileInformationPage from "../../components/app/ProfileInformationPage";
 
 import samplePatients from "../samples/samplePatients.json";
-import { IPatient } from "../../types";
+import { IPatient } from "../../../../HoloRepositoryUI-Types";
 
 it("renders AppContainer without crashing", () => {
   shallow(<AppContainer />);
@@ -96,7 +96,7 @@ it("renders NewHologramPage without crashing", () => {
 it("renders CreationModeSelectionStep without crashing", () => {
   shallow(
     <CreationModeSelectionStep
-      selected={jest.requireMock("../../types")}
+      selected={jest.requireMock("../../../../HoloRepositoryUI-Types")}
       handleModeChange={jest.fn}
     />
   );

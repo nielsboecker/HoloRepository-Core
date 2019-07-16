@@ -54,7 +54,7 @@ class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
           items: [
             {
               key: "fromImagingStudy",
-              name: "Generate from an imaging studyy",
+              name: "Generate from an imaging study",
               iconProps: {
                 iconName: "Blur"
               },

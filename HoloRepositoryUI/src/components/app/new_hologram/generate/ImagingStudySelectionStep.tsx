@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { IImagingStudySeries, IPatient } from "../../../../types";
+import { IImagingStudySeries, IPatient } from "../../../../../../HoloRepositoryUI-Types";
 import { ChoiceGroup, Dropdown, IChoiceGroupOption, IDropdownOption } from "office-ui-fabric-react";
 import { Col, Divider, Row } from "antd";
 import ImagingStudyDetailsCard from "./ImagingStudyDetailsCard";

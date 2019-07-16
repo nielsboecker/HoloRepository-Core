@@ -5,7 +5,7 @@ import { Col, Divider, Row } from "antd";
 import { capitaliseString, getAgeFromDobString } from "../../../util/PatientUtil";
 import PlainContentContainer from "../core/PlainContentContainer";
 import PatientBreadcrumb from "./PatientBreadcrumb";
-import { IPatient } from "../../../types";
+import { IPatient } from "../../../../../HoloRepositoryUI-Types";
 import {
   authorCol,
   dateCol,

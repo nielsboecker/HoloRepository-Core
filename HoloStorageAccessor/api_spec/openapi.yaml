@@ -214,6 +214,7 @@ components:
   schemas:
     PersonName:
       description: Components that make up the name of a person
+      type: object
       properties:
         full:
           type: string

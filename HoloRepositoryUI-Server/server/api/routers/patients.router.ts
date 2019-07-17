@@ -1,10 +1,8 @@
-import logger from "../../common/logger";
 import { Router } from "express";
-import controller from "../controllers/patients.controller";
+import PatientsController from "../controllers/patients.controller";
 
 const PatientsRouter = Router()
-  .post("/", controller.create)
-  .get("/", controller.all)
-  .get("/:id", controller.byId);
+  .get("/", PatientsController.getAll)
+  .get("/:pid", PatientsController.getById);
 
 export default PatientsRouter;

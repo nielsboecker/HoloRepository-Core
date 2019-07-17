@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 
 // eslint-disable-next-line no-unused-vars, no-shadow
 const errorHandler = (err, req: Request, res: Response, next: NextFunction) => {

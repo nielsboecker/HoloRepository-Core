@@ -1,19 +1,12 @@
 import logger from "../../common/logger";
+import { IPractitioner } from "../../../../HoloRepositoryUI-Types";
+
+import samplePractitioner from "../../../test/samples/samplePractitioner.json";
 
 export class PractitionersService {
-  all(): Promise<any[]> {
-    logger.info("fetch all");
-    return Promise.resolve([]);
-  }
-
-  byId(id: number): Promise<any> {
-    logger.info(`fetch example with id ${id}`);
-    return this.all().then(response => response[id]);
-  }
-
-  create(name: string): Promise<any> {
-    logger.info(`create with name ${name}`);
-    return Promise.resolve(null);
+  public getById(pid: string): Promise<IPractitioner> {
+    logger.info(`GET Practitioner by id '${pid}'`);
+    return Promise.resolve(samplePractitioner as IPractitioner);
   }
 }
 

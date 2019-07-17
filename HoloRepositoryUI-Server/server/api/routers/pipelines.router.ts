@@ -1,10 +1,6 @@
-import logger from "../../common/logger";
 import { Router } from "express";
-import controller from "../controllers/pipelines.controller";
+import PipelinesController from "../controllers/pipelines.controller";
 
-const PipelinesRouter = Router()
-  .post("/", controller.create)
-  .get("/", controller.all)
-  .get("/:id", controller.byId);
+const PipelinesRouter = Router().get("/", PipelinesController.getAll);
 
 export default PipelinesRouter;

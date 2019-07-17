@@ -1,19 +1,22 @@
 import logger from "../../common/logger";
+import { IHologram } from "../../../../HoloRepositoryUI-Types";
+
+import sampleHolograms from "../../../test/samples/sampleHolograms.json";
+
+const _sampleHolograms = sampleHolograms as IHologram[];
 
 export class HologramsService {
-  all(): Promise<any[]> {
-    logger.info("fetch all");
-    return Promise.resolve([]);
+  public getAll(): Promise<IHologram[]> {
+    logger.info("GET all Holograms");
+    return Promise.resolve(_sampleHolograms);
   }
 
-  byId(id: number): Promise<any> {
-    logger.info(`fetch example with id ${id}`);
-    return this.all().then(response => response[id]);
-  }
-
-  create(name: string): Promise<any> {
-    logger.info(`create with name ${name}`);
-    return Promise.resolve(null);
+  public getById(hid: string): Promise<IHologram> {
+    logger.info(`GET Hologram by id '${hid}'`);
+    const hologram = _sampleHolograms.find(hologram => hologram.hid === hid);
+    if (hologram) {
+      return Promise.resolve(hologram);
+    }
   }
 }
 

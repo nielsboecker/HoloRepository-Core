@@ -1,0 +1,122 @@
+[
+  {
+    "pid": "5d1bf4f1d7429b38ce499c61",
+    "name": {
+      "title": "Mrs",
+      "full": "Lorraine Cline",
+      "first": "Lorraine",
+      "last": "Cline"
+    },
+    "gender": "female",
+    "email": "lorraine.cline@corepan.us",
+    "phone": "+1 (890) 502-2502",
+    "birthDate": "1989-07-07T00:00:00.000Z",
+    "address": {
+      "street": "867 Dumont Avenue",
+      "city": "Fillmore",
+      "state": "Michigan",
+      "postcode": 6111
+    },
+    "imagingStudySeries": [],
+    "holograms": [
+      {
+        "hid": "5d1c926b01b4275942f15c5d",
+        "title": "Left kidney",
+        "subject": {
+          "pid": "5d1bf4f1d7429b38ce499c61",
+          "name": {
+            "title": "Mrs",
+            "full": "Lorraine Cline",
+            "first": "Lorraine",
+            "last": "Cline"
+          }
+        },
+        "author": {
+          "aid": "5d1bf414a5e95c2a1e2813a6",
+          "name": {
+            "title": "Mrs",
+            "full": "Noreen Spence",
+            "first": "Noreen",
+            "last": "Spence"
+          }
+        },
+        "createdDate": "2019-07-01T00:00:00.000Z",
+        "fileSizeInKb": 4765,
+        "imagingStudySeriesId": "5d1c926b89edc61de37b6a40"
+      },
+      {
+        "hid": "5d1c926b0a38632a96dd856e",
+        "title": "Right kidney",
+        "subject": {
+          "pid": "5d1bf4f1d7429b38ce499c61",
+          "name": {
+            "title": "Mrs",
+            "full": "Lorraine Cline",
+            "first": "Lorraine",
+            "last": "Cline"
+          }
+        },
+        "author": {
+          "aid": "afgjs2h8fj29fjssf02jfghh",
+          "name": {
+            "title": "Mr",
+            "full": "Jens Krinke",
+            "first": "Jens",
+            "last": "Krinke"
+          }
+        },
+        "createdDate": "2019-07-03T00:00:00.000Z",
+        "fileSizeInKb": 3544,
+        "imagingStudySeriesId": "5d1c926bc7a78813a010bbc5"
+      }
+    ]
+  },
+  {
+    "pid": "5d1bf4f164f57d1ff4656a8f",
+    "name": {
+      "title": "Mrs",
+      "full": "Alicia English",
+      "first": "Alicia",
+      "last": "English"
+    },
+    "gender": "female",
+    "email": "alicia.english@geeknet.me",
+    "phone": "+1 (876) 554-2406",
+    "birthDate": "1989-07-07T00:00:00.000Z",
+    "pictureUrl": "http://placehold.it/64x64",
+    "address": {
+      "street": "868 Newkirk Avenue",
+      "city": "Orason",
+      "state": "Alaska",
+      "postcode": 1157
+    },
+    "imagingStudySeries": [],
+    "holograms": [
+      {
+        "hid": "5d1c926bdd204a2af1c538ec",
+        "title": "Lungs",
+        "subject": {
+          "pid": "5d1bf4f164f57d1ff4656a8f",
+          "name": {
+            "title": "Mrs",
+            "full": "Alicia English",
+            "first": "Alicia",
+            "last": "English"
+          }
+        },
+        "author": {
+          "aid": "5d1bf414a5e95c2a1e2813a6",
+          "name": {
+            "title": "Mrs",
+            "full": "Noreen Spence",
+            "first": "Noreen",
+            "last": "Spence"
+          }
+        },
+        "createdDate": "2017-06-21T00:00:00.000Z",
+        "fileSizeInKb": 4436,
+        "imagingStudySeriesId": "5d1c926bb58b20030c255388"
+      }
+    ]
+  }
+]

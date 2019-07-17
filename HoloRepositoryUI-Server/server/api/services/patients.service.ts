@@ -1,19 +1,22 @@
 import logger from "../../common/logger";
+import { IPatient } from "../../../../HoloRepositoryUI-Types";
+
+import samplePatients from "../../../test/samples/samplePatients.json";
+
+const _samplePatients = samplePatients as IPatient[];
 
 export class PatientsService {
-  all(): Promise<any[]> {
-    logger.info("fetch all");
-    return Promise.resolve([]);
+  public getAll(): Promise<IPatient[]> {
+    logger.info("GET all Patients");
+    return Promise.resolve(_samplePatients);
   }
 
-  byId(id: number): Promise<any> {
-    logger.info(`fetch example with id ${id}`);
-    return this.all().then(response => response[id]);
-  }
-
-  create(name: string): Promise<any> {
-    logger.info(`create with name ${name}`);
-    return Promise.resolve(null);
+  public getById(pid: string): Promise<IPatient> {
+    logger.info(`GET Patient by id '${pid}'`);
+    const patient = samplePatients.find(patient => patient.pid === pid);
+    if (patient) {
+      return Promise.resolve(patient as IPatient);
+    }
   }
 }
 

@@ -1,10 +1,6 @@
-import logger from "../../common/logger";
 import { Router } from "express";
-import controller from "../controllers/practitioners.controller";
+import PractitionersController from "../controllers/practitioners.controller";
 
-const PractitionersRouter = Router()
-  .post("/", controller.create)
-  .get("/", controller.all)
-  .get("/:id", controller.byId);
+const PractitionersRouter = Router().get("/:pid", PractitionersController.getById);
 
 export default PractitionersRouter;

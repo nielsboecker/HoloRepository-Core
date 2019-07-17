@@ -1,5 +1,5 @@
 {
-  "name": "holorepository-ui",
+  "name": "holorepository-ui-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

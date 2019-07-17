@@ -5,9 +5,6 @@ import bodyParser from "body-parser";
 import http from "http";
 import os from "os";
 import cookieParser from "cookie-parser";
-
-import installValidator from "./openapi";
-
 import logger from "./logger";
 
 const app = express();
@@ -28,7 +25,6 @@ export default class ExpressServer {
   }
 
   router(routes: (app: Application) => void): ExpressServer {
-    installValidator(app, routes);
     return this;
   }
 

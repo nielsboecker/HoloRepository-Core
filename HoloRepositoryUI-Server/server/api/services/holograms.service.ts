@@ -31,6 +31,18 @@ export class HologramsService {
     logger.warn("Delete not implemented yet");
     return Promise.resolve(true);
   }
+
+  public upload(): Promise<boolean> {
+    // TODO: Implement
+    logger.warn("Upload not implemented yet");
+    return Promise.resolve(true);
+  }
+
+  public generate(): Promise<boolean> {
+    // TODO: Generate
+    logger.warn("Generate not implemented yet");
+    return Promise.resolve(true);
+  }
 }
 
 export default new HologramsService();

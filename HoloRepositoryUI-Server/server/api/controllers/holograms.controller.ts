@@ -30,6 +30,20 @@ export class HologramsController {
       else res.status(404).end();
     });
   }
+
+  public upload(req: Request, res: Response): void {
+    HologramsService.upload().then(success => {
+      if (success) res.status(200).end();
+      else res.status(404).end();
+    });
+  }
+
+  public generate(req: Request, res: Response): void {
+    HologramsService.generate().then(success => {
+      if (success) res.status(200).end();
+      else res.status(404).end();
+    });
+  }
 }
 
 export default new HologramsController();

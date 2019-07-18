@@ -37,6 +37,38 @@ export class HoloRepositoryServerService {
       });
   }
 
+  public async downloadHologramById(hid: string): Promise<BinaryType | null> {
+    return await serverAxios
+      .get<BinaryType>(`${routes.holograms}/${hid}/download`)
+      .then(hologram => hologram.data)
+      .catch(error => {
+        console.error(error);
+        return null;
+      });
+  }
+
+  public async deleteHologramById(hid: string): Promise<boolean> {
+    return await serverAxios
+      .delete(`${routes.holograms}/${hid}`)
+      .then(() => true)
+      .catch(error => {
+        console.error(error);
+        return false;
+      });
+  }
+
+  public async uploadHologram(): Promise<boolean> {
+    // TODO: Implement
+    console.warn("Upload not implemented yet");
+    return Promise.resolve(true);
+  }
+
+  public async generateHologram(): Promise<boolean> {
+    // TODO: Implement
+    console.warn("Generate not implemented yet");
+    return Promise.resolve(true);
+  }
+
   public async getImagingStudySeriesForAllPatients(pids: string[]): Promise<IImagingStudySeries[]> {
     return await serverAxios
       .get<IImagingStudySeries[]>(`${routes.imagingStudySeries}`, {
@@ -48,6 +80,16 @@ export class HoloRepositoryServerService {
       .catch(error => {
         console.error(error);
         return [];
+      });
+  }
+
+  public async getImagingStudySeriesPreview(issid: string): Promise<string | unknown> {
+    return await serverAxios
+      .get<string>(`${routes.imagingStudySeries}/${issid}/preview`)
+      .then(iss => iss.data)
+      .catch(error => {
+        console.error(error);
+        return null;
       });
   }
 

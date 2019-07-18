@@ -1,6 +1,5 @@
 import ImagingStudiesService from "../services/imagingStudySeries.service";
 import { Request, Response } from "express";
-import HologramsService from "../services/holograms.service";
 import getConditionalPidsFilter from "../util/filter.util";
 
 export class ImagingStudySeriesController {
@@ -12,6 +11,16 @@ export class ImagingStudySeriesController {
 
   public getById(req: Request, res: Response): void {
     ImagingStudiesService.getById(req.params.issid).then(iss => {
+      if (iss) {
+        res.json(iss);
+      } else {
+        res.status(404).end();
+      }
+    });
+  }
+
+  public getPreviewById(req: Request, res: Response): void {
+    ImagingStudiesService.getPreviewById(req.params.issid).then(iss => {
       if (iss) {
         res.json(iss);
       } else {

@@ -18,13 +18,17 @@ export class HologramsController {
   }
 
   public downloadById(req: Request, res: Response): void {
-    logger.warn("Download not implemented yet");
-    res.status(500).end();
+    HologramsService.downloadById(req.params.hid).then(hologram => {
+      if (hologram) res.send(hologram);
+      else res.status(404).end();
+    });
   }
 
   public deleteById(req: Request, res: Response): void {
-    logger.warn("Delete not implemented yet");
-    res.status(500).end();
+    HologramsService.deleteById(req.params.hid).then(success => {
+      if (success) res.status(200).end();
+      else res.status(404).end();
+    });
   }
 }
 

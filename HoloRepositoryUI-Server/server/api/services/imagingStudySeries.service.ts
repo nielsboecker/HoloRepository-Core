@@ -20,6 +20,19 @@ export class ImagingStudySeriesService {
       return Promise.resolve(null);
     }
   }
+
+  public getPreviewById(issid: string): Promise<string> {
+    // TODO: Implement
+    logger.warn("ISS preview not implemented yet");
+
+    const iss = _sampleImagingStudySeries.find(iss => iss.issid === issid);
+    if (iss) {
+      // TODO: Query PACS for image preview endpoint, return endpoint
+      return Promise.resolve("<preview-url>");
+    } else {
+      return Promise.resolve(null);
+    }
+  }
 }
 
 export default new ImagingStudySeriesService();

@@ -1,5 +1,5 @@
-# HoloAccessor API Changelog
-All changes done to the holoaccessor API spec will be documented here.
+# HoloStorage Accessor API Changelog
+All changes done to the HoloStorage Accessor API spec will be documented here.
 
 ## [0.1.4] - 2019-07-14
 ### Changed

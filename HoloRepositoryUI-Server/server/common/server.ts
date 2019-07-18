@@ -5,6 +5,7 @@ import http from "http";
 import os from "os";
 import cookieParser from "cookie-parser";
 import logger from "./logger";
+import cors from "cors";
 import errorHandler from "../api/middlewares/error.handler";
 
 const app = express();
@@ -25,8 +26,14 @@ export default class ExpressServer {
   }
 
   public router(routes: (app: Application) => void): ExpressServer {
+    // Middleware before routes
+    app.use(cors());
+
     routes(app);
+
+    // Middleware after routes
     app.use(errorHandler);
+
     return this;
   }
 

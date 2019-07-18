@@ -21,6 +21,9 @@ This instruction will link your local port 5000 with the port 5000 in the contai
 
 now we can send the request to the container because server is running, Here I use curl to send a post request with the file i would like to segement and send it to the container. when container recieve this input nifti file it will call the NN model to segement the input file and when process is complete the flask server will find the output file and return it to the client.
 
+<code>curl -X POST -F file=@100_CT.nii http://localhost:6969/seg -o output.nii.gz</code>
+
+
 ### Flask script
 Here i use flask framework to create a server so i have a port that allow user to send request to the container, container can segment the request input and output it to the user.
 ### Testing for the flask script

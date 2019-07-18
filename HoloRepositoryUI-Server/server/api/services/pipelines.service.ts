@@ -5,7 +5,7 @@ import samplePipelines from "../../../test/samples/samplePipelines.json";
 
 export class PipelinesService {
   public getAll(): Promise<IPipeline[]> {
-    logger.info("GET all Pipelnes");
+    logger.info("GET all Pipelines");
     return Promise.resolve(samplePipelines as IPipeline[]);
   }
 }

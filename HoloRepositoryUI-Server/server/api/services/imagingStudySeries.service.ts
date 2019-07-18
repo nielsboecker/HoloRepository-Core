@@ -5,7 +5,7 @@ import sampleImagingStudySeries from "../../../test/samples/sampleImagingStudySe
 
 const _sampleImagingStudySeries = sampleImagingStudySeries as IImagingStudySeries[];
 
-export class ImagingStudiesService {
+export class ImagingStudySeriesService {
   public getAll(): Promise<IImagingStudySeries[]> {
     logger.info("GET all ImagingStudySeries");
     return Promise.resolve(_sampleImagingStudySeries);
@@ -22,4 +22,4 @@ export class ImagingStudiesService {
   }
 }
 
-export default new ImagingStudiesService();
+export default new ImagingStudySeriesService();

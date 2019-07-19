@@ -1,6 +1,7 @@
 import { IPatient } from "../../../../HoloRepositoryUI-Types";
+import { R4 } from  '@Ahryman40k/ts-fhir-types';
 
-const mapPatient = (patient: any): IPatient | null => {
+const mapPatient = (patient: R4.IPatient): IPatient | null => {
   console.log("adapter");
   if (false) {
     return null;
@@ -8,7 +9,9 @@ const mapPatient = (patient: any): IPatient | null => {
     return {
       birthDate: patient.birthDate,
       gender: patient.gender,
-      name: patient.name[0].family,
+      name: {
+        full: patient.name[0].family,
+      },
       pid: patient.id
     };
   }

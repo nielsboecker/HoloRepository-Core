@@ -1,5 +1,5 @@
 import { Router } from "express";
-import PractitionersController from "../controllers/practitioners.controller";
+import PractitionersController from "./practitioners.controller";
 
 const PractitionersRouter = Router().get("/:pid", PractitionersController.getById);
 

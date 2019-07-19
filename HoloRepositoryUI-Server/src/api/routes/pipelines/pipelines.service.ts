@@ -1,7 +1,7 @@
-import logger from "../../common/logger";
-import { IPipeline } from "../../../../HoloRepositoryUI-Types";
+import logger from "../../../common/logger";
+import { IPipeline } from "../../../../../HoloRepositoryUI-Types";
 
-import samplePipelines from "../../../test/samples/samplePipelines.json";
+import samplePipelines from "../../../__tests__/samples/samplePipelines.json";
 
 export class PipelinesService {
   public getAll(): Promise<IPipeline[]> {

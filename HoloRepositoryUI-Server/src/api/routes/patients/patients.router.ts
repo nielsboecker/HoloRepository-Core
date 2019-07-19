@@ -1,5 +1,5 @@
 import { Router } from "express";
-import PatientsController from "../controllers/patients.controller";
+import PatientsController from "./patients.controller";
 
 const PatientsRouter = Router()
   .get("/", PatientsController.getAll)

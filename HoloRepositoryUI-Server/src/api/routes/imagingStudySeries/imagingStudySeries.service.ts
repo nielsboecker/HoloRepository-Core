@@ -1,7 +1,7 @@
-import logger from "../../common/logger";
-import { IImagingStudySeries } from "../../../../HoloRepositoryUI-Types";
+import logger from "../../../common/logger";
+import { IImagingStudySeries } from "../../../../../HoloRepositoryUI-Types";
 
-import sampleImagingStudySeries from "../../../test/samples/sampleImagingStudySeries.json";
+import sampleImagingStudySeries from "../../../__tests__/samples/sampleImagingStudySeries.json";
 
 const _sampleImagingStudySeries = sampleImagingStudySeries as IImagingStudySeries[];
 

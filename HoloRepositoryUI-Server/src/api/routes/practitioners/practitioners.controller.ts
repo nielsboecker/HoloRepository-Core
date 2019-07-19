@@ -1,4 +1,4 @@
-import PractitionersService from "../services/practitioners.service";
+import PractitionersService from "./practitioners.service";
 import { Request, Response } from "express";
 
 export class PractitionersController {

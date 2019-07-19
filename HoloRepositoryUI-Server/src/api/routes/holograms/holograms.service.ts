@@ -1,7 +1,7 @@
-import logger from "../../common/logger";
-import { IHologram } from "../../../../HoloRepositoryUI-Types";
+import logger from "../../../common/logger";
+import { IHologram } from "../../../../../HoloRepositoryUI-Types";
 
-import sampleHolograms from "../../../test/samples/sampleHolograms.json";
+import sampleHolograms from "../../../__tests__/samples/sampleHolograms.json";
 import { Request, Response } from "express";
 
 const _sampleHolograms = sampleHolograms as IHologram[];

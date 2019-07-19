@@ -1,6 +1,6 @@
-import ImagingStudiesService from "../services/imagingStudySeries.service";
+import ImagingStudiesService from "./imagingStudySeries.service";
 import { Request, Response } from "express";
-import getConditionalPidsFilter from "../util/filter.util";
+import getConditionalPidsFilter from "../../util/filter.util";
 
 export class ImagingStudySeriesController {
   public getAll(req: Request, res: Response): void {

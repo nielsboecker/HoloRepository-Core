@@ -1,7 +1,7 @@
-import logger from "../../common/logger";
-import { IPatient } from "../../../../HoloRepositoryUI-Types";
+import logger from "../../../common/logger";
+import { IPatient } from "../../../../../HoloRepositoryUI-Types";
 
-import samplePatientsAll from "../../../test/samples/samplePatientsAll.json";
+import samplePatientsAll from "../../../__tests__/samples/samplePatientsAll.json";
 
 const _samplePatients = samplePatientsAll as IPatient[];
 

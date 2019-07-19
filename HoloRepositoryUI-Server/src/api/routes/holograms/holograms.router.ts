@@ -1,5 +1,5 @@
 import { Router } from "express";
-import HologramsController from "../controllers/holograms.controller";
+import HologramsController from "./holograms.controller";
 
 const HologramsRouter = Router()
   .get("/", HologramsController.getAll)

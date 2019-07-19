@@ -6,22 +6,23 @@
   "scripts": {
     "start": "node dist/index.js",
     "compile": "ts-node build.ts && tsc",
-    "dev": "nodemon server/index.ts | pino-pretty",
-    "dev:debug": "nodemon --exec 'node -r ts-node/register --inspect-brk' server/index.ts | pino-pretty",
+    "dev": "nodemon src/index.ts | pino-pretty",
+    "dev:debug": "nodemon --exec 'node -r ts-node/register --inspect-brk' src/index.ts | pino-pretty",
     "test": "mocha test/**/*.ts --exit",
     "test:debug": "mocha --inspect-brk test/**/*.ts --exit",
-    "lint:check": "eslint '{server,test}/**/*.{js,ts,json}'",
-    "lint": "eslint '{server,test}/**/*.{js,ts,json}' --quiet --fix",
-    "format:check": "prettier --list-different '{server,test}/**/*.{js,ts,json,md}' ",
-    "format": "prettier --write '{server,test}/**/*.{js,ts,json,md}' "
+    "lint:check": "eslint 'src/**/*.{js,ts,json}'",
+    "lint": "eslint 'src/**/*.{js,ts,json}' --quiet --fix",
+    "format:check": "prettier --list-different 'src/**/*.{js,ts,json,md}' ",
+    "format": "prettier --write 'src/**/*.{js,ts,json,md}' "
   },
   "dependencies": {
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.4",
+    "cors": "latest",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
-    "pino": "^5.11.1",
-    "cors": "latest"
+    "fhir-kit-client": "^1.3.0",
+    "pino": "^5.11.1"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",

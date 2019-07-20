@@ -1,16 +1,30 @@
-import { IImagingStudySeries, IPatient, IPractitioner } from "../../../../HoloRepositoryUI-Types";
+import {
+  IImagingStudySeries,
+  IPatient,
+  IPractitioner,
+  IHumanName
+} from "../../../../HoloRepositoryUI-Types";
 import { R4 } from "@Ahryman40k/ts-fhir-types";
 import { SupportedFhirResourceType } from "../clients/fhirClient";
 import logger from "../logger";
 
+const _mapHumanName = (names?: R4.IHumanName[]): IHumanName => {
+  const name = names && names[0] ? names[0] : null;
+
+  const given = name && name.given ? name.given.join(" ") : "";
+  const family = name && name.family ? name.family : "Unknown";
+  const full = `${given} ${family}`;
+  const title = name && name.prefix && name.prefix[0] ? name.prefix[0] : "";
+
+  return { given, family, full, title };
+};
+
 const _mapPatient = (patient: R4.IPatient): IPatient | null => {
- return {
-    birthDate: patient.birthDate,
-    gender: patient.gender,
-    name: {
-      full: patient.name[0].family
-    },
-    pid: patient.id
+  return {
+    pid: patient.id || "unknown",
+    name: _mapHumanName(patient.name),
+    birthDate: patient.birthDate || "unknown",
+    gender: patient.gender || "unknown"
   };
 };
 

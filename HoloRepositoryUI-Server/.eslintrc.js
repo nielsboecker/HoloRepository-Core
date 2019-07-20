@@ -15,6 +15,8 @@ module.exports = {
   },
   rules: {
     // Allow names like "IImagingStudy_Series"
-    "@typescript-eslint/camelcase": 0
+    "@typescript-eslint/camelcase": 0,
+    // Promise error handlers, Jest test cases etc. don't need explicit return type
+    "@typescript-eslint/explicit-function-return-type": 0
   }
 };

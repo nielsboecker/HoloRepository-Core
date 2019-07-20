@@ -52,16 +52,10 @@ npm start
 
 ## Test It
 
-Run the Mocha unit tests
+Run the Jest unit tests
 
 ```shell
 npm test
-```
-
-or debug them
-
-```shell
-npm run test:debug
 ```
 
 ## Try It

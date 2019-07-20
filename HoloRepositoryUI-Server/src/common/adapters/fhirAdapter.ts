@@ -2,7 +2,8 @@ import {
   IImagingStudySeries,
   IPatient,
   IPractitioner,
-  IHumanName
+  IHumanName,
+  IPerson
 } from "../../../../HoloRepositoryUI-Types";
 import { R4 } from "@Ahryman40k/ts-fhir-types";
 import { SupportedFhirResourceType } from "../clients/fhirClient";
@@ -19,24 +20,32 @@ const _mapHumanName = (names?: R4.IHumanName[]): IHumanName => {
   return { given, family, full, title };
 };
 
-const _mapPatient = (patient: R4.IPatient): IPatient | null => {
+const _mapPerson = (person: R4.IPatient| R4.IPractitioner): IPerson | null => {
   return {
-    pid: patient.id || "unknown",
-    name: _mapHumanName(patient.name),
-    birthDate: patient.birthDate || "unknown",
-    gender: patient.gender || "unknown"
+    pid: person.id || "unknown",
+    name: _mapHumanName(person.name),
+    birthDate: person.birthDate || "unknown",
+    gender: person.gender || "unknown"
   };
 };
 
-const _mapPractitioner = (practitioner: R4.IPractitioner): IPractitioner | null => {
-  // TODO: Implement
-  return null;
+const _mapPatient = (patient: R4.IPatient): IPatient | null => {
+  return _mapPerson(patient);
 };
 
-const _mapImagingStudySeries = (iss: R4.IImagingStudy): IImagingStudySeries | null => {
-  // TODO: Implement
-  return null;
+const _mapPractitioner = (practitioner: R4.IPractitioner): IPractitioner | null => {
+  return _mapPerson(practitioner);
 };
+
+const _mapImagingStudySeries = (iss: R4.IImagingStudy): IImagingStudySeries | null => ({
+  bodySite: "",
+  date: "",
+  issid: "",
+  modality: "",
+  numberOfInstances: 0,
+  previewPictureUrl: "",
+  subject: { pid: "" }
+});
 
 const getAdapterFunction = (resourceType: string): Function => {
   logger.debug(`Mapping type '${resourceType}'`);

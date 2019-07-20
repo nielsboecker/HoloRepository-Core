@@ -1,0 +1,44 @@
+{
+  "resourceType": "Practitioner",
+  "id": "e24af66a-20e9-405d-94b2-7ff9ae8cf9ad",
+  "meta": {
+    "versionId": "2",
+    "lastUpdated": "2019-07-18T07:52:15.44+00:00"
+  },
+  "extension": [
+    {
+      "url": "http://synthetichealth.github.io/synthea/utilization-encounters-extension",
+      "valueInteger": 218
+    }
+  ],
+  "identifier": [
+    {
+      "system": "http://hl7.org/fhir/sid/us-npi",
+      "value": "430"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "family": "Schneider199",
+      "given": [
+        "Andre610"
+      ],
+      "prefix": [
+        "Dr."
+      ]
+    }
+  ],
+  "address": [
+    {
+      "line": [
+        "41 HIGHLAND AVENUE"
+      ],
+      "city": "WINCHESTER",
+      "state": "MA",
+      "postalCode": "01890",
+      "country": "US"
+    }
+  ],
+  "gender": "male"
+}

@@ -18,11 +18,11 @@ export interface IHumanName {
  * Common attributes of Patients and Practitioners.
  * Semantics is similar to the corresponding FHIR resource.
  */
-interface IPerson {
+export interface IPerson {
   pid: string;
   name: IHumanName;
   gender: Gender;
-  birthDate: string;
+  birthDate?: string;
   phone?: string;
   email?: string;
   address?: {

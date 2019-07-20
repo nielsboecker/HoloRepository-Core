@@ -1,0 +1,54 @@
+{
+  "resourceType": "ImagingStudy",
+  "id": "5c889b73-46cc-41af-86b4-5cebfdc3637c",
+  "meta": {
+    "versionId": "3",
+    "lastUpdated": "2019-07-05T13:23:29.598+00:00"
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "urn:ietf:rfc:3986",
+      "value": "urn:oid:1.2.840.99999999.99449078.1562175375414"
+    }
+  ],
+  "status": "available",
+  "subject": {
+    "reference": "urn:uuid:e13d1464-d401-4be4-8b90-e8edadd6dce1"
+  },
+  "encounter": {
+    "reference": "urn:uuid:a91f8eee-9368-40bf-af2e-3bf95b7119ab"
+  },
+  "started": "2013-07-29T18:13:10+01:00",
+  "numberOfSeries": 1,
+  "numberOfInstances": 1,
+  "series": [
+    {
+      "uid": "1.2.840.99999999.1.27060515.1562175375414",
+      "number": 1,
+      "modality": {
+        "system": "http://dicom.nema.org/resources/ontology/DCM",
+        "code": "DX",
+        "display": "Digital Radiography"
+      },
+      "numberOfInstances": 1,
+      "bodySite": {
+        "system": "http://snomed.info/sct",
+        "code": "51185008",
+        "display": "Chest"
+      },
+      "started": "2013-07-29T18:13:10+01:00",
+      "instance": [
+        {
+          "uid": "1.2.840.99999999.1.1.95469414.1562175375414",
+          "sopClass": {
+            "system": "urn:ietf:rfc:3986",
+            "code": "1.2.840.10008.5.1.4.1.1.1.1"
+          },
+          "number": 1,
+          "title": "Image of chest"
+        }
+      ]
+    }
+  ]
+}

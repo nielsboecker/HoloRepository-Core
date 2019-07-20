@@ -9,6 +9,13 @@ import { R4 } from "@Ahryman40k/ts-fhir-types";
 import { SupportedFhirResourceType } from "../clients/fhirClient";
 import logger from "../logger";
 
+const _normaliseDateString = (dateString: string): string => {
+  // Note: Skipping validation of whether input string represents a date correctly
+  const date = new Date(dateString);
+  date.setUTCHours(0, 0, 0, 0);
+  return date.toISOString();
+};
+
 const _mapHumanName = (names?: R4.IHumanName[]): IHumanName => {
   const name = names && names[0] ? names[0] : null;
 
@@ -20,12 +27,12 @@ const _mapHumanName = (names?: R4.IHumanName[]): IHumanName => {
   return { given, family, full, title };
 };
 
-const _mapPerson = (person: R4.IPatient| R4.IPractitioner): IPerson | null => {
+const _mapPerson = (person: R4.IPatient | R4.IPractitioner): IPerson | null => {
   return {
-    pid: person.id || "unknown",
+    pid: person.id || undefined,
     name: _mapHumanName(person.name),
-    birthDate: person.birthDate || "unknown",
-    gender: person.gender || "unknown"
+    birthDate: person.birthDate ? _normaliseDateString(person.birthDate) : undefined,
+    gender: person.gender || undefined
   };
 };
 
@@ -37,15 +44,31 @@ const _mapPractitioner = (practitioner: R4.IPractitioner): IPractitioner | null 
   return _mapPerson(practitioner);
 };
 
-const _mapImagingStudySeries = (iss: R4.IImagingStudy): IImagingStudySeries | null => ({
-  bodySite: "",
-  date: "",
-  issid: "",
-  modality: "",
-  numberOfInstances: 0,
-  previewPictureUrl: "",
-  subject: { pid: "" }
-});
+const _getImagingStudySeriesPreviewUrl = (issid?: string): string | undefined => {
+  logger.warn("Feature not implemented yet");
+  return undefined;
+};
+
+const _mapImagingStudySeries = (is: R4.IImagingStudy): IImagingStudySeries | null => {
+  const iss = is.series && is.series[0] ? is.series[0] : null;
+
+  return {
+    bodySite: iss && iss.bodySite && iss.bodySite.display ? iss.bodySite.display : undefined,
+    date: is.started ? _normaliseDateString(is.started) : undefined,
+    issid: is.id ? is.id : undefined,
+    modality:
+      is.modality && is.modality[0] && is.modality[0].display
+        ? is.modality[0].display
+        : iss.modality && iss.modality.display
+        ? iss.modality.display
+        : undefined,
+    numberOfInstances: iss.numberOfInstances ? iss.numberOfInstances : undefined,
+    previewPictureUrl: _getImagingStudySeriesPreviewUrl(is.id),
+    subject: {
+      pid: is.subject && is.subject.id ? is.subject.id : undefined
+    }
+  };
+};
 
 const getAdapterFunction = (resourceType: string): Function => {
   logger.debug(`Mapping type '${resourceType}'`);
@@ -62,4 +85,4 @@ const getAdapterFunction = (resourceType: string): Function => {
   }
 };
 
-export { getAdapterFunction };
+export { getAdapterFunction, _normaliseDateString };

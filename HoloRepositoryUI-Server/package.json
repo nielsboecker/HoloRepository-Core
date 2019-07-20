@@ -8,7 +8,7 @@
     "compile": "ts-node build.ts && tsc",
     "dev": "nodemon src/index.ts | pino-pretty",
     "dev:debug": "nodemon --exec 'node -r ts-node/register --inspect-brk' src/index.ts | pino-pretty",
-    "test": "jest --watch",
+    "test": "jest",
     "lint:check": "eslint 'src/**/*.{js,ts,json}'",
     "lint": "eslint 'src/**/*.{js,ts,json}' --quiet --fix",
     "format:check": "prettier --list-different 'src/**/*.{js,ts,json,md}' ",

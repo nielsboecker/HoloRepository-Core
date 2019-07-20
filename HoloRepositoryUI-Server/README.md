@@ -58,6 +58,14 @@ Run the Jest unit tests
 npm test
 ```
 
+To run in interactive mode:
+
+```shell
+npm test -- --watch
+```
+
+
+
 ## Try It
 * Open you're browser to [http://localhost:3000](http://localhost:3000)
 * Invoke the `/examples` endpoint 

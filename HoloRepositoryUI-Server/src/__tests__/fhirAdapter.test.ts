@@ -50,8 +50,7 @@ it("should map imaging studies", () => {
   expect(result.modality).toEqual("Digital Radiography");
   expect(result.numberOfInstances).toBe(1);
   expect(result.subject).toBeDefined();
-
-  //expect(result.subject.pid).toEqual();
+  expect(result.subject.pid).toEqual("e13d1464-d401-4be4-8b90-e8edadd6dce1");
 
   expect(result.subject.name).toBeUndefined();
   expect(result.previewPictureUrl).toBeUndefined();

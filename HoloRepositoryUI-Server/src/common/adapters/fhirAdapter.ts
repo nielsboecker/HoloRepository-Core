@@ -45,9 +45,23 @@ const _mapPractitioner = (practitioner: R4.IPractitioner): IPractitioner | null 
 };
 
 const _getImagingStudySeriesPreviewUrl = (issid?: string): string | undefined => {
-  logger.warn("Feature not implemented yet");
+  logger.warn("Feature _getImagingStudySeriesPreviewUrl not implemented yet");
   return undefined;
 };
+
+function _mapImagingStudySubject(is: R4.IImagingStudy) {
+  let pid = undefined;
+  let name = undefined;
+  // Note: Azure FHIR server doesn't support "_include" queries yet, so in order to avoid a
+  // second query, extract the PID from the reference UUID string instead and omit name
+  if (is.subject && is.subject.reference) {
+
+    const uidParts = is.subject.reference.split(":");
+    pid = uidParts[uidParts.length - 1];
+  }
+
+  return { pid, name };
+}
 
 const _mapImagingStudySeries = (is: R4.IImagingStudy): IImagingStudySeries | null => {
   const iss = is.series && is.series[0] ? is.series[0] : null;
@@ -64,9 +78,7 @@ const _mapImagingStudySeries = (is: R4.IImagingStudy): IImagingStudySeries | nul
         : undefined,
     numberOfInstances: iss.numberOfInstances ? iss.numberOfInstances : undefined,
     previewPictureUrl: _getImagingStudySeriesPreviewUrl(is.id),
-    subject: {
-      pid: is.subject && is.subject.id ? is.subject.id : undefined
-    }
+    subject: _mapImagingStudySubject(is)
   };
 };
 

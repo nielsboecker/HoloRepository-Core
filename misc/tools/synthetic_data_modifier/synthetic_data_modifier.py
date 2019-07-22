@@ -109,7 +109,7 @@ class ModifySyntheaData:
         return result
 
     def convert(self, in_dir, out_dir):
-        for filepath in sorted(glob.glob(os.path.join(in_dir, "*"))):
+        for filepath in sorted(glob.glob(os.path.join(in_dir, "*.json"))):
             logging.info(f"Processing: {filepath}")
             data = None
             entry_data = []
@@ -146,7 +146,10 @@ class ModifySyntheaData:
             if entry_data:
                 data["entry"] = entry_data
                 self._write_data(
-                    os.path.join(out_dir, os.path.basename(filepath) + ".modified"),
+                    os.path.join(
+                        out_dir,
+                        os.path.basename(filepath).replace(".json", ".modified.json"),
+                    ),
                     data,
                 )
 

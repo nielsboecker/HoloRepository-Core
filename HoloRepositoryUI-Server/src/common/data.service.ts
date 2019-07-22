@@ -30,10 +30,18 @@ const getAllImagingStudySeries = async (): Promise<IImagingStudySeries[]> => {
   );
 };
 
+const getImagingStudySeriesForPatient = async (pid: string): Promise<IImagingStudySeries[]> => {
+  return FhirClient.getAllAndMap<R4.IImagingStudy, IImagingStudySeries>(
+    SupportedFhirResourceType.ImagingStudySeries,
+    { patient: pid }
+  );
+};
+
 export {
   getPatient,
   getAllPatients,
   getPractitioner,
   getImagingStudySeries,
-  getAllImagingStudySeries
+  getAllImagingStudySeries,
+  getImagingStudySeriesForPatient
 };

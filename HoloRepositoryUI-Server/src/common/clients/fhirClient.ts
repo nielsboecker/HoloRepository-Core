@@ -64,7 +64,7 @@ const _getResource = async <Resource extends SupportedFhirResource>(
   resourceType: string,
   id: string
 ): Promise<Resource> => {
-  logger.debug(`Fetching FHIR resource '${resourceType}/${id}'`);
+  logger.debug(`Fetching FHIR resource [${resourceType}/${id}]`);
 
   return await _fhirClient
     .read({ resourceType, id })
@@ -78,22 +78,26 @@ const _getResource = async <Resource extends SupportedFhirResource>(
  * @private
  */
 const _getAllResources = async <Resource extends SupportedFhirResource>(
-  resourceType: string
+  resourceType: string,
+  searchParams: object = {}
 ): Promise<Resource[]> => {
-  logger.debug(`Fetching all FHIR resources '${resourceType}'`);
+  logger.debug(`Fetching all FHIR resources [${resourceType}]`);
 
   const bundle: R4.IBundle = await _fhirClient
     .resourceSearch({
       resourceType,
-      searchParams: {}
+      searchParams
     })
     .then(decode(R4.RTTI_Bundle))
     .catch(handleError);
 
+  if (!bundle || !bundle.entry || bundle.entry.length === 0) {
+    logger.warn(`Empty FHIR bundle for request [all ${resourceType}]`);
+    return Promise.resolve([]);
+  }
+
   const decoder = _getDecoder<Resource>(resourceType);
-  const items = bundle.entry
-    .map(item => item.resource)
-    .map(decode(decoder));
+  const items = bundle.entry.map(item => item.resource).map(decode(decoder));
 
   return Promise.all(items);
 };
@@ -115,18 +119,22 @@ const getAndMap = async <Resource extends SupportedFhirResource, Output extends 
 };
 
 /**
- * Retrieves all FHIR resource of a resource type and maps it to the internal data type.
+ * Retrieves all FHIR resources of a resource type and maps them to the internal data type.
+ *
+ * @param resourceType  FHIR resource type
+ * @param searchParams  optional set of search params to specify query
  */
 const getAllAndMap = async <Resource extends SupportedFhirResource, Output extends InternalType>(
-  resourceType: string
+  resourceType: string,
+  searchParams: object = {}
 ): Promise<Output[]> => {
   const map = getAdapterFunction(resourceType);
-  return _getAllResources<Resource>(resourceType)
-  .then(resources => resources.map(resource => map(resource)))
-  .catch((error: Error) => {
-    logger.warn(`Error while mapping data [all ${resourceType}s]`, error);
-    return null;
-  });
+  return _getAllResources<Resource>(resourceType, searchParams)
+    .then(resources => resources.map(resource => map(resource)))
+    .catch((error: Error) => {
+      logger.warn(`Error while mapping data [all ${resourceType}]`, error);
+      return null;
+    });
 };
 
 export default { getAndMap, getAllAndMap };

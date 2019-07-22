@@ -1,5 +1,10 @@
 import { IHologram, IImagingStudySeries } from "../../../../HoloRepositoryUI-Types";
 
+/**
+ * This queries all data and filters afterwards. Instead, FHIR queries should be built such
+ * that the server filters the data and only returns relevant resources in the first place.
+ * @deprecated
+ */
 const getConditionalPidsFilter = ({ pids }): ((v: IHologram | IImagingStudySeries) => boolean) => {
   if (pids) {
     const _pids: string[] = pids.split(",");

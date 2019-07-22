@@ -1,6 +1,6 @@
 import logger from "../../../common/logger";
 import { IImagingStudySeries } from "../../../../../HoloRepositoryUI-Types";
-import { getImagingStudySeries } from "../../../common/data.service";
+import { getAllImagingStudySeries, getImagingStudySeries } from "../../../common/data.service";
 
 import sampleImagingStudySeries from "../../../__tests__/samples/internal/sampleImagingStudySeries.json";
 
@@ -9,7 +9,7 @@ const _sampleImagingStudySeries = sampleImagingStudySeries as IImagingStudySerie
 export class ImagingStudySeriesService {
   public getAll(): Promise<IImagingStudySeries[]> {
     logger.info("GET all ImagingStudySeries");
-    return Promise.resolve(_sampleImagingStudySeries);
+    return getAllImagingStudySeries();
   }
 
   public getById(issid: string): Promise<IImagingStudySeries> {

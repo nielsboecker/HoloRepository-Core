@@ -6,6 +6,10 @@ const getPatient = async (pid: string): Promise<IPatient> => {
   return FhirClient.getAndMap<R4.IPatient, IPatient>(SupportedFhirResourceType.Patient, pid);
 };
 
+const getAllPatients = async (): Promise<IPatient[]> => {
+  return FhirClient.getAllAndMap<R4.IPatient, IPatient>(SupportedFhirResourceType.Patient);
+};
+
 const getPractitioner = async (pid: string): Promise<IPractitioner> => {
   return FhirClient.getAndMap<R4.IPractitioner, IPractitioner>(
     SupportedFhirResourceType.Practitioner,
@@ -20,4 +24,16 @@ const getImagingStudySeries = async (issid: string): Promise<IImagingStudySeries
   );
 };
 
-export { getPatient, getPractitioner, getImagingStudySeries };
+const getAllImagingStudySeries = async (): Promise<IImagingStudySeries[]> => {
+  return FhirClient.getAllAndMap<R4.IImagingStudy, IImagingStudySeries>(
+    SupportedFhirResourceType.ImagingStudySeries
+  );
+};
+
+export {
+  getPatient,
+  getAllPatients,
+  getPractitioner,
+  getImagingStudySeries,
+  getAllImagingStudySeries
+};

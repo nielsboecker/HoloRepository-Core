@@ -1,15 +1,11 @@
 import logger from "../../../common/logger";
 import { IPatient } from "../../../../../HoloRepositoryUI-Types";
-import { getPatient } from "../../../common/data.service";
-
-import samplePatientsAll from "../../../__tests__/samples/internal/samplePatientsAll.json";
-
-const _samplePatients = samplePatientsAll as IPatient[];
+import { getAllPatients, getPatient } from "../../../common/data.service";
 
 export class PatientsService {
   public getAll(): Promise<IPatient[]> {
     logger.info("GET all Patients");
-    return Promise.resolve(_samplePatients);
+    return getAllPatients();
   }
 
   public getById(pid: string): Promise<IPatient> {

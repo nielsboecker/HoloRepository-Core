@@ -2,6 +2,7 @@ import json
 import config
 import sys
 import os
+import glob
 
 
 def create_contained_endpoint(tag, url):
@@ -90,30 +91,54 @@ def write_data(output_path, content):
         output_f.write(json.dumps(content, indent=4, sort_keys=True))
 
 
-def main():
-    for patient_file, info in config.CONFIG.items():
-        title, num_instances, display_name, url = info
+def patient_handler(filename, data):
+    pass
+
+
+def practitioner_handler(filename, data):
+    pass
+
+
+def imaging_study_handler(filename, data):
+    result = None
+
+    if filename in config.CONFIG:
+        print(data)
+        title, num_instances, display_name, url = config.CONFIG[filename]
+        result = modify_imaging_study(data, num_instances, display_name, url)
+    return result
+
+
+def main(resource_handler):
+    input_dir = sys.argv[1]
+    output_dir = sys.argv[2]
+    for filepath in glob.glob(os.path.join(input_dir, "*")):
         data = None
-        output = "output/" + os.path.basename(patient_file) + ".modified"
-        print(output)
-        if not os.path.isfile(patient_file):
-            sys.exit("{0} cannot be found".format(patient_file))
-        with open(patient_file, "r") as read_patient_file:
+        entry_data = []
+        with open(filepath, "r") as read_patient_file:
             data = json.load(read_patient_file)
+        for i, resource in enumerate(data["entry"]):
+            resource_type = resource["resource"]["resourceType"]
+            if resource_type in resource_handler:
+                print(resource_type)
+                new_data = resource_handler[resource_type](
+                    os.path.basename(filepath), resource
+                )
 
-        imaging_study_index = find_imaging_study(data)
-        new_imaging_study = modify_imaging_study(
-            data["entry"][imaging_study_index], num_instances, display_name, url
-        )
-        modified_data = data
-        modified_data["entry"] = [
-            data["entry"][0],
-            new_imaging_study,
-        ]  # first entry is patients
+                if new_data:
+                    entry_data.append(new_data)
 
-        write_data(output, modified_data)
-    # print(name, instances, display, url)
+        if entry_data:
+            data["entry"] = entry_data
+            write_data(
+                os.path.join(output_dir, os.path.basename(filepath) + ".modified"), data
+            )
 
 
 if __name__ == "__main__":
-    main()
+    resource_handler = {
+        "ImagingStudy": imaging_study_handler,
+        "Practitioner": practitioner_handler,
+        "Patient": patient_handler,
+    }
+    main(resource_handler)

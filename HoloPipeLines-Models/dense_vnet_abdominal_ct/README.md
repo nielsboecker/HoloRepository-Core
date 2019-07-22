@@ -1,0 +1,47 @@
+# Niftynet abdominal neural network container
+This page describes how to create a docker image that is with the endpoint for the network described in
+
+Eli Gibson, Francesco Giganti, Yipeng Hu, Ester Bonmati, Steve Bandula, Kurinchi Gurusamy, Brian Davidson, Stephen P. Pereira, Matthew J. Clarkson and Dean C. Barratt (2017), Automatic multi-organ segmentation on abdominal CT with dense v-networks https://doi.org/10.1109/TMI.2018.2806309
+
+This network model container segments eight organs on abdominal CT, comprising the gastointestinal tract (esophagus, stomach, duodenum), the pancreas, and nearby organs (liver, gallbladder, spleen, left kidney).
+
+Here is the repo for the network model
+https://github.com/NifTK/NiftyNetModelZoo/tree/5-reorganising-with-lfs/dense_vnet_abdominal_ct
+the repo only runs in the niftynet framework so to run the network model locally you need to follow the isntruction from the niftynet and download the framework first
+https://niftynet.readthedocs.io/en/dev/installation.html
+
+
+## Build Docker image from the Docker file
+
+```
+docker build -t [docker name:tag] .
+# example
+docker build -t niftynet:latest .
+```
+
+This instruction will create the niftynet docker image with flask server end point. to run the image you create you need to run the other command
+
+
+## run docker and connect docker to the port 5000 
+```
+docker run -d -p 5000:5000 [docker name]
+# example
+docker run -d -p 5000:5000 niftynet:latest
+```
+
+
+This instruction will link your local port 5000 with the port 5000 in the container and the container has been seted to run the server when it you run the docker image
+
+now we can send the request to the container because server is running, Here I use curl to send a post request with the file i would like to segement and send it to the container. when container recieve this input nifti file it will call the NN model to segement the input file and when process is complete the flask server will find the output file and return it to the client.
+
+### Flask script
+Here i use flask framework to create a server so i have a port that allow user to send request to the container, container can segment the request input and output it to the user.
+
+### Testing for the flask script
+To run the test you need to go in the image you created
+''' docker exec -it [docker container name] bash '''
+and go to the /app directory
+''' cd ~/app'''
+run the test.py
+''' python test.py '''
+

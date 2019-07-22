@@ -75,14 +75,6 @@ def modify_imaging_study(data, num_instances, display_name, url):
     return data
 
 
-def find_imaging_study(data):
-    for i in range(len(data["entry"])):
-        if data["entry"][i]["resource"]["resourceType"] == "ImagingStudy":
-            return i
-    else:
-        raise LookupError("ImagingStudy resource not found")
-
-
 def write_data(output_path, content):
     dir_name = os.path.dirname(output_path)
     if not os.path.exists(dir_name):
@@ -91,42 +83,58 @@ def write_data(output_path, content):
         output_f.write(json.dumps(content, indent=4, sort_keys=True))
 
 
-def patient_handler(filename, data):
-    pass
+def patient_handler(data, prac_ids):
+    general_practitioners = []
+    for pid in prac_ids:
+        general_practitioners.append({"reference": "Practitioner/" + pid})
+
+    data["resource"]["generalPractitioner"] = general_practitioners
+
+    return data
 
 
-def practitioner_handler(filename, data):
-    pass
+def practitioner_handler(data):
+    return data
 
 
-def imaging_study_handler(filename, data):
+def imaging_study_handler(data, filename):
     result = None
 
     if filename in config.CONFIG:
-        print(data)
         title, num_instances, display_name, url = config.CONFIG[filename]
         result = modify_imaging_study(data, num_instances, display_name, url)
     return result
 
 
-def main(resource_handler):
+def main():
     input_dir = sys.argv[1]
     output_dir = sys.argv[2]
     for filepath in glob.glob(os.path.join(input_dir, "*")):
         data = None
         entry_data = []
+        practitioner_ids = []
         with open(filepath, "r") as read_patient_file:
             data = json.load(read_patient_file)
-        for i, resource in enumerate(data["entry"]):
-            resource_type = resource["resource"]["resourceType"]
-            if resource_type in resource_handler:
-                print(resource_type)
-                new_data = resource_handler[resource_type](
-                    os.path.basename(filepath), resource
-                )
 
-                if new_data:
-                    entry_data.append(new_data)
+        # Pre-proc, look for all prac ids
+        for resource in data["entry"]:
+            resource_type = resource["resource"]["resourceType"]
+            if resource_type == "Practitioner":
+                practitioner_ids.append(resource["resource"]["id"])
+
+        # Actual processing
+        for resource in data["entry"]:
+            new_data = None
+            resource_type = resource["resource"]["resourceType"]
+            if resource_type == "ImagingStudy":
+                new_data = imaging_study_handler(resource, os.path.basename(filepath))
+            elif resource_type == "Practitioner":
+                new_data = practitioner_handler(resource)
+            elif resource_type == "Patient":
+                new_data = patient_handler(resource, practitioner_ids)
+
+            if new_data:
+                entry_data.append(new_data)
 
         if entry_data:
             data["entry"] = entry_data
@@ -136,9 +144,4 @@ def main(resource_handler):
 
 
 if __name__ == "__main__":
-    resource_handler = {
-        "ImagingStudy": imaging_study_handler,
-        "Practitioner": practitioner_handler,
-        "Patient": patient_handler,
-    }
-    main(resource_handler)
+    main()

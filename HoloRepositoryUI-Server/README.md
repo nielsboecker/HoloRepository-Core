@@ -2,90 +2,42 @@
 
 Back-end for the HoloRepository UI that provides the front-end with a concise API, abstracting all interactions with other subsystems such as the hospital's FHIR server and PACS.
 
-## Quick Start
+The back-end is written in Express.js and Typescript.
 
-Get started developing...
+## Development
 
 ```shell
-# install deps
+# install dependencies
 npm install
 
 # run in development mode
 npm run dev
 
+# run in  debug mode
+npm run dev:debug
+
 # run tests
 npm run test
+
+# compile and run in production mode
+npm run compile && npm start
 ```
+
+
+### Local development
+
+When run with `npm run dev`, the API server will be available at [http://localhost:3001/api/v1](http://localhost:3001/api/v1). It can be tested, for instance using `curl`:
+```shell
+curl localhost:3001/api/v1/patients
+```
+
+If you run the React client at the same time, it will be using port `3000` and accessing this back-end at `3001`.
+
+### Notes
+- **TypeScript**: This app uses TypeScript to provide type safety, static analysis, code completion etc. If you get an error about types not being compiled, you have to `cd ../HoloRepositoryUI-Types` and `npm install & npm run build`.
 
 ---
 
-## Install Dependencies
+## Deployment
 
-Install all package dependencies (one time operation)
-
-```shell
-npm install
-```
-
-## Run It
-#### Run in *development* mode:
-Runs the application is development mode. Should not be used in production
-
-```shell
-npm run dev
-```
-
-or debug it
-
-```shell
-npm run dev:debug
-```
-
-#### Run in *production* mode:
-
-Compiles the application and starts it in production production mode.
-
-```shell
-npm run compile
-npm start
-```
-
-## Test It
-
-Run the Mocha unit tests
-
-```shell
-npm test
-```
-
-or debug them
-
-```shell
-npm run test:debug
-```
-
-## Try It
-* Open you're browser to [http://localhost:3000](http://localhost:3000)
-* Invoke the `/examples` endpoint 
-  ```shell
-  curl http://localhost:3000/api/v1/examples
-  ```
-
-
-## Debug It
-
-#### Debug the server:
-
-```
-npm run dev:debug
-```
-
-#### Debug Tests
-
-```
-npm run test:debug
-```
-
-#### Debug with VSCode
-
-Add these [contents](https://github.com/cdimascio/generator-express-no-stress/blob/next/assets/.vscode/launch.json) to your `.vscode/launch.json` file
+> TODO

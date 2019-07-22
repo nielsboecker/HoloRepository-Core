@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "rootDir": ".",
+        "outDir": "dist",
+        "composite": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "jsx": "preserve",
+        "preserveConstEnums": true
+    },
+    "references": []
+}

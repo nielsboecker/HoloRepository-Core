@@ -1,19 +1,17 @@
-import express from "express";
-import { Application } from "express";
+import express, { Application } from "express";
 import path from "path";
 import bodyParser from "body-parser";
 import http from "http";
 import os from "os";
 import cookieParser from "cookie-parser";
-
-import installValidator from "./openapi";
-
 import logger from "./logger";
+import cors from "cors";
+import errorHandler from "../api/middlewares/error.handler";
 
 const app = express();
 
 export default class ExpressServer {
-  constructor() {
+  public constructor() {
     // Set root app path
     const root = path.normalize(__dirname + "/../..");
     app.set("appPath", root + "client");
@@ -27,12 +25,19 @@ export default class ExpressServer {
     app.use(express.static(`${root}/public`));
   }
 
-  router(routes: (app: Application) => void): ExpressServer {
-    installValidator(app, routes);
+  public router(routes: (app: Application) => void): ExpressServer {
+    // Middleware before routes
+    app.use(cors());
+
+    routes(app);
+
+    // Middleware after routes
+    app.use(errorHandler);
+
     return this;
   }
 
-  listen(port: string | number = process.env.PORT): Application {
+  public listen(port: string | number = process.env.PORT): Application {
     const welcome = port => () =>
       logger.info(
         `up and running in ${process.env.NODE_ENV ||

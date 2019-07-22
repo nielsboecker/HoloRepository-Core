@@ -1,7 +1,8 @@
 import logger from "../../../common/logger";
 import { IImagingStudySeries } from "../../../../../HoloRepositoryUI-Types";
+import { getImagingStudySeries } from "../../../common/data.service";
 
-import sampleImagingStudySeries from "../../../__tests__/samples/sampleImagingStudySeries.json";
+import sampleImagingStudySeries from "../../../__tests__/samples/internal/sampleImagingStudySeries.json";
 
 const _sampleImagingStudySeries = sampleImagingStudySeries as IImagingStudySeries[];
 
@@ -13,12 +14,7 @@ export class ImagingStudySeriesService {
 
   public getById(issid: string): Promise<IImagingStudySeries> {
     logger.info(`GET ImagingStudySeries by id '${issid}'`);
-    const iss = _sampleImagingStudySeries.find(iss => iss.issid === issid);
-    if (iss) {
-      return Promise.resolve(iss);
-    } else {
-      return Promise.resolve(null);
-    }
+    return getImagingStudySeries(issid);
   }
 
   public getPreviewById(issid: string): Promise<string> {

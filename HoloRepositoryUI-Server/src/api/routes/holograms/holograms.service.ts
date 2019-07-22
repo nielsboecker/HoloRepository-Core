@@ -1,10 +1,12 @@
 import logger from "../../../common/logger";
 import { IHologram } from "../../../../../HoloRepositoryUI-Types";
 
-import sampleHolograms from "../../../__tests__/samples/sampleHolograms.json";
+import sampleHolograms from "../../../__tests__/samples/internal/sampleHolograms.json";
 import { Request, Response } from "express";
 
 const _sampleHolograms = sampleHolograms as IHologram[];
+
+// Note: This will have to remain mocked until HoloStorage API endpoints are ready
 
 export class HologramsService {
   public getAll(): Promise<IHologram[]> {

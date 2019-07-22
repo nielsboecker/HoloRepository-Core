@@ -1,6 +1,6 @@
 import Client from "fhir-kit-client";
 import t from "io-ts";
-import * as tPromise from "io-ts-promise";
+import { decode, isDecodeError } from "io-ts-promise";
 import { getAdapterFunction } from "../adapters/fhirAdapter";
 import { FHIR_SERVER_BASE_URL } from "../../config";
 import { R4 } from "@Ahryman40k/ts-fhir-types";
@@ -21,7 +21,7 @@ export enum SupportedFhirResourceType {
 }
 
 /**
- * Get an io-ts decoder to validate a FHIR resource complies with the FHIR R4 definitions.
+ * Returns an io-ts decoder to validate a FHIR resource complies with the FHIR R4 definitions.
  * @private
  */
 const _getDecoder = (resourceType: string): t.Decoder<unknown, R4.IDomainResource> => {
@@ -40,7 +40,7 @@ const _getDecoder = (resourceType: string): t.Decoder<unknown, R4.IDomainResourc
 };
 
 /**
- * Generic method to retreive a FHIR resource by ID.
+ * Retrieves a FHIR resource by ID.
  * @private
  */
 const _getResource = async <T extends SupportedFhirResource>(
@@ -51,9 +51,9 @@ const _getResource = async <T extends SupportedFhirResource>(
 
   return await _fhirClient
     .read({ resourceType, id })
-    .then(tPromise.decode(_getDecoder(resourceType)))
+    .then(decode(_getDecoder(resourceType)))
     .catch((error: Error) => {
-      if (tPromise.isDecodeError(error)) {
+      if (isDecodeError(error)) {
         logger.warn("Type decoding failed due to invalid data.", error.message);
       } else {
         logger.warn("Request failed due to network issues.", error.message);
@@ -63,10 +63,9 @@ const _getResource = async <T extends SupportedFhirResource>(
 };
 
 /**
- * Generic method to retreive a FHIR resource by ID and map it to the internal data type.
- * @private
+ * Retrieves a FHIR resource by ID and maps it to the internal data type.
  */
-const _getAndMap = async <Resource extends SupportedFhirResource, Type extends InternalType>(
+const getAndMap = async <Resource extends SupportedFhirResource, Type extends InternalType>(
   resourceType: string,
   pid: string
 ): Promise<Type> => {
@@ -74,24 +73,9 @@ const _getAndMap = async <Resource extends SupportedFhirResource, Type extends I
   return _getResource<Resource>(resourceType, pid)
     .then(resource => map(resource))
     .catch((error: Error) => {
-      logger.warn("Error while mapping data", error);
+      logger.warn(`Error while mapping data [${resourceType}/${pid}]`, error);
       return null;
     });
 };
 
-const getPatient = async (pid: string): Promise<IPatient> => {
-  return _getAndMap<R4.IPatient, IPatient>("Patient", pid);
-};
-
-const getPractitioner = async (pid: string): Promise<IPractitioner> => {
-  return _getAndMap<R4.IPractitioner, IPractitioner>("Practitioner", pid);
-};
-
-const getImagingStudySeries = async (issid: string): Promise<IImagingStudySeries> => {
-  return _getAndMap<R4.IImagingStudy, IImagingStudySeries>(
-    SupportedFhirResourceType.ImagingStudySeries,
-    issid
-  );
-};
-
-export { getPatient, getPractitioner, getImagingStudySeries };
+export default { getAndMap };

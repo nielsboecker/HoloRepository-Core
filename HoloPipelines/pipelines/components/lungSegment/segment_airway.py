@@ -1,7 +1,6 @@
 import numpy as np
 import nibabel as nib
 from scipy import ndimage
-#import fistme
 try:
 	from utils import *
 except:

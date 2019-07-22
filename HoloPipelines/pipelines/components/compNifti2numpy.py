@@ -21,10 +21,6 @@ def resample(dataPath, new_spacing=[1,1,1]):
 	spacing = np.array(list(spacing))
 
 	resize_factor = spacing / new_spacing
-	#print(type(image.shape))
-	print(image.shape[:3])
-	print(spacing)
-	#print(resize_factor)
 	new_real_shape = image.shape[:3] * resize_factor
 	new_shape = np.round(new_real_shape)
 	real_resize_factor = new_shape / image.shape[:3]
@@ -35,18 +31,18 @@ def resample(dataPath, new_spacing=[1,1,1]):
 	
 	return image, new_spacing
 
-def main(mainPath=tempPath, tempFname=fName, option=0):
+def main(inputNiftiPath, outputNumpyPath=""):
 	#https://github.com/nipy/nibabel/issues/626
 	nib.Nifti1Header.quaternion_threshold = -1e-06
-	img = nib.load(mainPath)
+	img = nib.load(inputNiftiPath)
 
 	img, newSpacing = resample(img)
 
-	a = np.array(img.dataobj)
-	if option == 1:
-		np.save(str(numpyPath.joinpath("%s.npy" % tempFname[:-4])), a)
-		return 0
-	return a
+	numpyList = np.array(img.dataobj)
+	if str(outputNumpyPath) != "":
+		outputNumpyPath = str(pathlib.Path(outputNumpyPath))
+		np.save(str(pathlib.Path(outputNumpyPath)), numpyList)
+	return numpyList
 
 if __name__ == '__main__':
 	print("component can't run on its own")

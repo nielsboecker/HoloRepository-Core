@@ -11,7 +11,13 @@ pip install -r requirements.txt
 
 Some dependencies are not available through pip, they are listed below with their installation instructions
 
-**GDCM (Unix)** *This works, but should to be replaced with pacman or other package manager for ease of use*
+**GDCM (Unix)**
+```
+sudo apt-get install libgdcm2.8
+sudo apt-get install libcdcm-tools
+```
+
+outdated
 ```
  git clone --branch release git://git.code.sf.net/p/gdcm/gdcm
  mkdir gdcmbin
@@ -45,9 +51,9 @@ The final 2 dependencies can be installed using Node.js package manager. Please 
  npm install -g gltf-pipeline
 ```
 
-(optional)Run *setupDirectory.py* to download sample dicom and nifti files which can be used for manual testing.
+(optional)Run *setupExample.py* to download sample dicom and nifti files which can be used for manual testing.
 
-Downloaded files from *setupDirectory.py* and all the produced 3D models can be deleted by running *cleanUp.py*
+Downloaded files from *setupExample.py* and all the produced 3D models can be deleted by running *cleanUp.py*
 
 ## Usage:
 Example

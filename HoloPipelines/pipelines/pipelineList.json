@@ -2,17 +2,17 @@
    "p0":[
       {
          "name":"nifti2obj",
-         "src":"pipelines/nifti2obj.py",
+         "src":"pipelines/pipelineNifti2obj.py",
          "info":"Generate obj mesh from nifti",
          "addDate":"27/06/2019",
          "modDate":"27/06/2019",
-         "param":"3"
+         "param":"4"
       }
    ],
    "p1":[
       {
          "name":"nifti2glb",
-         "src":"pipelines/nifti2glb.py",
+         "src":"pipelines/pipelineNifti2glb.py",
          "info":"Generate glb mesh from nifti",
          "addDate":"28/06/2019",
          "modDate":"28/06/2019",
@@ -22,21 +22,21 @@
    "p3":[
       {
          "name":"dicom2glb",
-         "src":"pipelines/dicom2glb.py",
+         "src":"pipelines/pipelineDicom2glb.py",
          "info":"Generate glb mesh from dicom",
          "addDate":"01/07/2019",
          "modDate":"01/07/2019",
-         "param":"2"
+         "param":"3"
       }
    ],
    "p4":[
       {
          "name":"lungDicom2glb",
-         "src":"pipelines/lungDicom2glb.py",
+         "src":"pipelines/pipelineLungDicom2glb.py",
          "info":"Generate segmented lungs (without air way) glb mesh from dicom",
          "addDate":"01/07/2019",
          "modDate":"01/07/2019",
-         "param":"1"
+         "param":"2"
       }
    ]
 }

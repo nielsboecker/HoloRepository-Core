@@ -2,7 +2,7 @@ import json
 import os
 import sys
 import argparse
-from subprocess import call as call
+from subprocess import call
 import pathlib
 
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
@@ -16,6 +16,7 @@ parser.add_argument('-p', '--param', default = [], nargs='*', help="parameters f
 args = parser.parse_args()
 
 def main():
+	#check common dir
 	if not os.path.exists("medicalScans"):
 		os.mkdir("medicalScans")
 		os.mkdir("medicalScans/dicom")
@@ -26,23 +27,23 @@ def main():
 		os.mkdir("output")
 		os.mkdir("output/OBJ")
 		os.mkdir("output/GLB")
-	if not os.path.exists("pipelines/components/lungSegment/result"):
-		os.mkdir("pipelines/components/lungSegment/result")
 
+	#check for pipeline config file
 	if not os.path.exists(str(pathlib.Path(newCwd).joinpath(str(args.config)))):
 		sys.exit("error: config file not found")
 
 	searchCounter = 0
 	with open(str(pathlib.Path(newCwd).joinpath(str(args.config)))) as json_file:
 		lsPipe = json.load(json_file)
+		#--ls flag
 		if args.ls:
 			print(json.dumps(lsPipe, indent=4, sort_keys=False))
 			sys.exit()
 		elif len(args.info) > 0:
-			for k, v in lsPipe.items():
-				data = v[0]
+			for key, value in lsPipe.items():
+				data = value[0]
 				if args.info in data['name']:
-					print("**ID: " + k)
+					print("**ID: " + key)
 					print("name: " + data["name"])
 					print("source: " + data["src"])
 					print("param req: " + data["param"])
@@ -50,23 +51,20 @@ def main():
 					print("date added: " + data["addDate"])
 					print("date last modified: " + data["modDate"])
 					print("")
-					searchCounter=searchCounter + 1
+					searchCounter += 1
 			if searchCounter == 0:
 				print("pipelineController: no pipeline with such name")
 			else:
 				print("pipelineController: "+str(searchCounter)+" results")
 			sys.exit()
-
-		temp = ""
+		#check if pipeline exist
 		if args.pipelineID not in lsPipe:
 			sys.exit("pipelineController: no pipeline with such ID")
 		if len(args.param) != int(lsPipe[args.pipelineID][0]['param']):
 			sys.exit("pipelineController: invalid number of param [expected: " + str(lsPipe[args.pipelineID][0]['param']) + ", got: " + str(len(args.param)) + "]")
-		for i in args.param:
-			temp = temp + str(i) + " "
-		temp = temp[:len(temp) - 1]
-		print("starting pipeline...")
-		call('python ' + lsPipe[args.pipelineID][0]['src'] + " " + temp, cwd=newCwd, shell=True)
+		#start pipeline
+		print("starting pipeline "+args.pipelineID+"...")
+		call('python ' + lsPipe[args.pipelineID][0]['src'] + " " +" ".join(args.param), cwd=newCwd, shell=True)
 
 	json_file.close()
 

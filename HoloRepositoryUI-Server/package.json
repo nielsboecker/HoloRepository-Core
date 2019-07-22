@@ -1,0 +1,47 @@
+{
+  "name": "HoloRepositoryUI-Server",
+  "version": "0.1.0",
+  "description": "Back-end for the HoloRepository UI that provides the front-end with a concise API, abstracting all interactions with other subsystems such as the hospital's FHIR server and PACS.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "compile": "ts-node build.ts && tsc",
+    "dev": "nodemon server/index.ts | pino-pretty",
+    "dev:debug": "nodemon --exec 'node -r ts-node/register --inspect-brk' server/index.ts | pino-pretty",
+    "test": "mocha test/**/*.ts --exit",
+    "test:debug": "mocha --inspect-brk test/**/*.ts --exit",
+    "lint:check": "eslint '{server,test}/**/*.{js,ts,json}'",
+    "lint": "eslint '{server,test}/**/*.{js,ts,json}' --quiet --fix",
+    "format:check": "prettier --list-different '{server,test}/**/*.{js,ts,json,md}' ",
+    "format": "prettier --write '{server,test}/**/*.{js,ts,json,md}' "
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.4",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "express-openapi-validator": "^0.53.3",
+    "pino": "^5.11.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.12.0",
+    "@typescript-eslint/parser": "^1.12.0",
+    "@types/chai": "^4.1.7",
+    "@types/cookie-parser": "^1.4.1",
+    "@types/express": "^4.16.1",
+    "@types/mocha": "^5.2.6",
+    "@types/pino": "^5.8.5",
+    "chai": "^4.2.0",
+    "eslint": "^6.0.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "mocha": "^6.1.4",
+    "nodemon": "^1.19.0",
+    "pino-pretty": "^2.6.1",
+    "prettier": "^1.18.2",
+    "shelljs": "^0.8.3",
+    "supertest": "^3.4.2",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.4.5"
+  }
+}

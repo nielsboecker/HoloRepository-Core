@@ -38,7 +38,7 @@ def generate_instances(instances, display):
     for i in range(instances):
         data.append(
             {
-                "uid": "id-" + str(i+1),
+                "uid": "id-" + str(i + 1),
                 "sopClass": {
                     "system": "urn:ietf:rfc:3986",
                     "code": "1.2.840.10008.5.1.4.1.1.3.1",
@@ -58,7 +58,9 @@ def modify_imaging_study(data, num_instances, display_name, url):
     data["numberOfInstances"] = num_instances
     data["endpoint"] = create_endpoint_reference(tag)
     data["contained"] = create_contained_endpoint(tag, url)
-    data["subject"]["reference"] = data["subject"]["reference"].replace("urn:uuid:", "Patient/")
+    data["subject"]["reference"] = data["subject"]["reference"].replace(
+        "urn:uuid:", "Patient/"
+    )
     data.pop("encounter", None)
     data["series"][0]["numberOfInstances"] = num_instances
     data["series"][0]["bodySite"]["display"] = display_name
@@ -84,9 +86,18 @@ def main():
             data = json.load(read_patient_file)
             imaging_study_index = find_imaging_study(data)
             new_imaging_study = modify_imaging_study(
-                data["entry"][imaging_study_index]["resource"], num_instances, display_name, url
+                data["entry"][imaging_study_index]["resource"],
+                num_instances,
+                display_name,
+                url,
             )
-            print(json.dumps(new_imaging_study))
+            modified_data = data
+            modified_data["entry"] = [
+                data["entry"][0],
+                new_imaging_study,
+            ]  # first entry is patients
+
+            print(json.dumps(modified_data))
         # print(name, instances, display, url)
 
 

@@ -88,7 +88,8 @@
         "previewPictureUrl": "https://boxdicom.com/img/thumbs/54718.jpg",
         "bodySite": "Shoulder",
         "date": "2017-10-12",
-        "modality": "X-Ray"
+        "modality": "X-Ray",
+        "endpoint": "foobar"
       }
     ],
     "holograms": []
@@ -123,14 +124,16 @@
         "previewPictureUrl": "https://boxdicom.com/img/thumbs/53326.jpg",
         "bodySite": "Brain",
         "date": "2017-10-10",
-        "modality": "MRI"
+        "modality": "MRI",
+        "endpoint": "foobar"
       },
       {
         "issid": "f53a5afd-2f14-49c2-8e0b-c99d9a1268dc",
         "subject": {
           "pid": "5d1bf4f1cca3d9f787bd80fd"
         },
-        "numberOfInstances": 10
+        "numberOfInstances": 10,
+        "endpoint": "foobar"
       }
     ],
     "holograms": []

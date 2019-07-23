@@ -1,7 +1,7 @@
 import {
   capitaliseString,
   getAgeFromDobString,
-  getNumberOfHolograms
+  getNumberOfHologramsString
 } from "../../util/PatientUtil";
 // @ts-ignore TS7015
 import mockNow from "jest-mock-now";
@@ -27,13 +27,13 @@ it("getAgeFromDobString functions correctly", () => {
   expect(result).toBe(24);
 });
 
-it("getNumberOfHolograms functions correctly", () => {
+it("getNumberOfHologramsString functions correctly", () => {
   const input = sampleHolograms as IHologram[];
-  const result = getNumberOfHolograms(input);
+  const result = getNumberOfHologramsString(input);
   expect(result).toEqual("3 holograms available");
 });
 
-it("getNumberOfHolograms functions correctly for empty array", () => {
-  const result = getNumberOfHolograms([]);
+it("getNumberOfHologramsString functions correctly for empty array", () => {
+  const result = getNumberOfHologramsString([]);
   expect(result).toEqual("No holograms available");
 });

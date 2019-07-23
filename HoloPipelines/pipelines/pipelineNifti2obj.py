@@ -1,4 +1,4 @@
-#this pipeline mmay be removed in the future as obj is not used to display 3D model on hololens
+#this pipeline may be removed in the future as obj is not used to display 3D model on hololens
 from components import compNifti2numpy
 from components import compNumpy2obj
 import pathlib
@@ -7,9 +7,6 @@ import numpy as np
 
 def main(inputNiftiPath, threshold, outputObjPath, flipNpy=False):
 	generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(inputNiftiPath)))
-	if flipNpy:#not sure if this function will be needed. likely to be removed later
-		generatedNumpyList = np.flip(generatedNumpyList, 0)
-		generatedNumpyList = np.flip(generatedNumpyList, 1)
 	generatedObjPath = compNumpy2obj.main(generatedNumpyList, threshold, str(pathlib.Path(outputObjPath)))
 	print("nifti2obj: done")
 

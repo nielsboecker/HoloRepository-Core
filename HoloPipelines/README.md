@@ -11,31 +11,19 @@ pip install -r requirements.txt
 
 Some dependencies are not available through pip, they are listed below with their installation instructions
 
-**GDCM (Unix)**
+**GDCM (Debian/Ubuntu)**
 ```
 sudo apt-get install libgdcm2.8
 sudo apt-get install libcdcm-tools
 ```
 
-outdated
-```
- git clone --branch release git://git.code.sf.net/p/gdcm/gdcm
- mkdir gdcmbin
- cd gdcmbin
- ccmake ../gdcm
-```
-   [select your configuration] make sure to select *GDCM_BUILD_APPLICATIONS* and *GDCM_BUILD_EXAMPLES*
-```
- Press 'c' (configure), Press 'g' (generate)
- make
-```
 Double check to see if installation is successful by running
 ```
- gdcmdump
+gdcmdump
 ```
 or
 ```
- gdcmconv
+gdcmconv
 ```
 If command is not found then please make sure to add to PATH
 
@@ -43,12 +31,12 @@ The final 2 dependencies can be installed using Node.js package manager. Please 
 
 **obj2gltf**  https://github.com/AnalyticalGraphicsInc/OBJ2GLTF
 ```
- npm install -g obj2gltf
+npm install -g obj2gltf
 ```
 
 **glTF Pipeline** https://github.com/AnalyticalGraphicsInc/gltf-pipeline
 ```
- npm install -g gltf-pipeline
+npm install -g gltf-pipeline
 ```
 
 (optional)Run *setupExample.py* to download sample dicom and nifti files which can be used for manual testing.

@@ -10,6 +10,7 @@ export interface IImagingStudySeries {
     pid: string;
     name?: IHumanName;
   };
+  endpoint: string;
   numberOfInstances: number;
   previewPictureUrl?: string;
   bodySite?: string;

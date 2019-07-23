@@ -6,8 +6,6 @@ import {
   getImagingStudySeriesForPatient
 } from "../../../common/data.service";
 
-// TODO: Endpoint, preview image
-
 export class ImagingStudySeriesService {
   public getAll(): Promise<IImagingStudySeries[]> {
     logger.info("GET all ImagingStudySeries");

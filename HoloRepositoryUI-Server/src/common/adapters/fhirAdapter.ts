@@ -70,52 +70,65 @@ const _mapPractitioner = (practitioner: R4.IPractitioner): IPractitioner | null 
   return _mapPerson(practitioner);
 };
 
-const _getImagingStudySeriesPreviewUrl = (issid?: string): string | undefined => {
-  logger.warn("Feature _getImagingStudySeriesPreviewUrl not implemented yet");
-  return undefined;
-};
-
 function _mapImagingStudySubject(is: R4.IImagingStudy) {
   let pid = undefined;
   let name = undefined;
   // Note: Azure FHIR server doesn't support "_include" queries yet, so in order to avoid a
-  // second query, extract the PID from the reference UUID string instead and omit name
+  // second query, extract the PID from the reference string instead and omit name
   if (is.subject && is.subject.reference) {
-    const uidParts = is.subject.reference.split(":");
+    const uidParts = is.subject.reference.split("/");
     pid = uidParts[uidParts.length - 1];
   }
 
   return { pid, name };
 }
 
-const _mapImagingStudySeries = (is: R4.IImagingStudy): IImagingStudySeries | null => {
-  const iss = is.series && is.series[0] ? is.series[0] : null;
+const _extractEndpoint = (is: R4.IImagingStudy): string => {
+  // Note: This is slightly hacky, a cleaner approach would use FhirClient.resolve();
+  // this however would require another async call to the client. The given solution
+  // is acceptable as we know that the endpoint is always the first contained resource.
+  const endpoint: R4.IEndpoint = is.contained && is.contained[0] as R4.IEndpoint;
+  return endpoint.address;
+};
+
+const _extractImagingStudySeriesPreviewUrl = (is: R4.IImagingStudy): string => {
+  return `${_extractEndpoint(is)}.preview.jpg`;
+};
+
+
+const _mapImagingStudySeries = (
+  is: R4.IImagingStudy
+): IImagingStudySeries | undefined => {
+  const { modality, id, started, series } = is;
+  const iss = series && series[0] ? series[0] : null;
 
   return {
     bodySite: iss && iss.bodySite && iss.bodySite.display ? iss.bodySite.display : undefined,
-    date: is.started ? _normaliseDateString(is.started) : undefined,
-    issid: is.id ? is.id : undefined,
+    date: started ? _normaliseDateString(started) : undefined,
+    issid: id ? id : undefined,
     modality:
-      is.modality && is.modality[0] && is.modality[0].display
-        ? is.modality[0].display
+      modality && modality[0] && modality[0].display
+        ? modality[0].display
         : iss.modality && iss.modality.display
         ? iss.modality.display
         : undefined,
     numberOfInstances: iss.numberOfInstances ? iss.numberOfInstances : undefined,
-    previewPictureUrl: _getImagingStudySeriesPreviewUrl(is.id),
-    subject: _mapImagingStudySubject(is)
+    subject: _mapImagingStudySubject(is),
+    endpoint: _extractEndpoint(is),
+    previewPictureUrl: _extractImagingStudySeriesPreviewUrl(is)
   };
 };
 
 const getAdapterFunction = (resourceType: string): Function => {
   logger.debug(`Mapping type '${resourceType}'`);
 
+  const { Patient, ImagingStudySeries, Practitioner } = SupportedFhirResourceType;
   switch (resourceType) {
-    case SupportedFhirResourceType.Patient:
+    case Patient:
       return _mapPatient;
-    case SupportedFhirResourceType.Practitioner:
+    case Practitioner:
       return _mapPractitioner;
-    case SupportedFhirResourceType.ImagingStudySeries:
+    case ImagingStudySeries:
       return _mapImagingStudySeries;
     default:
       throw new Error(`Type not supported: ${resourceType}`);

@@ -50,16 +50,21 @@ it("should map imaging studies", () => {
   const input = sampleImagingStudy as R4.IImagingStudy;
   const mapImagingStudySeries = getAdapterFunction(SupportedFhirResourceType.ImagingStudySeries);
   const result: IImagingStudySeries = mapImagingStudySeries(input);
-  expect(result.issid).toEqual("5c889b73-46cc-41af-86b4-5cebfdc3637c");
-  expect(result.bodySite).toEqual("Chest");
-  expect(result.date).toEqual("2013-07-29T00:00:00.000Z");
-  expect(result.modality).toEqual("Digital Radiography");
-  expect(result.numberOfInstances).toBe(1);
-  expect(result.subject).toBeDefined();
-  expect(result.subject.pid).toEqual("e13d1464-d401-4be4-8b90-e8edadd6dce1");
 
+  expect(result.issid).toEqual("c3f4ea25-fb0e-4b2e-bf1b-73453ecf04cb");
+  expect(result.bodySite).toEqual("chest");
+  expect(result.date).toEqual("2017-04-03T00:00:00.000Z");
+  expect(result.modality).toEqual("Digital Radiography");
+  expect(result.numberOfInstances).toBe(273);
+  expect(result.subject).toBeDefined();
+  expect(result.subject.pid).toEqual("666da72f-1dfa-427a-96a9-c9fb30bf7296");
   expect(result.subject.name).toBeUndefined();
-  expect(result.previewPictureUrl).toBeUndefined();
+  expect(result.endpoint).toEqual(
+    "https://holoblob.blob.core.windows.net/mock-pacs/normal-chest-mediastinal.zip"
+  );
+  expect(result.previewPictureUrl).toEqual(
+    "https://holoblob.blob.core.windows.net/mock-pacs/normal-chest-mediastinal.zip.preview.jpg"
+  );
 });
 
 it("should normalise dates correctly", () => {

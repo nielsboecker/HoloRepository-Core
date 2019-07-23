@@ -13,7 +13,18 @@ Output data can then be uploaded into FHIR servers via the `holo_fhir_tool`.
 # Installation
 Install with `pipenv install`
 
+# Usage
+```shell
+synthea_data_modifier.py convert in_dir out_dir [--config config.cfg]
+
+    convert     command to convert contents in_dir to out_dir
+    in_dir      path to find synthea generated data
+    out_dir     path to write modified data
+    --config    path to configuration file
+```
+
 # Configuration
+Configure specific input synthea files to be modified with specific imaging study resource information.
 ```cfg
 {
     "filename": [
@@ -23,14 +34,12 @@ Install with `pipenv install`
         "url_to_dicom"
     ],
     ...
+    "patient-01.json": [
+        "left-renal-mass",
+        "155",
+        "pelvis",
+        "https://host-site/pacs/series_data.zip"
+    ]
 }
 ```
 
-# Usage
-```shell
-synthea_data_modifier.py convert in_dir out_dir [--config config.cfg]
-
-    convert command to convert contents in_dir to out_dir
-    in_dir  path to find synthea generated data
-    out_dir path to write modified data
-```

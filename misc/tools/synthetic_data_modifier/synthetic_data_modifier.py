@@ -58,6 +58,14 @@ class ModifySyntheaData:
         return data
 
     def _modify_imaging_study(self, data, num_instances, display_name, url):
+        """Modify existing imaging study resource
+
+        Modify synthea generated imaging study with information for dev.
+        - Create endpoints to a self-contained reference to the url
+        - Fix subject refererence to enable FHIR RESTful search to work
+        - Remove unused encounter refererence
+        - Expand `instance` array to configured number of instances
+        """
         resource_data = data["resource"]
         num_instances = int(num_instances)
         tag = "imagingEndpointId"
@@ -114,7 +122,7 @@ class ModifySyntheaData:
             data = None
             entry_data = []
             practitioner_ids = []
-            have_img_study = False
+            already_included_img_study = False
             with open(filepath, "r") as read_patient_file:
                 data = json.load(read_patient_file)
 
@@ -130,11 +138,11 @@ class ModifySyntheaData:
             for resource in data["entry"]:
                 new_data = None
                 resource_type = resource["resource"]["resourceType"]
-                if resource_type == "ImagingStudy" and not have_img_study:
+                if resource_type == "ImagingStudy" and not already_included_img_study:
                     new_data = self._imaging_study_handler(
                         resource, os.path.basename(filepath)
                     )
-                    have_img_study = True
+                    already_included_img_study = True
                 elif resource_type == "Practitioner":
                     new_data = self._practitioner_handler(resource)
                 elif resource_type == "Patient":

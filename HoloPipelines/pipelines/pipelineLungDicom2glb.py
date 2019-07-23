@@ -1,6 +1,5 @@
 #NOTE: lungSegment will always output as sample_lung.nii.gz etc
 from components import compDcm2nifti
-#import components.compLungSegment.main
 from components.lungSegment.main import main as lungSegment
 from components import compNifti2numpy
 from components import compNumpy2obj
@@ -9,7 +8,7 @@ import pathlib
 import sys
 import os
 
-def main(dicomPath, outputGlbPath):#TODO: update json
+def main(dicomPath, outputGlbPath):
 	generatedNiftiPath = compDcm2nifti.main(str(dicomPath), str(pathlib.Path.cwd().joinpath("medicalScans", "nifti", str(pathlib.PurePath(dicomPath).parts[-1]))))#convert dcm and move to temp path inside nifti folder. nifti will be in a sub folder named after the input dicom folder
 	generatedSegmentedLungsNiftiPath = lungSegment(generatedNiftiPath)
 	generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(generatedSegmentedLungsNiftiPath)))

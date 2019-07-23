@@ -15,6 +15,17 @@ export interface IHumanName {
 }
 
 /**
+ * Interface representing a person's address.
+ * Semantics is similar to the corresponding FHIR resource.
+ */
+export interface IAddress {
+  street?: string;
+  city?: string;
+  state?: string;
+  postcode?: string | number;
+};
+
+/**
  * Common attributes of Patients and Practitioners.
  * Semantics is similar to the corresponding FHIR resource.
  */
@@ -25,12 +36,7 @@ export interface IPerson {
   birthDate?: string;
   phone?: string;
   email?: string;
-  address?: {
-    street: string;
-    city: string;
-    state: string;
-    postcode: string | number;
-  };
+  address?: IAddress;
   pictureUrl?: string;
 }
 

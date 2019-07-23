@@ -1,9 +1,10 @@
 import {
+  IAddress,
+  IHumanName,
   IImagingStudySeries,
   IPatient,
-  IPractitioner,
-  IHumanName,
-  IPerson
+  IPerson,
+  IPractitioner
 } from "../../../../HoloRepositoryUI-Types";
 import { R4 } from "@Ahryman40k/ts-fhir-types";
 import { SupportedFhirResourceType } from "../clients/fhirClient";
@@ -27,12 +28,37 @@ const _mapHumanName = (names?: R4.IHumanName[]): IHumanName => {
   return { given, family, full, title };
 };
 
+function _extractPhone(telecom?: R4.IContactPoint[]): string | undefined {
+  if (telecom && telecom.find(tel => tel.system === R4.ContactPointSystemKind._phone)) {
+    return telecom.find(tel => tel.system === R4.ContactPointSystemKind._phone).value;
+  }
+  return undefined;
+}
+
+function _extractAddress(address?: R4.IAddress[]): IAddress | undefined {
+  return (
+    address &&
+    address[0] && {
+      city: address[0].city,
+      postcode: address[0].postalCode,
+      state: address[0].state,
+      street: address[0].line && address[0].line[0]
+    }
+  );
+}
+
 const _mapPerson = (person: R4.IPatient | R4.IPractitioner): IPerson | null => {
+  // Note: Given the nature of FHIR, all of these fields may be undefined
+  const { address, telecom, birthDate, gender, id, name, photo } = person;
+
   return {
-    pid: person.id || undefined,
-    name: _mapHumanName(person.name),
-    birthDate: person.birthDate ? _normaliseDateString(person.birthDate) : undefined,
-    gender: person.gender || undefined
+    pid: id,
+    name: name && _mapHumanName(name),
+    gender: gender,
+    birthDate: birthDate && _normaliseDateString(birthDate),
+    phone: _extractPhone(telecom),
+    address: _extractAddress(address),
+    pictureUrl: photo && photo[0] && photo[0].url
   };
 };
 
@@ -55,7 +81,6 @@ function _mapImagingStudySubject(is: R4.IImagingStudy) {
   // Note: Azure FHIR server doesn't support "_include" queries yet, so in order to avoid a
   // second query, extract the PID from the reference UUID string instead and omit name
   if (is.subject && is.subject.reference) {
-
     const uidParts = is.subject.reference.split(":");
     pid = uidParts[uidParts.length - 1];
   }

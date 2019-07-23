@@ -12,17 +12,23 @@ it("should map patients", () => {
   const mapPatient = getAdapterFunction(SupportedFhirResourceType.Patient);
   const result: IPatient = mapPatient(input);
 
-  expect(result.pid).toEqual("e13d1464-d401-4be4-8b90-e8edadd6dce1");
+  expect(result.pid).toEqual("fa8a04b6-a7dd-4b02-9975-faf8c6c36448");
   expect(result.name).toEqual({
-    full: "Cesar434 Macejkovic424",
+    full: "Fermin Mills",
     title: "Mr.",
-    given: "Cesar434",
-    family: "Macejkovic424"
+    given: "Fermin",
+    family: "Mills"
   });
   expect(result.gender).toEqual("male");
-  expect(result.birthDate).toEqual("1966-01-02T00:00:00.000Z");
-
-  expect(result.pictureUrl).toBeUndefined();
+  expect(result.birthDate).toEqual("1942-10-25T00:00:00.000Z");
+  expect(result.phone).toEqual("555-115-8212");
+  expect(result.address).toEqual({
+    city: "Fall River",
+    postcode: "02720",
+    state: "Massachusetts",
+    street: "1076 Dooley Burg Unit 4"
+  });
+  expect(result.pictureUrl).toEqual("https://randomuser.me/api/portraits/men/18.jpg");
 });
 
 it("should map practitioners", () => {
@@ -30,12 +36,12 @@ it("should map practitioners", () => {
   const mapPractitioner = getAdapterFunction(SupportedFhirResourceType.Practitioner);
   const result: IPractitioner = mapPractitioner(input);
 
-  expect(result.pid).toEqual("e24af66a-20e9-405d-94b2-7ff9ae8cf9ad");
+  expect(result.pid).toEqual("c2675859-493c-47c4-a7e0-376689cc4d5c");
   expect(result.name).toEqual({
-    full: "Andre610 Schneider199",
+    full: "Stanford Leannon",
     title: "Dr.",
-    given: "Andre610",
-    family: "Schneider199"
+    given: "Stanford",
+    family: "Leannon"
   });
   expect(result.gender).toEqual("male");
 });

@@ -5,6 +5,8 @@ import os
 import glob
 import fire
 import logging
+import random
+import string
 
 
 class ModifySyntheaData:
@@ -94,18 +96,63 @@ class ModifySyntheaData:
         with open(output_path, "w") as output_f:
             output_f.write(json.dumps(content, indent=4, sort_keys=True))
 
+    def _clean_names(self, data):
+        if "name" in data["resource"]:
+            for i, name in enumerate(data["resource"]["name"]):
+                data["resource"]["name"][i]["family"] = name["family"].rstrip(
+                    string.digits
+                )
+                for j, given_name in enumerate(name["given"]):
+                    data["resource"]["name"][i]["given"][j] = given_name.rstrip(
+                        string.digits
+                    )
+
+        return data
+
+    def _add_photo(self, data):
+        gender = None
+        pic_num = random.randrange(100)
+        if "gender" in data["resource"]:
+            if data["resource"]["gender"] == "male":
+                gender = "men"
+            elif data["resource"]["gender"] == "female":
+                gender = "women"
+
+        if gender:
+            data["resource"]["photo"] = [
+                {"url": f"https://randomuser.me/api/portraits/{gender}/{pic_num}.jpg"}
+            ]
+
+        return data
+
     def _patient_handler(self, data, prac_ids):
+        """Handle patient resource
+
+        - Add generalPractitioner based on found practitioner ids
+        - Remove all digits in names
+        - Add photo
+        """
         logging.info("\tIncluding Patient resource")
         general_practitioners = []
         for pid in prac_ids:
             logging.debug(f"\tAdding generalPractitioner: {pid}")
             general_practitioners.append({"reference": "Practitioner/" + pid})
         data["resource"]["generalPractitioner"] = general_practitioners
+        data = self._clean_names(data)
+        data = self._add_photo(data)
 
         return data
 
     def _practitioner_handler(self, data):
+        """ Handle practitioner resource
+
+        - Remove all digits in names
+        - Add photo
+        """
+        data = self._clean_names(data)
+        data = self._add_photo(data)
         logging.info("\tIncluding Practitioner resource")
+
         return data
 
     def _imaging_study_handler(self, data, filename):

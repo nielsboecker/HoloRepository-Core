@@ -34,14 +34,39 @@ This instruction will link your local port 5000 with the port 5000 in the contai
 
 now we can send the request to the container because server is running, Here I use curl to send a post request with the file i would like to segement and send it to the container. when container recieve this input nifti file it will call the NN model to segement the input file and when process is complete the flask server will find the output file and return it to the client.
 
-### Flask script
-Here i use flask framework to create a server so i have a port that allow user to send request to the container, container can segment the request input and output it to the user.
+### API
+Here i use flask framework to run my gunicorn server so i have a local port that allow user to send request to the container, container can accept the segment request input and output it to the user.
+The container runs on the ```http://localhost:5000```
+to send a request for the segmentation, We provide a ```/model``` endpoint to do the segmentation.
+
+Here are the requirements for the segmentation request:
+* request must send to this address ```http://localhost:5000/model```
+* request must be a post request
+* request should contains the nifiti file you would like to segment
+* the format for the nifiti file should  end with .nii format
+* to reuse this container you might need to modify the config file depends on your nifiti input, further infomation about how to modify the config file you can find out from the niftynet website https://niftynet.readthedocs.io/en/dev/config_spec.html
+
+Here is an example that i use curl to send a post request to the container
+```
+curl -X POST -F file=@100_CT.nii http://localhost:5000/seg -o output.nii.gz
+```
 
 ### Testing for the flask script
-To run the test you need to go in the image you created
-''' docker exec -it [docker container name] bash '''
+To run the test you need to modify the Dockerfile first you need to copy a nifit image to the container's app directory
+```
+# example
+ COPY 100_CT.nii /app/
+```
+and create the container again then go to the container you created
+``` 
+docker exec -it [docker container name] bash 
+```
 and go to the /app directory
-''' cd ~/app'''
+```
+cd ~/app
+```
 run the test.py
-''' python test.py '''
+```
+python test.py 
+```
 

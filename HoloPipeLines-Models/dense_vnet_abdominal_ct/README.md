@@ -47,6 +47,7 @@ Here are the requirements for the segmentation request:
 * to reuse this container you might need to modify the config file depends on your nifiti input, further infomation about how to modify the config file you can find out from the niftynet website https://niftynet.readthedocs.io/en/dev/config_spec.html
 
 Here is an example that i use curl to send a post request to the container
+
 ```
 curl -X POST -F file=@100_CT.nii http://localhost:5000/seg -o output.nii.gz
 ```

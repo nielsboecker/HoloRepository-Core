@@ -1,7 +1,10 @@
 {
-  "name": "HoloRepositoryUI-Server",
+  "name": "holorepository-ui-server",
   "version": "0.1.0",
   "description": "Back-end for the HoloRepository UI that provides the front-end with a concise API, abstracting all interactions with other subsystems such as the hospital's FHIR server and PACS.",
+  "config": {
+    "lintfiles": "src/**/*.{js,ts,json}"
+  },
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
@@ -9,8 +12,8 @@
     "dev": "nodemon src/index.ts | pino-pretty",
     "dev:debug": "nodemon --exec 'node -r ts-node/register --inspect-brk' src/index.ts | pino-pretty",
     "test": "jest",
-    "lint:check": "eslint 'src/**/*.{js,ts,json}'",
-    "lint": "eslint 'src/**/*.{js,ts,json}' --quiet --fix",
+    "lint:check": "eslint $npm_package_config_lintfiles",
+    "lint": "eslint $npm_package_config_lintfiles",
     "format:check": "prettier --list-different 'src/**/*.{js,ts,json,md}' ",
     "format": "prettier --write 'src/**/*.{js,ts,json,md}' "
   },
@@ -38,7 +41,9 @@
     "eslint": "^6.0.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^3.0.1",
     "jest": "^24.8.0",
+    "lint-staged": "^9.2.0",
     "nodemon": "^1.19.0",
     "pino-pretty": "^2.6.1",
     "prettier": "^1.18.2",
@@ -47,5 +52,17 @@
     "ts-jest": "^24.0.2",
     "ts-node": "^8.0.2",
     "typescript": "^3.4.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "$npm_package_config_lintfiles": [
+      "npm run format",
+      "npm run lint",
+      "git add"
+    ]
   }
 }

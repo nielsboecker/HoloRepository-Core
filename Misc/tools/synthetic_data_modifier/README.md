@@ -20,7 +20,7 @@ synthea_data_modifier.py convert in_dir out_dir [--config config.cfg]
     convert     command to convert contents in_dir to out_dir
     in_dir      path to find synthea generated data
     out_dir     path to write modified data
-    --config    path to configuration file
+    --config    path to configuration file (default: config.cfg)
 ```
 
 # Configuration
@@ -43,3 +43,9 @@ Configure specific input synthea files to be modified with specific imaging stud
 }
 ```
 
+# Misc: Data Selection From Synthea
+Patient data used in this module is obtained from synthea via the following steps:
+1. Generate a large number of data from synthea
+2. Select those containing ImagingStudy resource
+3. Remove files with >750kb size
+4. Pick 11 for use in the program

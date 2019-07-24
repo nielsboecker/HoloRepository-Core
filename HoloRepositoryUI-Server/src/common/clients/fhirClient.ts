@@ -22,6 +22,7 @@ export enum SupportedFhirResourceType {
 
 /**
  * Returns an io-ts decoder to validate a FHIR resource complies with the FHIR R4 definitions.
+ * Note: ts-ignores are needed because we manually guarantee the right decoder for given type.
  * @private
  */
 const _getDecoder = <Resource extends SupportedFhirResource>(
@@ -45,14 +46,23 @@ const _getDecoder = <Resource extends SupportedFhirResource>(
 };
 
 /**
- * Handles errors and outputs according error messages.
+ * Handles errors occurring while fetching data from FHIR server and decoding them to the appropriate
+ * types with io-ts. Outputs according error messages.
  */
-const handleError = (error: Error) => {
+const handleErrorWhileFetchingData = (error: Error) => {
   if (isDecodeError(error)) {
-    logger.warn("Type decoding failed due to invalid data.", error.message);
+    logger.warn("Type decoding failed due to invalid data", error.message);
   } else {
-    logger.warn("Request failed due to network issues.", error.message);
+    logger.warn("Request failed due to network issues", error.message);
   }
+  return null;
+};
+
+/**
+ * Handles errors occurring while mapping data to internal types. Outputs according error messages.
+ */
+const handleErrorWhileMappingData = (error: Error, context: string) => {
+  logger.warn(`There was a problem while mapping data [${context}]`, error.message);
   return null;
 };
 
@@ -66,10 +76,10 @@ const _getResource = async <Resource extends SupportedFhirResource>(
 ): Promise<Resource> => {
   logger.debug(`Fetching FHIR resource [${resourceType}/${id}]`);
 
-  return await _fhirClient
+  return _fhirClient
     .read({ resourceType, id })
     .then(decode(_getDecoder(resourceType)))
-    .catch(handleError);
+    .catch(handleErrorWhileFetchingData);
 };
 
 /**
@@ -89,10 +99,10 @@ const _getAllResources = async <Resource extends SupportedFhirResource>(
       searchParams
     })
     .then(decode(R4.RTTI_Bundle))
-    .catch(handleError);
+    .catch(handleErrorWhileFetchingData);
 
   if (!bundle || !bundle.entry || bundle.entry.length === 0) {
-    logger.warn(`Empty FHIR bundle for request [all ${resourceType}]`);
+    logger.warn(`Empty FHIR bundle for request [GET /${resourceType}/]`);
     return Promise.resolve([]);
   }
 
@@ -110,12 +120,9 @@ const getAndMap = async <Resource extends SupportedFhirResource, Output extends 
   pid: string
 ): Promise<Output> => {
   const map = getAdapterFunction(resourceType);
-  return _getResource<Resource>(resourceType, pid)
+  return await _getResource<Resource>(resourceType, pid)
     .then(resource => map(resource))
-    .catch((error: Error) => {
-      logger.warn(`Error while mapping data [${resourceType}/${pid}]`, error);
-      return null;
-    });
+    .catch((error: Error) => handleErrorWhileMappingData(error, `GET ${resourceType}/${pid}`));
 };
 
 /**
@@ -129,12 +136,9 @@ const getAllAndMap = async <Resource extends SupportedFhirResource, Output exten
   searchParams: object = {}
 ): Promise<Output[]> => {
   const map = getAdapterFunction(resourceType);
-  return _getAllResources<Resource>(resourceType, searchParams)
+  return await _getAllResources<Resource>(resourceType, searchParams)
     .then(resources => resources.map(resource => map(resource)))
-    .catch((error: Error) => {
-      logger.warn(`Error while mapping data [all ${resourceType}]`, error);
-      return null;
-    });
+    .catch((error: Error) => handleErrorWhileMappingData(error, `GET /${resourceType}/`));
 };
 
 export default { getAndMap, getAllAndMap };

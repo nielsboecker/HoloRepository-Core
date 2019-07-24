@@ -47,7 +47,7 @@ function _extractAddress(address?: R4.IAddress[]): IAddress | undefined {
   );
 }
 
-const _mapPerson = (person: R4.IPatient | R4.IPractitioner): IPerson | null => {
+const _mapPerson = (person: R4.IPatient | R4.IPractitioner): IPerson | undefined => {
   // Note: Given the nature of FHIR, all of these fields may be undefined
   const { address, telecom, birthDate, gender, id, name, photo } = person;
 
@@ -62,17 +62,17 @@ const _mapPerson = (person: R4.IPatient | R4.IPractitioner): IPerson | null => {
   };
 };
 
-const _mapPatient = (patient: R4.IPatient): IPatient | null => {
-  return _mapPerson(patient);
+const _mapPatient = (patient: R4.IPatient): IPatient | undefined => {
+  return _mapPerson(patient) as IPatient;
 };
 
-const _mapPractitioner = (practitioner: R4.IPractitioner): IPractitioner | null => {
-  return _mapPerson(practitioner);
+const _mapPractitioner = (practitioner: R4.IPractitioner): IPractitioner | undefined => {
+  return _mapPerson(practitioner) as IPractitioner;
 };
 
-function _mapImagingStudySubject(is: R4.IImagingStudy) {
-  let pid = undefined;
-  let name = undefined;
+const _mapImagingStudySubject = (is: R4.IImagingStudy): { pid: string; name?: IHumanName } => {
+  let pid;
+  let name;
   // Note: Azure FHIR server doesn't support "_include" queries yet, so in order to avoid a
   // second query, extract the PID from the reference string instead and omit name
   if (is.subject && is.subject.reference) {
@@ -81,13 +81,13 @@ function _mapImagingStudySubject(is: R4.IImagingStudy) {
   }
 
   return { pid, name };
-}
+};
 
 const _extractEndpoint = (is: R4.IImagingStudy): string => {
   // Note: This is slightly hacky, a cleaner approach would use FhirClient.resolve();
   // this however would require another async call to the client. The given solution
   // is acceptable as we know that the endpoint is always the first contained resource.
-  const endpoint: R4.IEndpoint = is.contained && is.contained[0] as R4.IEndpoint;
+  const endpoint: R4.IEndpoint = is.contained && (is.contained[0] as R4.IEndpoint);
   return endpoint.address;
 };
 
@@ -95,10 +95,7 @@ const _extractImagingStudySeriesPreviewUrl = (is: R4.IImagingStudy): string => {
   return `${_extractEndpoint(is)}.preview.jpg`;
 };
 
-
-const _mapImagingStudySeries = (
-  is: R4.IImagingStudy
-): IImagingStudySeries | undefined => {
+const _mapImagingStudySeries = (is: R4.IImagingStudy): IImagingStudySeries | undefined => {
   const { modality, id, started, series } = is;
   const iss = series && series[0] ? series[0] : null;
 

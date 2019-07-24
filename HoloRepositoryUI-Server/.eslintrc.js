@@ -17,6 +17,8 @@ module.exports = {
     // Allow names like "IImagingStudy_Series"
     "@typescript-eslint/camelcase": 0,
     // Promise error handlers, Jest test cases etc. don't need explicit return type
-    "@typescript-eslint/explicit-function-return-type": 0
+    "@typescript-eslint/explicit-function-return-type": 0,
+    // parseInt() may use default base of 10
+    "radix": 0
   }
 };

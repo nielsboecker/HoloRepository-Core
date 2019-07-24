@@ -1,19 +1,33 @@
 import HologramsService from "./hologram.service";
 import { Request, Response } from "express";
-import getConditionalPidsFilter from "../../util/filter.util";
+import logger from "../../../common/logger";
+import ImagingStudiesService from "../imagingStudy/imagingStudy.service";
 
 export class HologramController {
-  public getAll(req: Request, res: Response): void {
-    HologramsService.getAll()
-      .then(value => value.filter(getConditionalPidsFilter(req.query)))
-      .then(holograms => res.json(holograms));
-  }
+  public async getAll(req: Request, res: Response): Promise<void> {
+    const { pids } = req.query;
 
-  public getById(req: Request, res: Response): void {
-    HologramsService.getById(req.params.hid).then(hologram => {
-      if (hologram) res.json(hologram);
-      else res.status(404).end();
-    });
+    // Note: similar to getAll in ImagingStudyController, should be refactored
+    if (pids) {
+      const pidsSplit = pids.split(",");
+      if (pidsSplit.length === 0) {
+        logger.warn(`Cannot get all holograms for pids = '${pids}'`);
+        res.status(400).end();
+      } else {
+        logger.info(`GET all holograms for pids = ${pidsSplit}`);
+        const hologramsForPids = {};
+        await Promise.all(
+          pidsSplit.map(pid =>
+            HologramsService.getAllForPatient(pid).then(
+              hologram => (hologramsForPids[pid] = hologram)
+            )
+          )
+        );
+        res.json(hologramsForPids);
+      }
+    } else {
+      ImagingStudiesService.getAll().then(iss => res.json(iss));
+    }
   }
 
   public downloadById(req: Request, res: Response): void {

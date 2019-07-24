@@ -1,16 +1,12 @@
 import PatientsService from "./patient.service";
 import { Request, Response } from "express";
-import logger from "../../../common/logger";
-import ImagingStudiesService from "../imagingStudy/imagingStudy.service";
 
 export class ImagingStudiesController {
   public getAll(req: Request, res: Response): void {
-    const { generalPractitioner } = req.query;
+    const { practitioner } = req.query;
 
-    if (generalPractitioner) {
-      PatientsService.getAllForGeneralPractitioner(generalPractitioner).then(patients =>
-        res.json(patients)
-      );
+    if (practitioner) {
+      PatientsService.getAllForPractitioner(practitioner).then(patients => res.json(patients));
     } else {
       PatientsService.getAll().then(patient => res.json(patient));
     }

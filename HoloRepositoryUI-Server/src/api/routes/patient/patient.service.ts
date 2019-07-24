@@ -1,10 +1,6 @@
 import logger from "../../../common/logger";
 import { IPatient } from "../../../../../HoloRepositoryUI-Types";
-import {
-  getAllPatients,
-  getAllForGeneralPractitioner,
-  getPatient
-} from "../../../common/data.service";
+import { getAllPatients, getAllForPractitioner, getPatient } from "../../../common/data.service";
 
 export class PatientService {
   public getAll(): Promise<IPatient[]> {
@@ -12,9 +8,9 @@ export class PatientService {
     return getAllPatients();
   }
 
-  public getAllForGeneralPractitioner(generalPractitioner: string): Promise<IPatient[]> {
-    logger.info(`GET all Patients for general practitioner '${generalPractitioner}'`);
-    return getAllForGeneralPractitioner(generalPractitioner);
+  public getAllForPractitioner(practitionerId: string): Promise<IPatient[]> {
+    logger.info(`GET all Patients for general practitioner '${practitionerId}'`);
+    return getAllForPractitioner(practitionerId);
   }
 
   public getById(pid: string): Promise<IPatient> {

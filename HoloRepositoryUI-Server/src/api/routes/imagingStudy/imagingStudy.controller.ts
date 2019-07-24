@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import logger from "../../../common/logger";
 
 export class ImagingStudyController {
-  public getAll(req: Request, res: Response): void {
+  public async getAll(req: Request, res: Response): Promise<void> {
     const { pids } = req.query;
 
     if (pids) {
@@ -14,9 +14,11 @@ export class ImagingStudyController {
       } else {
         logger.info(`GET all ImagingStudies for pids = ${pidsSplit}`);
         const issForPids = {};
-        pidsSplit.forEach(pid => {
-          ImagingStudiesService.getAllForPatient(pid).then(iss => (issForPids[pid] = iss));
-        });
+        await Promise.all(
+          pidsSplit.map(pid =>
+            ImagingStudiesService.getAllForPatient(pid).then(iss => (issForPids[pid] = iss))
+          )
+        );
         res.json(issForPids);
       }
     } else {

@@ -8,11 +8,11 @@ import {
 
 export class ImagingStudyService {
   public getAll(): Promise<IImagingStudy[]> {
-    logger.info("GET all ImagingStudy");
+    logger.info("GET all ImagingStudies");
     return getAllImagingStudies();
   }
 
-  public getAllForPatient(pid: string): Promise<IImagingStudy[]> {
+  public async getAllForPatient(pid: string): Promise<IImagingStudy[]> {
     logger.info(`GET all ImagingStudies for 'Patient/${pid}'`);
     return getImagingStudiesForPatient(pid);
   }

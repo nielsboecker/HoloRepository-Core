@@ -13,12 +13,9 @@ export class HologramService {
     return Promise.resolve(_sampleHolograms);
   }
 
-  public getById(hid: string): Promise<IHologram> {
-    logger.info(`GET Hologram by id '${hid}'`);
-    const hologram = _sampleHolograms.find(hologram => hologram.hid === hid);
-    if (hologram) {
-      return Promise.resolve(hologram);
-    }
+  public getAllForPatient(pid: string) {
+    logger.info(`GET all Holograms for pid = '${pid}'`);
+    return Promise.resolve(_sampleHolograms);
   }
 
   public downloadById(hid: string): Promise<BinaryType | string> {

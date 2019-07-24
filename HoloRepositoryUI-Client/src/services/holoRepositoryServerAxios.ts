@@ -10,7 +10,7 @@ const apiPrefix = `/api/v${apiVersion}`;
 export const routes = {
   practitioner: "practitioner",
   patient: "patient",
-  holograms: "hologram",
+  hologram: "hologram",
   pipeline: "pipeline",
   imagingStudy: "imagingStudy"
 };

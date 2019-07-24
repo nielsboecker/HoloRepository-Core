@@ -5,61 +5,61 @@ import {
   IHologram,
   IImagingStudy,
   IPipeline
-} from "../../../../HoloRepository-Core/HoloRepositoryUI-Types";
+} from "../../../HoloRepositoryUI-Types";
+import { PidToPatientsMap } from "../components/shared/App";
+
+const handleError = (error: Error): null => {
+  console.log("Encountered an error while fetching data from backend: ", error.message);
+  return null;
+};
+
+export type HologramsCombinedResult = Record<string, IHologram[]>;
+export type ImagingStudiesCombinedResult = Record<string, IImagingStudy[]>;
 
 export class HoloRepositoryServerService {
   public async getPractitioner(pid: string): Promise<IPractitioner | null> {
     return serverAxios
       .get<IPractitioner>(`${routes.practitioner}/${pid}`)
       .then(practitioner => practitioner.data)
-      .catch(error => {
-        console.error(error);
-        return null;
-      });
+      .catch(handleError);
   }
 
-  public async getAllPatients(): Promise<IPatient[]> {
+  public async getAllPatientsForPractitioner(pid: string): Promise<IPatient[] | null> {
     return serverAxios
-      .get<IPatient[]>(routes.patient)
-      .then(patients => patients.data)
-      .catch(error => {
-        console.error(error);
-        return [];
-      });
-  }
-
-  public async getHologramsForAllPatients(pids: string[]): Promise<IHologram[]> {
-    return serverAxios
-      .get<IHologram[]>(`${routes.holograms}`, {
+      .get<IPatient[]>(routes.patient, {
         params: {
-          pids: pids.join(",")
+          practitioner: pid
+        }
+      })
+      .then(patients => patients.data)
+      .catch(handleError);
+  }
+
+  public async getHologramsForAllPatients(
+    patients: PidToPatientsMap
+  ): Promise<HologramsCombinedResult | null> {
+    return serverAxios
+      .get<HologramsCombinedResult>(`${routes.hologram}`, {
+        params: {
+          pids: _extractCombinedPidsString(patients)
         }
       })
       .then(holograms => holograms.data)
-      .catch(error => {
-        console.error(error);
-        return [];
-      });
+      .catch(handleError);
   }
 
   public async downloadHologramById(hid: string): Promise<BinaryType | null> {
     return serverAxios
-      .get<BinaryType>(`${routes.holograms}/${hid}/download`)
+      .get<BinaryType>(`${routes.hologram}/${hid}/download`)
       .then(hologram => hologram.data)
-      .catch(error => {
-        console.error(error);
-        return null;
-      });
+      .catch(handleError);
   }
 
-  public async deleteHologramById(hid: string): Promise<boolean> {
+  public async deleteHologramById(hid: string): Promise<boolean | null> {
     return serverAxios
-      .delete(`${routes.holograms}/${hid}`)
+      .delete(`${routes.hologram}/${hid}`)
       .then(() => true)
-      .catch(error => {
-        console.error(error);
-        return false;
-      });
+      .catch(handleError);
   }
 
   public async uploadHologram(): Promise<boolean> {
@@ -68,45 +68,40 @@ export class HoloRepositoryServerService {
     return Promise.resolve(true);
   }
 
-  public async generateHologram(): Promise<boolean> {
+  public async generateHologram(): Promise<boolean | null> {
     // TODO: Implement
     console.warn("Generate not implemented yet");
-    return Promise.resolve(true);
+    return Promise.resolve(true).catch(handleError);
   }
 
-  public async getImagingStudiesForAllPatients(pids: string[]): Promise<IImagingStudy[]> {
+  public async getImagingStudiesForAllPatients(
+    patients: PidToPatientsMap
+  ): Promise<ImagingStudiesCombinedResult | null> {
     return serverAxios
-      .get<IImagingStudy[]>(`${routes.imagingStudy}`, {
-        params: {
-          pids: pids.join(",")
-        }
+      .get<ImagingStudiesCombinedResult>(`${routes.imagingStudy}`, {
+        params: { pids: _extractCombinedPidsString(patients) }
       })
       .then(iss => iss.data)
-      .catch(error => {
-        console.error(error);
-        return [];
-      });
+      .catch(handleError);
   }
 
-  public async getImagingStudyPreview(isid: string): Promise<string | unknown> {
+  public async getImagingStudyPreview(isid: string): Promise<string | null> {
     return serverAxios
       .get<string>(`${routes.imagingStudy}/${isid}/preview`)
       .then(iss => iss.data)
-      .catch(error => {
-        console.error(error);
-        return null;
-      });
+      .catch(handleError);
   }
 
-  public async getAllPipelines(): Promise<IPipeline[]> {
+  public async getAllPipelines(): Promise<IPipeline[] | null> {
     return serverAxios
       .get<IPipeline[]>(routes.pipeline)
       .then(pipeline => pipeline.data)
-      .catch(error => {
-        console.error(error);
-        return [];
-      });
+      .catch(handleError);
   }
 }
+
+const _extractCombinedPidsString = (patients: PidToPatientsMap): string => {
+  return Object.keys(patients).join(",");
+};
 
 export default new HoloRepositoryServerService();

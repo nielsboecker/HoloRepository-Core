@@ -4,20 +4,19 @@ import { decode, isDecodeError } from "io-ts-promise";
 import { getAdapterFunction } from "../adapters/fhirAdapter";
 import { FHIR_SERVER_BASE_URL } from "../../config";
 import { R4 } from "@Ahryman40k/ts-fhir-types";
-import { IImagingStudySeries, IPatient, IPractitioner } from "../../../../HoloRepositoryUI-Types";
+import { IImagingStudy, IPatient, IPractitioner } from "../../../../HoloRepositoryUI-Types";
 import logger from "../logger";
 
 const _fhirClient = new Client({
   baseUrl: FHIR_SERVER_BASE_URL
 });
 
-export type InternalType = IPatient | IPractitioner | IImagingStudySeries;
+export type InternalType = IPatient | IPractitioner | IImagingStudy;
 export type SupportedFhirResource = R4.IPatient | R4.IPractitioner | R4.IImagingStudy;
 export enum SupportedFhirResourceType {
   Patient = "Patient",
   Practitioner = "Practitioner",
-  // Note: We assume that there is just one series per study
-  ImagingStudySeries = "ImagingStudy"
+  ImagingStudy = "ImagingStudy"
 }
 
 /**
@@ -37,7 +36,7 @@ const _getDecoder = <Resource extends SupportedFhirResource>(
     case SupportedFhirResourceType.Practitioner:
       // @ts-ignore
       return R4.RTTI_Practitioner;
-    case SupportedFhirResourceType.ImagingStudySeries:
+    case SupportedFhirResourceType.ImagingStudy:
       // @ts-ignore
       return R4.RTTI_ImagingStudy;
     default:

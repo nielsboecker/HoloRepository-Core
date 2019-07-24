@@ -1,7 +1,7 @@
 import { R4 } from "@Ahryman40k/ts-fhir-types";
 import { _normaliseDateString, getAdapterFunction } from "../common/adapters/fhirAdapter";
 import { SupportedFhirResourceType } from "../common/clients/fhirClient";
-import { IPatient, IPractitioner, IImagingStudySeries } from "../../../HoloRepositoryUI-Types";
+import { IPatient, IPractitioner, IImagingStudy } from "../../../HoloRepositoryUI-Types";
 
 import samplePatient from "./samples/fhir/samplePatient.json";
 import samplePractitioner from "./samples/fhir/samplePractitioner.json";
@@ -48,10 +48,10 @@ it("should map practitioners", () => {
 
 it("should map imaging studies", () => {
   const input = sampleImagingStudy as R4.IImagingStudy;
-  const mapImagingStudySeries = getAdapterFunction(SupportedFhirResourceType.ImagingStudySeries);
-  const result: IImagingStudySeries = mapImagingStudySeries(input);
+  const mapImagingStudy = getAdapterFunction(SupportedFhirResourceType.ImagingStudy);
+  const result: IImagingStudy = mapImagingStudy(input);
 
-  expect(result.issid).toEqual("c3f4ea25-fb0e-4b2e-bf1b-73453ecf04cb");
+  expect(result.isid).toEqual("c3f4ea25-fb0e-4b2e-bf1b-73453ecf04cb");
   expect(result.bodySite).toEqual("chest");
   expect(result.date).toEqual("2017-04-03T00:00:00.000Z");
   expect(result.modality).toEqual("Digital Radiography");

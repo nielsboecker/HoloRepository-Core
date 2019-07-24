@@ -1,19 +1,19 @@
 import React, { Component } from "react";
-import { IImagingStudySeries, IPatient } from "../../../../../../HoloRepositoryUI-Types";
+import { IImagingStudy, IPatient } from "../../../../../../HoloRepositoryUI-Types";
 import { ChoiceGroup, Dropdown, IChoiceGroupOption, IDropdownOption } from "office-ui-fabric-react";
 import { Col, Divider, Row } from "antd";
 import ImagingStudyDetailsCard from "./ImagingStudyDetailsCard";
 
 import samplePatients from "../../../../__tests__/samples/samplePatients.json";
-import samplePatientsWithImagingStudySeries from "../../../../__tests__/samples/samplePatientsWithImagingStudySeries.json";
+import samplePatientsWithImagingStudies from "../../../../__tests__/samples/samplePatientsWithImagingStudies.json";
 
-const allPatients = [...samplePatients, ...samplePatientsWithImagingStudySeries].sort((a, b) =>
+const allPatients = [...samplePatients, ...samplePatientsWithImagingStudies].sort((a, b) =>
   a.name.full.localeCompare(b.name.full)
 ) as IPatient[];
 
 export interface IImagingStudySelectionStepState {
   selectedPatient?: IPatient;
-  selectedStudy?: IImagingStudySeries;
+  selectedStudy?: IImagingStudy;
 }
 
 class ImagingStudySelectionStep extends Component<any, IImagingStudySelectionStepState> {
@@ -34,13 +34,13 @@ class ImagingStudySelectionStep extends Component<any, IImagingStudySelectionSte
           <Divider />
 
           {this.state.selectedPatient &&
-          this.state.selectedPatient.imagingStudySeries &&
-          this.state.selectedPatient.imagingStudySeries.length >= 1 ? (
+          this.state.selectedPatient.imagingStudies &&
+          this.state.selectedPatient.imagingStudies.length >= 1 ? (
             <ChoiceGroup
-              label="Select an imaging study series"
+              label="Select an imaging study"
               required
-              options={this._getImagingStudySeriesOptions()}
-              onChange={this._handleImagingStudySeriesChange}
+              options={this._getImagingStudyOptions()}
+              onChange={this._handleimagingStudyChange}
             />
           ) : (
             <p>Select a patient with existing imaging studies.</p>
@@ -57,10 +57,10 @@ class ImagingStudySelectionStep extends Component<any, IImagingStudySelectionSte
   private _mapPatientsToDropdownOptions = (): IDropdownOption[] => {
     return allPatients.map(patient => ({
       key: patient.pid,
-      text: `${patient.name.full} (${ImagingStudySelectionStep._getNumberOfSeries(
+      text: `${patient.name.full} (${ImagingStudySelectionStep._getNumberOfStudies(
         patient
-      )} series)`,
-      disabled: !patient.imagingStudySeries || patient.imagingStudySeries.length === 0
+      )} imaging studies)`,
+      disabled: !patient.imagingStudies || patient.imagingStudies.length === 0
     }));
   };
 
@@ -72,31 +72,31 @@ class ImagingStudySelectionStep extends Component<any, IImagingStudySelectionSte
     }
   };
 
-  private _handleImagingStudySeriesChange = (_: any, option?: IChoiceGroupOption) => {
-    if (!this.state.selectedPatient || !this.state.selectedPatient.imagingStudySeries) {
+  private _handleimagingStudyChange = (_: any, option?: IChoiceGroupOption) => {
+    if (!this.state.selectedPatient || !this.state.selectedPatient.imagingStudies) {
       return;
     }
     const selectedStudyId = option!.key;
-    const selectedStudy = this.state.selectedPatient.imagingStudySeries.find(
-      series => series.issid === selectedStudyId
+    const selectedStudy = this.state.selectedPatient.imagingStudies.find(
+      is => is.isid === selectedStudyId
     );
     if (selectedStudy) {
       this.setState({ selectedStudy });
     }
   };
 
-  private _getImagingStudySeriesOptions = (): IChoiceGroupOption[] => {
-    if (!this.state.selectedPatient || !this.state.selectedPatient.imagingStudySeries) {
+  private _getImagingStudyOptions = (): IChoiceGroupOption[] => {
+    if (!this.state.selectedPatient || !this.state.selectedPatient.imagingStudies) {
       return [];
     }
-    return this.state.selectedPatient.imagingStudySeries.map((series, index) => ({
-      key: series.issid,
-      text: `Imaging study ${index + 1} (${series.numberOfInstances} instances)`
+    return this.state.selectedPatient.imagingStudies.map((is, index) => ({
+      key: is.isid,
+      text: `Imaging study ${index + 1} (${is.numberOfInstances} instances)`
     }));
   };
 
-  private static _getNumberOfSeries(patient: IPatient) {
-    return patient.imagingStudySeries ? patient.imagingStudySeries.length : 0;
+  private static _getNumberOfStudies(patient: IPatient) {
+    return patient.imagingStudies ? patient.imagingStudies.length : 0;
   }
 }
 

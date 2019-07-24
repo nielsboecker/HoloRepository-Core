@@ -1,4 +1,4 @@
-import { IHologram, IImagingStudySeries } from "./Holograms";
+import { IHologram, IImagingStudy } from "./Holograms";
 
 export type Gender = "male" | "female" | "other" | "unknown";
 
@@ -53,6 +53,6 @@ export interface IPractitioner extends IPerson {
  * Semantics is similar to the corresponding FHIR resource.
  */
 export interface IPatient extends IPerson {
-  imagingStudySeries?: IImagingStudySeries[];
+  imagingStudies?: IImagingStudy[];
   holograms?: IHologram[];
 }

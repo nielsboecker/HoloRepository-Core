@@ -1,11 +1,12 @@
 import { IHumanName } from "./Patients";
 
 /**
- * Interface representing one image series in a DICOM imaging study.
+ * Interface representing one image series in a DICOM imaging study. For this project, we assume that every study
+ * just hosts exactly one series, so the concepts are used interchangeably.
  * Semantics is similar to the corresponding FHIR resource.
  */
-export interface IImagingStudySeries {
-  issid: string;
+export interface IImagingStudy {
+  isid: string;
   subject: {
     pid: string;
     name?: IHumanName;
@@ -43,7 +44,7 @@ export interface IHologram {
   };
   createdDate: string;
   fileSizeInKb: number;
-  imagingStudySeriesId?: string;
+  imagingStudyId?: string;
   description?: string;
   bodySite?: string;
   encounterDate?: string;

@@ -12,7 +12,7 @@ export const routes = {
   patients: "patients",
   holograms: "holograms",
   pipelines: "pipelines",
-  imagingStudySeries: "imagingStudySeries"
+  imagingStudies: "imagingStudies"
 };
 
 const holoRepositoryServerAxios = axios.create({

@@ -1,18 +1,18 @@
-import ImagingStudiesService from "./imagingStudySeries.service";
+import ImagingStudiesService from "./imagingStudy.service";
 import { Request, Response } from "express";
 import logger from "../../../common/logger";
 
-export class ImagingStudySeriesController {
+export class ImagingStudyController {
   public getAll(req: Request, res: Response): void {
     const { pids } = req.query;
 
     if (pids) {
       const pidsSplit = pids.split(",");
       if (pidsSplit.length === 0) {
-        logger.warn(`Cannot get all ImagingStudySeries for pids = '${pids}'`);
+        logger.warn(`Cannot get all ImagingStudies for pids = '${pids}'`);
         res.status(400).end();
       } else {
-        logger.info(`GET all ImagingStudySeries for pids = ${pidsSplit}`);
+        logger.info(`GET all ImagingStudies for pids = ${pidsSplit}`);
         const issForPids = {};
         pidsSplit.forEach(pid => {
           ImagingStudiesService.getAllForPatient(pid).then(iss => (issForPids[pid] = iss));
@@ -25,7 +25,7 @@ export class ImagingStudySeriesController {
   }
 
   public getById(req: Request, res: Response): void {
-    ImagingStudiesService.getById(req.params.issid).then(iss => {
+    ImagingStudiesService.getById(req.params.isid).then(iss => {
       if (iss) {
         res.json(iss);
       } else {
@@ -34,4 +34,4 @@ export class ImagingStudySeriesController {
     });
   }
 }
-export default new ImagingStudySeriesController();
+export default new ImagingStudyController();

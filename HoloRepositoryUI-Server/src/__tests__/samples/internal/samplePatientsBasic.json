@@ -18,7 +18,7 @@
       "state": "Texas",
       "postcode": 9622
     },
-    "imagingStudySeries": [],
+    "imagingStudies": [],
     "holograms": []
   },
   {
@@ -39,7 +39,7 @@
       "state": "Iowa",
       "postcode": 6072
     },
-    "imagingStudySeries": [],
+    "imagingStudies": [],
     "holograms": []
   },
   {
@@ -60,7 +60,7 @@
       "state": "Kentucky",
       "postcode": 8031
     },
-    "imagingStudySeries": [],
+    "imagingStudies": [],
     "holograms": []
   },
   {
@@ -81,7 +81,7 @@
       "state": "Virginia",
       "postcode": 7914
     },
-    "imagingStudySeries": [],
+    "imagingStudies": [],
     "holograms": []
   },
   {
@@ -103,7 +103,7 @@
       "state": "American Samoa",
       "postcode": 5807
     },
-    "imagingStudySeries": [],
+    "imagingStudies": [],
     "holograms": []
   },
   {
@@ -125,7 +125,7 @@
       "state": "Marshall Islands",
       "postcode": 5407
     },
-    "imagingStudySeries": [],
+    "imagingStudies": [],
     "holograms": []
   },
   {
@@ -147,7 +147,7 @@
       "state": "South Dakota",
       "postcode": 5638
     },
-    "imagingStudySeries": [],
+    "imagingStudies": [],
     "holograms": []
   }
 ]

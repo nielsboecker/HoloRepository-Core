@@ -1,7 +1,7 @@
 import {
   IAddress,
   IHumanName,
-  IImagingStudySeries,
+  IImagingStudy,
   IPatient,
   IPerson,
   IPractitioner
@@ -91,18 +91,18 @@ const _extractEndpoint = (is: R4.IImagingStudy): string => {
   return endpoint.address;
 };
 
-const _extractImagingStudySeriesPreviewUrl = (is: R4.IImagingStudy): string => {
+const _extractImagingStudyPreviewUrl = (is: R4.IImagingStudy): string => {
   return `${_extractEndpoint(is)}.preview.jpg`;
 };
 
-const _mapImagingStudySeries = (is: R4.IImagingStudy): IImagingStudySeries | undefined => {
+const _mapImagingStudy = (is: R4.IImagingStudy): IImagingStudy | undefined => {
   const { modality, id, started, series } = is;
   const iss = series && series[0] ? series[0] : null;
 
   return {
     bodySite: iss && iss.bodySite && iss.bodySite.display ? iss.bodySite.display : undefined,
     date: started ? _normaliseDateString(started) : undefined,
-    issid: id ? id : undefined,
+    isid: id ? id : undefined,
     modality:
       modality && modality[0] && modality[0].display
         ? modality[0].display
@@ -112,21 +112,21 @@ const _mapImagingStudySeries = (is: R4.IImagingStudy): IImagingStudySeries | und
     numberOfInstances: iss.numberOfInstances ? iss.numberOfInstances : undefined,
     subject: _mapImagingStudySubject(is),
     endpoint: _extractEndpoint(is),
-    previewPictureUrl: _extractImagingStudySeriesPreviewUrl(is)
+    previewPictureUrl: _extractImagingStudyPreviewUrl(is)
   };
 };
 
 const getAdapterFunction = (resourceType: string): Function => {
   logger.debug(`Mapping type '${resourceType}'`);
 
-  const { Patient, ImagingStudySeries, Practitioner } = SupportedFhirResourceType;
+  const { Patient, ImagingStudy, Practitioner } = SupportedFhirResourceType;
   switch (resourceType) {
     case Patient:
       return _mapPatient;
     case Practitioner:
       return _mapPractitioner;
-    case ImagingStudySeries:
-      return _mapImagingStudySeries;
+    case ImagingStudy:
+      return _mapImagingStudy;
     default:
       throw new Error(`Type not supported: ${resourceType}`);
   }

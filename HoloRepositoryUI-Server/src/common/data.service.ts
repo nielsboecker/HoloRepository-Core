@@ -1,6 +1,6 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import FhirClient, { SupportedFhirResourceType } from "./clients/fhirClient";
-import { IImagingStudySeries, IPatient, IPractitioner } from "../../../HoloRepositoryUI-Types";
+import { IImagingStudy, IPatient, IPractitioner } from "../../../HoloRepositoryUI-Types";
 
 const getPatient = async (pid: string): Promise<IPatient> => {
   return FhirClient.getAndMap<R4.IPatient, IPatient>(SupportedFhirResourceType.Patient, pid);
@@ -17,22 +17,22 @@ const getPractitioner = async (pid: string): Promise<IPractitioner> => {
   );
 };
 
-const getImagingStudySeries = async (issid: string): Promise<IImagingStudySeries> => {
-  return FhirClient.getAndMap<R4.IImagingStudy, IImagingStudySeries>(
-    SupportedFhirResourceType.ImagingStudySeries,
-    issid
+const getImagingStudy = async (isid: string): Promise<IImagingStudy> => {
+  return FhirClient.getAndMap<R4.IImagingStudy, IImagingStudy>(
+    SupportedFhirResourceType.ImagingStudy,
+    isid
   );
 };
 
-const getAllImagingStudySeries = async (): Promise<IImagingStudySeries[]> => {
-  return FhirClient.getAllAndMap<R4.IImagingStudy, IImagingStudySeries>(
-    SupportedFhirResourceType.ImagingStudySeries
+const getAllImagingStudies = async (): Promise<IImagingStudy[]> => {
+  return FhirClient.getAllAndMap<R4.IImagingStudy, IImagingStudy>(
+    SupportedFhirResourceType.ImagingStudy
   );
 };
 
-const getImagingStudySeriesForPatient = async (pid: string): Promise<IImagingStudySeries[]> => {
-  return FhirClient.getAllAndMap<R4.IImagingStudy, IImagingStudySeries>(
-    SupportedFhirResourceType.ImagingStudySeries,
+const getImagingStudiesForPatient = async (pid: string): Promise<IImagingStudy[]> => {
+  return FhirClient.getAllAndMap<R4.IImagingStudy, IImagingStudy>(
+    SupportedFhirResourceType.ImagingStudy,
     { patient: pid }
   );
 };
@@ -41,7 +41,7 @@ export {
   getPatient,
   getAllPatients,
   getPractitioner,
-  getImagingStudySeries,
-  getAllImagingStudySeries,
-  getImagingStudySeriesForPatient
+  getImagingStudy,
+  getAllImagingStudies,
+  getImagingStudiesForPatient
 };

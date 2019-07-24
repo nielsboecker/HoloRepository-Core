@@ -17,7 +17,7 @@
       "state": "Michigan",
       "postcode": 6111
     },
-    "imagingStudySeries": [],
+    "imagingStudies": [],
     "holograms": [
       {
         "hid": "5d1c926b01b4275942f15c5d",
@@ -42,7 +42,7 @@
         },
         "createdDate": "2019-07-01T00:00:00.000Z",
         "fileSizeInKb": 4765,
-        "imagingStudySeriesId": "5d1c926b89edc61de37b6a40"
+        "imagingStudyId": "5d1c926b89edc61de37b6a40"
       },
       {
         "hid": "5d1c926b0a38632a96dd856e",
@@ -67,7 +67,7 @@
         },
         "createdDate": "2019-07-03T00:00:00.000Z",
         "fileSizeInKb": 3544,
-        "imagingStudySeriesId": "5d1c926bc7a78813a010bbc5"
+        "imagingStudyId": "5d1c926bc7a78813a010bbc5"
       }
     ]
   },
@@ -90,7 +90,7 @@
       "state": "Alaska",
       "postcode": 1157
     },
-    "imagingStudySeries": [],
+    "imagingStudies": [],
     "holograms": [
       {
         "hid": "5d1c926bdd204a2af1c538ec",
@@ -115,7 +115,7 @@
         },
         "createdDate": "2017-06-21T00:00:00.000Z",
         "fileSizeInKb": 4436,
-        "imagingStudySeriesId": "5d1c926bb58b20030c255388"
+        "imagingStudyId": "5d1c926bb58b20030c255388"
       }
     ]
   }

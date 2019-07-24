@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { IImagingStudySeries } from "../../../../../../HoloRepositoryUI-Types";
+import { IImagingStudy } from "../../../../../../HoloRepositoryUI-Types";
 import { CommandBarButton, Icon, IconButton, Image, Modal } from "office-ui-fabric-react";
 import { Divider } from "antd";
 
@@ -8,7 +8,7 @@ import { Divider } from "antd";
 const style = { backgroundColor: "#eee", padding: "24px", marginTop: "31px" };
 
 export interface IImagingStudyDetailsCardProps {
-  study?: IImagingStudySeries;
+  study?: IImagingStudy;
 }
 
 export interface IImagingStudyDetailsCardState {
@@ -46,7 +46,7 @@ class ImagingStudyDetailsCard extends Component<
 
       return (
         <div style={style}>
-          <h2>Imaging study series</h2>
+          <h2>Imaging study</h2>
           <ul>
             <li>Number of instances: {study.numberOfInstances}</li>
             <li>Body site: {study.bodySite || "Unknown"}</li>
@@ -85,7 +85,7 @@ class ImagingStudyDetailsCard extends Component<
       return (
         <div style={style}>
           <Icon iconName="Info" style={{ marginRight: "12px" }} />
-          Select an imaging study series to see more details.
+          Select an imaging study to see more details.
         </div>
       );
     }

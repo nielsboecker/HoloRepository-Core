@@ -22,7 +22,7 @@ class App extends Component {
     );
     BackendService.getImagingStudiesForAllPatients(pidsWithIss).then(i => console.log("iss", i));
     BackendService.getImagingStudyPreview(isid).then(p => console.log("iss preview", p));
-    BackendService.getAllPipelines().then(p => console.log("pipelines", p));
+    BackendService.getAllPipelines().then(p => console.log("pipeline", p));
     BackendService.downloadHologramById(hid).then(h => console.log("holo download", h));
     BackendService.deleteHologramById(hid).then(h => console.log("holo delete", h));
     BackendService.uploadHologram().then(h => console.log("holo upload", h));

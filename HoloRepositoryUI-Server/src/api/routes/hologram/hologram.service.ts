@@ -8,7 +8,7 @@ const _sampleHolograms = sampleHolograms as IHologram[];
 
 // Note: This will have to remain mocked until HoloStorage API endpoints are ready
 
-export class HologramsService {
+export class HologramService {
   public getAll(): Promise<IHologram[]> {
     logger.info("GET all Holograms");
     return Promise.resolve(_sampleHolograms);
@@ -47,4 +47,4 @@ export class HologramsService {
   }
 }
 
-export default new HologramsService();
+export default new HologramService();

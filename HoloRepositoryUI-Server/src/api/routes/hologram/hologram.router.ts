@@ -1,7 +1,7 @@
 import { Router } from "express";
-import HologramsController from "./holograms.controller";
+import HologramsController from "./hologram.controller";
 
-const HologramsRouter = Router()
+const HologramRouter = Router()
   .get("/", HologramsController.getAll)
   .get("/:hid", HologramsController.getById)
   .get("/:hid/download", HologramsController.downloadById)
@@ -9,4 +9,4 @@ const HologramsRouter = Router()
   .post("/upload", HologramsController.upload)
   .post("/generate", HologramsController.generate);
 
-export default HologramsRouter;
+export default HologramRouter;

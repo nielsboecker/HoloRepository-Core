@@ -18,7 +18,7 @@
       "state": "Delaware",
       "postcode": 1702
     },
-    "imagingStudies": [
+    "imagingStudy": [
       {
         "isid": "efd5c2bf-8499-45ef-b6bf-3d35714f5442",
         "subject": {
@@ -77,7 +77,7 @@
       "state": "Mississippi",
       "postcode": 688
     },
-    "imagingStudies": [
+    "imagingStudy": [
       {
         "isid": "4c31e586-a49b-44cd-b447-9fe8a6d1806d",
         "subject": {
@@ -113,7 +113,7 @@
       "state": "Arkansas",
       "postcode": 8426
     },
-    "imagingStudies": [
+    "imagingStudy": [
       {
         "isid": "b1557468-2cee-49e6-992b-77cc0b508db3",
         "subject": {

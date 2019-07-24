@@ -1,9 +1,9 @@
-import HologramsService from "./holograms.service";
+import HologramsService from "./hologram.service";
 import { Request, Response } from "express";
 import getConditionalPidsFilter from "../../util/filter.util";
 import logger from "../../../common/logger";
 
-export class HologramsController {
+export class HologramController {
   public getAll(req: Request, res: Response): void {
     HologramsService.getAll()
       .then(value => value.filter(getConditionalPidsFilter(req.query)))
@@ -46,4 +46,4 @@ export class HologramsController {
   }
 }
 
-export default new HologramsController();
+export default new HologramController();

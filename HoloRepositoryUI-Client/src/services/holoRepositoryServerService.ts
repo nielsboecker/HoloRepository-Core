@@ -10,7 +10,7 @@ import {
 export class HoloRepositoryServerService {
   public async getPractitioner(pid: string): Promise<IPractitioner | null> {
     return serverAxios
-      .get<IPractitioner>(`${routes.practitioners}/${pid}`)
+      .get<IPractitioner>(`${routes.practitioner}/${pid}`)
       .then(practitioner => practitioner.data)
       .catch(error => {
         console.error(error);
@@ -20,7 +20,7 @@ export class HoloRepositoryServerService {
 
   public async getAllPatients(): Promise<IPatient[]> {
     return serverAxios
-      .get<IPatient[]>(routes.patients)
+      .get<IPatient[]>(routes.patient)
       .then(patients => patients.data)
       .catch(error => {
         console.error(error);
@@ -76,7 +76,7 @@ export class HoloRepositoryServerService {
 
   public async getImagingStudiesForAllPatients(pids: string[]): Promise<IImagingStudy[]> {
     return serverAxios
-      .get<IImagingStudy[]>(`${routes.imagingStudies}`, {
+      .get<IImagingStudy[]>(`${routes.imagingStudy}`, {
         params: {
           pids: pids.join(",")
         }
@@ -90,7 +90,7 @@ export class HoloRepositoryServerService {
 
   public async getImagingStudyPreview(isid: string): Promise<string | unknown> {
     return serverAxios
-      .get<string>(`${routes.imagingStudies}/${isid}/preview`)
+      .get<string>(`${routes.imagingStudy}/${isid}/preview`)
       .then(iss => iss.data)
       .catch(error => {
         console.error(error);
@@ -100,7 +100,7 @@ export class HoloRepositoryServerService {
 
   public async getAllPipelines(): Promise<IPipeline[]> {
     return serverAxios
-      .get<IPipeline[]>(routes.pipelines)
+      .get<IPipeline[]>(routes.pipeline)
       .then(pipeline => pipeline.data)
       .catch(error => {
         console.error(error);

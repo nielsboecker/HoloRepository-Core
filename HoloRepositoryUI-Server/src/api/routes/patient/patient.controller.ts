@@ -1,4 +1,4 @@
-import PatientsService from "./patients.service";
+import PatientsService from "./patient.service";
 import { Request, Response } from "express";
 
 export class ImagingStudiesController {

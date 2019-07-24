@@ -8,16 +8,17 @@ const apiVersion = 1;
 const apiPrefix = `/api/v${apiVersion}`;
 
 export const routes = {
-  practitioners: "practitioners",
-  patients: "patients",
-  holograms: "holograms",
-  pipelines: "pipelines",
-  imagingStudies: "imagingStudies"
+  practitioner: "practitioner",
+  patient: "patient",
+  holograms: "hologram",
+  pipeline: "pipeline",
+  imagingStudy: "imagingStudy"
 };
 
 const holoRepositoryServerAxios = axios.create({
   baseURL: `http://localhost:3001${apiPrefix}`,
-  timeout: 2500,
+  // Note: High timeout value needed as app takes a long time to start in dev mode
+  timeout: 4000,
   headers
 });
 

@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "Back-end for the HoloRepository UI that provides the front-end with a concise API, abstracting all interactions with other subsystems such as the hospital's FHIR server and PACS.",
   "config": {
-    "lintfiles": "src/**/*.{js,ts,json}"
+    "lintfiles": "src/**/*.{js,ts}",
+    "formatfiles": "src/**/*.{js,ts,json}"
   },
   "main": "index.js",
   "scripts": {
@@ -14,8 +15,8 @@
     "test": "jest",
     "lint:check": "eslint $npm_package_config_lintfiles",
     "lint": "eslint $npm_package_config_lintfiles",
-    "format:check": "prettier --list-different 'src/**/*.{js,ts,json,md}' ",
-    "format": "prettier --write 'src/**/*.{js,ts,json,md}' "
+    "format:check": "prettier --list-different $npm_package_config_formatfiles",
+    "format": "prettier --write $npm_package_config_formatfiles"
   },
   "dependencies": {
     "@ahryman40k/ts-fhir-types": "^4.0.23",
@@ -59,9 +60,12 @@
     }
   },
   "lint-staged": {
-    "$npm_package_config_lintfiles": [
-      "npm run format",
+    "src/**/*.{js,ts}": [
       "npm run lint",
+      "git add"
+    ],
+    "src/**/*.{js,ts,json}": [
+      "npm run format",
       "git add"
     ]
   }

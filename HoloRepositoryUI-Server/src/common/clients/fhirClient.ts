@@ -119,7 +119,7 @@ const getAndMap = async <Resource extends SupportedFhirResource, Output extends 
   pid: string
 ): Promise<Output> => {
   const map = getAdapterFunction(resourceType);
-  return await _getResource<Resource>(resourceType, pid)
+  return _getResource<Resource>(resourceType, pid)
     .then(resource => map(resource))
     .catch((error: Error) => handleErrorWhileMappingData(error, `GET ${resourceType}/${pid}`));
 };
@@ -135,7 +135,7 @@ const getAllAndMap = async <Resource extends SupportedFhirResource, Output exten
   searchParams: object = {}
 ): Promise<Output[]> => {
   const map = getAdapterFunction(resourceType);
-  return await _getAllResources<Resource>(resourceType, searchParams)
+  return _getAllResources<Resource>(resourceType, searchParams)
     .then(resources => resources.map(resource => map(resource)))
     .catch((error: Error) => handleErrorWhileMappingData(error, `GET /${resourceType}/`));
 };

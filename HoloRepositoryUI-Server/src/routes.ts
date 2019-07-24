@@ -1,7 +1,7 @@
 import { Application } from "express";
-import PatientRouter from "./api/routes/patients/patient.router";
+import PatientRouter from "./api/routes/patient/patient.router";
 import HologramRouter from "./api/routes/hologram/hologram.router";
-import PipelineRouter from "./api/routes/pipelines/pipeline.router";
+import PipelineRouter from "./api/routes/pipeline/pipeline.router";
 import ImagingStudyRouter from "./api/routes/imagingStudy/imagingStudy.router";
 import PractitionerRouter from "./api/routes/practitioner/practitioner.router";
 

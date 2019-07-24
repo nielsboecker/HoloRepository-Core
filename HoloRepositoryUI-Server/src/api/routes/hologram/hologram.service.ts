@@ -2,7 +2,6 @@ import logger from "../../../common/logger";
 import { IHologram } from "../../../../../HoloRepositoryUI-Types";
 
 import sampleHolograms from "../../../__tests__/samples/internal/sampleHolograms.json";
-import { Request, Response } from "express";
 
 const _sampleHolograms = sampleHolograms as IHologram[];
 
@@ -24,13 +23,13 @@ export class HologramService {
 
   public downloadById(hid: string): Promise<BinaryType | string> {
     // TODO: Implement
-    logger.warn("Download not implemented yet");
+    logger.warn("Download not implemented yet", hid);
     return Promise.resolve("<holo-file>");
   }
 
   public deleteById(hid: string): Promise<boolean> {
     // TODO: Implement
-    logger.warn("Delete not implemented yet");
+    logger.warn("Delete not implemented yet", hid);
     return Promise.resolve(true);
   }
 

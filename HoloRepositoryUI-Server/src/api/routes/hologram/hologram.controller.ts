@@ -1,7 +1,6 @@
 import HologramsService from "./hologram.service";
 import { Request, Response } from "express";
 import getConditionalPidsFilter from "../../util/filter.util";
-import logger from "../../../common/logger";
 
 export class HologramController {
   public getAll(req: Request, res: Response): void {

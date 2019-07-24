@@ -10,7 +10,7 @@ const getConditionalPidsFilter = ({ pids }): ((v: IHologram | IImagingStudy) => 
     const _pids: string[] = pids.split(",");
     return value => _pids.includes(value.subject.pid);
   } else {
-    return value => true;
+    return () => true;
   }
 };
 

@@ -11,12 +11,12 @@ import string
 
 class ModifySyntheaData:
     def __init__(self, config="config.cfg"):
-        self.config = None
+        self._config = None
         with open(config, "r") as config_f:
-            self.config = json.load(config_f)
-        self._photo_rand = random.Random(self.config["general"]["seed"])
-        self._practitioners_rand = random.Random(self.config["general"]["seed"])
-        self._practitioners_per_patient = self.config["general"][
+            self._config = json.load(config_f)
+        self._photo_rand = random.Random(self._config["general"]["seed"])
+        self._practitioners_rand = random.Random(self._config["general"]["seed"])
+        self._practitioners_per_patient = self._config["general"][
             "practitioners_per_patient"
         ]
 
@@ -166,9 +166,9 @@ class ModifySyntheaData:
 
     def _imaging_study_handler(self, data, filename):
         result = None
-        if filename in self.config["imagingStudy"]:
+        if filename in self._config["imagingStudy"]:
             logging.info("\tIncluding ImagingStudy resource")
-            title, num_instances, display_name, url = self.config["imagingStudy"][
+            title, num_instances, display_name, url = self._config["imagingStudy"][
                 filename
             ]
             result = self._modify_imaging_study(data, num_instances, display_name, url)

@@ -51,7 +51,7 @@ def main():
 					print("")
 					searchCounter += 1
 			if searchCounter == 0:
-				print("pipelineController: no pipeline with such name")
+				sys.exit("pipelineController: no pipeline with such name")
 			else:
 				print("pipelineController: "+str(searchCounter)+" results")
 			sys.exit()
@@ -65,6 +65,9 @@ def main():
 		subprocess.run(["python", lsPipe[args.pipelineID]['src']] + args.param, cwd=newCwd)
 
 	json_file.close()
+
+def getPipelineConfigList():#TODO ye
+	return json
 
 if __name__ == "__main__":
 	main()

@@ -10,7 +10,7 @@ success = True
 
 def main(inputObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False):
 	success = subprocess.run(["obj2gltf", "-i", str(pathlib.Path(inputObjPath)), "-b"])
-	if success:
+	if success.returncode == 0:
 		outputGlbPath = str(pathlib.Path(outputGlbPath))
 		move(str(pathlib.Path(inputObjPath)).replace(".obj", ".glb"), outputGlbPath)
 		if deleteOriginalObj:
@@ -20,7 +20,10 @@ def main(inputObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False)
 		#Draco compression. note that draco compresssion in viewers may not be common
 		if compressGlb:
 			success = subprocess.run("gltf-pipeline", "-i", outputGlbPath, "-o", outputGlbPath, "-d", cwd=newCwd)
-			print("obj2glb: Draco compression finished")
+			if success.returncode == 0:
+				print("obj2glb: Draco compression finished")
+			else:
+				sys.exit("obj2glb: Draco compression failed")
 	else:
 		sys.exit("obj2glb: conversion failed")
 	return outputGlbPath

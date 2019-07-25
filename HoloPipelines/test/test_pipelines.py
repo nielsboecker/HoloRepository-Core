@@ -67,17 +67,21 @@ def remove3Dmodels():
 
 def test_pipelines_dicom2glb(testSetup):
 	output = subprocess.run(["python", "pipelineController.py", "-c", "test/testList.json", "p3", "-p", str(dicomPath.joinpath("3_Axial_CE")), str(glbPath.joinpath("testResult0.glb")), "350"], cwd=newCwd)
+	assert 0 == output.returncode
 	assert os.path.isfile(glbPath.joinpath("testResult0.glb"))
 
 def test_pipelines_lungDicom2glb(testSetup):
 	output = subprocess.run(["python", "pipelineController.py", "-c", "test/testList.json", "p4", "-p", str(dicomPath.joinpath("3_Axial_CE")), str(glbPath.joinpath("testResult1.glb"))], cwd=newCwd)
+	assert 0 == output.returncode
 	assert os.path.isfile(glbPath.joinpath("testResult1.glb"))
 
 def test_pipelines_nifti2obj(testSetup):
 	output = subprocess.run(["python", "pipelineController.py", "-c", "test/testList.json", "p0", "-p", str(niftiPath.joinpath("1103_3_glm.nii")),str(objPath.joinpath("testResult2.obj")), "30", "0"], cwd=newCwd)
+	assert 0 == output.returncode
 	assert os.path.isfile(objPath.joinpath("testResult2.obj"))
 
 def test_pipelines_nifti2glb(testSetup):
 	output = subprocess.run(["python", "pipelineController.py", "-c", "test/testList.json", "p1", "-p", str(niftiPath.joinpath("1103_3_glm.nii")), str(glbPath.joinpath("testResult3.glb")), "30"], cwd=newCwd)
+	assert 0 == output.returncode
 	assert os.path.isfile(glbPath.joinpath("testResult3.glb"))
 

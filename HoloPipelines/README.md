@@ -19,10 +19,10 @@ sudo apt-get install libcdcm-tools
 
 Double check to see if installation is successful by running
 `gdcmdump` or `gdcmconv`
-If command is not found then please make sure to add to PATH
+If command is not found then please make sure to add to PATH by using the command (replace "directory_to_GDCM_bin_folder" with your local directory, without the double quotes)
 
 ```
-PATH=$PATH:pathToYourLocalGDCMbin
+PATH=$PATH:"directory_to_GDCM_bin_folder"
 ```
 
 The final 2 dependencies can be installed using Node.js package manager. Please make sure to have the latest version of npm installed.

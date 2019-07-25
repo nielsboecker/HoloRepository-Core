@@ -6,7 +6,7 @@ import {
   IImagingStudy,
   IPipeline
 } from "../../../HoloRepositoryUI-Types";
-import { PidToPatientsMap } from "../components/shared/App";
+import { PidToPatientsMap } from "../components/shared/AppState";
 
 const handleError = (error: Error): null => {
   console.log("Encountered an error while fetching data from backend: ", error.message);

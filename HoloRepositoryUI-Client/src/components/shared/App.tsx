@@ -3,25 +3,17 @@ import "./App.scss";
 import MainContainer from "./MainContainer";
 import { initializeIcons } from "@uifabric/icons";
 import BackendService from "../../services/holoRepositoryServerService";
-import { IPractitioner, IPatient } from "../../../../HoloRepositoryUI-Types";
+import { IPatient, IPractitioner } from "../../../../HoloRepositoryUI-Types";
+import { AppContext, IAppState, initialState } from "./AppState";
 
 // Note: See https://developer.microsoft.com/en-us/fabric/#/styles/web/icons#fabric-react
 initializeIcons();
-
-export type PidToPatientsMap = Record<string, IPatient>;
-export interface IAppState {
-  practitioner?: IPractitioner;
-  patients?: PidToPatientsMap;
-  handlePractitionerChange: Function;
-  handlePatientsChange: Function;
-}
 
 class App extends Component<any, IAppState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      practitioner: undefined,
-      patients: {},
+      ...initialState,
       handlePractitionerChange: this._handlePractitionerChange,
       handlePatientsChange: this._handlePatientsChange
     };
@@ -44,9 +36,11 @@ class App extends Component<any, IAppState> {
 
   render() {
     return (
-      <div className="App">
-        <MainContainer />
-      </div>
+      <AppContext.Provider value={this.state}>
+        <div className="App">
+          <MainContainer />
+        </div>
+      </AppContext.Provider>
     );
   }
 

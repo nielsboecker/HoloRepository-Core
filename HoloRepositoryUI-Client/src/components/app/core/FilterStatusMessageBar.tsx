@@ -12,11 +12,9 @@ class FilterStatusMessageBar extends Component<IFilterStatusMessageBarProps> {
     const { totalCount, filteredCount, itemEntityName = "item" } = this.props;
 
     return (
-      <>
-        {totalCount !== filteredCount && (
-          <MessageBar>{`Showing ${filteredCount} of ${totalCount} ${itemEntityName}s.`}</MessageBar>
-        )}
-      </>
+      totalCount !== filteredCount && (
+        <MessageBar>{`Showing ${filteredCount} of ${totalCount} ${itemEntityName}s.`}</MessageBar>
+      )
     );
   }
 }

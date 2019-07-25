@@ -7,7 +7,7 @@ export type PropsWithContext = { context?: IAppState };
 
 export interface IAppState {
   practitioner?: IPractitioner;
-  patients?: PidToPatientsMap;
+  patients: PidToPatientsMap;
   handlePractitionerChange: Function;
   handlePatientsChange: Function;
 }

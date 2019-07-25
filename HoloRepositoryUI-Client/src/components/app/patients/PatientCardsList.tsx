@@ -1,40 +1,26 @@
 import React, { Component } from "react";
-import {
-  FocusZone,
-  FocusZoneDirection,
-  getId,
-  Label,
-  List,
-  SearchBox,
-  Toggle
-} from "office-ui-fabric-react";
+import { FocusZone, FocusZoneDirection, getId, Label, List, SearchBox, Toggle } from "office-ui-fabric-react";
 import { Col, Row } from "antd";
 import { IPatient } from "../../../../../HoloRepositoryUI-Types";
 import PatientCard from "./PatientCard";
-
-import samplePatients from "../../../__tests__/samples/samplePatients.json";
-import samplePatientsWithHolograms from "../../../__tests__/samples/samplePatientsWithHolograms.json";
 import FilterStatusMessageBar from "../core/FilterStatusMessageBar";
+import { PidToPatientsMap, PropsWithContext, withAppContext } from "../../shared/AppState";
 
 export interface IPatientCardsListState {
   filterPatientNameText?: string;
   isShowWithHologramsOnly: boolean;
-  patients?: IPatient[];
 }
 
-export default class PatientCardsList extends Component<any, IPatientCardsListState> {
-  allPatients = [...samplePatients, ...samplePatientsWithHolograms].sort((a, b) =>
-    a.name.full.localeCompare(b.name.full)
-  ) as IPatient[];
-
+class PatientCardsList extends Component<PropsWithContext, IPatientCardsListState> {
   state: IPatientCardsListState = {
     filterPatientNameText: "",
-    isShowWithHologramsOnly: false,
-    patients: this.allPatients
+    isShowWithHologramsOnly: false
   };
 
   render(): JSX.Element {
-    const { patients = [], isShowWithHologramsOnly } = this.state;
+    const { isShowWithHologramsOnly } = this.state;
+    
+    const { allPatients, displayedPatients } = this._updateDisplayedPatients();
 
     // Ensure that the ID is unique on the page.
     const filterNameId = getId("filterName");
@@ -67,41 +53,46 @@ export default class PatientCardsList extends Component<any, IPatientCardsListSt
             </Row>
 
             <FilterStatusMessageBar
-              totalCount={this.allPatients.length}
-              filteredCount={patients.length}
+              totalCount={Object.keys(allPatients).length}
+              filteredCount={Object.keys(displayedPatients).length}
               itemEntityName="patient"
             />
           </div>
         </FocusZone>
 
         <FocusZone direction={FocusZoneDirection.vertical}>
-          <List items={patients} onRenderCell={this._onRenderCell} />
+          <List items={Object.values(displayedPatients)} onRenderCell={this._onRenderCell} />
         </FocusZone>
       </>
     );
   }
 
-  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<IPatientCardsListState>): void {
-    if (
-      prevState.filterPatientNameText !== this.state.filterPatientNameText ||
-      prevState.isShowWithHologramsOnly !== this.state.isShowWithHologramsOnly
-    ) {
-      let patients = this.allPatients.slice();
-      if (this.state.filterPatientNameText) {
-        patients = patients.filter(
-          patient =>
-            patient.name.full
-              .toLowerCase()
-              .indexOf(this.state.filterPatientNameText!.toLowerCase()) >= 0
-        );
-      }
+  private _updateDisplayedPatients() {
+    const { patients: allPatients } = this.props.context!;
 
-      if (this.state.isShowWithHologramsOnly) {
-        patients = patients.filter(patient => patient.holograms && patient.holograms.length > 0);
-      }
+    const displayedPatients: PidToPatientsMap = { ...allPatients };
+    for (const pid in allPatients) {
+      const patient = allPatients[pid];
 
-      this.setState({ patients });
+      if (this._filterItem_noHolograms(patient) || this._filterItem_patientName(patient)) {
+        delete displayedPatients[pid];
+      }
     }
+    return { allPatients, displayedPatients };
+  }
+
+  private _filterItem_noHolograms(patient: IPatient): boolean {
+    return (
+      this.state.isShowWithHologramsOnly && (!patient.holograms || patient.holograms.length === 0)
+    );
+  }
+
+  private _filterItem_patientName(patient: IPatient): boolean {
+    return (
+      this.state.filterPatientNameText !== undefined &&
+      this.state.filterPatientNameText !== "" &&
+      patient.name.full.toLowerCase().indexOf(this.state.filterPatientNameText.toLowerCase()) < 0
+    );
   }
 
   private _onRenderCell = (patient: IPatient | undefined): JSX.Element => {
@@ -120,3 +111,5 @@ export default class PatientCardsList extends Component<any, IPatientCardsListSt
     }));
   };
 }
+
+export default withAppContext(PatientCardsList);

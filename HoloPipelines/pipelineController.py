@@ -66,8 +66,5 @@ def main():
 
 	json_file.close()
 
-def getPipelineConfigList():#TODO ye
-	return json
-
 if __name__ == "__main__":
 	main()

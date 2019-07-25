@@ -1,5 +1,5 @@
 import React, { ComponentType, Context, createContext, PureComponent } from "react";
-import { IPatient, IPractitioner } from "../../../../HoloRepositoryUI-Types";
+import { IPatient, IPipeline, IPractitioner } from "../../../../HoloRepositoryUI-Types";
 
 export type PidToPatientsMap = Record<string, IPatient>;
 
@@ -9,18 +9,22 @@ export interface IAppState {
   practitioner?: IPractitioner;
   patients: PidToPatientsMap;
   selectedPatientId?: string;
+  pipelines: IPipeline[];
   handlePractitionerChange: Function;
   handlePatientsChange: Function;
   handleSelectedPatientIdChange: Function;
+  handlePipelinesChange: Function;
 }
 
 const initialState: IAppState = {
   practitioner: undefined,
   patients: {},
   selectedPatientId: undefined,
+  pipelines: [],
   handlePractitionerChange: () => {},
   handleSelectedPatientIdChange: () => {},
-  handlePatientsChange: () => {}
+  handlePatientsChange: () => {},
+  handlePipelinesChange: () => {}
 };
 
 // using same interface for App state and context

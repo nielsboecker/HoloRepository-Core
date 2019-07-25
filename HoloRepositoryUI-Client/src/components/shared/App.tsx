@@ -3,7 +3,7 @@ import "./App.scss";
 import MainContainer from "./MainContainer";
 import { initializeIcons } from "@uifabric/icons";
 import BackendService from "../../services/holoRepositoryServerService";
-import { IPatient, IPractitioner } from "../../../../HoloRepositoryUI-Types";
+import { IPatient, IPractitioner, IPipeline } from "../../../../HoloRepositoryUI-Types";
 import { AppContext, IAppState, initialState } from "./AppState";
 
 // Note: See https://developer.microsoft.com/en-us/fabric/#/styles/web/icons#fabric-react
@@ -16,7 +16,8 @@ class App extends Component<any, IAppState> {
       ...initialState,
       handlePractitionerChange: this._handlePractitionerChange,
       handlePatientsChange: this._handlePatientsChange,
-      handleSelectedPatientIdChange: this._handleSelectedPatientIdChange
+      handleSelectedPatientIdChange: this._handleSelectedPatientIdChange,
+      handlePipelinesChange: this._handlePipelinesChange
     };
   }
 
@@ -28,10 +29,16 @@ class App extends Component<any, IAppState> {
       this._handlePractitionerChange(practitioner!);
     });
 
-    // Load all patients for which the current practitioner is responsible
+    // Fetch all patients for which the current practitioner is responsible
     BackendService.getAllPatientsForPractitioner(practitionerId).then(patients => {
       console.log("patients", patients);
       this._handlePatientsChange(patients!);
+    });
+
+    // Fetch information about available pipelines
+    BackendService.getAllPipelines().then(pipelines => {
+      console.log("pipelines", pipelines);
+      this._handlePipelinesChange(pipelines || []);
     });
   }
 
@@ -105,8 +112,12 @@ class App extends Component<any, IAppState> {
   };
 
   private _handleSelectedPatientIdChange = (pid: string) => {
-    this.setState({selectedPatientId: pid})
-  }
+    this.setState({ selectedPatientId: pid });
+  };
+
+  private _handlePipelinesChange = (pipelines: IPipeline[]) => {
+    this.setState({ pipelines });
+  };
 }
 
 export default App;

@@ -5,7 +5,7 @@ import pathlib
 import sys
 import numpy as np
 
-def main(inputNiftiPath, threshold, outputObjPath, flipNpy=False):
+def main(inputNiftiPath, outputObjPath, threshold, flipNpy=False):
 	generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(inputNiftiPath)))
 	generatedObjPath = compNumpy2obj.main(generatedNumpyList, threshold, str(pathlib.Path(outputObjPath)))
 	print("nifti2obj: done")

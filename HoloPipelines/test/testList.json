@@ -1,5 +1,5 @@
 {
-   "s0":[
+   "s0":
       {
          "name":"sample0",
          "src":"test/sample0.py",
@@ -7,9 +7,8 @@
          "addDate":"26/06/2019",
          "modDate":"26/06/2019",
          "param":"0"
-      }
-   ],
-   "p0":[
+      },
+   "p0":
       {
          "name":"nifti2obj",
          "src":"pipelines/pipelineNifti2obj.py",
@@ -17,9 +16,8 @@
          "addDate":"27/06/2019",
          "modDate":"27/06/2019",
          "param":"4"
-      }
-   ],
-   "p1":[
+      },
+   "p1":
       {
          "name":"nifti2glb",
          "src":"pipelines/pipelineNifti2glb.py",
@@ -27,9 +25,8 @@
          "addDate":"28/06/2019",
          "modDate":"28/06/2019",
          "param":"3"
-      }
-   ],
-   "p3":[
+      },
+   "p3":
       {
          "name":"dicom2glb",
          "src":"pipelines/pipelineDicom2glb.py",
@@ -37,9 +34,8 @@
          "addDate":"01/07/2019",
          "modDate":"01/07/2019",
          "param":"3"
-      }
-   ],
-   "p4":[
+      },
+   "p4":
       {
          "name":"lungDicom2glb",
          "src":"pipelines/pipelineLungDicom2glb.py",
@@ -48,5 +44,4 @@
          "modDate":"01/07/2019",
          "param":"2"
       }
-   ]
 }

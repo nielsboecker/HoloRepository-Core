@@ -1,12 +1,13 @@
 import numpy as np
 import nibabel as nib
 from scipy import ndimage
+import pathlib
 try:
 	from utils import *
 except:
 	from components.lungSegment.utils import *
 
-def segment_airway(params, I, I_affine, Mlung):
+def segment_airway(params, I, I_affine, Mlung, outputNiftiFolderPath):
 
 	#####################################################
 	# Initialize parameters 
@@ -38,8 +39,8 @@ def segment_airway(params, I, I_affine, Mlung):
 	Mawtmp = ndimage.binary_dilation(Maw, structure = struct_l, iterations = 1)
 	Mawtmp = np.int8(Mawtmp)
 	Mlung[Maw > 0] = 0
-	nib.Nifti1Image(Maw,I_affine).to_filename('pipelines/components/lungSegment/result/sample_aw.nii.gz')
-	nib.Nifti1Image(Mlung,I_affine).to_filename('pipelines/components/lungSegment/result/sample_lung.nii.gz')
+	nib.Nifti1Image(Maw,I_affine).to_filename(str(pathlib.Path(outputNiftiFolderPath).joinpath("aw.nii.gz")))
+	nib.Nifti1Image(Mlung,I_affine).to_filename(str(pathlib.Path(outputNiftiFolderPath).joinpath("lung.nii.gz")))
 	
 	return Mlung, Maw
 

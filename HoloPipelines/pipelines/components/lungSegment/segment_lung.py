@@ -3,8 +3,9 @@ import nibabel as nib
 from scipy import ndimage
 from skimage import measure
 from scipy import stats
+import pathlib
 
-def segment_lung(params, I, I_affine):
+def segment_lung(params, I, I_affine, outputNiftiFolderPath):
 	
 	#####################################################
 	# Intensity thresholding & Morphological operations
@@ -49,7 +50,7 @@ def segment_lung(params, I, I_affine):
 	M     = ndimage.binary_fill_holes(M)
 	Mlung = np.int8(M)
 	#nib.Nifti1Image(Mlung,I_affine).to_filename('./result/sample_lungaw.nii.gz')
-	nib.Nifti1Image(Mlung,I_affine).to_filename('pipelines/components/lungSegment/result/sample_lungaw.nii.gz')
+	nib.Nifti1Image(Mlung,I_affine).to_filename(str(pathlib.Path(outputNiftiFolderPath).joinpath("lungaw.nii.gz")))
 	
 	return Mlung
 

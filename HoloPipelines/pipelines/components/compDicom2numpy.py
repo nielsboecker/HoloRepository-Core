@@ -8,9 +8,6 @@ import scipy.ndimage
 import pathlib
 import time
 
-cwd = pathlib.Path.cwd()
-numpyPath = cwd.joinpath("numpy")
-
 def loadScan(scanPath):
 	slices = [dicom.read_file(str(pathlib.Path(scanPath, s))) for s in os.listdir(str(scanPath))]
 	slices.sort(key = lambda x: int(x.InstanceNumber))
@@ -69,16 +66,10 @@ def resample(dataPath, new_spacing=[1,1,1]):
 	
 	return image, new_spacing
 
-def main(dicomPath, outputNumpy=False, outputNumpyPath=""):
+def main(dicomPath):
 	print("dicom2numpy: resampling dicom...")
 	imgs_after_resamp, spacing = resample(dicomPath)
 	print("dicom2numpy: resampling done")
-	if outputNumpy:
-		if outputNumpyPath != "":
-			np.save(str(outputNumpyPath), imgs_after_resamp)
-			return 0
-		else:
-			sys.exit("dicom2numpy: error, no output path given")
 	return imgs_after_resamp
 
 if __name__ == '__main__':

@@ -48,9 +48,7 @@ def testSetup():
 
 	remove3Dmodels()
 
-	setupEndsHere = True
-
-	yield setupEndsHere
+	yield #code below will run everytime a test case finishes
 
 	remove3Dmodels()
 
@@ -68,18 +66,18 @@ def remove3Dmodels():
 		os.remove(str(glbPath.joinpath("testResult3.glb")))
 
 def test_pipelines_dicom2glb(testSetup):
-	output = subprocess.check_output("python pipelineController.py -c test/testList.json p3 -p "+str(dicomPath.joinpath("3_Axial_CE"))+" 350 "+str(glbPath.joinpath("testResult0.glb")), cwd=newCwd, shell=True).decode("utf-8")
+	output = subprocess.run(["python", "pipelineController.py", "-c", "test/testList.json", "p3", "-p", str(dicomPath.joinpath("3_Axial_CE")), str(glbPath.joinpath("testResult0.glb")), "350"], cwd=newCwd)
 	assert os.path.isfile(glbPath.joinpath("testResult0.glb"))
 
 def test_pipelines_lungDicom2glb(testSetup):
-	output = subprocess.check_output("python pipelineController.py -c test/testList.json p4 -p "+str(dicomPath.joinpath("3_Axial_CE"))+" "+str(glbPath.joinpath("testResult1.glb")), cwd=newCwd, shell=True).decode("utf-8")
+	output = subprocess.run(["python", "pipelineController.py", "-c", "test/testList.json", "p4", "-p", str(dicomPath.joinpath("3_Axial_CE")), str(glbPath.joinpath("testResult1.glb"))], cwd=newCwd)
 	assert os.path.isfile(glbPath.joinpath("testResult1.glb"))
 
 def test_pipelines_nifti2obj(testSetup):
-	output = subprocess.check_output("python pipelineController.py -c test/testList.json p0 -p "+str(niftiPath.joinpath("1103_3_glm.nii"))+" 30 "+str(objPath.joinpath("testResult2.obj")) + " 0", cwd=newCwd, shell=True).decode("utf-8")
+	output = subprocess.run(["python", "pipelineController.py", "-c", "test/testList.json", "p0", "-p", str(niftiPath.joinpath("1103_3_glm.nii")),str(objPath.joinpath("testResult2.obj")), "30", "0"], cwd=newCwd)
 	assert os.path.isfile(objPath.joinpath("testResult2.obj"))
 
 def test_pipelines_nifti2glb(testSetup):
-	output = subprocess.check_output("python pipelineController.py -c test/testList.json p1 -p "+str(niftiPath.joinpath("1103_3_glm.nii"))+" 30 "+str(glbPath.joinpath("testResult3.glb")), cwd=newCwd, shell=True).decode("utf-8")
+	output = subprocess.run(["python", "pipelineController.py", "-c", "test/testList.json", "p1", "-p", str(niftiPath.joinpath("1103_3_glm.nii")), str(glbPath.joinpath("testResult3.glb")), "30"], cwd=newCwd)
 	assert os.path.isfile(glbPath.joinpath("testResult3.glb"))
 

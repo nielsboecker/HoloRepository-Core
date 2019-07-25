@@ -1,4 +1,4 @@
-# PIPELINE
+# HoloPipelines
 
 ## Requirements:
 Python 3.7 or above
@@ -18,14 +18,12 @@ sudo apt-get install libcdcm-tools
 ```
 
 Double check to see if installation is successful by running
-```
-gdcmdump
-```
-or
-```
-gdcmconv
-```
+`gdcmdump` or `gdcmconv`
 If command is not found then please make sure to add to PATH
+
+```
+PATH=$PATH:pathToYourLocalGDCMbin
+```
 
 The final 2 dependencies can be installed using Node.js package manager. Please make sure to have the latest version of npm installed.
 
@@ -54,7 +52,28 @@ python pipelineController.py p4 -p 3_Axial_CE
 ```
 python pipelineController.py -h
 ```
-- this script has a built in help
+- this script has a built in help which will print out
+```
+usage: pipelineController.py [-h] [-c CONFIG] [-l] [-i INFO]
+                             [-p [PARAM [PARAM ...]]]
+                             [pipelineID]
+
+Selct pipeline to process
+
+positional arguments:
+  pipelineID            ID of pipeline
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        path to pipeline config file relative to
+                        pipelineController
+  -l, --ls              list all the available piplines
+  -i INFO, --info INFO  get info from pipeline's name
+  -p [PARAM [PARAM ...]], --param [PARAM [PARAM ...]]
+                        parameters for pipeline e.g. dicom folder name or HU
+                        threshold
+```
 
 ## Testing:
 Testing can be done by using pytest:
@@ -66,11 +85,3 @@ Then navigate to /HoloRepository-Core/HoloPipelines and run:
 ```
 pytest --cov
 ```
-
-### Refs:
-- https://www.raddq.com/dicom-processing-segmentation-visualization-in-python/      14/06/19
-- https://wiki.idoimaging.com/index.php?title=Sample_Data   seems like the have some dicoms and a bit of niftis we can playwith    17/06/19
-- https://www.researchgate.net/post/What_is_the_easiest_way_to_batch_resize_DICOM_files to down sample dicoms, incase if they're too large  17/06/19
-- https://stackoverflow.com/questions/55560243/resize-a-dicom-image-in-python      this one is for python. the one above is for mathlab, i didn't see
-- https://stackoverflow.com/questions/48844778/create-a-obj-file-from-3d-array-in-python   export mesh to obj   17/06/19
-- (optional) new marching cubes with smoothing (?) https://github.com/ilastik/marching_cubes

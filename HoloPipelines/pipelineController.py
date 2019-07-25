@@ -2,7 +2,7 @@ import json
 import os
 import sys
 import argparse
-from subprocess import call
+import subprocess
 import pathlib
 
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
@@ -21,8 +21,6 @@ def main():
 		os.mkdir("medicalScans")
 		os.mkdir("medicalScans/dicom")
 		os.mkdir("medicalScans/nifti")
-	if not os.path.exists("numpy"):
-		os.mkdir("numpy")
 	if not os.path.exists("output"):
 		os.mkdir("output")
 		os.mkdir("output/OBJ")
@@ -39,9 +37,9 @@ def main():
 		if args.ls:
 			print(json.dumps(lsPipe, indent=4, sort_keys=False))
 			sys.exit()
-		elif len(args.info) > 0:
+		if len(args.info) > 0:
 			for key, value in lsPipe.items():
-				data = value[0]
+				data = value
 				if args.info in data['name']:
 					print("**ID: " + key)
 					print("name: " + data["name"])
@@ -60,11 +58,11 @@ def main():
 		#check if pipeline exist
 		if args.pipelineID not in lsPipe:
 			sys.exit("pipelineController: no pipeline with such ID")
-		if len(args.param) != int(lsPipe[args.pipelineID][0]['param']):
-			sys.exit("pipelineController: invalid number of param [expected: " + str(lsPipe[args.pipelineID][0]['param']) + ", got: " + str(len(args.param)) + "]")
+		if len(args.param) != int(lsPipe[args.pipelineID]['param']):
+			sys.exit("pipelineController: invalid number of param [expected: " + str(lsPipe[args.pipelineID]['param']) + ", got: " + str(len(args.param)) + "]")
 		#start pipeline
 		print("starting pipeline "+args.pipelineID+"...")
-		call('python ' + lsPipe[args.pipelineID][0]['src'] + " " +" ".join(args.param), cwd=newCwd, shell=True)
+		subprocess.run(["python", lsPipe[args.pipelineID]['src']] + args.param, cwd=newCwd)
 
 	json_file.close()
 

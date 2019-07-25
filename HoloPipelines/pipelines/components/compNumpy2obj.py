@@ -16,11 +16,6 @@ import sys
 
 nib.Nifti1Header.quaternion_threshold = -1e-06
 
-cwd = pathlib.Path.cwd()
-
-objPath = cwd.joinpath("output", "OBJ")
-numpyPath = cwd.joinpath("numpy")
-
 
 def generateMesh(image, threshold=300, step_size=1):
 	print ("Transposing surface...")
@@ -40,7 +35,7 @@ def generateObj(inputNumpy, thisThreshold, outputObjPath):
 		try:
 			numpyData = np.load(str(pathlib.Path(inputNumpy)))
 		except:
-			sys.exit("numpy2obj: error occured while loading numpy. please make sure the path to numpy is correct.")
+			sys.exit("numpy2obj: error occured while loading numpy. Please make sure the path to numpy is correct.")
 
 	verts, faces, norm = generateMesh(numpyData, float(thisThreshold), 1)
 
@@ -60,8 +55,8 @@ def generateObj(inputNumpy, thisThreshold, outputObjPath):
 
 def main(inputData, mainThreshold, outputPath):
 	generateObj(inputData, mainThreshold, outputPath)
-	return outputPath
 	print ("numpy2obj: done")
+	return outputPath
 
 if __name__ == '__main__':
 	print("component can't run on its own")

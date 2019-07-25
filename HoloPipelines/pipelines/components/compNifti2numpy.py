@@ -5,13 +5,6 @@ import scipy
 import pathlib
 import platform
 
-cwd = pathlib.Path.cwd()
-
-numpyPath = cwd.joinpath("numpy")
-
-fName = ""
-tempPath = ""
-
 def resample(dataPath, new_spacing=[1,1,1]):
 	image = dataPath
 	originalShape = image.shape[:3]
@@ -31,7 +24,7 @@ def resample(dataPath, new_spacing=[1,1,1]):
 	
 	return image, new_spacing
 
-def main(inputNiftiPath, outputNumpyPath=""):
+def main(inputNiftiPath):
 	#https://github.com/nipy/nibabel/issues/626
 	nib.Nifti1Header.quaternion_threshold = -1e-06
 	img = nib.load(inputNiftiPath)
@@ -39,9 +32,6 @@ def main(inputNiftiPath, outputNumpyPath=""):
 	img, newSpacing = resample(img)
 
 	numpyList = np.array(img.dataobj)
-	if str(outputNumpyPath) != "":
-		outputNumpyPath = str(pathlib.Path(outputNumpyPath))
-		np.save(str(pathlib.Path(outputNumpyPath)), numpyList)
 	return numpyList
 
 if __name__ == '__main__':

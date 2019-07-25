@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, send_file
 from werkzeug.utils import secure_filename
-from subprocess import Popen as pop
+import subprocess
 
 app = Flask(__name__)
 
@@ -41,10 +41,14 @@ def seg_file():
             file.filename = UPLOAD_FILENAME
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-        pop(
-            "net_segment inference -c ~/niftynet/extensions/dense_vnet_abdominal_ct/config.ini",
-            shell=False,
-        ).wait()
+        subprocess.run(
+            [
+                "net_segment",
+                "inference",
+                "-c",
+                "/root/niftynet/extensions/dense_vnet_abdominal_ct/config.ini",
+            ]
+        )
         return send_file(OUTPUT_FOLDER + "/" + format_output_filename(filename)), 200
 
 

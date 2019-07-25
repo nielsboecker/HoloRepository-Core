@@ -8,14 +8,18 @@ export type PropsWithContext = { context?: IAppState };
 export interface IAppState {
   practitioner?: IPractitioner;
   patients: PidToPatientsMap;
+  selectedPatientId?: string;
   handlePractitionerChange: Function;
   handlePatientsChange: Function;
+  handleSelectedPatientIdChange: Function;
 }
 
 const initialState: IAppState = {
   practitioner: undefined,
   patients: {},
+  selectedPatientId: undefined,
   handlePractitionerChange: () => {},
+  handleSelectedPatientIdChange: () => {},
   handlePatientsChange: () => {}
 };
 

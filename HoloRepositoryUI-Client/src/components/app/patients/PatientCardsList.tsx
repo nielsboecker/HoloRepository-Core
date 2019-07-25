@@ -19,7 +19,7 @@ class PatientCardsList extends Component<PropsWithContext, IPatientCardsListStat
 
   render(): JSX.Element {
     const { isShowWithHologramsOnly } = this.state;
-    
+
     const { allPatients, displayedPatients } = this._updateDisplayedPatients();
 
     // Ensure that the ID is unique on the page.

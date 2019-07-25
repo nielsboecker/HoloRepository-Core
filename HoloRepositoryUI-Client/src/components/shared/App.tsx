@@ -15,7 +15,8 @@ class App extends Component<any, IAppState> {
     this.state = {
       ...initialState,
       handlePractitionerChange: this._handlePractitionerChange,
-      handlePatientsChange: this._handlePatientsChange
+      handlePatientsChange: this._handlePatientsChange,
+      handleSelectedPatientIdChange: this._handleSelectedPatientIdChange
     };
   }
 
@@ -43,6 +44,11 @@ class App extends Component<any, IAppState> {
       </AppContext.Provider>
     );
   }
+
+  private _fetchPatientSpecificData = () => {
+    this._fetchImagingStudiesForPatients();
+    this._fetchHologramsForPatients();
+  };
 
   private _fetchImagingStudiesForPatients = () => {
     const { patients } = this.state;
@@ -87,21 +93,20 @@ class App extends Component<any, IAppState> {
     this.setState({ practitioner });
   };
 
-  private _fetchPatientSpecificData = () => {
-    this._fetchImagingStudiesForPatients();
-    this._fetchHologramsForPatients();
-  };
+  private _handlePatientsChange = (patientsArray?: IPatient[]) => {
+    if (!patientsArray) return;
 
-  private _handlePatientsChange = (patientsFlat?: IPatient[]) => {
-    if (!patientsFlat) return;
-
-    console.debug(`Received ${patientsFlat.length} patients`);
-    const patients = patientsFlat.reduce(
+    console.debug(`Received ${patientsArray.length} patients`);
+    const patients = patientsArray.reduce(
       (accumulator, patient) => ({ ...accumulator, [patient.pid]: patient }),
       {}
     );
     this.setState({ patients }, this._fetchPatientSpecificData);
   };
+
+  private _handleSelectedPatientIdChange = (pid: string) => {
+    this.setState({selectedPatientId: pid})
+  }
 }
 
 export default App;

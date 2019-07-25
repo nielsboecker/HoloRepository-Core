@@ -11,12 +11,6 @@ servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/boonwj/HoloRepository/0.2.0
 
-# Feedback
-# - /holograms/:hid to have a PUT operation for modification
-# - /patients to return all patient data without any queries
-# - /patients to ?search opeartion
-# - hologram schema's creationMode to add "FROM_DEPTHVISOR_RECORDING" for Depthvisor code
-
 paths:
   /patients:
     get:

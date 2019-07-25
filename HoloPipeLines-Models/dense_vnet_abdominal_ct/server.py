@@ -43,7 +43,7 @@ def seg_file():
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
         subprocess.run(
             [
-                "net_segment",
+                "/usr/local/bin/net_segment",
                 "inference",
                 "-c",
                 "/root/niftynet/extensions/dense_vnet_abdominal_ct/config.ini",

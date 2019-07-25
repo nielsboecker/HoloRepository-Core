@@ -5,7 +5,7 @@ FROM ubuntu:18.04
 RUN apt-get update  && apt-get clean 
 
 # install package
-RUN apt-get install -y --no-install-recommends python3-pip python3-dev build-essential nano
+RUN apt-get install -y --no-install-recommends python3-pip python3-dev build-essential nano 
 
 # Copy the flask script in to the container and set the working directory
 COPY server.py test.py /app/
@@ -28,8 +28,6 @@ RUN rm -rf /root/niftynet/data/dense_vnet_abdominal_ct/*
 # Copy the config to the container remove the sample config file
 COPY config.ini /root/niftynet/extensions/dense_vnet_abdominal_ct/
 
-# Remove package
-RUN rm -rf /var/lib/apt/lists/*
 
 # set the entry point to the script so when we start the docker it will run the server
 ENTRYPOINT ["gunicorn"]

@@ -4,21 +4,20 @@ import { Persona, PersonaSize } from "office-ui-fabric-react";
 import { Col, Divider, Row } from "antd";
 import PlainContentContainer from "./core/PlainContentContainer";
 import { capitaliseString, getAgeFromDobString } from "../../util/PatientUtil";
-import { IPractitioner } from "../../../../HoloRepositoryUI-Types";
+import { PropsWithContext, withAppContext } from "../shared/AppState";
 
-import samplePractitioner from "../../__tests__/samples/samplePractitioner.json";
-
-class ProfileInformationPage extends Component<RouteComponentProps> {
-  practitioner = samplePractitioner as IPractitioner;
+class ProfileInformationPage extends Component<RouteComponentProps & PropsWithContext> {
 
   render() {
+    const practitioner = this.props.context!.practitioner!;
+
     return (
       <PlainContentContainer>
         <Row gutter={16}>
           <Col span={6}>
             <Persona
-              imageUrl={this.practitioner.pictureUrl ? this.practitioner.pictureUrl : undefined}
-              text={this.practitioner.name.full}
+              imageUrl={practitioner.pictureUrl ? practitioner.pictureUrl : undefined}
+              text={practitioner.name.full}
               size={PersonaSize.size72}
               hidePersonaDetails={true}
             />
@@ -28,10 +27,10 @@ class ProfileInformationPage extends Component<RouteComponentProps> {
             <div>
               <ul>
                 <li className="name">
-                  Full name: {`${this.practitioner.name.title} ${this.practitioner.name.full}`}
+                  Full name: {`${practitioner.name.title} ${practitioner.name.full}`}
                 </li>
-                <li className="age">Age: {getAgeFromDobString(this.practitioner.birthDate)}</li>
-                <li className="gender">Gender: {capitaliseString(this.practitioner.gender)}</li>
+                <li className="age">Age: {getAgeFromDobString(practitioner.birthDate)}</li>
+                <li className="gender">Gender: {capitaliseString(practitioner.gender)}</li>
               </ul>
             </div>
           </Col>
@@ -39,8 +38,8 @@ class ProfileInformationPage extends Component<RouteComponentProps> {
           <Divider>Contact details</Divider>
 
           <ul>
-            <li>Phone: {this.practitioner.phone}</li>
-            <li>Mail: {this.practitioner.email}</li>
+            <li>Phone: {practitioner.phone || "Unknown"}</li>
+            <li>Mail: {practitioner.email || "Unknown"}</li>
           </ul>
         </Row>
       </PlainContentContainer>
@@ -48,4 +47,4 @@ class ProfileInformationPage extends Component<RouteComponentProps> {
   }
 }
 
-export default ProfileInformationPage;
+export default withAppContext(ProfileInformationPage);

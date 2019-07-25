@@ -4,9 +4,9 @@ const capitaliseString = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-const getAgeFromDobString = (dobString?: string) => {
+const getAgeFromDobString = (dobString?: string): number | string => {
   if (!dobString) {
-    return 0;
+    return "Unknown";
   }
   const birthDate = new Date(dobString);
   const ageDiffMs = Date.now() - birthDate.getTime();

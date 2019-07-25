@@ -12,10 +12,7 @@ import {
 import { Layout, Menu } from "antd";
 import "./MenuHeader.scss";
 import appLogo from "../../../assets/logo/2x/logo_and_font@2x.png";
-import { IPractitioner } from "../../../../../HoloRepositoryUI-Types";
-
-import samplePractitioner from "../../../__tests__/samples/samplePractitioner.json";
-//import "antd/dist/antd.css";
+import { PropsWithContext, withAppContext } from "../../shared/AppState";
 
 const { Header } = Layout;
 const { SubMenu } = Menu;
@@ -26,17 +23,12 @@ const imageProps: IImageProps = {
   maximizeFrame: true
 };
 
-const practitioner = samplePractitioner as IPractitioner;
+const practitionerPersona: IPersonaSharedProps = {};
 
-const practitionerPersona: IPersonaSharedProps = {
-  imageUrl: practitioner.pictureUrl,
-  imageInitials: "NS",
-  text: practitioner.name.full,
-  secondaryText: "Practitioner"
-};
-
-class MenuHeader extends Component {
+class MenuHeader extends Component<PropsWithContext> {
   render() {
+    const { practitioner } = this.props.context!;
+
     return (
       <Header>
         <Link to="/app/patients">
@@ -66,6 +58,8 @@ class MenuHeader extends Component {
               <div className="submenu-title-wrapper">
                 <Persona
                   {...practitionerPersona}
+                  imageUrl={practitioner!.pictureUrl}
+                  text={practitioner!.name.full}
                   size={PersonaSize.size32}
                   presence={PersonaPresence.online}
                   hidePersonaDetails={false}
@@ -96,4 +90,26 @@ class MenuHeader extends Component {
   }
 }
 
-export default MenuHeader;
+//export const withContext = <P extends {}>(Component: React.ComponentType<P>) =>
+//  class WithContext extends React.PureComponent<P & IAppState> {
+//    render() {
+//      return (
+//        <AppContext.Consumer>
+//          {(context: IAppState) => <Component {...this.props} {...context} />}
+//        </AppContext.Consumer>
+//      );
+//    }
+//  };
+
+//export const withContext = <P extends {}>(Component: React.ComponentType<P>) =>
+//  class WithContext extends React.PureComponent<P & IAppState> {
+//    render() {
+//      return (
+//        <AppContext.Consumer>
+//          {(context: IAppState) => <Component {...this.props} appContext={context} />}
+//        </AppContext.Consumer>
+//      );
+//    }
+//  };
+
+export default withAppContext(MenuHeader);

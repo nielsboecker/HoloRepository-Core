@@ -25,19 +25,19 @@ class App extends Component<any, IAppState> {
     // Note: SMART login is currently not implemented, so a hard-coded practitioner will be the user
     const practitionerId = "b0016666-1924-455d-8b16-92c631fa5207";
     BackendService.getPractitioner(practitionerId).then(practitioner => {
-      console.log("practitioner", practitioner);
+      console.log("Fetched data: practitioner", practitioner);
       this._handlePractitionerChange(practitioner!);
     });
 
     // Fetch all patients for which the current practitioner is responsible
     BackendService.getAllPatientsForPractitioner(practitionerId).then(patients => {
-      console.log("patients", patients);
+      console.log("Fetched data: patients", patients);
       this._handlePatientsChange(patients!);
     });
 
     // Fetch information about available pipelines
     BackendService.getAllPipelines().then(pipelines => {
-      console.log("pipelines", pipelines);
+      console.log("Fetched data: pipelines", pipelines);
       this._handlePipelinesChange(pipelines || []);
     });
   }
@@ -62,6 +62,7 @@ class App extends Component<any, IAppState> {
     if (!patients) return;
 
     BackendService.getImagingStudiesForAllPatients(patients).then(combinedResult => {
+      console.log("Fetched data: imaging studies", combinedResult);
       for (const pid in combinedResult) {
         const studies = combinedResult[pid];
         const patient = patients[pid];
@@ -82,6 +83,7 @@ class App extends Component<any, IAppState> {
     if (!patients) return;
 
     BackendService.getHologramsForAllPatients(patients).then(combinedResult => {
+      console.log("Fetched data: holograms", combinedResult);
       for (const pid in combinedResult) {
         const holograms = combinedResult[pid];
         const patient = patients[pid];

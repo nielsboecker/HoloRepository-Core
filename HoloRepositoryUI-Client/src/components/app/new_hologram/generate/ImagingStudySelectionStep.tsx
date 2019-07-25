@@ -3,20 +3,17 @@ import { IImagingStudy, IPatient } from "../../../../../../HoloRepositoryUI-Type
 import { ChoiceGroup, Dropdown, IChoiceGroupOption, IDropdownOption } from "office-ui-fabric-react";
 import { Col, Divider, Row } from "antd";
 import ImagingStudyDetailsCard from "./ImagingStudyDetailsCard";
-
-import samplePatients from "../../../../__tests__/samples/samplePatients.json";
-import samplePatientsWithImagingStudies from "../../../../__tests__/samples/samplePatientsWithImagingStudies.json";
-
-const allPatients = [...samplePatients, ...samplePatientsWithImagingStudies].sort((a, b) =>
-  a.name.full.localeCompare(b.name.full)
-) as IPatient[];
+import { PropsWithContext, withAppContext } from "../../../shared/AppState";
 
 export interface IImagingStudySelectionStepState {
   selectedPatient?: IPatient;
   selectedStudy?: IImagingStudy;
 }
 
-class ImagingStudySelectionStep extends Component<any, IImagingStudySelectionStepState> {
+class ImagingStudySelectionStep extends Component<
+  PropsWithContext,
+  IImagingStudySelectionStepState
+> {
   state: IImagingStudySelectionStepState = {};
 
   render() {
@@ -55,21 +52,22 @@ class ImagingStudySelectionStep extends Component<any, IImagingStudySelectionSte
   }
 
   private _mapPatientsToDropdownOptions = (): IDropdownOption[] => {
-    return allPatients.map(patient => ({
-      key: patient.pid,
+    const { patients } = this.props.context!;
+
+    return Object.entries(patients).map(([pid, patient]) => ({
+      key: pid,
       text: `${patient.name.full} (${ImagingStudySelectionStep._getNumberOfStudies(
         patient
-      )} imaging studies)`,
+      )} studies)`,
       disabled: !patient.imagingStudies || patient.imagingStudies.length === 0
     }));
   };
 
   private _handlePatientDropdownChange = (_: any, option?: IDropdownOption) => {
+    const { patients } = this.props.context!;
+
     const selectedPatientId = option!.key;
-    const selectedPatient = allPatients.find(patient => patient.pid === selectedPatientId);
-    if (selectedPatient) {
-      this.setState({ selectedPatient, selectedStudy: undefined });
-    }
+    this.setState({ selectedPatient: patients[selectedPatientId], selectedStudy: undefined });
   };
 
   private _handleimagingStudyChange = (_: any, option?: IChoiceGroupOption) => {
@@ -100,4 +98,4 @@ class ImagingStudySelectionStep extends Component<any, IImagingStudySelectionSte
   }
 }
 
-export default ImagingStudySelectionStep;
+export default withAppContext(ImagingStudySelectionStep);

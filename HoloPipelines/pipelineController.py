@@ -91,5 +91,12 @@ def main():
     json_file.close()
 
 
+def startPipeline(plID, paramList=[]):
+	fname = "test/testList.json"#hard coded
+	with open(str(pathlib.Path(newCwd).joinpath(str(fname)))) as json_file:
+		lsPipe = json.load(json_file)
+		subprocess.run(["python", lsPipe[plID]["src"]] + paramList, cwd=newCwd)
+	json_file.close()
+
 if __name__ == "__main__":
     main()

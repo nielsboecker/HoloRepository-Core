@@ -2,7 +2,9 @@
 FROM ubuntu:18.04
 
 # Update Software repository
-RUN apt-get update  && apt-get clean 
+RUN apt-get update  && \
+apt-get install -y --no-install-recommends python3-pip python3-dev build-essential nano &&\
+apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # install package
 RUN apt-get install -y --no-install-recommends python3-pip python3-dev build-essential nano 
@@ -15,7 +17,7 @@ WORKDIR /app
 COPY requirements.txt /app/
 
 # Run install tensorflow, niftynet, flask
-RUN pip3 install --upgrade setuptools 
+RUN pip3 install --upgrade setuptools
 RUN pip3 install wheel
 RUN pip3 install -r requirements.txt
 

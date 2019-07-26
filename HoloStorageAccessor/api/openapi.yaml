@@ -440,7 +440,7 @@ components:
         creationDescription:
           type: string
           description: The description associated with the creation method of the hologram
-          example: By bone segmentation pipeline with HU 750
+          example: By bone segmentation pipeline with HU threshold 750
         hologramFile:
           type: string
           format: binary
@@ -498,7 +498,7 @@ components:
         creationDescription:
           type: string
           description: The description associated with the creation method of the hologram
-          example: By bone segmentation pipeline with HU 750
+          example: By bone segmentation pipeline with HU threshold 750
         aid:
           type: string
           description: The UUID of the author of this hologram

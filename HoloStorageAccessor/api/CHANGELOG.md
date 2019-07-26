@@ -11,6 +11,7 @@ https://app.swaggerhub.com/apis/boonwj/HoloRepository/
   - Added `dateOfImaging` field
   - Added `creationDescription` field
   - Removed `pipelineID` field
+  - Renamed `createdDate` to `creationDate`
 - `POST: /holograms` successful response is `hologram` data
 
 ## [0.3.1] - 2019-07-26

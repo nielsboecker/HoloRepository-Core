@@ -67,7 +67,7 @@ class PatientDetailPage extends Component<IPatientDetailPageProps> {
           <HologramsDetailsList
             columns={[fileTypeCol, titleCol, dateCol, authorCol, fileSizeCol]}
             showFilters={false}
-            patientId={patient.pid}
+            limitToSelectedPatient={true}
           />
         </Row>
       </PlainContentContainer>

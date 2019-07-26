@@ -5,7 +5,7 @@ from flask_json import FlaskJSON, JsonError, json_response, as_json
 
 app = Flask(__name__)
 
-status = {"jobID": "j0", "status": "hey", "stamp": "2020"}
+status = {"j0":{ "status": "segment", "stamp": "2020"}}
 app.config["JSON_ADD_STATUS"] = False
 piprline = {}
 
@@ -69,9 +69,12 @@ def send_job_start_response():
 
 @app.route("/job/<jobid>/status", methods=["GET"])
 def get_job_status(jobid):
-    # show the user profile for that user
+    if jobid in status:
+        status_for_current_jobid={jobid:status[jobid]}
+    else:
+        status_for_current_jobid={jobid:"does not exist"} 
 
-    return "User %s" % escape(jobid)
+    return json.dumps(status_for_current_jobid)
 
 
 if __name__ == "__main__":

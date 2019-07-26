@@ -54,7 +54,7 @@ def main():
         if args.ls:
             print(json.dumps(lsPipe, indent=4, sort_keys=False))
             sys.exit()
-        if len(args.info) > 0:
+        if args.info:
             for key, value in lsPipe.items():
                 data = value
                 if args.info in data["name"]:

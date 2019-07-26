@@ -4,9 +4,13 @@ from scipy import ndimage
 import pathlib
 
 try:
-    from utils import *
-except:
-    from components.lungSegment.utils import *
+    from utils import close_space_dilation, generate_structure_trachea, generate_initLoc
+except Exception as e:
+    from components.lungSegment.utils import (
+        close_space_dilation,
+        generate_structure_trachea,
+        generate_initLoc,
+    )
 
 
 def segment_airway(params, I, I_affine, Mlung, outputNiftiFolderPath):

@@ -46,9 +46,7 @@ def main(inputNiftiPath, outputNiftiFolderPath):
 
     Mlung, Maw = segment_airway(params, I, I_affine, Mlung, outputNiftiFolderPath)
 
-    return str(
-        outputNiftiFolderPath
-    )  # TODO: add prefix or suffix filename with something(id from the job ID?) in the future to avoid concurrency issues
+    return str(outputNiftiFolderPath)
 
 
 if __name__ == "__main__":

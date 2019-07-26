@@ -35,8 +35,8 @@ def main(inputObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False)
                 sys.exit("obj2glb: Draco compression failed")
     else:
         sys.exit("obj2glb: conversion failed")
-    return outputGlbPath
     print("obj2glb: done")
+    return outputGlbPath
 
 
 if __name__ == "__main__":

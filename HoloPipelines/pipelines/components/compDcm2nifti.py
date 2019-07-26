@@ -9,8 +9,8 @@ def main(dicomInputPath, outputNiftiFolderPath):
         os.makedirs(outputNiftiFolderPath)
     # convert series of dicom to nifti
     dicom2nifti.convert_directory(dicomInputPath, outputNiftiFolderPath)
-    return outputNiftiFolderPath
     print("dcm2nifti: done")
+    return outputNiftiFolderPath
 
 
 if __name__ == "__main__":

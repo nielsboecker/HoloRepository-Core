@@ -19,7 +19,7 @@ def loadScan(scanPath):
         slickThickness = np.abs(
             slices[0].ImagePositionscan[2] - slices[1].ImagePositionscan[2]
         )
-    except:
+    except Exception as e:
         slickThickness = np.abs(slices[0].SliceLocation - slices[1].SliceLocation)
 
     for s in slices:
@@ -60,7 +60,7 @@ def resample(dataPath, new_spacing=[1, 1, 1]):
             ),
         )
         spacing = np.array(list(spacing))
-    except:
+    except Exception as e:
         print(len(scan[0].PixelSpacing))
         print(
             "Pixel Spacing (row, col): (%f, %f) "

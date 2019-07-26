@@ -4,6 +4,9 @@ All changes done to the HoloStorage Accessor API spec will be documented here.
 View the interactive documentation of the most updated API at the following link:
 https://app.swaggerhub.com/apis/boonwj/HoloRepository/
 
+## [1.0.0] - 2019-07-26
+Bump version number to finalise initial api version
+
 ## [0.4.0] - 2019-07-26
 ### Changed
 - `hologram` and `hologramUpload` data type

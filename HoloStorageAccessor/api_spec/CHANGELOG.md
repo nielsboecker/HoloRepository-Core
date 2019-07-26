@@ -4,6 +4,22 @@ All changes done to the HoloStorage Accessor API spec will be documented here.
 View the interactive documentation of the most updated API at the following link:
 https://app.swaggerhub.com/apis/boonwj/HoloRepository/
 
+## [0.3.0] - 2019-07-25
+This is a fundamentally different approach to the schema style in 0.2.0.
+### Changed
+- `author` and `patient` fields in `Hologram` metadata now only contains UUIDs to their resource
+- `/holograms` supports query via `pid`
+- `/patients` no longer support query for `creationMode`
+- `/patients` results no longer not contain `hologram` information
+- `/patients` and `/authors` return values in an object of form {pid: {patientData}, ... }
+- `/authors` return values in an object of form {aid: {authorData}, ... }
+- `/holograms` return values in object of form {hid: [{authorData1}, ...], ... }.
+### Added
+- `/authors` endpoint to query for author information, available operations are similar to `/patients`
+    - PUT: /authors
+    - GET: /authors?aid=
+    - GET: /authors/:aid
+
 ## [0.2.0] - 2019-07-25
 ### Changed
 - Hologram metadata is nested within `metadata` property in Hologram Schema

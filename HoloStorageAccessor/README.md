@@ -7,5 +7,20 @@ The APIs are designed and documented via OpenAPI. Server boilerplate was generat
 TODO
 
 # Usage
-TODO
+## Running the server
 
+To run the server, follow these simple steps:
+
+```
+go run main.go
+```
+
+To run the server in a docker container
+```
+docker build --network=host -t openapi .
+```
+
+Once the image is built, just run
+```
+docker run --rm -it openapi
+```

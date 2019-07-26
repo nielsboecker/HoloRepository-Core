@@ -1,0 +1,5 @@
+{
+    "fhirURL": "https://urltofhir.com",
+    "blobStoreName": "blob-storage-name",
+    "blobKey": "access-key-to-blob"
+}

@@ -4,13 +4,22 @@ All changes done to the HoloStorage Accessor API spec will be documented here.
 View the interactive documentation of the most updated API at the following link:
 https://app.swaggerhub.com/apis/boonwj/HoloRepository/
 
+## [0.4.0] - 2019-07-26
+### Changed
+- `hologram` and `hologramUpload` data type
+  - Added `bodySite` field
+  - Added `dateOfImaging` field
+  - Added `creationDescription` field
+  - Removed `pipelineID` field
+- `POST: /holograms` successful response is `hologram` data
+
 ## [0.3.1] - 2019-07-26
 ### Changed
-- `POST: /hologram` request format changed
+- `POST: /holograms` request format changed
     - Removed hid field
     - Added full author field
     - Added full patient field
-- `POST: /hologram` successful creation status code change from 200 to 201
+- `POST: /holograms` successful creation status code change from 200 to 201
 - `hologram` metadata information changed to be more explicit
     - `author` to `aid`
     - `patient` to `pid`

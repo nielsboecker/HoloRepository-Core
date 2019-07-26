@@ -1,15 +1,15 @@
 openapi: 3.0.2
 info:
-  version: "0.3.1"
+  version: "0.4.0"
   title: 'HoloStorage Accessor API'
   description: 'API to access holograms and metadata from HoloStorage'
 
 # Added by API Auto Mocking Plugin
 servers:
   - description: HoloStorage Sample Server URL
-    url: https://holoaccessor.com/api/0.3.1
+    url: https://holoaccessor.com/api/0.4.0
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/boonwj/HoloRepository/0.3.1
+    url: https://virtserver.swaggerhub.com/boonwj/HoloRepository/0.4.0
 
 paths:
   /patients:
@@ -123,12 +123,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The UUID of the uploaded hologram
-                    example: 32853d69-3e71-4c87-abf9-56f0eddefefc
+                $ref: '#/components/schemas/Hologram'
         400:
           description: Unaccepted input
           content:
@@ -423,7 +418,16 @@ components:
           type: integer
           description: The size of the hologram in KB
           example: 5120
-        createdDate:
+        bodySite:
+          type: string
+          description: The body part the hologram represents
+          example: hips
+        dateOfImaging:
+          type: string
+          format: date-time
+          description: The date when the imaging was done
+          example: '2017-07-15T15:20:25Z'
+        creationDate:
           type: string
           format: date-time
           description: The date the hologram was generated
@@ -433,10 +437,10 @@ components:
           enum: [GENERATE_FROM_IMAGING_STUDY, UPLOAD_EXISTING_MODEL, FROM_DEPTHVISOR_RECORDING]
           description: The way the hologram was created
           example: GENERATE_FROM_IMAGING_STUDY
-        pipelineId:
+        creationDescription:
           type: string
-          description: The id to the pipeline that was used in the generation of the hologram
-          example: bone-01
+          description: The description associated with the creation method of the hologram
+          example: By bone segmentation pipeline with HU 750
         hologramFile:
           type: string
           format: binary
@@ -472,7 +476,16 @@ components:
           type: integer
           description: The size of the hologram in KB
           example: 5120
-        createdDate:
+        bodySite:
+          type: string
+          description: The body part the hologram represents
+          example: hips
+        dateOfImaging:
+          type: string
+          format: date-time
+          description: The date when the imaging was done
+          example: '2017-07-15T15:20:25Z'
+        creationDate:
           type: string
           format: date-time
           description: The date the hologram was generated
@@ -482,10 +495,10 @@ components:
           enum: [GENERATE_FROM_IMAGING_STUDY, UPLOAD_EXISTING_MODEL, FROM_DEPTHVISOR_RECORDING]
           description: The way the hologram was created
           example: GENERATE_FROM_IMAGING_STUDY
-        pipelineId:
+        creationDescription:
           type: string
-          description: The id to the pipeline that was used in the generation of the hologram
-          example: bone-01
+          description: The description associated with the creation method of the hologram
+          example: By bone segmentation pipeline with HU 750
         aid:
           type: string
           description: The UUID of the author of this hologram

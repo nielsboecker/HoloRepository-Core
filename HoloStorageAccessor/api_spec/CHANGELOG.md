@@ -4,6 +4,17 @@ All changes done to the HoloStorage Accessor API spec will be documented here.
 View the interactive documentation of the most updated API at the following link:
 https://app.swaggerhub.com/apis/boonwj/HoloRepository/
 
+## [0.3.1] - 2019-07-26
+### Changed
+- `POST: /hologram` request format changed
+    - Removed hid field
+    - Added full author field
+    - Added full patient field
+- `POST: /hologram` successful creation status code change from 200 to 201
+- `hologram` metadata information changed to be more explicit
+    - `author` to `aid`
+    - `patient` to `pid`
+
 ## [0.3.0] - 2019-07-25
 This is a fundamentally different approach to the schema style in 0.2.0.
 ### Changed
@@ -17,7 +28,7 @@ This is a fundamentally different approach to the schema style in 0.2.0.
 ### Added
 - `/authors` endpoint to query for author information, available operations are similar to `/patients`
     - PUT: /authors
-    - GET: /authors?aid=
+    - GET: /authors?aid=id1,id2,...,idx
     - GET: /authors/:aid
 
 ## [0.2.0] - 2019-07-25

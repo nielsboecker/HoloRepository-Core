@@ -15,6 +15,7 @@ def main(dicomFolderPath, outputGlbPath, threshold):
             compCommonPath.obj.joinpath(
                 str(pathlib.PurePath(dicomFolderPath).parts[-1])
             )
+
         )
         + ".obj",
     )
@@ -22,6 +23,7 @@ def main(dicomFolderPath, outputGlbPath, threshold):
         generatedObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False
     )
     print("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
+
 
 
 if __name__ == "__main__":

@@ -27,6 +27,7 @@ def testSetup():
         print("Beginning dicom sample download...")
 
         url = "https://holoblob.blob.core.windows.net/test/3_Axial_CE.zip"
+
         urllib.request.urlretrieve(url, str(thisCwd.joinpath(zipFileName)))
 
         print("Beginning dicom unzip...")
@@ -39,6 +40,7 @@ def testSetup():
         print("Beginning nifti sample download...")
 
         url = "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip"
+
         urllib.request.urlretrieve(url, str(thisCwd.joinpath(zipFileName)))
 
         print("Beginning nifti unzip...")
@@ -77,6 +79,7 @@ def test_pipelines_dicom2glb(testSetup):
             "-c",
             "test/pipelineListForTesting.json",
             "dicom2glb",
+
             "-p",
             str(dicomPath.joinpath("3_Axial_CE")),
             str(glbPath.joinpath("testResult0.glb")),
@@ -84,7 +87,9 @@ def test_pipelines_dicom2glb(testSetup):
         ],
         cwd=newCwd,
     )
+
     assert 0 == output.returncode
+
     assert os.path.isfile(glbPath.joinpath("testResult0.glb"))
 
 
@@ -102,6 +107,7 @@ def test_pipelines_lungDicom2glb(testSetup):
         ],
         cwd=newCwd,
     )
+
     assert 0 == output.returncode
     assert os.path.isfile(glbPath.joinpath("testResult1.glb"))
 
@@ -122,6 +128,7 @@ def test_pipelines_nifti2obj(testSetup):
         ],
         cwd=newCwd,
     )
+
     assert 0 == output.returncode
     assert os.path.isfile(objPath.joinpath("testResult2.obj"))
 
@@ -141,5 +148,6 @@ def test_pipelines_nifti2glb(testSetup):
         ],
         cwd=newCwd,
     )
+
     assert 0 == output.returncode
     assert os.path.isfile(glbPath.joinpath("testResult3.glb"))

@@ -45,7 +45,9 @@ def main(inputNiftiPath, outputNiftiFolderPath):
 
     Mlung, Maw = segment_airway(params, I, I_affine, Mlung, outputNiftiFolderPath)
 
+
     return str(outputNiftiFolderPath)
+
 
 
 if __name__ == "__main__":

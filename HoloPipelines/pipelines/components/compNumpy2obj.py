@@ -29,7 +29,9 @@ def generateObj(inputNumpy, thisThreshold, outputObjPath):
     else:
         try:
             numpyData = np.load(str(pathlib.Path(inputNumpy)))
+
         except Exception as e:
+
             sys.exit(
                 "numpy2obj: error occured while loading numpy. Please make sure the path to numpy is correct."
             )

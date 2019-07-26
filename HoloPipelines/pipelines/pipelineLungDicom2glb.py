@@ -8,6 +8,7 @@ import pathlib
 import sys
 
 
+
 def main(dicomPath, outputGlbPath):
     generatedNiftiPath = compDcm2nifti.main(
         str(dicomPath),
@@ -15,6 +16,7 @@ def main(dicomPath, outputGlbPath):
     )  # convert dcm and move to temp path inside nifti folder. nifti will be in a sub folder named after the input dicom folder
     generatedSegmentedLungsNiftiPath = lungSegment(
         generatedNiftiPath, str(compCommonPath.nifti.joinpath("segmentedLungs"))
+
     )
     generatedNumpyList = compNifti2numpy.main(
         str(pathlib.Path(generatedSegmentedLungsNiftiPath).joinpath("lung.nii.gz"))
@@ -23,6 +25,7 @@ def main(dicomPath, outputGlbPath):
         generatedNumpyList,
         0.5,
         str(compCommonPath.obj.joinpath("nifti2glb_tempObj.obj")),
+
     )
     generatedGlbPath = compObj2glbWrapper.main(
         generatedObjPath,
@@ -31,6 +34,7 @@ def main(dicomPath, outputGlbPath):
         compressGlb=False,
     )
     print("lungDicom2glb: done, glb saved to {}".format(generatedGlbPath))
+
 
 
 if __name__ == "__main__":

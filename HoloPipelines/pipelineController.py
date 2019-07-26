@@ -8,11 +8,13 @@ import pipelines.components.compCommonPath as plCommonPath
 
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
+
 parser = argparse.ArgumentParser(description="Select pipeline to process")
 parser.add_argument(
     "-c",
     "--config",
     default="./pipelineList.json",
+
     type=str,
     help="path to pipeline config file relative to pipelineController",
 )
@@ -20,12 +22,14 @@ parser.add_argument(
     "-l", "--ls", action="store_true", help="list all the available piplines"
 )
 parser.add_argument(
+
     "-i",
     "--info",
     default="",
     metavar="NAME",
     type=str,
     help="get info from pipeline's name",
+
 )
 parser.add_argument("pipelineID", type=str, nargs="?", help="ID of pipeline")
 parser.add_argument(
@@ -40,6 +44,7 @@ args = parser.parse_args()
 
 def main():
     # check common dir
+
     plCommonPath.main()
 
     # check for pipeline config file
@@ -91,12 +96,7 @@ def main():
     json_file.close()
 
 
-def startPipeline(plID, paramList=[]):
-	fname = "test/testList.json"#hard coded
-	with open(str(pathlib.Path(newCwd).joinpath(str(fname)))) as json_file:
-		lsPipe = json.load(json_file)
-		subprocess.run(["python", lsPipe[plID]["src"]] + paramList, cwd=newCwd)
-	json_file.close()
+
 
 if __name__ == "__main__":
     main()

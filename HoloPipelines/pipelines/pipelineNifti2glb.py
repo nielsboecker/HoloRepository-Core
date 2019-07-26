@@ -1,4 +1,6 @@
+
 from components import compCommonPath
+
 from components import compNifti2numpy
 from components import compNumpy2obj
 from components import compObj2glbWrapper
@@ -24,3 +26,4 @@ def main(inputNiftiPath, outputGlbPath, threshold):
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2], sys.argv[3])
+

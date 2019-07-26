@@ -12,5 +12,6 @@ def main(dicomInputPath, outputNiftiFolderPath):
     return outputNiftiFolderPath
 
 
+
 if __name__ == "__main__":
     print("component can't run on its own")

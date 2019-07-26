@@ -12,6 +12,7 @@ success = True
 def main(inputObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False):
     success = subprocess.run(["obj2gltf", "-i", str(pathlib.Path(inputObjPath)), "-b"])
     if success.returncode == 0:
+
         outputGlbPath = str(pathlib.Path(outputGlbPath))
         move(str(pathlib.Path(inputObjPath)).replace(".obj", ".glb"), outputGlbPath)
         if deleteOriginalObj:
@@ -37,6 +38,7 @@ def main(inputObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False)
         sys.exit("obj2glb: conversion failed")
     print("obj2glb: done")
     return outputGlbPath
+
 
 
 if __name__ == "__main__":

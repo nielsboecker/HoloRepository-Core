@@ -5,11 +5,13 @@ import pathlib
 import sys
 
 
+
 def main(inputNiftiPath, outputObjPath, threshold, flipNpy=False):
     generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(inputNiftiPath)))
     generatedObjPath = compNumpy2obj.main(
         generatedNumpyList, threshold, str(pathlib.Path(outputObjPath))
     )
+
     print("nifti2obj: done, obj saved to {}".format(generatedObjPath))
 
 

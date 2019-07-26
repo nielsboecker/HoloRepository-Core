@@ -5,6 +5,7 @@ from scipy import ndimage
 import pathlib
 
 try:
+
     from utils import close_space_dilation, generate_structure_trachea, generate_initLoc
 except ModuleNotFoundError as e:
     from components.lungSegment.utils import (
@@ -20,7 +21,7 @@ except ModuleNotFoundError as e:
     )
 
 
-def segment_airway(params, I, I_affine, Mlung, outputNiftiFolderPath):
+
 
     #####################################################
     # Initialize parameters
@@ -62,5 +63,6 @@ def segment_airway(params, I, I_affine, Mlung, outputNiftiFolderPath):
     nib.Nifti1Image(Mlung, I_affine).to_filename(
         str(pathlib.Path(outputNiftiFolderPath).joinpath("lung.nii.gz"))
     )
+
 
     return Mlung, Maw

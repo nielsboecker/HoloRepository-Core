@@ -19,7 +19,12 @@ parser.add_argument(
     "-l", "--ls", action="store_true", help="list all the available piplines"
 )
 parser.add_argument(
-    "-i", "--info", default="", type=str, help="get info from pipeline's name"
+    "-i",
+    "--info",
+    default="",
+    metavar="NAME",
+    type=str,
+    help="get info from pipeline's name",
 )
 parser.add_argument("pipelineID", type=str, nargs="?", help="ID of pipeline")
 parser.add_argument(

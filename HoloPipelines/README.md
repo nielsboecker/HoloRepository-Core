@@ -32,19 +32,8 @@ npm install -g gltf-pipeline
 ```
 
 ## Usage:
-Example
 ```
-python pipelineController.py p4 -p 3_Axial_CE
-```
-- p4: pipeline ID. In this case to segment lung and generate glb from it
-- -p 3_Axial_CE: param(s) for the specific pipeline, in this case a directory for an upper ct scan from medicalScans/dicom
-
-```
-python pipelineController.py -h
-```
-- this script has a built in help which will print out
-```
-usage: pipelineController.py [-h] [-c CONFIG] [-l] [-i INFO]
+usage: pipelineController.py [-h] [-c CONFIG] [-l] [-i NAME]
                              [-p [PARAM [PARAM ...]]]
                              [pipelineID]
 
@@ -59,19 +48,26 @@ optional arguments:
                         path to pipeline config file relative to
                         pipelineController
   -l, --ls              list all the available piplines
-  -i INFO, --info INFO  get info from pipeline's name
+  -i NAME, --info NAME  get info from pipeline's name
   -p [PARAM [PARAM ...]], --param [PARAM [PARAM ...]]
                         parameters for pipeline e.g. dicom folder name or HU
                         threshold
 ```
 
+### Example Usage
+```
+python pipelineController.py p4 -p 3_Axial_CE
+```
+- `p4`: pipeline ID. In this case to segment lung and generate glb from it
+- `-p 3_Axial_CE`: param(s) for the specific pipeline, in this case a directory for an upper ct scan from medicalScans/dicom
+
 ## Testing:
-Testing can be done by using pytest:
+Testing is done using pytest:
 ```
 pip install pytest
 pip install pytest-cov
 ```
-Then navigate to /HoloRepository-Core/HoloPipelines and run:
+Execute tests by running the following command in `HoloPipelines` directory:
 ```
 pytest --cov
 ```

@@ -25,16 +25,16 @@ export interface IHologramCreationSteps {
 interface IAddHologramPageState {
   currentStep: number;
   creationMode: HologramCreationMode;
-  //steps: IHologramCreationStep[];
 }
 
 class NewHologramPage extends Component<RouteComponentProps, IAddHologramPageState> {
   state = {
     currentStep: 0,
     creationMode:
-      (this.props.location && (this.props.location.state.mode as HologramCreationMode)) ||
+      (this.props.location &&
+        this.props.location.state &&
+        (this.props.location.state.mode as HologramCreationMode)) ||
       HologramCreationMode.generateFromImagingStudy
-    //steps: allSteps[HologramCreationMode.generateFromImagingStudy]
   };
 
   private _handleModeChange = (creationMode: HologramCreationMode) => {

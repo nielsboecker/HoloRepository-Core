@@ -1,12 +1,13 @@
 import React from "react";
-import { mount, ReactWrapper } from "enzyme";
+import { ReactWrapper } from "enzyme";
 import MainContainer from "../../components/shared/MainContainer";
 import AppContainer from "../../components/app/core/AppContainer";
 import PublicContainer from "../../components/public/PublicContainer";
-import { LocationProvider, createHistory, createMemorySource } from "@reach/router";
+import { createHistory, createMemorySource, LocationProvider } from "@reach/router";
 import LandingPage from "../../components/public/LandingPage";
 import PatientListPage from "../../components/app/patients/PatientListPage";
 import ErrorPage from "../../components/public/ErrorPage";
+import { mountWithContextProvider } from "../../util/TestUtils";
 
 it("should render PublicContainer for route '/'", () => {
   const underTest = prepareAndMountComponent("/");
@@ -48,9 +49,9 @@ it("should render ErrorPage for invalid URLs under the '/app' main route", () =>
  * Helper function to wrap a component in LocationProvider and mount it.
  */
 function prepareAndMountComponent(route: string): ReactWrapper {
-  return mount(
+  return mountWithContextProvider(
     <LocationProvider history={createHistory(createMemorySource(route))}>
-      <MainContainer />
+        <MainContainer />
     </LocationProvider>
   );
 }

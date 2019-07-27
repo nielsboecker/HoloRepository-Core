@@ -7,7 +7,6 @@ import { capitaliseString, getAgeFromDobString } from "../../util/PatientUtil";
 import { PropsWithContext, withAppContext } from "../shared/AppState";
 
 class ProfileInformationPage extends Component<RouteComponentProps & PropsWithContext> {
-
   render() {
     const practitioner = this.props.context!.practitioner!;
 

@@ -31,7 +31,8 @@ class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
           iconName: "Download"
         },
         disabled: selection.getSelectedCount() < 1,
-        onClick: () => handleDownloadHolograms(this.props.selection.getSelection().map(item => item.key))
+        onClick: () =>
+          handleDownloadHolograms(this.props.selection.getSelection().map(item => item.key))
       },
 
       {
@@ -41,7 +42,8 @@ class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
           iconName: "Delete"
         },
         disabled: selection.getSelectedCount() < 1,
-        onClick: () => handleDeleteHolograms(this.props.selection.getSelection().map(item => item.key))
+        onClick: () =>
+          handleDeleteHolograms(this.props.selection.getSelection().map(item => item.key))
       }
     ];
 

@@ -90,26 +90,5 @@ class MenuHeader extends Component<PropsWithContext> {
   }
 }
 
-//export const withContext = <P extends {}>(Component: React.ComponentType<P>) =>
-//  class WithContext extends React.PureComponent<P & IAppState> {
-//    render() {
-//      return (
-//        <AppContext.Consumer>
-//          {(context: IAppState) => <Component {...this.props} {...context} />}
-//        </AppContext.Consumer>
-//      );
-//    }
-//  };
-
-//export const withContext = <P extends {}>(Component: React.ComponentType<P>) =>
-//  class WithContext extends React.PureComponent<P & IAppState> {
-//    render() {
-//      return (
-//        <AppContext.Consumer>
-//          {(context: IAppState) => <Component {...this.props} appContext={context} />}
-//        </AppContext.Consumer>
-//      );
-//    }
-//  };
-
 export default withAppContext(MenuHeader);
+export { MenuHeader };

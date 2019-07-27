@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { FocusZone, FocusZoneDirection, getId, Label, List, SearchBox, Toggle } from "office-ui-fabric-react";
+import {
+  FocusZone,
+  FocusZoneDirection,
+  getId,
+  Label,
+  List,
+  SearchBox,
+  Toggle
+} from "office-ui-fabric-react";
 import { Col, Row } from "antd";
 import { IPatient } from "../../../../../HoloRepositoryUI-Types";
 import PatientCard from "./PatientCard";

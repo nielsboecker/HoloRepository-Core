@@ -1,5 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
+import { Selection } from "office-ui-fabric-react";
 
 import AppContainer from "../../components/app/core/AppContainer";
 import MenuHeader from "../../components/app/core/MenuHeader";
@@ -29,12 +30,13 @@ import PatientCardsList from "../../components/app/patients/PatientCardsList";
 import PatientListPage from "../../components/app/patients/PatientListPage";
 import PipelineDetailBox from "../../components/app/PipelineDetailBox";
 import ProfileInformationPage from "../../components/app/ProfileInformationPage";
+import { IPatient } from "../../../../HoloRepositoryUI-Types";
+import { mountWithContextProvider } from "../../util/TestUtils";
 
 import samplePatients from "../samples/samplePatients.json";
-import { IPatient } from "../../../../HoloRepositoryUI-Types";
 
 it("renders AppContainer without crashing", () => {
-  shallow(<AppContainer />);
+  mountWithContextProvider(<AppContainer />);
 });
 
 it("renders ContentContainer without crashing", () => {
@@ -46,7 +48,7 @@ it("renders FilterStatusMessageBar without crashing", () => {
 });
 
 it("renders MenuHeader without crashing", () => {
-  shallow(<MenuHeader />);
+  mountWithContextProvider(<MenuHeader />);
 });
 
 it("renders PlainContentContainer without crashing", () => {
@@ -58,11 +60,11 @@ it("renders DeviceConnectorPage without crashing", () => {
 });
 
 it("renders HologramsCommandBar without crashing", () => {
-  shallow(<HologramsCommandBar selection={jest.requireMock("office-ui-fabric-react")} />);
+  mountWithContextProvider(<HologramsCommandBar selection={new Selection()} />);
 });
 
 it("renders HologramsDetailsList without crashing", () => {
-  shallow(<HologramsDetailsList showFilters={false} />);
+  mountWithContextProvider(<HologramsDetailsList showFilters={false} />);
 });
 
 it("renders HologramsListPage without crashing", () => {
@@ -78,11 +80,11 @@ it("renders ImagingStudyDetailsCard without crashing", () => {
 });
 
 it("renders ImagingStudySelectionStep without crashing", () => {
-  shallow(<ImagingStudySelectionStep />);
+  mountWithContextProvider(<ImagingStudySelectionStep />);
 });
 
 it("renders PipelineSelectionStep without crashing", () => {
-  shallow(<PipelineSelectionStep />);
+  mountWithContextProvider(<PipelineSelectionStep />);
 });
 
 it("renders PipelineSpecificationCard without crashing", () => {
@@ -134,11 +136,7 @@ it("renders PatientBreadcrumb without crashing", () => {
 });
 
 it("renders PatientDetailPage without crashing", () => {
-  shallow(<PatientDetailPage />);
-});
-
-it("renders PatientDetailPage without crashing", () => {
-  shallow(<PatientDetailPage />);
+  mountWithContextProvider(<PatientDetailPage />);
 });
 
 it("renders PatientCard without crashing", () => {
@@ -147,7 +145,7 @@ it("renders PatientCard without crashing", () => {
 });
 
 it("renders PatientCardsList without crashing", () => {
-  shallow(<PatientCardsList />);
+  mountWithContextProvider(<PatientCardsList />);
 });
 
 it("renders PatientListPage without crashing", () => {
@@ -159,5 +157,5 @@ it("renders PipelineDetailBox without crashing", () => {
 });
 
 it("renders ProfileInformationPage without crashing", () => {
-  shallow(<ProfileInformationPage />);
+  mountWithContextProvider(<ProfileInformationPage />);
 });

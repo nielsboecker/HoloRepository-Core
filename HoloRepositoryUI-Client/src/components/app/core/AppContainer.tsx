@@ -38,7 +38,7 @@ class AppContainer extends Component<RouteComponentProps & PropsWithContext> {
         <div>
           <Spinner label="Loading..." />
         </div>
-      )
+      );
     }
   }
 }

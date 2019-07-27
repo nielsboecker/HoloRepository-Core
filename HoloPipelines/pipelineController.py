@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser(description="Selct pipeline to process")
 parser.add_argument(
     "-c",
     "--config",
-    default="pipelines/pipelineList.json",
+    default="./pipelineList.json",
     type=str,
     help="path to pipeline config file relative to pipelineController",
 )

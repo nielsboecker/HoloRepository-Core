@@ -2,11 +2,9 @@ import numpy as np
 import pydicom as dicom
 import pydicom.pixel_data_handlers.gdcm_handler
 import os
-from glob import glob
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import scipy.ndimage
 import pathlib
-import time
+import sys
 
 
 def loadScan(scanPath):

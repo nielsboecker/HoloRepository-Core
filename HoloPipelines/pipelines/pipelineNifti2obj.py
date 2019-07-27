@@ -3,7 +3,6 @@ from components import compNifti2numpy
 from components import compNumpy2obj
 import pathlib
 import sys
-import numpy as np
 
 
 def main(inputNiftiPath, outputObjPath, threshold, flipNpy=False):

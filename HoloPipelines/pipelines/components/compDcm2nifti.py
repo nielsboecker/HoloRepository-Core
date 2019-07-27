@@ -1,5 +1,4 @@
 import dicom2nifti
-import pathlib
 import os
 
 

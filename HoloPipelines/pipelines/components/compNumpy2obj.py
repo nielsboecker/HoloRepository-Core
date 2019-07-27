@@ -1,16 +1,6 @@
 import numpy as np
 import nibabel as nib
-import pydicom as dicom
-import pydicom.pixel_data_handlers.gdcm_handler
-import os
-import matplotlib.pyplot as plt
-from glob import glob
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-import scipy.ndimage
-from skimage import morphology
 from skimage import measure
-from skimage.transform import resize
-from sklearn.cluster import KMeans
 import pathlib
 import sys
 

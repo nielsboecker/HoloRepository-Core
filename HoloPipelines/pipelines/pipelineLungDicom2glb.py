@@ -5,7 +5,6 @@ from components import compNumpy2obj
 from components import compObj2glbWrapper
 import pathlib
 import sys
-import os
 
 
 def main(dicomPath, outputGlbPath):

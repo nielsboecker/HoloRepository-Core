@@ -1,9 +1,5 @@
 import numpy as np
 import nibabel as nib
-from nilearn.image import resample_img
-import scipy
-import pathlib
-import platform
 
 
 def resample(dataPath, new_spacing=[1, 1, 1]):

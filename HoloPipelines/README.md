@@ -17,13 +17,7 @@ sudo apt-get install libgdcm2.8
 sudo apt-get install libcdcm-tools
 ```
 
-Double check to see if installation is successful by running
-`gdcmdump` or `gdcmconv`
-If command is not found then please make sure to add to PATH by using the command (replace "directory_to_GDCM_bin_folder" with your local directory, without the double quotes)
-
-```
-PATH=$PATH:"directory_to_GDCM_bin_folder"
-```
+Verify installation success and see if `gdcmdump` or `gdcmconv` commands can be executed.
 
 The final 2 dependencies can be installed using Node.js package manager. Please make sure to have the latest version of npm installed.
 
@@ -36,10 +30,6 @@ npm install -g obj2gltf
 ```
 npm install -g gltf-pipeline
 ```
-
-(optional)Run *setupExample.py* to download sample dicom and nifti files which can be used for manual testing.
-
-Downloaded files from *setupExample.py* and all the produced 3D models can be deleted by running *cleanUp.py*
 
 ## Usage:
 Example
@@ -85,3 +75,5 @@ Then navigate to /HoloRepository-Core/HoloPipelines and run:
 ```
 pytest --cov
 ```
+Note: Tests downloads sample files during the testing process. These files can be deleted by running *cleanUp.py*
+

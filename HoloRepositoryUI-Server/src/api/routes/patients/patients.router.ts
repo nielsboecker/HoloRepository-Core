@@ -1,8 +1,8 @@
 import { Router } from "express";
-import PatientsController from "./patient.controller";
+import PatientsController from "./patients.controller";
 
-const PatientRouter = Router()
+const PatientsRouter = Router()
   .get("/", PatientsController.getAll)
   .get("/:pid", PatientsController.getById);
 
-export default PatientRouter;
+export default PatientsRouter;

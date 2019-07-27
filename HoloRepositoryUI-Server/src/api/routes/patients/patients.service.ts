@@ -2,7 +2,7 @@ import logger from "../../../common/logger";
 import { IPatient } from "../../../../../HoloRepositoryUI-Types";
 import { getAllPatients, getAllForPractitioner, getPatient } from "../../../common/data.service";
 
-export class PatientService {
+export class PatientsService {
   public getAll(): Promise<IPatient[]> {
     logger.info("GET all Patients");
     return getAllPatients();
@@ -19,4 +19,4 @@ export class PatientService {
   }
 }
 
-export default new PatientService();
+export default new PatientsService();

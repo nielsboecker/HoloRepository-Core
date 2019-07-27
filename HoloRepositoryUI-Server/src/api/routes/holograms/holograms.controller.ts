@@ -1,9 +1,9 @@
-import HologramsService from "./hologram.service";
+import HologramsService from "./holograms.service";
 import { Request, Response } from "express";
 import logger from "../../../common/logger";
-import ImagingStudiesService from "../imagingStudy/imagingStudy.service";
+import ImagingStudiesService from "../imagingStudy/imagingStudies.service";
 
-export class HologramController {
+export class HologramsController {
   public async getAll(req: Request, res: Response): Promise<void> {
     const { pids } = req.query;
 
@@ -59,4 +59,4 @@ export class HologramController {
   }
 }
 
-export default new HologramController();
+export default new HologramsController();

@@ -8,11 +8,11 @@ const apiVersion = 1;
 const apiPrefix = `/api/v${apiVersion}`;
 
 export const routes = {
-  practitioner: "practitioner",
-  patient: "patient",
-  hologram: "hologram",
-  pipeline: "pipeline",
-  imagingStudy: "imagingStudy"
+  practitioners: "practitioners",
+  patients: "patients",
+  holograms: "holograms",
+  pipelines: "pipelines",
+  imagingStudies: "imagingStudies"
 };
 
 const holoRepositoryServerAxios = axios.create({

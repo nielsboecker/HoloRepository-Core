@@ -6,7 +6,7 @@ import {
   getImagingStudiesForPatient
 } from "../../../common/data.service";
 
-export class ImagingStudyService {
+export class ImagingStudiesService {
   public getAll(): Promise<IImagingStudy[]> {
     logger.info("GET all ImagingStudies");
     return getAllImagingStudies();
@@ -23,4 +23,4 @@ export class ImagingStudyService {
   }
 }
 
-export default new ImagingStudyService();
+export default new ImagingStudiesService();

@@ -1,8 +1,8 @@
-import ImagingStudiesService from "./imagingStudy.service";
+import ImagingStudiesService from "./imagingStudies.service";
 import { Request, Response } from "express";
 import logger from "../../../common/logger";
 
-export class ImagingStudyController {
+export class ImagingStudiesController {
   public async getAll(req: Request, res: Response): Promise<void> {
     const { pids } = req.query;
 
@@ -36,4 +36,4 @@ export class ImagingStudyController {
     });
   }
 }
-export default new ImagingStudyController();
+export default new ImagingStudiesController();

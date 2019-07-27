@@ -3,7 +3,7 @@ import { IPipeline } from "../../../../../HoloRepositoryUI-Types";
 
 import samplePipelines from "../../../__tests__/samples/internal/samplePipelines.json";
 
-export class PipelineService {
+export class PipelinesService {
   public getAll(): Promise<IPipeline[]> {
     logger.info("GET all Pipelines");
 
@@ -12,4 +12,4 @@ export class PipelineService {
   }
 }
 
-export default new PipelineService();
+export default new PipelinesService();

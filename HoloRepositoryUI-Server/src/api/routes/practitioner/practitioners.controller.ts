@@ -1,7 +1,7 @@
-import PractitionersService from "./practitioner.service";
+import PractitionersService from "./practitioners.service";
 import { Request, Response } from "express";
 
-export class PractitionerController {
+export class PractitionersController {
   public getById(req: Request, res: Response): void {
     PractitionersService.getById(req.params.pid).then(practitioner => {
       if (practitioner) {
@@ -13,4 +13,4 @@ export class PractitionerController {
   }
 }
 
-export default new PractitionerController();
+export default new PractitionersController();

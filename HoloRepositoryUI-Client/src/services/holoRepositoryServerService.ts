@@ -20,14 +20,14 @@ export type ImagingStudiesCombinedResult = Record<string, IImagingStudy[]>;
 export class HoloRepositoryServerService {
   public async getPractitioner(pid: string): Promise<IPractitioner | null> {
     return serverAxios
-      .get<IPractitioner>(`${routes.practitioner}/${pid}`)
+      .get<IPractitioner>(`${routes.practitioners}/${pid}`)
       .then(practitioner => practitioner.data)
       .catch(handleError);
   }
 
   public async getAllPatientsForPractitioner(pid: string): Promise<IPatient[] | null> {
     return serverAxios
-      .get<IPatient[]>(routes.patient, {
+      .get<IPatient[]>(routes.patients, {
         params: {
           practitioner: pid
         }
@@ -40,7 +40,7 @@ export class HoloRepositoryServerService {
     patients: PidToPatientsMap
   ): Promise<HologramsCombinedResult | null> {
     return serverAxios
-      .get<HologramsCombinedResult>(`${routes.hologram}`, {
+      .get<HologramsCombinedResult>(`${routes.holograms}`, {
         params: {
           pids: _extractCombinedPidsString(patients)
         }
@@ -67,7 +67,7 @@ export class HoloRepositoryServerService {
 
   public async deleteHologramById(hid: string): Promise<boolean | null> {
     return serverAxios
-      .delete(`${routes.hologram}/${hid}`)
+      .delete(`${routes.holograms}/${hid}`)
       .then(response => response.status === 200 || response.status === 204)
       .catch(handleError);
   }
@@ -88,23 +88,16 @@ export class HoloRepositoryServerService {
     patients: PidToPatientsMap
   ): Promise<ImagingStudiesCombinedResult | null> {
     return serverAxios
-      .get<ImagingStudiesCombinedResult>(`${routes.imagingStudy}`, {
+      .get<ImagingStudiesCombinedResult>(`${routes.imagingStudies}`, {
         params: { pids: _extractCombinedPidsString(patients) }
       })
       .then(iss => iss.data)
       .catch(handleError);
   }
 
-  public async getImagingStudyPreview(isid: string): Promise<string | null> {
-    return serverAxios
-      .get<string>(`${routes.imagingStudy}/${isid}/preview`)
-      .then(iss => iss.data)
-      .catch(handleError);
-  }
-
   public async getAllPipelines(): Promise<IPipeline[] | null> {
     return serverAxios
-      .get<IPipeline[]>(routes.pipeline)
+      .get<IPipeline[]>(routes.pipelines)
       .then(pipeline => pipeline.data)
       .catch(handleError);
   }

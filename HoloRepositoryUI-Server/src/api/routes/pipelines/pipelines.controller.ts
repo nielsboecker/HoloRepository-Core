@@ -1,4 +1,4 @@
-import PipelinesService from "./pipeline.service";
+import PipelinesService from "./pipelines.service";
 import { Request, Response } from "express";
 
 export class ImagingStudiesController {

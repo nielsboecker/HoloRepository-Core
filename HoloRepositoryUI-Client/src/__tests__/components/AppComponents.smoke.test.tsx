@@ -105,7 +105,7 @@ it("renders CreationModeSelectionStep without crashing", () => {
 });
 
 it("renders DetailsDeclarationStep without crashing", () => {
-  shallow(<DetailsDeclarationStep />);
+  mountWithContextProvider(<DetailsDeclarationStep />);
 });
 
 it("renders ExtendedChoiceGroupLabel without crashing", () => {

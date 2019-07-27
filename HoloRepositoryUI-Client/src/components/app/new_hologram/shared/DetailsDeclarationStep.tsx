@@ -1,8 +1,4 @@
 import React, { Component } from "react";
-import { IPatient } from "../../../../../../HoloRepositoryUI-Types";
-
-import samplePatients from "../../../../__tests__/samples/samplePatients.json";
-import samplePatientsWithHolograms from "../../../../__tests__/samples/samplePatientsWithHolograms.json";
 import {
   DatePicker,
   DayOfWeek,
@@ -11,17 +7,14 @@ import {
   Stack,
   TextField
 } from "office-ui-fabric-react";
+import { PidToPatientsMap, PropsWithContext, withAppContext } from "../../../shared/AppState";
 
 const columnProps: Partial<IStackProps> = {
   tokens: { childrenGap: 15 },
   styles: { root: { width: 300 } }
 };
 
-class DetailsDeclarationStep extends Component {
-  private _allPatients = [...samplePatients, ...samplePatientsWithHolograms].sort((a, b) =>
-    a.name.full.localeCompare(b.name.full)
-  ) as IPatient[];
-
+class DetailsDeclarationStep extends Component<PropsWithContext> {
   render() {
     return (
       <div>
@@ -30,7 +23,7 @@ class DetailsDeclarationStep extends Component {
             <Dropdown
               label="Corresponding patient"
               placeholder="Select a patient"
-              options={this._mapPatientsToDropdownOptions(this._allPatients)}
+              options={this._mapPatientsToDropdownOptions(this.props.context!.patients)}
               required={true}
               styles={{ dropdown: { width: 300 } }}
             />
@@ -65,9 +58,12 @@ class DetailsDeclarationStep extends Component {
     );
   }
 
-  private _mapPatientsToDropdownOptions = (patients: IPatient[]) => {
-    return patients.map(patient => ({ key: patient.pid, text: patient.name.full }));
+  private _mapPatientsToDropdownOptions = (patients: PidToPatientsMap) => {
+    return Object.entries(patients).map(([pid, patient]) => ({
+      key: pid,
+      text: patient.name.full
+    }));
   };
 }
 
-export default DetailsDeclarationStep;
+export default withAppContext(DetailsDeclarationStep);

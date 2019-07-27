@@ -4,7 +4,7 @@ import {
   DetailsListLayoutMode,
   Fabric,
   getId,
-  IColumn,
+  IColumn, IObjectWithKey,
   Label,
   SearchBox,
   Selection,
@@ -51,7 +51,7 @@ export interface IHologramsDetailsListProps extends PropsWithContext {
   limitToSelectedPatient?: boolean;
 }
 
-export interface IHologramDocument {
+export interface IHologramDocument extends IObjectWithKey {
   wrappedHologram: IHologram;
   titleDisplay: string;
   authorDisplay: string;
@@ -263,6 +263,8 @@ class HologramsDetailsList extends Component<
           const createdDate = new Date(hologram.createdDate);
 
           return {
+            // Note: appending random suffix because of duplicate IDs in mocked data, will be replaced
+            key: hologram.hid + Math.random(),
             titleDisplay: hologram.title,
             authorDisplay: this._getDisplayAuthorName(hologram),
             subjectDisplay: this._getDisplaySubjectName(hologram),

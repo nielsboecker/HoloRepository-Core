@@ -17,7 +17,9 @@ class App extends Component<any, IAppState> {
       handlePractitionerChange: this._handlePractitionerChange,
       handlePatientsChange: this._handlePatientsChange,
       handleSelectedPatientIdChange: this._handleSelectedPatientIdChange,
-      handlePipelinesChange: this._handlePipelinesChange
+      handlePipelinesChange: this._handlePipelinesChange,
+      handleDeleteHolograms: this._handleDeleteHolograms,
+      handleDownloadHolograms: this._handleDownloadHolograms
     };
   }
 
@@ -119,6 +121,16 @@ class App extends Component<any, IAppState> {
 
   private _handlePipelinesChange = (pipelines: IPipeline[]) => {
     this.setState({ pipelines });
+  };
+
+  private _handleDeleteHolograms = (hids: string[]) => {
+    hids.forEach(hid => BackendService.deleteHologramById(hid).then(res => console.log(res)));
+  };
+
+  private _handleDownloadHolograms = (hids: string[]) => {
+    hids.forEach(hid => {
+      BackendService.downloadHologramById(hid).then(response => console.log("download", response));
+    });
   };
 }
 

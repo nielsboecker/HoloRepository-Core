@@ -2,13 +2,17 @@ import React, { Component } from "react";
 import { CommandBar, ICommandBarItemProps, Selection } from "office-ui-fabric-react";
 import { navigate } from "@reach/router";
 import { HologramCreationMode } from "../../../types";
+import { PropsWithContext, withAppContext } from "../../shared/AppState";
 
-export interface IHologramsCommandBarProps {
+export interface IHologramsCommandBarProps extends PropsWithContext {
   selection: Selection;
 }
 
 class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
   public render(): JSX.Element {
+    const { handleDeleteHolograms, handleDownloadHolograms } = this.props.context!;
+    const { selection } = this.props;
+
     const _selectionItems: ICommandBarItemProps[] = [
       {
         key: "preview",
@@ -16,8 +20,8 @@ class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
         iconProps: {
           iconName: "View"
         },
-        disabled: this.props.selection.count < 1,
-        onClick: () => console.log("View")
+        disabled: selection.getSelectedCount() !== 1,
+        onClick: () => alert("3D model preview not implemented yet")
       },
 
       {
@@ -26,8 +30,8 @@ class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
         iconProps: {
           iconName: "Download"
         },
-        disabled: this.props.selection.count < 1,
-        onClick: () => console.log("Download")
+        disabled: selection.getSelectedCount() < 1,
+        onClick: () => handleDownloadHolograms(this.props.selection.getSelection().map(item => item.key))
       },
 
       {
@@ -36,8 +40,8 @@ class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
         iconProps: {
           iconName: "Delete"
         },
-        disabled: this.props.selection.count < 1,
-        onClick: () => console.log("Delete")
+        disabled: selection.getSelectedCount() < 1,
+        onClick: () => handleDeleteHolograms(this.props.selection.getSelection().map(item => item.key))
       }
     ];
 
@@ -91,4 +95,4 @@ class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
   }
 }
 
-export default HologramsCommandBar;
+export default withAppContext(HologramsCommandBar, false);

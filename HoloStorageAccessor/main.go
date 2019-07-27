@@ -15,7 +15,8 @@ import (
 	"log"
 	"os"
 
-	sw "github.com/nbckr/HoloRepository-Core/HoloStorageAccessor/go"
+	// sw "github.com/nbckr/HoloRepository-Core/HoloStorageAccessor/go"
+	sw "./go"
 )
 
 type Config struct {

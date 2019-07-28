@@ -3,7 +3,7 @@ import PatientCard from "../../components/app/patients/PatientCard";
 
 import samplePatientsWithHolograms from "../samples/samplePatientsWithHolograms.json";
 import { getAgeFromDobString } from "../../util/PatientUtil";
-import { IPatient } from "../../../../HoloRepositoryUI-Types";
+import { IPatient } from "../../../../types";
 import { mountWithContextProvider } from "../../util/TestUtils";
 
 it("should render patient details correctly", () => {

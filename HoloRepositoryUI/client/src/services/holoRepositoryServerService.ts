@@ -5,7 +5,7 @@ import {
   IHologram,
   IImagingStudy,
   IPipeline
-} from "../../../HoloRepositoryUI-Types";
+} from "../../../types";
 import { PidToPatientsMap } from "../components/shared/AppState";
 import { AxiosResponse } from "axios";
 

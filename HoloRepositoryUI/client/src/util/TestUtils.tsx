@@ -1,7 +1,7 @@
 import React from "react";
 import { mount } from "enzyme";
 import { AppContext, IAppState, initialState } from "../components/shared/AppState";
-import { IPractitioner } from "../../../HoloRepositoryUI-Types";
+import { IPractitioner } from "../../../types";
 
 import samplePractitioner from "../__tests__/samples/samplePractitioner.json";
 

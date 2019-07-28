@@ -1,4 +1,4 @@
-import { IHologram } from "../../../HoloRepositoryUI-Types";
+import { IHologram } from "../../../types";
 
 const capitaliseString = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);

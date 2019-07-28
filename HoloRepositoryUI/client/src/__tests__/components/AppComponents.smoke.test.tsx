@@ -30,7 +30,7 @@ import PatientCardsList from "../../components/app/patients/PatientCardsList";
 import PatientListPage from "../../components/app/patients/PatientListPage";
 import PipelineDetailBox from "../../components/app/PipelineDetailBox";
 import ProfileInformationPage from "../../components/app/ProfileInformationPage";
-import { IPatient } from "../../../../HoloRepositoryUI-Types";
+import { IPatient } from "../../../../types";
 import { mountWithContextProvider } from "../../util/TestUtils";
 
 import samplePatients from "../samples/samplePatients.json";
@@ -98,7 +98,7 @@ it("renders NewHologramPage without crashing", () => {
 it("renders CreationModeSelectionStep without crashing", () => {
   shallow(
     <CreationModeSelectionStep
-      selected={jest.requireMock("../../../../HoloRepositoryUI-Types")}
+      selected={jest.requireMock("../../../../types")}
       handleModeChange={jest.fn}
     />
   );

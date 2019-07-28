@@ -1,5 +1,5 @@
 import React, { Component, ComponentType, Context, createContext, PureComponent } from "react";
-import { IPatient, IPipeline, IPractitioner } from "../../../../HoloRepositoryUI-Types";
+import { IPatient, IPipeline, IPractitioner } from "../../../../types";
 
 export type PidToPatientsMap = Record<string, IPatient>;
 

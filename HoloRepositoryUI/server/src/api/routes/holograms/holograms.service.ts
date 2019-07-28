@@ -1,5 +1,5 @@
 import logger from "../../../common/logger";
-import { IHologram } from "../../../../../HoloRepositoryUI-Types";
+import { IHologram } from "../../../../../types";
 
 import sampleHolograms from "../../../__tests__/samples/internal/sampleHolograms.json";
 

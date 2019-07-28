@@ -1,5 +1,5 @@
 import logger from "../../../common/logger";
-import { IPipeline } from "../../../../../HoloRepositoryUI-Types";
+import { IPipeline } from "../../../../../types";
 
 import samplePipelines from "../../../__tests__/samples/internal/samplePipelines.json";
 

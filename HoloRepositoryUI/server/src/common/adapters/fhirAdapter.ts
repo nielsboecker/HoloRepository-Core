@@ -5,7 +5,7 @@ import {
   IPatient,
   IPerson,
   IPractitioner
-} from "../../../../HoloRepositoryUI-Types";
+} from "../../../../types";
 import { R4 } from "@Ahryman40k/ts-fhir-types";
 import { SupportedFhirResourceType } from "../clients/fhirClient";
 import logger from "../logger";

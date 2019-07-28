@@ -1,5 +1,5 @@
 import logger from "../../../common/logger";
-import { IPatient } from "../../../../../HoloRepositoryUI-Types";
+import { IPatient } from "../../../../../types";
 import { getAllPatients, getAllForPractitioner, getPatient } from "../../../common/data.service";
 
 export class PatientsService {

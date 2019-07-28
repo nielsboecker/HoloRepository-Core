@@ -13,6 +13,7 @@ Upon receiving a DICOM image series, a job will be started and passed through th
 
 
 ## Technologies
+> TODO: Please add this section.
 
 
 ## Architecture
@@ -31,35 +32,7 @@ We are continually wrapping existing pre-trained models with a lightweight Flask
 If you want to train your own model or integrate an existing model that is not officially supported yet, you can easily integrate it yourself. You will need to implement some kind of server to comply with the specified API endpoints (documented in `models/README.md`) and a `Dockerfile`. You can take a look at the existing models for reference.
 
 
-## Usage:
-```
-usage: pipelineController.py [-h] [-c CONFIG] [-l] [-i NAME]
-                             [-p [PARAM [PARAM ...]]]
-                             [pipelineID]
-
-Selct pipeline to process
-
-positional arguments:
-  pipelineID            ID of pipeline
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -c CONFIG, --config CONFIG
-                        path to pipeline config file relative to
-                        pipelineController
-  -l, --ls              list all the available piplines
-  -i NAME, --info NAME  get info from pipeline's name
-  -p [PARAM [PARAM ...]], --param [PARAM [PARAM ...]]
-                        parameters for pipeline e.g. dicom folder name or HU
-                        threshold
-```
-
-### Example Usage
-```
-python pipelineController.py p4 -p 3_Axial_CE
-```
-- `p4`: pipeline ID. In this case to segment lung and generate glb from it
-- `-p 3_Axial_CE`: param(s) for the specific pipeline, in this case a directory for an upper ct scan from medicalScans/dicom
+## Development
 
 
 ### Requirements:
@@ -94,6 +67,38 @@ npm install -g gltf-pipeline
 ```
 
 
+### Local usage
+```
+usage: pipelineController.py [-h] [-c CONFIG] [-l] [-i NAME]
+                             [-p [PARAM [PARAM ...]]]
+                             [pipelineID]
+
+Selct pipeline to process
+
+positional arguments:
+  pipelineID            ID of pipeline
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        path to pipeline config file relative to
+                        pipelineController
+  -l, --ls              list all the available piplines
+  -i NAME, --info NAME  get info from pipeline's name
+  -p [PARAM [PARAM ...]], --param [PARAM [PARAM ...]]
+                        parameters for pipeline e.g. dicom folder name or HU
+                        threshold
+```
+
+
+#### Example usage
+```
+python pipelineController.py p4 -p 3_Axial_CE
+```
+- `p4`: pipeline ID. In this case to segment lung and generate glb from it
+- `-p 3_Axial_CE`: param(s) for the specific pipeline, in this case a directory for an upper ct scan from medicalScans/dicom
+
+
 ## Testing
 Testing is done using pytest:
 ```
@@ -105,6 +110,10 @@ Execute tests by running the following command in `HoloPipelines` directory:
 pytest --cov
 ```
 > Note: Tests downloads sample files during the testing process. These files can be deleted by running *cleanUp.py*
+
+
+## API specification
+> TODO: Please add this section.
 
 
 ## Contact and support

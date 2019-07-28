@@ -33,6 +33,14 @@ The back-end is written in Node / Express 4.16 and TypeScript.
 This app uses TypeScript to provide type safety, static analysis, code completion etc. To facilitate development and enhance confidence in the end-to-end system, both client and server are using the same type definitions.
 
 
+## Architecture
+The UI implements a traditional client-server architecture. The server is responsible for interacting with other systems (FHIR server, HoloPipelines, HoloStorage Accessor). It performs data validation and mapping, and sends the required data to the client.
+
+The server's architecture follows common Express patterns: Every route has a dedicated router, controller and service. Furthermore, there is a client and a service module for each external system.
+
+The client is a modular React application that is primarily split into the actual app (where users are after they authenticated) and a public area, that is accessible without login. The different routes correspond to different modules and submodules.
+
+
 ## Development
 
 
@@ -116,6 +124,23 @@ npm run build
 ```
 
 Note that the actual deployment leverages Docker. A `Dockerfile` is provided for both client and server and the typical development workflow uses Azure DevOps pipelines to build and release the app.
+
+
+## Integration
+
+
+### Client-Server API specification
+The internal API between the client and the server can be found in `server/src/routes.ts` and essentially consists of these routes:
+* 
+* `/practitioners`
+* `/patients`
+* `/holograms`
+* `/pipelines`
+* `/imagingStudies`
+
+
+### Other services
+The server accesses the EHR FHIR server (respectively the stand-in we deployed on Azure) to read medical data concerned with patients, practitioners and imaging studies. To display information about and download/delete/upload holograms, it communicates with the HoloStorage Accessor API. Furthermore, to generate new holograms and enquire information about available pipelines, it communicates with the HoloPipelines through the respective API.
 
 
 ## Contact and support

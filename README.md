@@ -53,8 +53,7 @@ The HoloRepository ecosystem consists of multiple sub-systems and remains open t
 
 
 ### [HoloRepositoryUI](https://github.com/nbckr/HoloRepository-Core/tree/master/HoloRepositoryUI)
-A web-based application that allows practitioners to browse their patients and manage the generation of 3D models sourced from imaging  
-studies like CT or MRI scans. The client-side application is accompanied by an API server that is responsible for commicating with the other components.
+A web-based application that allows practitioners to browse their patients and manage the generation of 3D models sourced from imaging studies like CT or MRI scans. The client-side application is accompanied by an API server that is responsible for commicating with the other components.
 
 
 ### [HoloPipelines](https://github.com/nbckr/HoloRepository-Core/tree/master/HoloPipelines)

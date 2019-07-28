@@ -1,4 +1,5 @@
 # HoloPipelines
+A cloud-based service that performs the automatic generation of 3D models from 2D image stacks. Pre-trained neural network models are deployed and accessed with this component alongside traditional techniques like Hounsfield value thresholding.
 
 
 ## Description

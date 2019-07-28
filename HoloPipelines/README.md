@@ -1,41 +1,111 @@
-# dicom2mesh
-A simple Python script which utilises marching cubes algorithm(skimage library) to generate 3D mesh from Dicom/Nifti image stack, which then can be output to .obj file(can be previewed using 3D viewer from microsoft store).
+# HoloPipelines
 
-## Requirements:
-Python 3.7 or above
 
-## Dependencies:
-- Anaconda https://www.anaconda.com/distribution/ (or alternatively, each dependencies can be install separately)
-    - Numpy https://www.numpy.org/
-    - Scipy https://www.scipy.org/
-    - Matplotlib https://pypi.org/project/matplotlib/
-- Pydicom https://pydicom.github.io/
-- GDCM http://gdcm.sourceforge.net/wiki/index.php/Main_Page (conda install -c conda-forge gdcm)
-- Skit-image https://scikit-image.org/
-- Sklearn https://scikit-learn.org/stable/
-- NiBabel https://nipy.org/nibabel/
+## Description
+<img src="https://user-images.githubusercontent.com/11090412/62010807-49d5b180-b167-11e9-9ff5-cd221e94b265.png" alt="screenshot" height="350" align="left" />
+The HoloPipelines are responsible for the generation of 3D holograms to eventually be displayed in the HoloLens, sourced from DICOM imaging studies. The cloud-hosted service provides a consistent pipeline interface to consume DICOM and yield glTF2 files (plus associated patient data). By implementing a Docker-based template, arbitrary pre-trained neural network (NN) models can be plugged into the HoloPipelines service seamlessly. This allows to add new workflows in the future and implement each workflow independently.
+
+A typical pipeline will process the data fully automatic by utilising a NN model which has been trained to perform a specific task, such as segmenting the bones from a CT scan. Several Docker-based interfaces for distributing pre-trained models have been suggested, for instance the ModelHub.ai scheme, Niftinet or Microsoft Azure ML. We will iteratively add adapters for these interfaces, so that the HoloPipelines can integrate existing models.
+
+As each pipeline is independent, semi-automated or manual pipelines (which may even include their own front-ends or manual processing steps) could be added later.
+
+Upon receiving a DICOM image series, a job will be started and passed through the different stages of a pipeline. The status of each job can be queried through a distinct API. When finished, the result will be handed on to the HoloStorage Accessor.
+
+
+## Technologies
+
+
+## Architecture
+The HoloPipeines themself are a cloud-based application developed with Python. The code implements a Pipes-and-Filters pattern and is kept modular. Different modules can be pieced together to reflect different workflows, and thereby provide different pipelines.
+
+The modules that form a pipeline can perform different tasks:
+* The first module in the chain is responsible for listening to incoming `POST` requests and then actively pulling the input data from the PACS.
+* Intermediate modules perform various pre- or post-processing tasks such as rescaling, cropping, or filtering.
+* Special adapter modules are used to call the pre-trained NN models, which are being deployed as separate containers and accessed via HTTP calls.
+* The last module is responsible for sending the result off to the HoloStorage Accessor.
+
+
+## Pre-trained NN models
+We are continually wrapping existing pre-trained models with a lightweight Flask API and a `Dockerfile`. These models can be found in the `models/` directory.
+
+If you want to train your own model or integrate an existing model that is not officially supported yet, you can easily integrate it yourself. You will need to implement some kind of server to comply with the specified API endpoints (documented in `models/README.md`) and a `Dockerfile`. You can take a look at the existing models for reference.
+
 
 ## Usage:
-- The code works by first converting Dicom or Nifti images to a Numpy array, then generate a .obj mesh from it.
-- dicom2numpy.py, nifti2numpy.py and numpy2obj.py can be run independently:
-> python3 dicom2numpy.py
+```
+usage: pipelineController.py [-h] [-c CONFIG] [-l] [-i NAME]
+                             [-p [PARAM [PARAM ...]]]
+                             [pipelineID]
 
-- For a one way Dicom/Nifti to obj mesh, main.py can be used.
-    - An example usage of main.py: 
-> python3 main.py "d" "samples" 300 "abdomen_mesh"
+Selct pipeline to process
 
-   - "d", first argument being the option used for conversion. {"d":dicom to obj, "n":nifti to obj, "num"numpy to obj}
-   - "samples", input directory of the Dicom files. Please note that the script can only take input from a fixed directory according           to its conversion option at the moment. {"d": imgs/dicom/(sub dir name), "n": imgs/nifti/(.nii file name), "num": numpy/(.npy             filename)}
-   - 300, third argument being the Housfield used for the thresholding in marching cube algorithm. In this example, 300 is used for             bones. For the sample Nifti file please use 30 or above as it has already been segmented.
-   - "abdomen_mesh", the fourth argument. Once the mesh has successfully generated, it will be saved in output/OBJs with the given             name.
+positional arguments:
+  pipelineID            ID of pipeline
 
-## OBJ conversion to GLTF/GLB
-https://github.com/AnalyticalGraphicsInc/obj2gltf
-Make sure to have the latest version of Node.js 
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        path to pipeline config file relative to
+                        pipelineController
+  -l, --ls              list all the available piplines
+  -i NAME, --info NAME  get info from pipeline's name
+  -p [PARAM [PARAM ...]], --param [PARAM [PARAM ...]]
+                        parameters for pipeline e.g. dicom folder name or HU
+                        threshold
+```
 
-### Refs:
-- https://www.raddq.com/dicom-processing-segmentation-visualization-in-python/      14/06/19
-- https://wiki.idoimaging.com/index.php?title=Sample_Data   seems like the have some dicoms and a bit of niftis we can playwith    17/06/19
-- https://www.researchgate.net/post/What_is_the_easiest_way_to_batch_resize_DICOM_files to down sample dicoms, incase if they're too large  17/06/19
-- https://stackoverflow.com/questions/55560243/resize-a-dicom-image-in-python      this one is for python. the one above is for mathlab, i didn't see
-- https://stackoverflow.com/questions/48844778/create-a-obj-file-from-3d-array-in-python   export mesh to obj   17/06/19
+### Example Usage
+```
+python pipelineController.py p4 -p 3_Axial_CE
+```
+- `p4`: pipeline ID. In this case to segment lung and generate glb from it
+- `-p 3_Axial_CE`: param(s) for the specific pipeline, in this case a directory for an upper ct scan from medicalScans/dicom
+
+
+### Requirements:
+Python 3.7 or above
+
+### Dependencies and installation:
+Dependencies can be installed by using pip command as follow
+```
+pip install -r requirements.txt
+```
+
+Some dependencies are not available through pip, they are listed below with their installation instructions
+
+**GDCM (Debian/Ubuntu)**
+```
+sudo apt-get install libgdcm2.8
+sudo apt-get install libcdcm-tools
+```
+
+Verify installation success and see if `gdcmdump` or `gdcmconv` commands can be executed.
+
+The final 2 dependencies can be installed using Node.js package manager. Please make sure to have the latest version of npm installed.
+
+**obj2gltf**  https://github.com/AnalyticalGraphicsInc/OBJ2GLTF
+```
+npm install -g obj2gltf
+```
+
+**glTF Pipeline** https://github.com/AnalyticalGraphicsInc/gltf-pipeline
+```
+npm install -g gltf-pipeline
+```
+
+
+## Testing
+Testing is done using pytest:
+```
+pip install pytest
+pip install pytest-cov
+```
+Execute tests by running the following command in `HoloPipelines` directory:
+```
+pytest --cov
+```
+> Note: Tests downloads sample files during the testing process. These files can be deleted by running *cleanUp.py*
+
+
+## Contact and support
+This component is owned by [UdomkarnBoonyaprasert](https://github.com/UdomkarnBoonyaprasert) and [ansonwong9695](https://github.com/ansonwong9695). Please get in touch if you have any questions. For change requests and bug reports, please open a new issue.

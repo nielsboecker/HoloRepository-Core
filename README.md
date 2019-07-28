@@ -72,7 +72,7 @@ An enhanced facade, offering a consistent interface to the HoloStorage and trans
 A Unity library handling the runtime network connections from HoloLens applications to the HoloStorage. Distributed as a separate UnityPackage, this is meant to facilitate development of 3rd party applications that plug into the HoloRepository ecosystem.
 
 
-### [HoloRepository Demo application](https://github.com/nbckr/HoloRepository-HoloLens/tree/master/HoloRepositoryDemoApplication)
+### [HoloRepository demo application](https://github.com/nbckr/HoloRepository-HoloLens/tree/master/HoloRepositoryDemoApplication)
 A simple application that demonstrates how to dynamically access 3D models stored in the HoloStorage. The scenes can be distributed alongside the Connector library and serve as examples and interactive documentation.
 
 
@@ -85,7 +85,7 @@ The system is designed to enable other systems to integrate. Some current projec
 
 
 ## Code organisation
-Most of the components are kept in the [HoloRepository-HoloLens](https://github.com/nbckr/HoloRepository-HoloLens) mono-repository. The sub-directories correspond to sub-components as described above. The only exception are the components that are developed in Unity/C#, they are separately kept in the [HoloRepository-HoloLens](https://github.com/nbckr/HoloRepository-HoloLens) repository.
+Most of the components are kept here in the [HoloRepository-Core](https://github.com/nbckr/HoloRepository-Core) mono-repository. The sub-directories correspond to sub-components as described above. The only exception are the components that are developed in Unity/C#, they are separately kept in the [HoloRepository-HoloLens](https://github.com/nbckr/HoloRepository-HoloLens) repository.
 
 
 ## Development

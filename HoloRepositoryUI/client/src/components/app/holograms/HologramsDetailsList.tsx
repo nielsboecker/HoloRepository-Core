@@ -23,7 +23,7 @@ import {
 } from "./HologramsDetailsListColumns";
 import HologramsCommandBar from "./HologramsCommandBar";
 import FilterStatusMessageBar from "../core/FilterStatusMessageBar";
-import { IHologram } from "../../../../../HoloRepositoryUI-Types";
+import { IHologram } from "../../../../../types";
 import { PidToPatientsMap, PropsWithContext, withAppContext } from "../../shared/AppState";
 
 const unknownPersonName = "Unknown";

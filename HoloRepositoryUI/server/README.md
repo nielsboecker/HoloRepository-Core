@@ -34,7 +34,7 @@ curl localhost:3001/api/v1/patients
 If you run the React client at the same time, it will be using port `3000` and accessing this back-end at `3001`.
 
 ### Notes
-- **TypeScript**: This app uses TypeScript to provide type safety, static analysis, code completion etc. If you get an error about types not being compiled, you have to `cd ../HoloRepositoryUI-Types` and `npm install & npm run build`.
+- **TypeScript**: This app uses TypeScript to provide type safety, static analysis, code completion etc. If you get an error about types not being compiled, you have to `cd ../types` and `npm install & npm run build`.
 
 ---
 

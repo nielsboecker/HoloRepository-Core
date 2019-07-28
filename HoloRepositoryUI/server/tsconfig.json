@@ -15,7 +15,7 @@
   "exclude": ["node_modules"],
   "references": [
     {
-      "path": "../HoloRepositoryUI-Types"
+      "path": "../types"
     }
   ]
 }

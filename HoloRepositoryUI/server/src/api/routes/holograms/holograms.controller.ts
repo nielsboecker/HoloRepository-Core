@@ -1,7 +1,7 @@
 import HologramsService from "./holograms.service";
 import { Request, Response } from "express";
 import logger from "../../../common/logger";
-import ImagingStudiesService from "../imagingStudy/imagingStudies.service";
+import ImagingStudiesService from "../imagingStudies/imagingStudies.service";
 
 export class HologramsController {
   public async getAll(req: Request, res: Response): Promise<void> {

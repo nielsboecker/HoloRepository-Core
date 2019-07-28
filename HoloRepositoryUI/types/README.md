@@ -1,4 +1,4 @@
-# HoloRepository UI Types
+# HoloRepositoryUI-Types
 
 This directory contains the TypeScript definitions that are used by multiple other sub-projects. Using project references and leveraging the mono-repository style of this project, the other sub-directories directly access the compiled definitions from this directory.
 

@@ -9,7 +9,7 @@ import {
   Toggle
 } from "office-ui-fabric-react";
 import { Col, Row } from "antd";
-import { IPatient } from "../../../../../HoloRepositoryUI-Types";
+import { IPatient } from "../../../../../types";
 import PatientCard from "./PatientCard";
 import FilterStatusMessageBar from "../core/FilterStatusMessageBar";
 import { PidToPatientsMap, PropsWithContext, withAppContext } from "../../shared/AppState";

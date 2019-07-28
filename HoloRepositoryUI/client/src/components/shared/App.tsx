@@ -3,7 +3,7 @@ import "./App.scss";
 import MainContainer from "./MainContainer";
 import { initializeIcons } from "@uifabric/icons";
 import BackendService from "../../services/holoRepositoryServerService";
-import { IPatient, IPractitioner, IPipeline } from "../../../../HoloRepositoryUI-Types";
+import { IPatient, IPractitioner, IPipeline } from "../../../../types";
 import { AppContext, IAppState, initialState } from "./AppState";
 
 // Note: See https://developer.microsoft.com/en-us/fabric/#/styles/web/icons#fabric-react

@@ -1,5 +1,5 @@
 import logger from "../../../common/logger";
-import { IImagingStudy } from "../../../../../HoloRepositoryUI-Types";
+import { IImagingStudy } from "../../../../../types";
 import {
   getAllImagingStudies,
   getImagingStudy,

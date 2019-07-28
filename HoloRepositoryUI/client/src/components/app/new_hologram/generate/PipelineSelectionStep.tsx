@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { IPipeline } from "../../../../../../HoloRepositoryUI-Types";
+import { IPipeline } from "../../../../../../types";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
 import { Col, Row } from "antd";
 import PipelineSpecificationCard from "./PipelineSpecificationCard";

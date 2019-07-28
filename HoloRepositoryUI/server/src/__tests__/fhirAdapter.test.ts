@@ -1,7 +1,7 @@
 import { R4 } from "@Ahryman40k/ts-fhir-types";
 import { _normaliseDateString, getAdapterFunction } from "../common/adapters/fhirAdapter";
 import { SupportedFhirResourceType } from "../common/clients/fhirClient";
-import { IPatient, IPractitioner, IImagingStudy } from "../../../HoloRepositoryUI-Types";
+import { IPatient, IPractitioner, IImagingStudy } from "../../../types";
 
 import samplePatient from "./samples/fhir/samplePatient.json";
 import samplePractitioner from "./samples/fhir/samplePractitioner.json";

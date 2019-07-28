@@ -1,6 +1,6 @@
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import FhirClient, { SupportedFhirResourceType } from "./clients/fhirClient";
-import { IImagingStudy, IPatient, IPractitioner } from "../../../HoloRepositoryUI-Types";
+import { IImagingStudy, IPatient, IPractitioner } from "../../../types";
 
 const getPatient = async (pid: string): Promise<IPatient> => {
   return FhirClient.getAndMap<R4.IPatient, IPatient>(SupportedFhirResourceType.Patient, pid);

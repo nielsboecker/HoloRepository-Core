@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Divider } from "antd";
-import { IPipeline } from "../../../../../../HoloRepositoryUI-Types";
+import { IPipeline } from "../../../../../../types";
 import { CommandBarButton, Icon, IconButton, Image, Modal } from "office-ui-fabric-react";
 
 const style = { backgroundColor: "#eee", padding: "24px", marginTop: "31px" };

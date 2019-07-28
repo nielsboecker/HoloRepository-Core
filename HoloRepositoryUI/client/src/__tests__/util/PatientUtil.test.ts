@@ -6,7 +6,7 @@ import {
 // @ts-ignore TS7015
 import mockNow from "jest-mock-now";
 import sampleHolograms from "../samples/sampleHolograms.json";
-import { IHologram } from "../../../../HoloRepositoryUI-Types";
+import { IHologram } from "../../../../types";
 
 it("capitaliseString capitalises a string correctly", () => {
   const input = "foo bar";

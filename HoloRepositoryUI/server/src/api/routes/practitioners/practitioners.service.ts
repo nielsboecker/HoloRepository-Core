@@ -1,5 +1,5 @@
 import logger from "../../../common/logger";
-import { IPractitioner } from "../../../../../HoloRepositoryUI-Types";
+import { IPractitioner } from "../../../../../types";
 import { getPractitioner } from "../../../common/data.service";
 
 export class PractitionersService {

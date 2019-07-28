@@ -4,7 +4,7 @@ import { decode, isDecodeError } from "io-ts-promise";
 import { getAdapterFunction } from "../adapters/fhirAdapter";
 import { FHIR_SERVER_BASE_URL } from "../../config";
 import { R4 } from "@Ahryman40k/ts-fhir-types";
-import { IImagingStudy, IPatient, IPractitioner } from "../../../../HoloRepositoryUI-Types";
+import { IImagingStudy, IPatient, IPractitioner } from "../../../../types";
 import logger from "../logger";
 
 const _fhirClient = new Client({

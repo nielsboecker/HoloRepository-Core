@@ -8,7 +8,7 @@ import {
   getNumberOfHologramsString
 } from "../../../util/PatientUtil";
 import "./PatientCard.scss";
-import { IPatient } from "../../../../../HoloRepositoryUI-Types";
+import { IPatient } from "../../../../../types";
 import { PropsWithContext, withAppContext } from "../../shared/AppState";
 
 export interface IPatientCardProps extends PropsWithContext {

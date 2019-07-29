@@ -12,8 +12,9 @@ def main(dicomFolderPath, outputGlbPath, threshold):
         generatedNumpyList,
         threshold,
         str(
-            compCommonPath.obj
-            .joinpath(str(pathlib.PurePath(dicomFolderPath).parts[-1]))
+            compCommonPath.obj.joinpath(
+                str(pathlib.PurePath(dicomFolderPath).parts[-1])
+            )
         )
         + ".obj",
     )

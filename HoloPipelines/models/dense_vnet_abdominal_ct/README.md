@@ -14,7 +14,6 @@ https://niftynet.readthedocs.io/en/dev/installation.html
 ## Build Docker image from the Docker file
 
 ```
-docker build -t [docker name:tag] .
 # example
 docker build -t niftynet:latest .
 ```
@@ -24,9 +23,8 @@ This instruction will create the niftynet docker image with flask server end poi
 
 ## run docker and connect docker to the port 5000 
 ```
-docker run -d -p 5000:5000 [docker name]
 # example
-docker run -d -p 5000:5000 niftynet:latest
+docker run --rm -d -p 5000:5000 --name="niftynet" niftynet
 ```
 
 
@@ -35,7 +33,7 @@ This instruction will link your local port 5000 with the port 5000 in the contai
 now we can send the request to the container because server is running, Here I use curl to send a post request with the file i would like to segement and send it to the container. when container recieve this input nifti file it will call the NN model to segement the input file and when process is complete the flask server will find the output file and return it to the client.
 
 ### API
-Here i use flask framework to run my gunicorn server so i have a local port that allow user to send request to the container, container can accept the segment request input and output it to the user.
+Here i use flask framework to run my gunicorn server so i have a local port that allow user to send request to the container, container can accept the segment request input and output it to the user.docker build -t [docker name:tag] .
 The container runs on the ```http://localhost:5000```
 to send a request for the segmentation, We provide a ```/model``` endpoint to do the segmentation.
 
@@ -49,25 +47,12 @@ Here are the requirements for the segmentation request:
 Here is an example that i use curl to send a post request to the container
 
 ```
-curl -X POST -F file=@100_CT.nii http://localhost:5000/seg -o output.nii.gz
+curl -X POST -F file=@100_CT.nii http://localhost:5000/model -o output.nii.gz
 ```
 
 ### Testing for the flask script
-To run the test you need to modify the Dockerfile first you need to copy a nifit image to the container's app directory
-```
-# example
- COPY 100_CT.nii /app/
-```
-and create the container again then go to the container you created
-``` 
-docker exec -it [docker container name] bash 
-```
-and go to the /app directory
-```
-cd ~/app
-```
-run the test.py
-```
-python test.py 
-```
+To run the test, you need to make sure that you docker container is ruuning and you can run this command 
 
+```
+docker exec niftynet python3 test.py
+```

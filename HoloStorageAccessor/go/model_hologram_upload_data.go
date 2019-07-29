@@ -46,3 +46,10 @@ func (h HologramUploadData) GetHologramData() Hologram {
 	}
 	return data
 }
+
+func (h HologramUploadData) GetHologramDataInDocRefFHIR() HologramDocumentReferenceFHIR {
+	hologramData := h.GetHologramData()
+	data := hologramData.ToFHIR()
+
+	return data
+}

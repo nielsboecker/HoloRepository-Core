@@ -11,8 +11,6 @@ package openapi
 
 // Error - Error responses
 type Error struct {
-
-	ErrorCode string `json:"errorCode,omitempty"`
-
+	ErrorCode    string `json:"errorCode,omitempty"`
 	ErrorMessage string `json:"errorMessage,omitempty"`
 }

@@ -28,7 +28,7 @@ func TestHologramToHologramDocumentReferenceFHIR(t *testing.T) {
 				Status:       "Current",
 			},
 		},
-		"hologram_data": {
+		"with_data": {
 			input: Hologram{
 				Hid:                 "123",
 				Title:               "test-title",

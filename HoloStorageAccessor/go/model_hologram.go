@@ -18,41 +18,18 @@ import (
 
 // Hologram - Metadata of a hologram
 type Hologram struct {
-	// UUID of a hologram
-	Hid string `json:"hid,omitempty"`
-
-	// Summary of the hologram
-	Title string `json:"title,omitempty"`
-
-	// Further elaborations on the hologram with additional details
-	Description string `json:"description,omitempty"`
-
-	// The mimetype of the hologram file
-	ContentType string `json:"contentType,omitempty"`
-
-	// The size of the hologram in KB
-	FileSizeInKb uint32 `json:"fileSizeInKb,omitempty"`
-
-	// The body part the hologram represents
-	BodySite string `json:"bodySite,omitempty"`
-
-	// The date when the imaging was done
-	DateOfImaging time.Time `json:"dateOfImaging,omitempty"`
-
-	// The date the hologram was generated
-	CreationDate time.Time `json:"creationDate,omitempty"`
-
-	// The way the hologram was created
-	CreationMode string `json:"creationMode,omitempty"`
-
-	// The description associated with the creation method of the hologram
-	CreationDescription string `json:"creationDescription,omitempty"`
-
-	// The UUID of the author of this hologram
-	Aid string `json:"aid,omitempty"`
-
-	// The UUID of the patient associated with this hologram
-	Pid string `json:"pid,omitempty"`
+	Hid                 string    `json:"hid,omitempty"`
+	Title               string    `json:"title,omitempty"`
+	Description         string    `json:"description,omitempty"`
+	ContentType         string    `json:"contentType,omitempty"`
+	FileSizeInKb        uint32    `json:"fileSizeInKb,omitempty"`
+	BodySite            string    `json:"bodySite,omitempty"`
+	DateOfImaging       time.Time `json:"dateOfImaging,omitempty"`
+	CreationDate        time.Time `json:"creationDate,omitempty"`
+	CreationMode        string    `json:"creationMode,omitempty"`
+	CreationDescription string    `json:"creationDescription,omitempty"`
+	Aid                 string    `json:"aid,omitempty"`
+	Pid                 string    `json:"pid,omitempty"`
 }
 
 type HologramDocumentReferenceFHIR struct {

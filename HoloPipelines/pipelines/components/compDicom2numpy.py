@@ -1,6 +1,5 @@
 import numpy as np
 import pydicom as dicom
-import pydicom.pixel_data_handlers.gdcm_handler
 import os
 import scipy.ndimage
 import pathlib

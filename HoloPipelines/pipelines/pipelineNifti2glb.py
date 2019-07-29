@@ -1,3 +1,4 @@
+from components import compCommonPath
 from components import compNifti2numpy
 from components import compNumpy2obj
 from components import compObj2glbWrapper
@@ -10,7 +11,7 @@ def main(inputNiftiPath, outputGlbPath, threshold):
     generatedObjPath = compNumpy2obj.main(
         generatedNumpyList,
         threshold,
-        str(pathlib.Path.cwd().joinpath("output", "OBJ", "nifti2glb_tempObj.obj")),
+        str(compCommonPath.obj.joinpath("nifti2glb_tempObj.obj")),
     )
     generatedGlbPath = compObj2glbWrapper.main(
         generatedObjPath,

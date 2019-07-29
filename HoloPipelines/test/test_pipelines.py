@@ -7,12 +7,13 @@ import urllib.request
 from zipfile import ZipFile
 
 thisCwd = pathlib.Path.cwd()
+zipFileName = "__temp__.zip"
 dicomPath = thisCwd.joinpath("medicalScans", "dicom")
 niftiPath = thisCwd.joinpath("medicalScans", "nifti")
 
 outputPath = pathlib.Path.cwd().joinpath("output")
-objPath = outputPath.joinpath("OBJ")
-glbPath = outputPath.joinpath("GLB")
+objPath = outputPath.joinpath("obj")
+glbPath = outputPath.joinpath("glb")
 
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))).parent)
 
@@ -26,24 +27,24 @@ def testSetup():
         print("Beginning dicom sample download...")
 
         url = "https://holoblob.blob.core.windows.net/test/3_Axial_CE.zip"
-        urllib.request.urlretrieve(url, str(thisCwd.joinpath("__temp__.zip")))
+        urllib.request.urlretrieve(url, str(thisCwd.joinpath(zipFileName)))
 
         print("Beginning dicom unzip...")
-        with ZipFile("__temp__.zip", "r") as zipObj:  # unzip
+        with ZipFile(zipFileName, "r") as zipObj:  # unzip
             zipObj.extractall(str(dicomPath))
-        os.remove("__temp__.zip")
+        os.remove(zipFileName)
 
     if not os.path.exists(str(niftiPath.joinpath("1103_3_glm.nii"))):
         # download nifti sample
         print("Beginning nifti sample download...")
 
         url = "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip"
-        urllib.request.urlretrieve(url, str(thisCwd.joinpath("__temp__.zip")))
+        urllib.request.urlretrieve(url, str(thisCwd.joinpath(zipFileName)))
 
         print("Beginning nifti unzip...")
-        with ZipFile("__temp__.zip", "r") as zipObj:  # unzip
+        with ZipFile(zipFileName, "r") as zipObj:  # unzip
             zipObj.extractall(str(niftiPath))
-        os.remove("__temp__.zip")
+        os.remove(zipFileName)
 
         print("setup: done")
 
@@ -74,8 +75,8 @@ def test_pipelines_dicom2glb(testSetup):
             "python",
             "pipelineController.py",
             "-c",
-            "test/testList.json",
-            "p3",
+            "test/pipelineListForTesting.json",
+            "dicom2glb",
             "-p",
             str(dicomPath.joinpath("3_Axial_CE")),
             str(glbPath.joinpath("testResult0.glb")),
@@ -93,8 +94,8 @@ def test_pipelines_lungDicom2glb(testSetup):
             "python",
             "pipelineController.py",
             "-c",
-            "test/testList.json",
-            "p4",
+            "test/pipelineListForTesting.json",
+            "lungDicom2glb",
             "-p",
             str(dicomPath.joinpath("3_Axial_CE")),
             str(glbPath.joinpath("testResult1.glb")),
@@ -111,8 +112,8 @@ def test_pipelines_nifti2obj(testSetup):
             "python",
             "pipelineController.py",
             "-c",
-            "test/testList.json",
-            "p0",
+            "test/pipelineListForTesting.json",
+            "nifti2obj",
             "-p",
             str(niftiPath.joinpath("1103_3_glm.nii")),
             str(objPath.joinpath("testResult2.obj")),
@@ -131,8 +132,8 @@ def test_pipelines_nifti2glb(testSetup):
             "python",
             "pipelineController.py",
             "-c",
-            "test/testList.json",
-            "p1",
+            "test/pipelineListForTesting.json",
+            "nifti2glb",
             "-p",
             str(niftiPath.joinpath("1103_3_glm.nii")),
             str(glbPath.joinpath("testResult3.glb")),

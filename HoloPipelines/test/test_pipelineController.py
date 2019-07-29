@@ -5,22 +5,22 @@ import subprocess
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))).parent)
 
 
-def test_main_s0_normal():
+def test_main_samplePipeline_normal():
     output = subprocess.run(
-        ["python", "pipelineController.py", "-c", "test/testList.json", "s0"],
+        ["python", "pipelineController.py", "-c", "test/pipelineListForTesting.json", "samplePipeline"],
         cwd=newCwd,
     )
     assert 0 == output.returncode
 
 
-def test_main_s0_invalid_number_of_argument():
+def test_main_samplePipeline_invalid_number_of_argument():
     output = subprocess.run(
         [
             "python",
             "pipelineController.py",
             "-c",
-            "test/testList.json",
-            "s0",
+            "test/pipelineListForTesting.json",
+            "samplePipeline",
             "-p",
             "1",
         ],
@@ -31,20 +31,20 @@ def test_main_s0_invalid_number_of_argument():
 
 def test_main_missing_pipeline():
     output = subprocess.run(
-        ["python", "pipelineController.py", "-c", "test/testList.json", "s3"],
+        ["python", "pipelineController.py", "-c", "test/pipelineListForTesting.json", "samplePipeline0"],
         cwd=newCwd,
     )
     assert 1 == output.returncode
 
 
-def test_main_s0_missing_pipeline_with_extra_arguments():
+def test_main_samplePipeline_missing_pipeline_with_extra_arguments():
     output = subprocess.run(
         [
             "python",
             "pipelineController.py",
             "-c",
-            "test/testList.json",
-            "s3",
+            "test/pipelineListForTesting.json",
+            "samplePipeline0",
             "-p",
             "0",
         ],
@@ -55,7 +55,7 @@ def test_main_s0_missing_pipeline_with_extra_arguments():
 
 def test_main_ls_normal():
     output = subprocess.run(
-        ["python", "pipelineController.py", "-c", "test/testList.json", "--ls"],
+        ["python", "pipelineController.py", "-c", "test/pipelineListForTesting.json", "--ls"],
         cwd=newCwd,
     )
     assert 0 == output.returncode
@@ -67,9 +67,9 @@ def test_main_info_dicom2glb():
             "python",
             "pipelineController.py",
             "-c",
-            "test/testList.json",
+            "test/pipelineListForTesting.json",
             "--info",
-            "dicom2glb",
+            "DICOM to glb",
         ],
         cwd=newCwd,
     )
@@ -82,7 +82,7 @@ def test_main_info_for_missing_pipeline():
             "python",
             "pipelineController.py",
             "-c",
-            "test/testList.json",
+            "test/pipelineListForTesting.json",
             "--info",
             "doesNotExist",
         ],

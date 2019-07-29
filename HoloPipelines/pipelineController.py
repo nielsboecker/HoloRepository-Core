@@ -7,7 +7,7 @@ import pathlib
 
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
-parser = argparse.ArgumentParser(description="Selct pipeline to process")
+parser = argparse.ArgumentParser(description="Select pipeline to process")
 parser.add_argument(
     "-c",
     "--config",

@@ -1,3 +1,4 @@
+from components import compCommonPath
 from components import compDicom2numpy
 from components import compNumpy2obj
 from components import compObj2glbWrapper
@@ -11,8 +12,7 @@ def main(dicomFolderPath, outputGlbPath, threshold):
         generatedNumpyList,
         threshold,
         str(
-            pathlib.Path.cwd()
-            .joinpath("output", "OBJ")
+            compCommonPath.obj
             .joinpath(str(pathlib.PurePath(dicomFolderPath).parts[-1]))
         )
         + ".obj",

@@ -10,12 +10,13 @@
 package openapi
 
 import (
+	"encoding/json"
+	"errors"
 	"time"
 )
 
 // Hologram - Metadata of a hologram
 type Hologram struct {
-
 	// UUID of a hologram
 	Hid string `json:"hid,omitempty"`
 
@@ -29,7 +30,7 @@ type Hologram struct {
 	ContentType string `json:"contentType,omitempty"`
 
 	// The size of the hologram in KB
-	FileSizeInKb int32 `json:"fileSizeInKb,omitempty"`
+	FileSizeInKb uint32 `json:"fileSizeInKb,omitempty"`
 
 	// The body part the hologram represents
 	BodySite string `json:"bodySite,omitempty"`
@@ -51,4 +52,76 @@ type Hologram struct {
 
 	// The UUID of the patient associated with this hologram
 	Pid string `json:"pid,omitempty"`
+}
+
+type ReferenceFHIR struct {
+	Reference string `json:"reference,omitempty"`
+}
+
+type CodeableConceptFHIR struct {
+	Text string `json:"text,omitempty"`
+}
+
+type ContentFHIR struct {
+	Attachment AttachmentFHIR `json:"attachment,omitempty"`
+}
+type AttachmentFHIR struct {
+	ContentType string `json:"contentType,omitempty"`
+	URL         string `json:"url,omitempty"`
+	Size        uint32 `json:"size,omitempty"`
+	Title       string `json:"title,omitempty"`
+}
+type HologramDocumentReferenceFHIR struct {
+	ResourceType string              `json:"resourceType,omitempty"`
+	Id           string              `json:"id,omitempty"`
+	Status       string              `json:"status,omitempty"`
+	Date         time.Time           `json:"date,omitempty"`
+	Type         CodeableConceptFHIR `json:"type,omitempty"`
+	Content      []ContentFHIR       `json:"content,omitempty"`
+	HologramMeta string              `json:"description,omitempty"`
+	Subject      ReferenceFHIR       `json:"subject,omitempty"`
+	Author       []ReferenceFHIR     `json:"author,omitempty"`
+}
+
+type HologramMeta struct {
+	Description         string    `json:"description,omitempty"`
+	CreationDescription string    `json:"creationDescription,omitempty"`
+	BodySite            string    `json:"bodySite,omitempty"`
+	DateOfImaging       time.Time `json:"dateOfImaging,omitempty"`
+}
+
+func (h Hologram) ToFHIR() HologramDocumentReferenceFHIR {
+	hologramDocRef := HologramDocumentReferenceFHIR{ResourceType: "DocumentReference", Status: "Current"}
+	hologramDocRef.Id = h.Hid
+	hologramDocRef.Date = h.CreationDate
+	hologramDocRef.Type = CodeableConceptFHIR{Text: h.CreationMode}
+
+	// Process Attachment in ContentFHIR
+	attachmentData := AttachmentFHIR{ContentType: h.ContentType, Size: h.FileSizeInKb * 1024, Title: h.Title}
+	if attachmentData != (AttachmentFHIR{}) {
+		contentData := ContentFHIR{Attachment: attachmentData}
+		hologramDocRef.Content = append(hologramDocRef.Content, contentData)
+	}
+	// Process HologramMeta
+	holoMeta := HologramMeta{
+		Description:         h.Description,
+		CreationDescription: h.CreationDescription,
+		DateOfImaging:       h.DateOfImaging,
+		BodySite:            h.BodySite,
+	}
+	if holoMeta != (HologramMeta{}) {
+		holoMetadata, _ := json.Marshal(holoMeta)
+		hologramDocRef.HologramMeta = string(holoMetadata)
+	}
+
+	return hologramDocRef
+}
+
+func (h *HologramDocumentReferenceFHIR) UpdateAttachmentURL(url string) error {
+	if len(h.Content) > 0 {
+		h.Content[0].Attachment.URL = url
+		return nil
+	} else {
+		return errors.New("No content within DocumentReference")
+	}
 }

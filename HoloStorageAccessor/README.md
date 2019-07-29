@@ -27,7 +27,7 @@ go run main.go
 ## Testing
 To run the tests
 ```
-go test
+go test ./...
 ```
 
 ## Build and deployment

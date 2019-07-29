@@ -33,7 +33,7 @@ This instruction will link your local port 5000 with the port 5000 in the contai
 now we can send the request to the container because server is running, Here I use curl to send a post request with the file i would like to segement and send it to the container. when container recieve this input nifti file it will call the NN model to segement the input file and when process is complete the flask server will find the output file and return it to the client.
 
 ### API
-Here i use flask framework to run my gunicorn server so i have a local port that allow user to send request to the container, container can accept the segment request input and output it to the user.docker build -t [docker name:tag] .
+Here i use flask framework to run my gunicorn server so i have a local port that allow user to send request to the container, container can accept the segment request input and output it to the user.
 The container runs on the ```http://localhost:5000```
 to send a request for the segmentation, We provide a ```/model``` endpoint to do the segmentation.
 

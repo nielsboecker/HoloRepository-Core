@@ -26,7 +26,7 @@ import FilterStatusMessageBar from "../core/FilterStatusMessageBar";
 import { IHologram } from "../../../../../types";
 import { PidToPatientsMap, PropsWithContext, withAppContext } from "../../shared/AppState";
 
-const unknownPersonName = "Unknown";
+// const unknownPersonName = "Unknown";
 
 const defaultColumns: IColumn[] = [
   fileTypeCol,
@@ -57,8 +57,8 @@ export interface IHologramDocument extends IObjectWithKey {
   titleDisplay: string;
   authorDisplay: string;
   subjectDisplay: string;
-  createdDateDisplay: string;
-  createdDateValue: number;
+  creationDateDisplay: string;
+  creationDateValue: number;
   fileSizeInKbValue: number;
   fileSizeInKbDisplay: string;
 }
@@ -261,7 +261,7 @@ class HologramsDetailsList extends Component<
     Object.entries(holograms).forEach(([pid, patient]) => {
       if (patient.holograms && patient.holograms.length >= 1) {
         const patientHolograms = patient.holograms.map(hologram => {
-          const createdDate = new Date(hologram.createdDate);
+          const creationDate = new Date(hologram.creationDate);
 
           return {
             // Note: appending random suffix because of duplicate IDs in mocked data, will be replaced
@@ -270,8 +270,8 @@ class HologramsDetailsList extends Component<
             authorDisplay: this._getDisplayAuthorName(hologram),
             subjectDisplay: this._getDisplaySubjectName(hologram),
             wrappedHologram: hologram,
-            createdDateDisplay: createdDate.toLocaleDateString(),
-            createdDateValue: createdDate.valueOf(),
+            creationDateDisplay: creationDate.toLocaleDateString(),
+            creationDateValue: creationDate.valueOf(),
             fileSizeInKbValue: hologram.fileSizeInKb,
             fileSizeInKbDisplay: `${hologram.fileSizeInKb} kB`
           };
@@ -284,25 +284,30 @@ class HologramsDetailsList extends Component<
   };
 
   private _getDisplayAuthorName = (hologram: IHologram): string => {
-    const { practitioner } = this.props.context!;
+    //    const { practitioner } = this.props.context!;
 
-    let authorName;
-    if (!hologram.author || !hologram.author.name) {
-      authorName = unknownPersonName;
-    } else if (hologram.author.aid === practitioner!.pid) {
-      authorName = "You";
-    } else {
-      authorName = hologram.author.name.full;
-    }
+    let authorName = "Unknown";
+    // TODO: Repair
+
+    //    if (!hologram.author || !hologram.author.name) {
+    //      authorName = unknownPersonName;
+    //    } else if (hologram.author.aid === practitioner!.pid) {
+    //      authorName = "You";
+    //    } else {
+    //      authorName = hologram.author.name.full;
+    //    }
     return authorName;
   };
 
   private _getDisplaySubjectName = (hologram: IHologram): string => {
-    if (!hologram.subject.name) {
-      return unknownPersonName;
-    } else {
-      return hologram.subject.name.full;
-    }
+    return "Unknown";
+    // TODO: Repair
+
+    //    if (!hologram.subject.name) {
+    //      return unknownPersonName;
+    //    } else {
+    //      return hologram.subject.name.full;
+    //    }
   };
 }
 

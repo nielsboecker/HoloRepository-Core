@@ -18,7 +18,7 @@ def main(inputNiftiPath, outputGlbPath, threshold):
         deleteOriginalObj=True,
         compressGlb=False,
     )
-    print("nifti2glb: done")
+    print("nifti2glb: done, glb saved to {}".format(generatedGlbPath))
 
 
 if __name__ == "__main__":

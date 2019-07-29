@@ -34,7 +34,7 @@ def main(dicomPath, outputGlbPath):
         deleteOriginalObj=True,
         compressGlb=False,
     )
-    print("lungDicom2glb: done")
+    print("lungDicom2glb: done, glb saved to {}".format(generatedGlbPath))
 
 
 if __name__ == "__main__":

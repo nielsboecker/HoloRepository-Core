@@ -10,7 +10,7 @@ def main(inputNiftiPath, outputObjPath, threshold, flipNpy=False):
     generatedObjPath = compNumpy2obj.main(
         generatedNumpyList, threshold, str(pathlib.Path(outputObjPath))
     )
-    print("nifti2obj: done")
+    print("nifti2obj: done, obj saved to {}".format(generatedObjPath))
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
+import logging
 import numpy as np
 import nibabel as nib
 from scipy import ndimage
@@ -5,12 +6,13 @@ import pathlib
 
 try:
     from utils import close_space_dilation, generate_structure_trachea, generate_initLoc
-except Exception as e:
+except ModuleNotFoundError as e:
     from components.lungSegment.utils import (
         close_space_dilation,
         generate_structure_trachea,
         generate_initLoc,
     )
+    logging.warning("Unable to import from 'utils', importing from 'components.lungSegment.utils': {}".format(str(e)))
 
 
 def segment_airway(params, I, I_affine, Mlung, outputNiftiFolderPath):

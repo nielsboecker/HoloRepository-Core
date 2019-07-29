@@ -20,7 +20,7 @@ def main(dicomFolderPath, outputGlbPath, threshold):
     generatedGlbPath = compObj2glbWrapper.main(
         generatedObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False
     )
-    print("dicom2glb: done")
+    print("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
 
 
 if __name__ == "__main__":

@@ -2,10 +2,9 @@ import numpy as np
 import nibabel as nib
 
 
-def resample(dataPath, new_spacing=[1, 1, 1]):
-    image = dataPath
+def resample(imageData, new_spacing=[1, 1, 1]):
+    image = imageData
     originalShape = image.shape[:3]
-    header = image.header
     image._affline = None
     spacing = map(
         float,

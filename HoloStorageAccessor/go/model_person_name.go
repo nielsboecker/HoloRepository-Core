@@ -11,7 +11,6 @@ package openapi
 
 // PersonName - Components that make up the name of a person
 type PersonName struct {
-
 	Full string `json:"full,omitempty"`
 
 	Title string `json:"title,omitempty"`
@@ -20,3 +19,27 @@ type PersonName struct {
 
 	Family string `json:"family,omitempty"`
 }
+
+// HumanNameFHIR - Components of the relevant FHIR HumanName resource
+type HumanNameFHIR struct {
+	Text   string   `json:"text,omitempty"`
+	Family string   `json:"family,omitempty"`
+	Given  []string `json:"given,omitempty"`
+	Prefix []string `json:"prefix,omitempty"`
+}
+
+// ToFHIR - Convert PersonName schema to FHIR HumanName schema
+func (p *PersonName) ToFHIR() HumanNameFHIR {
+	var name HumanNameFHIR
+	name.Text = p.Full
+	name.Family = p.Family
+	if p.Title != "" {
+		name.Prefix = []string{p.Title}
+	}
+	if p.Given != "" {
+		name.Given = []string{p.Given}
+	}
+	return name
+}
+
+//

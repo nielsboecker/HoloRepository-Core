@@ -10,28 +10,36 @@ The REST API is being carefully designed, so that it not only satisfies the requ
 
 
 ## Technologies
-The API specification is written with OpenAPI v3.
+The following technologies are used in this component:
+- API specification using [OpenAPI v3.0.2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md)
+- Backend implementation using [Go Gin framework](https://github.com/gin-gonic/gin)
+- Server stub generated from OpenAPI specifications using [OpenAPI Generator](https://openapi-generator.tech/)
 
-The Accessor component is implemented in Go.
-
-> TODO: Enhance this section?
-
-
-# API specification
+## API specification
 The API specification can be found in the `api/` directory. A deployed version of the interactive documentation is available [here](https://app.swaggerhub.com/apis/boonwj/HoloRepository/).
 
-
 ## Development
-> TODO: Add this section
-
+To run the server
+```
+go run main.go
+```
 
 ## Testing
-> TODO: Add this section
-
+To run the tests
+```
+go test
+```
 
 ## Build and deployment
-> TODO: Add this section
+To run the server in a docker container
+```
+docker build --network=host -t holostorageaccessor .
+```
 
+Once the image is built, just run
+```
+docker run --rm -it holostorageaccessor
+```
 
 ## Contact and support
 This component is owned by [boonwj](https://github.com/boonwj). Please get in touch if you have any questions. For change requests and bug reports, please open a new issue.

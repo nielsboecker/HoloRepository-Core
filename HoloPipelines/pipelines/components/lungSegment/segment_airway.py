@@ -12,7 +12,12 @@ except ModuleNotFoundError as e:
         generate_structure_trachea,
         generate_initLoc,
     )
-    logging.warning("Unable to import from 'utils', importing from 'components.lungSegment.utils': {}".format(str(e)))
+
+    logging.warning(
+        "Unable to import from 'utils', importing from 'components.lungSegment.utils': {}".format(
+            str(e)
+        )
+    )
 
 
 def segment_airway(params, I, I_affine, Mlung, outputNiftiFolderPath):

@@ -73,3 +73,6 @@ pytest --cov
 ```
 Note: Tests downloads sample files during the testing process. These files can be deleted by running *cleanUp.py*
 
+## Credits:
+The Nifti lung segementation component found within `pipelines/components/lungSegment` ustilised the work done by Jie Yang (original repository: https://github.com/wanwanbeen/ct_lung_segmentation)
+

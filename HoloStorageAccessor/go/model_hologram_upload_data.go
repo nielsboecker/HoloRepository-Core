@@ -10,44 +10,39 @@
 package openapi
 
 import (
-	"time"
 	"os"
+	"time"
 )
 
 // HologramUploadData - Data structure to upload holograms to HoloStorage
 type HologramUploadData struct {
+	Title               string    `json:"title,omitempty"`
+	Description         string    `json:"description,omitempty"`
+	ContentType         string    `json:"contentType,omitempty"`
+	FileSizeInKb        uint32    `json:"fileSizeInKb,omitempty"`
+	BodySite            string    `json:"bodySite,omitempty"`
+	DateOfImaging       time.Time `json:"dateOfImaging,omitempty"`
+	CreationDate        time.Time `json:"creationDate,omitempty"`
+	CreationMode        string    `json:"creationMode,omitempty"`
+	CreationDescription string    `json:"creationDescription,omitempty"`
+	HologramFile        *os.File  `json:"hologramFile,omitempty"`
+	Author              Author    `json:"author,omitempty"`
+	Patient             Patient   `json:"patient,omitempty"`
+}
 
-	// Summary of the hologram
-	Title string `json:"title,omitempty"`
-
-	// Further elaborations on the hologram with additional details
-	Description string `json:"description,omitempty"`
-
-	// The mimetype of the hologram file
-	ContentType string `json:"contentType,omitempty"`
-
-	// The size of the hologram in KB
-	FileSizeInKb int32 `json:"fileSizeInKb,omitempty"`
-
-	// The body part the hologram represents
-	BodySite string `json:"bodySite,omitempty"`
-
-	// The date when the imaging was done
-	DateOfImaging time.Time `json:"dateOfImaging,omitempty"`
-
-	// The date the hologram was generated
-	CreationDate time.Time `json:"creationDate,omitempty"`
-
-	// The way the hologram was created
-	CreationMode string `json:"creationMode,omitempty"`
-
-	// The description associated with the creation method of the hologram
-	CreationDescription string `json:"creationDescription,omitempty"`
-
-	// The raw binary of the hologram model
-	HologramFile *os.File `json:"hologramFile,omitempty"`
-
-	Author Author `json:"author,omitempty"`
-
-	Patient Patient `json:"patient,omitempty"`
+func (h HologramUploadData) GetHologramData() Hologram {
+	data := Hologram{
+		Aid:                 h.Author.Aid,
+		BodySite:            h.BodySite,
+		ContentType:         h.ContentType,
+		CreationDate:        h.CreationDate,
+		CreationDescription: h.CreationDescription,
+		CreationMode:        h.CreationMode,
+		DateOfImaging:       h.DateOfImaging,
+		Description:         h.Description,
+		FileSizeInKb:        h.FileSizeInKb,
+		Pid:                 h.Patient.Pid,
+		Title:               h.Title,
+	}
+	return data
 }

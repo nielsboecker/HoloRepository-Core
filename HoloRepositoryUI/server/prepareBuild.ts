@@ -1,9 +1,8 @@
-import shelljs from 'shelljs';
-
-const config = require('./tsconfig.json');
-const outDir = config.compilerOptions.outDir;
+import shelljs from "shelljs";
+import tsConfig from "./tsconfig.json";
 
 // Create build target directory
+const outDir = tsConfig.compilerOptions.outDir;
 shelljs.rm('-rf', outDir);
 shelljs.mkdir(outDir);
 

@@ -11,9 +11,30 @@ package openapi
 
 // Author - Who authored the Hologram
 type Author struct {
-
-	// The author ID
-	Aid string `json:"aid,omitempty"`
-
+	Aid  string     `json:"aid,omitempty"`
 	Name PersonName `json:"name,omitempty"`
+}
+
+// PractitionerFHIR - Components of the relevant Practitioner FHIR resource
+type PractitionerFHIR struct {
+	ResourceType string        `json:"resourceType"`
+	ID           string        `json:"id"`
+	Name         HumanNameFHIR `json:"name,omitempty"`
+}
+
+// ToFHIR - Convert PractitionerBasic schema to FHIR Practitioner schema
+func (r Author) ToFHIR() PractitionerFHIR {
+	fhirData := PractitionerFHIR{ResourceType: "Practitioner"}
+	fhirData.ID = r.Aid
+	fhirData.Name = r.Name.ToFHIR()
+
+	return fhirData
+}
+
+func (r PractitionerFHIR) ToAPISpec() Author {
+	authorData := Author{}
+	authorData.Aid = r.ID
+	authorData.Name = r.Name.ToAPISpec()
+
+	return authorData
 }

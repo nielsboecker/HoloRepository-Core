@@ -11,12 +11,9 @@ package openapi
 
 // PersonName - Components that make up the name of a person
 type PersonName struct {
-	Full string `json:"full,omitempty"`
-
-	Title string `json:"title,omitempty"`
-
-	Given string `json:"given,omitempty"`
-
+	Full   string `json:"full,omitempty"`
+	Title  string `json:"title,omitempty"`
+	Given  string `json:"given,omitempty"`
 	Family string `json:"family,omitempty"`
 }
 
@@ -28,8 +25,8 @@ type HumanNameFHIR struct {
 	Prefix []string `json:"prefix,omitempty"`
 }
 
-// ToFHIR - Convert PersonName schema to FHIR HumanName schema
-func (p *PersonName) ToFHIR() HumanNameFHIR {
+// ToFHIRSchema - Convert PersonName schema to FHIR HumanName schema
+func (p PersonName) ToFHIR() HumanNameFHIR {
 	var name HumanNameFHIR
 	name.Text = p.Full
 	name.Family = p.Family
@@ -42,4 +39,17 @@ func (p *PersonName) ToFHIR() HumanNameFHIR {
 	return name
 }
 
-//
+// ToAPISpec - Convert FHIR HumanName schema to API Spec
+func (p HumanNameFHIR) ToAPISpec() PersonName {
+	var name PersonName
+	name.Full = p.Text
+	name.Family = p.Family
+	if len(p.Prefix) > 0 {
+		name.Title = p.Prefix[0]
+	}
+	if len(p.Given) > 0 {
+		name.Given = p.Given[0]
+	}
+
+	return name
+}

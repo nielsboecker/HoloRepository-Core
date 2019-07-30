@@ -19,6 +19,16 @@ curl -X POST -F file=@100_CT.nii http://localhost:5000/model -o output.nii.gz
 ```
 
 
+## Model deployment
+```shell
+# build model image
+docker build -t my-model .
+
+# run and map port to default HTTP port on the Docker host
+docker run -p 80:5000 my-model:latest
+```
+
+
 ## Models overview
 
 

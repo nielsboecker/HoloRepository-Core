@@ -15,7 +15,7 @@ https://niftynet.readthedocs.io/en/dev/installation.html
 
 ```
 # example
-docker build -t niftynet:latest .
+docker build -t niftynet .
 ```
 
 This instruction will create the niftynet docker image with flask server end point. to run the image you create you need to run the other command

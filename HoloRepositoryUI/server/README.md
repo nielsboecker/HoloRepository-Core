@@ -46,7 +46,7 @@ npm run compile && npm start
 docker build -t holorepository-ui-server -f ./Dockerfile ..
 
 # run and map port to default HTTP port on the Docker host
-docker run -p 80:3001 holorepository-ui-server:latest
+docker run -d -p 80:3001 --name holorepository-ui-server holorepository-ui-server:latest
 
 # test connection
 curl http://localhost/api/v1/patients

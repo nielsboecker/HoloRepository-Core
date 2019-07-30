@@ -19,11 +19,11 @@ type Patient struct {
 
 // PatientFHIR - Components of the relevant Patient FHIR resource
 type PatientFHIR struct {
-	ResourceType string        `json:"resourceType"`
-	ID           string        `json:"id"`
-	Name         HumanNameFHIR `json:"name,omitempty"`
-	Gender       string        `json:"gender,omitempty"`
-	BirthDate    string        `json:"birthDate,omitempty"`
+	ResourceType string          `json:"resourceType"`
+	ID           string          `json:"id"`
+	Name         []HumanNameFHIR `json:"name,omitempty"`
+	Gender       string          `json:"gender,omitempty"`
+	BirthDate    string          `json:"birthDate,omitempty"`
 }
 
 // ToFHIR - Convert PatientBasic schema to FHIR Patient schema
@@ -32,7 +32,10 @@ func (r Patient) ToFHIR() PatientFHIR {
 	fhirData.ID = r.Pid
 	fhirData.Gender = r.Gender
 	fhirData.BirthDate = r.BirthDate
-	fhirData.Name = r.Name.ToFHIR()
+	name := r.Name.ToFHIR()
+	if name.Text != "" {
+		fhirData.Name = append(fhirData.Name, name)
+	}
 
 	return fhirData
 }
@@ -42,7 +45,9 @@ func (r PatientFHIR) ToAPISpec() Patient {
 	patientData.Pid = r.ID
 	patientData.Gender = r.Gender
 	patientData.BirthDate = r.BirthDate
-	patientData.Name = r.Name.ToAPISpec()
+	if len(r.Name) > 0 {
+		patientData.Name = r.Name[0].ToAPISpec()
+	}
 
 	return patientData
 }

@@ -31,7 +31,7 @@ import PatientListPage from "../../components/app/patients/PatientListPage";
 import PipelineDetailBox from "../../components/app/PipelineDetailBox";
 import ProfileInformationPage from "../../components/app/ProfileInformationPage";
 import { IPatient } from "../../../../types";
-import { mountWithContextProvider } from "../../util/TestUtils";
+import { mountWithContextProvider } from "../../__test_utils__/MockContextProvider";
 
 import samplePatients from "../samples/samplePatients.json";
 

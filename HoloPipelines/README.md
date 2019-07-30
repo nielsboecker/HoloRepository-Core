@@ -14,7 +14,12 @@ Upon receiving a DICOM image series, a job will be started and passed through th
 
 
 ## Technologies
-> TODO: Please add this section.
+Majority of the code is written in Python 3.7.3
+* Web application framework to handle requests [Flask](https://github.com/pallets/flask)
+* [Node.js](https://nodejs.org/en/) to utilise the package available for glTF coversion and transformation
+* An open source convolutional neural networks platform [NiftyNet](https://niftynet.io)
+* Pipelines containerized using [Docker](https://www.docker.com)
+* Testing is done through [Pytest](https://github.com/pytest-dev/pytest)
 
 
 ## Architecture
@@ -50,7 +55,7 @@ Some dependencies are not available through pip, they are listed below with thei
 **GDCM (Debian/Ubuntu)**
 ```
 sudo apt-get install libgdcm2.8
-sudo apt-get install libcdcm-tools
+sudo apt-get install libgdcm-tools
 ```
 
 Verify installation success and see if `gdcmdump` or `gdcmconv` commands can be executed.
@@ -114,7 +119,23 @@ pytest --cov
 
 
 ## API specification
-> TODO: Please add this section.
+> TODO: update this
+```
+GET /pipelineapp
+```
+To get a list of all available pipelines
+```
+GET /job/<jobid>/status
+```
+To get the status of a job with specific ID
+```
+POST /job
+```
+To start a job
+```
+POST /status
+```
+To update status of a job
 
 
 ## Contact and support

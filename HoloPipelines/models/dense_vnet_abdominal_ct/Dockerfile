@@ -1,17 +1,17 @@
-# Download base image ubuntu 18.04
-FROM ubuntu:18.04
+#Download base image ubuntu 18.04
+FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+
 
 # Set variables
 ARG APP_DIR=/usr/src/app
 ARG PORT=5000
 
-# Update Software repository
+# Update Software repository, install package and clean the package 
 RUN apt-get update  && \
     apt-get install -y --no-install-recommends python3-pip python3-dev build-essential nano &&\
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install packages
-RUN apt-get install -y --no-install-recommends python3-pip python3-dev build-essential nano 
+
 
 # Copy the flask script into the container and set the working directory
 RUN mkdir -p ${APP_DIR}
@@ -22,7 +22,7 @@ COPY server.py test.py ./
 COPY requirements.txt ./
 
 # Run install tensorflow, niftynet, flask
-RUN pip3 install --upgrade setuptools
+RUN pip3 install --upgrade pip setuptools
 RUN pip3 install wheel
 RUN pip3 install -r requirements.txt
 

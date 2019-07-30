@@ -120,7 +120,10 @@ class HologramsDetailsList extends Component<
 
         {this.state.items.length === 0 ? (
           <div>
-            <p>No holograms available. Try changing filter settings or create a new hologram.</p>
+            <p>
+              No holograms available.
+              {this.props.showFilters && " Change filter settings or create a new hologram."}
+            </p>
           </div>
         ) : (
           <div className="list">

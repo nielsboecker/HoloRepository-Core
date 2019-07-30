@@ -1,6 +1,10 @@
 {
   "name": "holorepository-ui-client",
   "version": "0.1.0",
+  "config": {
+    "lintfiles": "src/**/*.{js,jsx,ts,tsx}",
+    "formatfiles": "src/**/*.{js,jsx,ts,tsx,json,css,md}"
+  },
   "private": true,
   "dependencies": {
     "@reach/router": "^1.2.1",
@@ -35,8 +39,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format:check": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\" ",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\" "
+    "lint:check": "eslint $npm_package_config_lintfiles",
+    "lint": "eslint --quiet --fix $npm_package_config_lintfiles",
+    "format:check": "prettier --list-different $npm_package_config_formatfiles ",
+    "format": "prettier --write $npm_package_config_formatfiles "
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -61,8 +67,12 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "yarn format",
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "npm run lint",
+      "git add"
+    ],
+    "src/**/*.{js,jsx,ts,tsx,json,css,md}": [
+      "npm run format",
       "git add"
     ]
   },

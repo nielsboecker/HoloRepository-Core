@@ -5,7 +5,7 @@ import { Link } from "@reach/router";
 import {
   capitaliseString,
   getAgeFromDobString,
-  getNumberOfHolograms
+  getNumberOfHologramsString
 } from "../../../util/PatientUtil";
 import "./PatientCard.scss";
 import { IPatient } from "../../../../../HoloRepositoryUI-Types";
@@ -38,7 +38,9 @@ export default class PatientCard extends Component<IPatientCardProps, object> {
                 <ul>
                   <li className="age">Age: {getAgeFromDobString(patient.birthDate)}</li>
                   <li className="gender">Gender: {capitaliseString(patient.gender)}</li>
-                  <li className="numberOfHolograms">{getNumberOfHolograms(patient.holograms)}</li>
+                  <li className="numberOfHolograms">
+                    {getNumberOfHologramsString(patient.holograms)}
+                  </li>
                 </ul>
               </div>
             </Col>

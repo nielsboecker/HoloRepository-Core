@@ -1,11 +1,16 @@
 import serverAxios, { routes } from "./holoRepositoryServerAxios";
-import { IPatient, IPractitioner } from "../types/Patients";
-import { IHologram, IImagingStudySeries, IPipeline } from "../types/Holograms";
+import {
+  IPatient,
+  IPractitioner,
+  IHologram,
+  IImagingStudy,
+  IPipeline
+} from "../../../../HoloRepository-Core/HoloRepositoryUI-Types";
 
 export class HoloRepositoryServerService {
   public async getPractitioner(pid: string): Promise<IPractitioner | null> {
-    return await serverAxios
-      .get<IPractitioner>(`${routes.practitioners}/${pid}`)
+    return serverAxios
+      .get<IPractitioner>(`${routes.practitioner}/${pid}`)
       .then(practitioner => practitioner.data)
       .catch(error => {
         console.error(error);
@@ -14,8 +19,8 @@ export class HoloRepositoryServerService {
   }
 
   public async getAllPatients(): Promise<IPatient[]> {
-    return await serverAxios
-      .get<IPatient[]>(routes.patients)
+    return serverAxios
+      .get<IPatient[]>(routes.patient)
       .then(patients => patients.data)
       .catch(error => {
         console.error(error);
@@ -24,7 +29,7 @@ export class HoloRepositoryServerService {
   }
 
   public async getHologramsForAllPatients(pids: string[]): Promise<IHologram[]> {
-    return await serverAxios
+    return serverAxios
       .get<IHologram[]>(`${routes.holograms}`, {
         params: {
           pids: pids.join(",")
@@ -38,7 +43,7 @@ export class HoloRepositoryServerService {
   }
 
   public async downloadHologramById(hid: string): Promise<BinaryType | null> {
-    return await serverAxios
+    return serverAxios
       .get<BinaryType>(`${routes.holograms}/${hid}/download`)
       .then(hologram => hologram.data)
       .catch(error => {
@@ -48,7 +53,7 @@ export class HoloRepositoryServerService {
   }
 
   public async deleteHologramById(hid: string): Promise<boolean> {
-    return await serverAxios
+    return serverAxios
       .delete(`${routes.holograms}/${hid}`)
       .then(() => true)
       .catch(error => {
@@ -69,9 +74,9 @@ export class HoloRepositoryServerService {
     return Promise.resolve(true);
   }
 
-  public async getImagingStudySeriesForAllPatients(pids: string[]): Promise<IImagingStudySeries[]> {
-    return await serverAxios
-      .get<IImagingStudySeries[]>(`${routes.imagingStudySeries}`, {
+  public async getImagingStudiesForAllPatients(pids: string[]): Promise<IImagingStudy[]> {
+    return serverAxios
+      .get<IImagingStudy[]>(`${routes.imagingStudy}`, {
         params: {
           pids: pids.join(",")
         }
@@ -83,9 +88,9 @@ export class HoloRepositoryServerService {
       });
   }
 
-  public async getImagingStudySeriesPreview(issid: string): Promise<string | unknown> {
-    return await serverAxios
-      .get<string>(`${routes.imagingStudySeries}/${issid}/preview`)
+  public async getImagingStudyPreview(isid: string): Promise<string | unknown> {
+    return serverAxios
+      .get<string>(`${routes.imagingStudy}/${isid}/preview`)
       .then(iss => iss.data)
       .catch(error => {
         console.error(error);
@@ -94,8 +99,8 @@ export class HoloRepositoryServerService {
   }
 
   public async getAllPipelines(): Promise<IPipeline[]> {
-    return await serverAxios
-      .get<IPipeline[]>(routes.pipelines)
+    return serverAxios
+      .get<IPipeline[]>(routes.pipeline)
       .then(pipeline => pipeline.data)
       .catch(error => {
         console.error(error);

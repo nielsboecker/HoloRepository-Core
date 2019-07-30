@@ -4,17 +4,20 @@ const capitaliseString = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-const getAgeFromDobString = (dobString: string) => {
+const getAgeFromDobString = (dobString?: string) => {
+  if (!dobString) {
+    return 0;
+  }
   const birthDate = new Date(dobString);
   const ageDiffMs = Date.now() - birthDate.getTime();
   const ageDate = new Date(ageDiffMs); // milliseconds from epoch
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 };
 
-const getNumberOfHolograms = (holograms?: IHologram[] | undefined) => {
+const getNumberOfHologramsString = (holograms?: IHologram[] | undefined) => {
   const numOfHolograms: number | string =
     holograms && holograms.length >= 1 ? holograms.length : "No";
   return `${numOfHolograms} hologram${numOfHolograms !== 1 ? "s" : ""} available`;
 };
 
-export { capitaliseString, getAgeFromDobString, getNumberOfHolograms };
+export { capitaliseString, getAgeFromDobString, getNumberOfHologramsString };

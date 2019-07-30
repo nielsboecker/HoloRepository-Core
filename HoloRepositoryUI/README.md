@@ -111,6 +111,9 @@ Jest provides a couple of advanced features, for instance you can generate a cov
 
 
 ## Build and deployment
+
+
+### Local builds
 To build the software locally, run
 ```shell
 # compile and run server in production mode
@@ -123,7 +126,25 @@ cd client
 npm run build
 ```
 
+
+### Building and running the docker images
 Note that the actual deployment leverages Docker. A `Dockerfile` is provided for both client and server and the typical development workflow uses Azure DevOps pipelines to build and release the app.
+
+```shell
+# client
+docker build -t holorepository-ui-client -f ./client/Dockerfile .
+docker run -d -p 80:3000 --name holorepository-ui-client holorepository-ui-client:latest
+
+# server
+docker build -t holorepository-ui-server -f ./server/Dockerfile .
+docker run -d -p 80:3001 --name holorepository-ui-server holorepository-ui-server:latest
+
+# test connections
+curl http://localhost/api/v1/patients
+curl http://localhost/app/
+```
+
+Note that the `Dockerfile`s are specified independently of the build context through the `-f` flag. This is necessary in order to copy `./types`, which would otherwise cause an error as it is outside the default build context. The build context therefore needs to be this parent directory.
 
 
 ## Integration

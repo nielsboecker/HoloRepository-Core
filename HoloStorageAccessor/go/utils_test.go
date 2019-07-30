@@ -29,3 +29,30 @@ func TestGetAllQueryIDs(t *testing.T) {
 		})
 	}
 }
+
+func TestURLPathConstruction(t *testing.T) {
+	type test struct {
+		baseurl string
+		path    string
+		want    string
+	}
+
+	tests := map[string]test{
+		"no_path_components":                       {baseurl: "http://test.com", path: "", want: "http://test.com"},
+		"with_path":                                {baseurl: "http://test.com", path: "demo/path", want: "http://test.com/demo/path"},
+		"baseurl_trailing_slash":                   {baseurl: "http://test.com/", path: "demo/path", want: "http://test.com/demo/path"},
+		"path_leading_slash":                       {baseurl: "http://test.com", path: "/demo/path", want: "http://test.com/demo/path"},
+		"basepath_trailing_and_path_leading_slash": {baseurl: "http://test.com/", path: "/demo/path", want: "http://test.com/demo/path"},
+		"path_trailing_slash":                      {baseurl: "http://test.com", path: "demo/path/", want: "http://test.com/demo/path"},
+	}
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			got, _ := ConstructURL(tc.baseurl, tc.path)
+			diff := cmp.Diff(tc.want, got)
+			if diff != "" {
+				t.Fatalf(diff)
+			}
+		})
+	}
+}

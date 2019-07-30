@@ -1,7 +1,6 @@
 import HologramsService from "./holograms.service";
 import { Request, Response } from "express";
 import logger from "../../../common/logger";
-import ImagingStudiesService from "../imagingStudies/imagingStudies.service";
 
 export class HologramsController {
   public async getAll(req: Request, res: Response): Promise<void> {
@@ -26,7 +25,7 @@ export class HologramsController {
         res.json(hologramsForPids);
       }
     } else {
-      ImagingStudiesService.getAll().then(iss => res.json(iss));
+      HologramsService.getAll().then(iss => res.json(iss));
     }
   }
 

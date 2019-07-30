@@ -15,9 +15,15 @@ func TestAuthorAPISpecToPractitionerFHIR(t *testing.T) {
 	tests := map[string]test{
 		"all_info": {
 			input: Author{Aid: "123", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
-			want: PractitionerFHIR{ResourceType: "Practitioner", ID: "123",
+			want: PractitionerFHIR{
+				ResourceType: "Practitioner",
+				ID:           "123",
 				Name: []HumanNameFHIR{
-					HumanNameFHIR{Text: "Bobby Cane", Given: []string{"Bobby"}, Family: "Cane", Prefix: []string{"Mr"}},
+					HumanNameFHIR{
+						Text:   "Bobby Cane",
+						Given:  []string{"Bobby"},
+						Family: "Cane",
+						Prefix: []string{"Mr"}},
 				}},
 		},
 		"partial_info": {
@@ -53,7 +59,30 @@ func TestPractitionerFHIRToAuthorAPISpec(t *testing.T) {
 				ResourceType: "Practitioner",
 				ID:           "123",
 				Name: []HumanNameFHIR{
-					HumanNameFHIR{Text: "Bobby Cane", Given: []string{"Bobby"}, Family: "Cane", Prefix: []string{"Mr"}},
+					HumanNameFHIR{
+						Text:   "Bobby Cane",
+						Given:  []string{"Bobby"},
+						Family: "Cane",
+						Prefix: []string{"Mr"}},
+				},
+			},
+			want: Author{Aid: "123", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
+		},
+		"multiple_names": {
+			input: PractitionerFHIR{
+				ResourceType: "Practitioner",
+				ID:           "123",
+				Name: []HumanNameFHIR{
+					HumanNameFHIR{
+						Text:   "Bobby Cane",
+						Given:  []string{"Bobby"},
+						Family: "Cane",
+						Prefix: []string{"Mr"}},
+					HumanNameFHIR{
+						Text:   "Isaac Newton",
+						Given:  []string{"Issac"},
+						Family: "Newton",
+						Prefix: []string{"Mr"}},
 				},
 			},
 			want: Author{Aid: "123", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
@@ -63,7 +92,11 @@ func TestPractitionerFHIRToAuthorAPISpec(t *testing.T) {
 				ResourceType: "Practitioner",
 				ID:           "123",
 				Name: []HumanNameFHIR{
-					HumanNameFHIR{Text: "Bobby Cane", Given: []string{"Bobby", "Tobias"}, Family: "Cane", Prefix: []string{"Mr", "Mister"}},
+					HumanNameFHIR{
+						Text:   "Bobby Cane",
+						Given:  []string{"Bobby", "Tobias"},
+						Family: "Cane",
+						Prefix: []string{"Mr", "Mister"}},
 				},
 			},
 			want: Author{Aid: "123", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},

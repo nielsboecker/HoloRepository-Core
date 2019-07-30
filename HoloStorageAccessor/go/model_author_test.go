@@ -15,7 +15,10 @@ func TestAuthorAPISpecToPractitionerFHIR(t *testing.T) {
 	tests := map[string]test{
 		"all_info": {
 			input: Author{Aid: "123", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
-			want:  PractitionerFHIR{ResourceType: "Practitioner", ID: "123", Name: HumanNameFHIR{Text: "Bobby Cane", Given: []string{"Bobby"}, Family: "Cane", Prefix: []string{"Mr"}}},
+			want: PractitionerFHIR{ResourceType: "Practitioner", ID: "123",
+				Name: []HumanNameFHIR{
+					HumanNameFHIR{Text: "Bobby Cane", Given: []string{"Bobby"}, Family: "Cane", Prefix: []string{"Mr"}},
+				}},
 		},
 		"partial_info": {
 			input: Author{Aid: "123"},
@@ -46,12 +49,24 @@ func TestPractitionerFHIRToAuthorAPISpec(t *testing.T) {
 
 	tests := map[string]test{
 		"all_info": {
-			input: PractitionerFHIR{ResourceType: "Practitioner", ID: "123", Name: HumanNameFHIR{Text: "Bobby Cane", Given: []string{"Bobby"}, Family: "Cane", Prefix: []string{"Mr"}}},
-			want:  Author{Aid: "123", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
+			input: PractitionerFHIR{
+				ResourceType: "Practitioner",
+				ID:           "123",
+				Name: []HumanNameFHIR{
+					HumanNameFHIR{Text: "Bobby Cane", Given: []string{"Bobby"}, Family: "Cane", Prefix: []string{"Mr"}},
+				},
+			},
+			want: Author{Aid: "123", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
 		},
 		"all_info_extra_name_fields": {
-			input: PractitionerFHIR{ResourceType: "Practitioner", ID: "123", Name: HumanNameFHIR{Text: "Bobby Cane", Given: []string{"Bobby", "Tobias"}, Family: "Cane", Prefix: []string{"Mr", "Mister"}}},
-			want:  Author{Aid: "123", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
+			input: PractitionerFHIR{
+				ResourceType: "Practitioner",
+				ID:           "123",
+				Name: []HumanNameFHIR{
+					HumanNameFHIR{Text: "Bobby Cane", Given: []string{"Bobby", "Tobias"}, Family: "Cane", Prefix: []string{"Mr", "Mister"}},
+				},
+			},
+			want: Author{Aid: "123", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
 		},
 		"partial_info": {
 			input: PractitionerFHIR{ResourceType: "Practitioner", ID: "123"},

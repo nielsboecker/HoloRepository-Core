@@ -17,16 +17,20 @@ type Author struct {
 
 // PractitionerFHIR - Components of the relevant Practitioner FHIR resource
 type PractitionerFHIR struct {
-	ResourceType string        `json:"resourceType"`
-	ID           string        `json:"id"`
-	Name         HumanNameFHIR `json:"name,omitempty"`
+	ResourceType string          `json:"resourceType"`
+	ID           string          `json:"id"`
+	Name         []HumanNameFHIR `json:"name,omitempty"`
 }
 
 // ToFHIR - Convert PractitionerBasic schema to FHIR Practitioner schema
 func (r Author) ToFHIR() PractitionerFHIR {
 	fhirData := PractitionerFHIR{ResourceType: "Practitioner"}
 	fhirData.ID = r.Aid
-	fhirData.Name = r.Name.ToFHIR()
+
+	name := r.Name.ToFHIR()
+	if name.Text != "" {
+		fhirData.Name = append(fhirData.Name, name)
+	}
 
 	return fhirData
 }
@@ -34,7 +38,9 @@ func (r Author) ToFHIR() PractitionerFHIR {
 func (r PractitionerFHIR) ToAPISpec() Author {
 	authorData := Author{}
 	authorData.Aid = r.ID
-	authorData.Name = r.Name.ToAPISpec()
+	if len(r.Name) > 0 {
+		authorData.Name = r.Name[0].ToAPISpec()
+	}
 
 	return authorData
 }

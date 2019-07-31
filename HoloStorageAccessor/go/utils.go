@@ -26,26 +26,39 @@ func ParseQueryIDs(query string) []string {
 }
 
 func ConstructURL(baseurl string, pathComponent string) (string, error) {
-	url, err := url.Parse(baseurl)
+	fhirURL, err := url.Parse(baseurl)
 	if err != nil {
 		log.Fatal(err)
 		return "", err
 	}
-	url.Path = path.Join(url.Path, pathComponent)
-	return url.String(), nil
+	fhirURL.Path = path.Join(fhirURL.Path, pathComponent)
+	return fhirURL.String(), nil
 }
 
-// func FHIRRestCall(baseurl string, data FHIRRequestData) (*Response, error) {
-// 	url.Path = path.Join(url.Path)
-// 	client := &http.Client{}
+func FHIRRestCall(baseurl string, data FHIRRequestData) ([]byte, error) {
+	fhirURL, _ := ConstructURL(baseurl, data.ResourcePathComp)
+	client := &http.Client{}
 
-// 	req, err := http.NewRequest(
-// 		data.HTTPMethod,
-// 		"https://my-json-server.typicode.com/typicode/demo/posts",
-// 		strings.NewReader(body)
-// 	)
-// 	req.Header.Add("Content-Type", "application/fhir+json")
-// }
+	req, err := http.NewRequest(
+		data.HTTPMethod,
+		fhirURL,
+		strings.NewReader(data.Body))
+
+	if err != nil {
+		return []byte{}, err
+	}
+	req.Header.Add("Content-Type", "application/fhir+json")
+
+	resp, err := client.Do(req)
+
+	if err != nil {
+		return []byte{}, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+
+	return body, nil
+}
 
 func LoadConfiguration(confFile string, config *AccessorConfig) error {
 	configfile, err := ioutil.ReadFile(confFile)
@@ -61,3 +74,28 @@ func LoadConfiguration(confFile string, config *AccessorConfig) error {
 	return nil
 }
 
+func SearchAuthors(aids []string) (map[string]Author, error) {
+	var result map[string]Author
+	var tempAuthor PractitionerFHIR
+
+	result = make(map[string]Author)
+
+	for _, aid := range aids {
+		reqData := FHIRRequestData{HTTPMethod: http.MethodGet, ResourcePathComp: "Practitioner/" + aid}
+		body, err := FHIRRestCall(accessorConfig.FhirURL, reqData)
+		if err != nil {
+			return make(map[string]Author), err
+		}
+		err = json.Unmarshal(body, &tempAuthor)
+		if err != nil {
+			return make(map[string]Author), err
+		}
+		if tempAuthor.ID != aid {
+			result[aid] = Author{}
+		} else {
+			result[aid] = tempAuthor.ToAPISpec()
+		}
+	}
+
+	return result, nil
+}

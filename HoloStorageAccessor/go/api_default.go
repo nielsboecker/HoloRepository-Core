@@ -17,7 +17,20 @@ import (
 
 // AuthorsAidGet - Get a single author metadata in HoloStorage
 func AuthorsAidGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	aid := c.Param("aid")
+	result, err := SearchAuthors([]string{aid})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
+		return
+	}
+	for _, data := range result {
+		if (data == Author{}) {
+			errMsg := "aid '" + aid + "' cannot be found"
+			c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
+			return
+		}
+	}
+	c.JSON(http.StatusOK, result)
 }
 
 // AuthorsAidPut - Add or update author information
@@ -27,7 +40,12 @@ func AuthorsAidPut(c *gin.Context) {
 
 // AuthorsGet - Mass query for author metadata in HoloStorage
 func AuthorsGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	result, err := SearchAuthors(ParseQueryIDs(c.Query("aid")))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, result)
 }
 
 // HologramsGet - Mass query for hologram metadata based on hologram ids

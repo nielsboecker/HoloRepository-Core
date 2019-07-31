@@ -45,8 +45,8 @@ def main():
         os.mkdir("medicalScans/nifti")
     if not os.path.exists("output"):
         os.mkdir("output")
-        os.mkdir("output/OBJ")
-        os.mkdir("output/GLB")
+        os.mkdir("output/obj")
+        os.mkdir("output/glb")
 
     # check for pipeline config file
     if not os.path.exists(str(pathlib.Path(newCwd).joinpath(str(args.config)))):

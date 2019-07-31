@@ -10,6 +10,7 @@ Security is disabled for development with the following additional parameter dur
 Install using `pipenv install` or `pip install -r requirements.txt`.
 
 ## Usage
+```
 Usage:
     fhir_interactions.py --base-url <FHIR_SERVER_URL> delete-all
     fhir_interactions.py --base-url <FHIR_SERVER_URL> upload-bundle <FHIR bundle file>
@@ -20,3 +21,4 @@ Options:
     delete-all      delete all resources on the fhir server
     upload-bundle   upload a single FHIR bundle json file
     upload-folder   upload all FHIR bundles stored within a folder
+```

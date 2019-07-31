@@ -36,7 +36,6 @@ EOT
 
 main() {
     if [[ "${1}" == "-h" || "${1}" == "--help" || "${#}" -ne 1 ]]; then
-        echo "${#}"
         echo "Usage: ${0} config.cfg"
         exit 1
     fi

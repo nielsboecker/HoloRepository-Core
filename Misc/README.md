@@ -2,7 +2,7 @@
 
 This directory contains a collection of tools and deployment scripts that were used in this project. Additional information for the respective components can be found within the component directories themselves.
 
-## [Tools](https://github.com/nbckr/HoloRepository-Core/tree/master/misc/tools)
+## [Tools](https://github.com/nbckr/HoloRepository-Core/tree/master/Misc/tools)
 
 | Name | Description |
 | --- | ---|
@@ -12,7 +12,7 @@ This directory contains a collection of tools and deployment scripts that were u
  | Orthanc Uploader | Dicom uploader to Orthanc PACS (deprecated) |
 
 
-## [Deployment Scripts](https://github.com/nbckr/HoloRepository-Core/tree/MISC/improve-readmes/misc/deployment)
+## [Deployment Scripts](https://github.com/nbckr/HoloRepository-Core/tree/master/Misc/deployment)
 | Name | Description |
 | --- | ---|
 | Azure Blob Storage | Setup of azure blob storage service |

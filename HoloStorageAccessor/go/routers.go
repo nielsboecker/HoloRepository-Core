@@ -10,6 +10,7 @@
 package openapi
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -30,10 +31,29 @@ type Route struct {
 // Routes is the list of the generated Route.
 type Routes []Route
 
+type AccessorConfig struct {
+	FhirURL       string `json:"fhirUrl"`
+	BlobStoreName string `json:"blobStoreName"`
+	BlobKey       string `json:"blobKey"`
+}
+
+var accessorConfig AccessorConfig
+
 // NewRouter returns a new router.
-func NewRouter() *gin.Engine {
+func NewRouter(confFile string) *gin.Engine {
+	err := LoadConfiguration(confFile, &accessorConfig)
+	if err != nil {
+		log.Printf("Error with configuration file: " + confFile)
+		log.Fatalln(err)
+	}
+
+	log.Printf("Fhir URL: %s", accessorConfig.FhirURL)
+	log.Printf("Blob Store: %s", accessorConfig.BlobStoreName)
+
 	router := gin.Default()
+
 	router.Static("/app/1.0.0/ui/", "./cmd/swaggerui")
+
 	for _, route := range routes {
 		switch route.Method {
 		case http.MethodGet:

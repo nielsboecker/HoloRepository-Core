@@ -10,47 +10,14 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
-	"os"
 
 	// sw "github.com/nbckr/HoloRepository-Core/HoloStorageAccessor/go"
 	sw "./go"
 )
 
-type Config struct {
-	FhirURL       string
-	BlobStoreName string
-	BlobKey       string
-}
-
-func LoadConfiguration(file string) {
-	var config Config
-	configfile, err := os.Open(file)
-	defer configfile.Close()
-
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
-	}
-
-	jsonParser := json.NewDecoder(configfile)
-	jsonParser.Decode(&config)
-
-	os.Setenv("FHIR_URL", config.FhirURL)
-	os.Setenv("BLOB_STORE", config.BlobStoreName)
-	os.Setenv("BLOB_KEY", config.BlobKey)
-}
-
 func main() {
-	LoadConfiguration("config.json")
-
-	log.Printf("Server started")
-	log.Printf("Fhir URL: %s", os.Getenv("FHIR_URL"))
-	log.Printf("Blob Store: %s", os.Getenv("BLOB_STORE"))
-
-	router := sw.NewRouter()
+	router := sw.NewRouter("config.json")
 
 	log.Fatal(router.Run(":8080"))
 }

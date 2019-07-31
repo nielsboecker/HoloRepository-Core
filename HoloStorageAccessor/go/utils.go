@@ -1,7 +1,10 @@
 package openapi
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"net/url"
 	"path"
 	"strings"
@@ -43,3 +46,18 @@ func ConstructURL(baseurl string, pathComponent string) (string, error) {
 // 	)
 // 	req.Header.Add("Content-Type", "application/fhir+json")
 // }
+
+func LoadConfiguration(confFile string, config *AccessorConfig) error {
+	configfile, err := ioutil.ReadFile(confFile)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal([]byte(configfile), config)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+

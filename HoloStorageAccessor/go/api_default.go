@@ -11,6 +11,7 @@ package openapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -42,7 +43,37 @@ func AuthorsAidGet(c *gin.Context) {
 
 // AuthorsAidPut - Add or update author information
 func AuthorsAidPut(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	contentType := c.Request.Header.Get("Content-Type")
+	if contentType != "application/json" {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: "Expected Content-Type: 'application/json', got '" + contentType + "'"})
+		return
+	}
+
+	decoder := json.NewDecoder(c.Request.Body)
+	var author Author
+	err := decoder.Decode(&author)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: err.Error()})
+		return
+	}
+
+	aid := c.Param("aid")
+	if author.Aid != aid {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: "aid in param and body do not match"})
+		return
+	}
+
+	authorFhir := author.ToFHIR()
+	fmt.Println(author)
+	fmt.Println(authorFhir)
+	jsonData, _ := json.Marshal(authorFhir)
+	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+aid)
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodPut, qid: aid, url: fhirURL, body: string(jsonData)})
+	if result.err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
+		return
+	}
+	c.JSON(result.statusCode, authorFhir)
 }
 
 // AuthorsGet - Mass query for author metadata in HoloStorage

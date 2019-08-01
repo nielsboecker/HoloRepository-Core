@@ -11,8 +11,8 @@ package openapi
 
 // Author - Who authored the Hologram
 type Author struct {
-	Aid  string      `json:"aid,omitempty"`
-	Name *PersonName `json:"name,omitempty"`
+	Aid  string     `json:"aid,omitempty"`
+	Name PersonName `json:"name,omitempty"`
 }
 
 // PractitionerFHIR - Components of the relevant Practitioner FHIR resource
@@ -28,7 +28,7 @@ func (r Author) ToFHIR() PractitionerFHIR {
 	fhirData.ID = r.Aid
 
 	name := r.Name.ToFHIR()
-	if name.Text != "" {
+	if name.Text != "" || name.Family != "" || len(name.Prefix) > 0 || len(name.Given) > 0 {
 		fhirData.Name = append(fhirData.Name, name)
 	}
 
@@ -40,7 +40,7 @@ func (r PractitionerFHIR) ToAPISpec() Author {
 	authorData.Aid = r.ID
 	if len(r.Name) > 0 {
 		name := r.Name[0].ToAPISpec()
-		authorData.Name = &name
+		authorData.Name = name
 	}
 
 	return authorData

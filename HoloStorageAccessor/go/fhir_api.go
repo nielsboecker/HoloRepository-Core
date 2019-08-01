@@ -14,9 +14,10 @@ type FHIRRequest struct {
 }
 
 type FHIRResult struct {
-	err      error
-	qid      string
-	response []byte
+	err        error
+	statusCode int
+	qid        string
+	response   []byte
 }
 
 func SingleFHIRQuery(fhirReq FHIRRequest) FHIRResult {
@@ -72,6 +73,7 @@ func processFHIRQuery(fhirReq FHIRRequest, c chan FHIRResult) {
 		return
 	}
 
+	result.statusCode = resp.StatusCode
 	result.response = body
 	c <- result
 }

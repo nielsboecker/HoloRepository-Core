@@ -87,15 +87,15 @@ func AuthorsGet(c *gin.Context) {
 	dataMap := make(map[string]Author)
 	var emptyData Author
 	for id, result := range results {
-		var tempData PractitionerFHIR
-		err := json.Unmarshal(result.response, &tempData)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, err.Error())
-			return
-		}
-		if tempData.ID != id {
+		if result.statusCode == 404 || result.statusCode == 410 {
 			dataMap[id] = emptyData
 		} else {
+			var tempData PractitionerFHIR
+			err := json.Unmarshal(result.response, &tempData)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, err.Error())
+				return
+			}
 			dataMap[id] = tempData.ToAPISpec()
 		}
 	}
@@ -118,15 +118,15 @@ func HologramsGet(c *gin.Context) {
 	dataMap := make(map[string]Hologram)
 	var emptyData Hologram
 	for id, result := range results {
-		var tempData HologramDocumentReferenceFHIR
-		err := json.Unmarshal(result.response, &tempData)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, err.Error())
-			return
-		}
-		if tempData.ID != id {
+		if result.statusCode == 404 || result.statusCode == 410 {
 			dataMap[id] = emptyData
 		} else {
+			var tempData HologramDocumentReferenceFHIR
+			err := json.Unmarshal(result.response, &tempData)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, err.Error())
+				return
+			}
 			dataMap[id] = tempData.ToAPISpec()
 		}
 	}
@@ -209,15 +209,15 @@ func PatientsGet(c *gin.Context) {
 	dataMap := make(map[string]Patient)
 	var emptyData Patient
 	for id, result := range results {
-		var tempData PatientFHIR
-		err := json.Unmarshal(result.response, &tempData)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, err.Error())
-			return
-		}
-		if tempData.ID != id {
+		if result.statusCode == 404 || result.statusCode == 410 {
 			dataMap[id] = emptyData
 		} else {
+			var tempData PatientFHIR
+			err := json.Unmarshal(result.response, &tempData)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, err.Error())
+				return
+			}
 			dataMap[id] = tempData.ToAPISpec()
 		}
 	}

@@ -11,7 +11,6 @@ package openapi
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,26 +18,26 @@ import (
 
 // AuthorsAidGet - Get a single author metadata in HoloStorage
 func AuthorsAidGet(c *gin.Context) {
-	aid := c.Param("aid")
-	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+aid)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodGet, qid: aid, url: fhirURL})
+	id := c.Param("aid")
+	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+id)
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL})
 
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return
 	}
-	var author PractitionerFHIR
-	err := json.Unmarshal(result.response, &author)
+	var data PractitionerFHIR
+	err := json.Unmarshal(result.response, &data)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
-	if author.ID != aid {
-		errMsg := "aid '" + aid + "' cannot be found"
+	if data.ID != id {
+		errMsg := "aid '" + id + "' cannot be found"
 		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
 		return
 	}
-	c.JSON(http.StatusOK, author.ToAPISpec())
+	c.JSON(http.StatusOK, data.ToAPISpec())
 }
 
 // AuthorsAidPut - Add or update author information
@@ -49,57 +48,55 @@ func AuthorsAidPut(c *gin.Context) {
 		return
 	}
 
+	var data Author
 	decoder := json.NewDecoder(c.Request.Body)
-	var author Author
-	err := decoder.Decode(&author)
+	err := decoder.Decode(&data)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: err.Error()})
 		return
 	}
 
-	aid := c.Param("aid")
-	if author.Aid != aid {
+	id := c.Param("aid")
+	if data.Aid != id {
 		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: "aid in param and body do not match"})
 		return
 	}
 
-	authorFhir := author.ToFHIR()
-	fmt.Println(author)
-	fmt.Println(authorFhir)
-	jsonData, _ := json.Marshal(authorFhir)
-	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+aid)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodPut, qid: aid, url: fhirURL, body: string(jsonData)})
+	dataFhir := data.ToFHIR()
+	jsonData, _ := json.Marshal(dataFhir)
+	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+id)
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodPut, qid: id, url: fhirURL, body: string(jsonData)})
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return
 	}
-	c.JSON(result.statusCode, authorFhir)
+	c.JSON(result.statusCode, dataFhir)
 }
 
 // AuthorsGet - Mass query for author metadata in HoloStorage
 func AuthorsGet(c *gin.Context) {
 	fhirRequests := make(map[string]FHIRRequest)
-	authorsMap := make(map[string]Author)
-	aids := ParseQueryIDs(c.Query("aid"))
+	ids := ParseQueryIDs(c.Query("aid"))
 
-	for _, aid := range aids {
-		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+aid)
-		fhirRequests[aid] = FHIRRequest{httpMethod: http.MethodGet, qid: aid, url: fhirURL}
+	for _, id := range ids {
+		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+id)
+		fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL}
 	}
 
 	results := BatchFHIRQuery(fhirRequests)
 
-	for aid, result := range results {
+	authorsMap := make(map[string]Author)
+	for id, result := range results {
 		var tempAuthor PractitionerFHIR
 		err := json.Unmarshal(result.response, &tempAuthor)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
-		if tempAuthor.ID != aid {
-			authorsMap[aid] = Author{}
+		if tempAuthor.ID != id {
+			authorsMap[id] = Author{}
 		} else {
-			authorsMap[aid] = tempAuthor.ToAPISpec()
+			authorsMap[id] = tempAuthor.ToAPISpec()
 		}
 	}
 
@@ -133,12 +130,57 @@ func HologramsPost(c *gin.Context) {
 
 // PatientsGet - Mass query for patients metadata in HoloStorage
 func PatientsGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	fhirRequests := make(map[string]FHIRRequest)
+	ids := ParseQueryIDs(c.Query("pid"))
+
+	for _, id := range ids {
+		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Patient/"+id)
+		fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL}
+	}
+
+	results := BatchFHIRQuery(fhirRequests)
+
+	patientsMap := make(map[string]Patient)
+	var emptyData Patient
+	for id, result := range results {
+		var tempData PatientFHIR
+		err := json.Unmarshal(result.response, &tempData)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		if tempData.ID != id {
+			patientsMap[id] = emptyData
+		} else {
+			patientsMap[id] = tempData.ToAPISpec()
+		}
+	}
+
+	c.JSON(http.StatusOK, patientsMap)
 }
 
 // PatientsPidGet - Get a single patient metadata in HoloStorage
 func PatientsPidGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id := c.Param("pid")
+	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Patient/"+id)
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL})
+
+	if result.err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
+		return
+	}
+	var data PatientFHIR
+	err := json.Unmarshal(result.response, &data)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	if data.ID != id {
+		errMsg := "id '" + id + "' cannot be found"
+		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
+		return
+	}
+	c.JSON(http.StatusOK, data.ToAPISpec())
 }
 
 // PatientsPidPut - Add or update basic patient information

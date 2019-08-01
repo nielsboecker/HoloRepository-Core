@@ -34,7 +34,7 @@ type Hologram struct {
 
 type HologramDocumentReferenceFHIR struct {
 	ResourceType string              `json:"resourceType,omitempty"`
-	Id           string              `json:"id,omitempty"`
+	ID           string              `json:"id,omitempty"`
 	Status       string              `json:"status,omitempty"`
 	Date         time.Time           `json:"date,omitempty"`
 	Type         CodeableConceptFHIR `json:"type,omitempty"`
@@ -94,7 +94,7 @@ func (h HologramDocumentReferenceFHIR) GetHoloMetadata() HologramMeta {
 
 func (h Hologram) ToFHIR() HologramDocumentReferenceFHIR {
 	hologramDocRef := HologramDocumentReferenceFHIR{ResourceType: "DocumentReference", Status: "Current"}
-	hologramDocRef.Id = h.Hid
+	hologramDocRef.ID = h.Hid
 	hologramDocRef.Date = h.CreationDate
 	hologramDocRef.Type = CodeableConceptFHIR{Text: h.CreationMode}
 
@@ -125,7 +125,7 @@ func (h *HologramDocumentReferenceFHIR) UpdateAttachmentURL(url string) error {
 
 func (h HologramDocumentReferenceFHIR) ToAPISpec() Hologram {
 	hologramData := Hologram{}
-	hologramData.Hid = h.Id
+	hologramData.Hid = h.ID
 	hologramData.CreationDate = h.Date
 	hologramData.CreationMode = h.Type.Text
 

@@ -46,7 +46,7 @@ func TestHologramToHologramDocumentReferenceFHIR(t *testing.T) {
 				ResourceType: "DocumentReference",
 				Status:       "Current",
 				Date:         time.Date(2019, 1, 2, 12, 30, 45, 0, time.UTC),
-				Id:           "123",
+				ID:           "123",
 				Type:         CodeableConceptFHIR{Text: "GENERATE_FROM_IMAGING_STUDY"},
 				HologramMeta: `{"description":"test-description","creationDescription":"test-pipe","bodySite":"hips","dateOfImaging":"2017-07-15T15:20:25Z"}`,
 				Content: []ContentFHIR{ContentFHIR{Attachment: AttachmentFHIR{
@@ -94,7 +94,7 @@ func TestHologramDocumentReferenceFHIRToHologram(t *testing.T) {
 				ResourceType: "DocumentReference",
 				Status:       "Current",
 				Date:         time.Date(2019, 1, 2, 12, 30, 45, 0, time.UTC),
-				Id:           "123",
+				ID:           "123",
 				Type:         CodeableConceptFHIR{Text: "GENERATE_FROM_IMAGING_STUDY"},
 				HologramMeta: `{"description":"test-description","creationDescription":"test-pipe","bodySite":"hips","dateOfImaging":"2017-07-15T15:20:25Z"}`,
 				Content: []ContentFHIR{ContentFHIR{Attachment: AttachmentFHIR{

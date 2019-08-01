@@ -119,7 +119,6 @@ pytest --cov
 
 
 ## API specification
-> TODO: update this
 ```
 GET /pipelineapp
 ```

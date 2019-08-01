@@ -106,7 +106,33 @@ func AuthorsGet(c *gin.Context) {
 
 // HologramsGet - Mass query for hologram metadata based on hologram ids
 func HologramsGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	fhirRequests := make(map[string]FHIRRequest)
+	ids := ParseQueryIDs(c.Query("hid"))
+
+	for _, id := range ids {
+		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference/"+id)
+		fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL}
+	}
+
+	results := BatchFHIRQuery(fhirRequests)
+
+	dataMap := make(map[string]Hologram)
+	var emptyData Hologram
+	for id, result := range results {
+		var tempData HologramDocumentReferenceFHIR
+		err := json.Unmarshal(result.response, &tempData)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		if tempData.ID != id {
+			dataMap[id] = emptyData
+		} else {
+			dataMap[id] = tempData.ToAPISpec()
+		}
+	}
+
+	c.JSON(http.StatusOK, dataMap)
 }
 
 // HologramsHidDelete - Delete a hologram in HoloStorage
@@ -121,7 +147,27 @@ func HologramsHidDownloadGet(c *gin.Context) {
 
 // HologramsHidGet - Get a single hologram metadata based on the hologram id
 func HologramsHidGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	id := c.Param("hid")
+	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference/"+id)
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL})
+
+	if result.err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
+		return
+	}
+	var data HologramDocumentReferenceFHIR
+	err := json.Unmarshal(result.response, &data)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	if data.ID != id {
+		errMsg := "hid '" + id + "' cannot be found"
+		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
+		return
+	}
+
+	c.JSON(http.StatusOK, data.ToAPISpec())
 }
 
 // HologramsPost - Upload hologram to HoloStorage

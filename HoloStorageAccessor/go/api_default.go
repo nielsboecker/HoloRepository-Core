@@ -136,7 +136,27 @@ func HologramsGet(c *gin.Context) {
 
 // HologramsHidDelete - Delete a hologram in HoloStorage
 func HologramsHidDelete(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"error": "Endpoint still under construction. Sorry for the inconvenience."})
+	id := c.Param("hid")
+	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference/"+id)
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL})
+
+	if result.err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
+		return
+	} else if result.statusCode == 404 || result.statusCode == 410 {
+		errMsg := "id '" + id + "' cannot be found"
+		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
+		return
+	}
+
+	result = SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodDelete, qid: id, url: fhirURL})
+	if result.err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
+		return
+	}
+
+	// TODO: Blob storage deletion
+	c.JSON(http.StatusOK, gin.H{"success": "Deleted hid '" + id + "'"})
 }
 
 // HologramsHidDownloadGet - Download holograms models based on the hologram id

@@ -1,6 +1,7 @@
 package openapi
 
 import (
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -57,6 +58,10 @@ func processFHIRQuery(fhirReq FHIRRequest, c chan FHIRResult) {
 	case "PUT", "POST":
 		req, _ = http.NewRequest(fhirReq.httpMethod, fhirReq.url, strings.NewReader(fhirReq.body))
 		req.Header.Add("Content-Type", "application/fhir+json")
+	default:
+		result.err = errors.New("Unsupported httpMethod: " + method)
+		c <- result
+		return
 	}
 
 	resp, err := client.Do(req)

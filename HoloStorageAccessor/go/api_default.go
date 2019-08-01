@@ -85,22 +85,23 @@ func AuthorsGet(c *gin.Context) {
 
 	results := BatchFHIRQuery(fhirRequests)
 
-	authorsMap := make(map[string]Author)
+	dataMap := make(map[string]Author)
+	var emptyData Author
 	for id, result := range results {
-		var tempAuthor PractitionerFHIR
-		err := json.Unmarshal(result.response, &tempAuthor)
+		var tempData PractitionerFHIR
+		err := json.Unmarshal(result.response, &tempData)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
-		if tempAuthor.ID != id {
-			authorsMap[id] = Author{}
+		if tempData.ID != id {
+			dataMap[id] = emptyData
 		} else {
-			authorsMap[id] = tempAuthor.ToAPISpec()
+			dataMap[id] = tempData.ToAPISpec()
 		}
 	}
 
-	c.JSON(http.StatusOK, authorsMap)
+	c.JSON(http.StatusOK, dataMap)
 }
 
 // HologramsGet - Mass query for hologram metadata based on hologram ids
@@ -140,7 +141,7 @@ func PatientsGet(c *gin.Context) {
 
 	results := BatchFHIRQuery(fhirRequests)
 
-	patientsMap := make(map[string]Patient)
+	dataMap := make(map[string]Patient)
 	var emptyData Patient
 	for id, result := range results {
 		var tempData PatientFHIR
@@ -150,13 +151,13 @@ func PatientsGet(c *gin.Context) {
 			return
 		}
 		if tempData.ID != id {
-			patientsMap[id] = emptyData
+			dataMap[id] = emptyData
 		} else {
-			patientsMap[id] = tempData.ToAPISpec()
+			dataMap[id] = tempData.ToAPISpec()
 		}
 	}
 
-	c.JSON(http.StatusOK, patientsMap)
+	c.JSON(http.StatusOK, dataMap)
 }
 
 // PatientsPidGet - Get a single patient metadata in HoloStorage

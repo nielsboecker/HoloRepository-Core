@@ -25,16 +25,15 @@ func AuthorsAidGet(c *gin.Context) {
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return
+	} else if result.statusCode == 404 || result.statusCode == 410 {
+		errMsg := "id '" + id + "' cannot be found"
+		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
+		return
 	}
 	var data PractitionerFHIR
 	err := json.Unmarshal(result.response, &data)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
-		return
-	}
-	if data.ID != id {
-		errMsg := "aid '" + id + "' cannot be found"
-		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
 		return
 	}
 	c.JSON(http.StatusOK, data.ToAPISpec())
@@ -154,16 +153,16 @@ func HologramsHidGet(c *gin.Context) {
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return
+	} else if result.statusCode == 404 || result.statusCode == 410 {
+		errMsg := "id '" + id + "' cannot be found"
+		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
+		return
 	}
+
 	var data HologramDocumentReferenceFHIR
 	err := json.Unmarshal(result.response, &data)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
-		return
-	}
-	if data.ID != id {
-		errMsg := "hid '" + id + "' cannot be found"
-		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
 		return
 	}
 
@@ -215,16 +214,16 @@ func PatientsPidGet(c *gin.Context) {
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return
+	} else if result.statusCode == 404 || result.statusCode == 410 {
+		errMsg := "id '" + id + "' cannot be found"
+		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
+		return
 	}
+
 	var data PatientFHIR
 	err := json.Unmarshal(result.response, &data)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
-		return
-	}
-	if data.ID != id {
-		errMsg := "id '" + id + "' cannot be found"
-		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
 		return
 	}
 	c.JSON(http.StatusOK, data.ToAPISpec())

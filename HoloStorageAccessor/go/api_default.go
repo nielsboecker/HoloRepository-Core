@@ -10,6 +10,7 @@
 package openapi
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -17,20 +18,20 @@ import (
 
 // AuthorsAidGet - Get a single author metadata in HoloStorage
 func AuthorsAidGet(c *gin.Context) {
-	aid := c.Param("aid")
-	result, err := SearchAuthors([]string{aid})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
-		return
-	}
-	for _, data := range result {
-		if (data == Author{}) {
-			errMsg := "aid '" + aid + "' cannot be found"
-			c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
-			return
-		}
-	}
-	c.JSON(http.StatusOK, result)
+	// aid := c.Param("aid")
+	// result, err := SearchAuthors([]string{aid})
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
+	// 	return
+	// }
+	// for _, data := range result {
+	// 	if (data == Author{}) {
+	// 		errMsg := "aid '" + aid + "' cannot be found"
+	// 		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
+	// 		return
+	// 	}
+	// }
+	// c.JSON(http.StatusOK, result)
 }
 
 // AuthorsAidPut - Add or update author information
@@ -40,12 +41,32 @@ func AuthorsAidPut(c *gin.Context) {
 
 // AuthorsGet - Mass query for author metadata in HoloStorage
 func AuthorsGet(c *gin.Context) {
-	result, err := SearchAuthors(ParseQueryIDs(c.Query("aid")))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
-		return
+	fhirRequests := make(map[string]FHIRRequest)
+	authorsMap := make(map[string]Author)
+	aids := ParseQueryIDs(c.Query("aid"))
+
+	for _, aid := range aids {
+		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+aid)
+		fhirRequests[aid] = FHIRRequest{httpMethod: http.MethodGet, qid: aid, url: fhirURL}
 	}
-	c.JSON(http.StatusOK, result)
+
+	results := BatchFHIRQuery(fhirRequests)
+
+	for aid, result := range results {
+		var tempAuthor PractitionerFHIR
+		err := json.Unmarshal(result.response, &tempAuthor)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		if tempAuthor.ID != aid {
+			authorsMap[aid] = Author{}
+		} else {
+			authorsMap[aid] = tempAuthor.ToAPISpec()
+		}
+	}
+
+	c.JSON(http.StatusOK, authorsMap)
 }
 
 // HologramsGet - Mass query for hologram metadata based on hologram ids

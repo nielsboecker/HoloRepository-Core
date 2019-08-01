@@ -16,18 +16,18 @@ import (
 
 // HologramUploadData - Data structure to upload holograms to HoloStorage
 type HologramUploadData struct {
-	Title               string    `json:"title,omitempty"`
-	Description         string    `json:"description,omitempty"`
-	ContentType         string    `json:"contentType,omitempty"`
-	FileSizeInKb        uint32    `json:"fileSizeInKb,omitempty"`
-	BodySite            string    `json:"bodySite,omitempty"`
-	DateOfImaging       time.Time `json:"dateOfImaging,omitempty"`
-	CreationDate        time.Time `json:"creationDate,omitempty"`
-	CreationMode        string    `json:"creationMode,omitempty"`
-	CreationDescription string    `json:"creationDescription,omitempty"`
-	HologramFile        *os.File  `json:"hologramFile,omitempty"`
-	Author              Author    `json:"author,omitempty"`
-	Patient             Patient   `json:"patient,omitempty"`
+	Title               string     `json:"title,omitempty"`
+	Description         string     `json:"description,omitempty"`
+	ContentType         string     `json:"contentType,omitempty"`
+	FileSizeInKb        uint32     `json:"fileSizeInKb,omitempty"`
+	BodySite            string     `json:"bodySite,omitempty"`
+	DateOfImaging       *time.Time `json:"dateOfImaging,omitempty"`
+	CreationDate        *time.Time `json:"creationDate,omitempty"`
+	CreationMode        string     `json:"creationMode,omitempty"`
+	CreationDescription string     `json:"creationDescription,omitempty"`
+	HologramFile        *os.File   `json:"hologramFile,omitempty"`
+	Author              Author     `json:"author,omitempty"`
+	Patient             Patient    `json:"patient,omitempty"`
 }
 
 func (h HologramUploadData) GetHologramData() Hologram {

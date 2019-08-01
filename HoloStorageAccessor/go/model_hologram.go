@@ -18,25 +18,25 @@ import (
 
 // Hologram - Metadata of a hologram
 type Hologram struct {
-	Hid                 string    `json:"hid,omitempty"`
-	Title               string    `json:"title,omitempty"`
-	Description         string    `json:"description,omitempty"`
-	ContentType         string    `json:"contentType,omitempty"`
-	FileSizeInKb        uint32    `json:"fileSizeInKb,omitempty"`
-	BodySite            string    `json:"bodySite,omitempty"`
-	DateOfImaging       time.Time `json:"dateOfImaging,omitempty"`
-	CreationDate        time.Time `json:"creationDate,omitempty"`
-	CreationMode        string    `json:"creationMode,omitempty"`
-	CreationDescription string    `json:"creationDescription,omitempty"`
-	Aid                 string    `json:"aid,omitempty"`
-	Pid                 string    `json:"pid,omitempty"`
+	Hid                 string     `json:"hid,omitempty"`
+	Title               string     `json:"title,omitempty"`
+	Description         string     `json:"description,omitempty"`
+	ContentType         string     `json:"contentType,omitempty"`
+	FileSizeInKb        uint32     `json:"fileSizeInKb,omitempty"`
+	BodySite            string     `json:"bodySite,omitempty"`
+	DateOfImaging       *time.Time `json:"dateOfImaging,omitempty"`
+	CreationDate        *time.Time `json:"creationDate,omitempty"`
+	CreationMode        string     `json:"creationMode,omitempty"`
+	CreationDescription string     `json:"creationDescription,omitempty"`
+	Aid                 string     `json:"aid,omitempty"`
+	Pid                 string     `json:"pid,omitempty"`
 }
 
 type HologramDocumentReferenceFHIR struct {
 	ResourceType string              `json:"resourceType,omitempty"`
 	ID           string              `json:"id,omitempty"`
 	Status       string              `json:"status,omitempty"`
-	Date         time.Time           `json:"date,omitempty"`
+	Date         *time.Time          `json:"date,omitempty"`
 	Type         CodeableConceptFHIR `json:"type,omitempty"`
 	Content      []ContentFHIR       `json:"content,omitempty"`
 	HologramMeta string              `json:"description,omitempty"`
@@ -45,10 +45,10 @@ type HologramDocumentReferenceFHIR struct {
 }
 
 type HologramMeta struct {
-	Description         string    `json:"description,omitempty"`
-	CreationDescription string    `json:"creationDescription,omitempty"`
-	BodySite            string    `json:"bodySite,omitempty"`
-	DateOfImaging       time.Time `json:"dateOfImaging,omitempty"`
+	Description         string     `json:"description,omitempty"`
+	CreationDescription string     `json:"creationDescription,omitempty"`
+	BodySite            string     `json:"bodySite,omitempty"`
+	DateOfImaging       *time.Time `json:"dateOfImaging,omitempty"`
 }
 
 type ReferenceFHIR struct {

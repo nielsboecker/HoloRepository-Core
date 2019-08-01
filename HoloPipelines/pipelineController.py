@@ -4,6 +4,7 @@ import sys
 import argparse
 import subprocess
 import pathlib
+import pipelines.components.compCommonPath as plCommonPath
 
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
@@ -39,14 +40,7 @@ args = parser.parse_args()
 
 def main():
     # check common dir
-    if not os.path.exists("medicalScans"):
-        os.mkdir("medicalScans")
-        os.mkdir("medicalScans/dicom")
-        os.mkdir("medicalScans/nifti")
-    if not os.path.exists("output"):
-        os.mkdir("output")
-        os.mkdir("output/obj")
-        os.mkdir("output/glb")
+    plCommonPath.main()
 
     # check for pipeline config file
     if not os.path.exists(str(pathlib.Path(newCwd).joinpath(str(args.config)))):

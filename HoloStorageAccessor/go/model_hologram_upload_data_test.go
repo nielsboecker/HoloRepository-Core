@@ -113,6 +113,8 @@ func TestGetHologramDocRefDataFromHologramUpload(t *testing.T) {
 					Size:        1024000,
 					Title:       "Hologram Title",
 				}}},
+				Subject: ReferenceFHIR{Reference: "Patient/patient-123"},
+				Author:  []ReferenceFHIR{ReferenceFHIR{Reference: "Practitioner/author-456"}},
 			},
 		},
 	}

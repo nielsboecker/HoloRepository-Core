@@ -13,6 +13,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -104,11 +105,20 @@ func (h Hologram) ToFHIR() HologramDocumentReferenceFHIR {
 		contentData := ContentFHIR{Attachment: attachmentData}
 		hologramDocRef.Content = append(hologramDocRef.Content, contentData)
 	}
+
 	// Process HologramMeta
 	holoMeta := h.GetHoloMetadata()
 	if holoMeta != (HologramMeta{}) {
 		holoMetadata, _ := json.Marshal(holoMeta)
 		hologramDocRef.HologramMeta = string(holoMetadata)
+	}
+
+	// Process References
+	if h.Pid != "" {
+		hologramDocRef.Subject = ReferenceFHIR{Reference: "Patient/" + h.Pid}
+	}
+	if h.Aid != "" {
+		hologramDocRef.Author = []ReferenceFHIR{ReferenceFHIR{Reference: "Practitioner/" + h.Aid}}
 	}
 
 	return hologramDocRef
@@ -130,10 +140,18 @@ func (h HologramDocumentReferenceFHIR) ToAPISpec() Hologram {
 	hologramData.CreationMode = h.Type.Text
 
 	if len(h.Author) > 0 {
-		hologramData.Aid = h.Author[0].Reference
+		if strings.HasPrefix(h.Author[0].Reference, "Practitioner/") {
+			hologramData.Aid = h.Author[0].Reference[len("Practitioner/"):]
+		} else {
+			hologramData.Aid = h.Author[0].Reference
+		}
 	}
 	if (h.Subject != ReferenceFHIR{}) {
-		hologramData.Pid = h.Subject.Reference
+		if strings.HasPrefix(h.Subject.Reference, "Patient/") {
+			hologramData.Pid = h.Subject.Reference[len("Patient/"):]
+		} else {
+			hologramData.Pid = h.Subject.Reference
+		}
 	}
 
 	meta := h.GetHoloMetadata()

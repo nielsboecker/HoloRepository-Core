@@ -29,6 +29,8 @@ func TestHologramToHologramDocumentReferenceFHIR(t *testing.T) {
 		"with_data": {
 			input: Hologram{
 				Hid:                 "123",
+				Aid:                 "a123",
+				Pid:                 "p123",
 				Title:               "test-title",
 				Description:         "test-description",
 				ContentType:         "application/test",
@@ -53,6 +55,8 @@ func TestHologramToHologramDocumentReferenceFHIR(t *testing.T) {
 					Title:       "test-title",
 					URL:         "www.storage.com/download/12345",
 				}}},
+				Subject: ReferenceFHIR{Reference: "Patient/p123"},
+				Author:  []ReferenceFHIR{ReferenceFHIR{Reference: "Practitioner/a123"}},
 			},
 		},
 	}
@@ -100,9 +104,13 @@ func TestHologramDocumentReferenceFHIRToHologram(t *testing.T) {
 					Title:       "test-title",
 					URL:         "www.storage.com/download/12345",
 				}}},
+				Subject: ReferenceFHIR{Reference: "Patient/p123"},
+				Author:  []ReferenceFHIR{ReferenceFHIR{Reference: "Practitioner/a123"}},
 			},
 			want: Hologram{
 				Hid:                 "123",
+				Pid:                 "p123",
+				Aid:                 "a123",
 				Title:               "test-title",
 				Description:         "test-description",
 				ContentType:         "application/test",

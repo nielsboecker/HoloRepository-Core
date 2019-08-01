@@ -19,6 +19,13 @@ type FHIRResult struct {
 	response []byte
 }
 
+func SingleFHIRQuery(fhirReq FHIRRequest) FHIRResult {
+	fhirChan := make(chan FHIRResult)
+	defer close(fhirChan)
+	go processFHIRQuery(fhirReq, fhirChan)
+	return <-fhirChan
+}
+
 func BatchFHIRQuery(fhirRequests map[string]FHIRRequest) map[string]FHIRResult {
 	var results map[string]FHIRResult
 	results = make(map[string]FHIRResult)

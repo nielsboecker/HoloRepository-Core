@@ -18,20 +18,26 @@ import (
 
 // AuthorsAidGet - Get a single author metadata in HoloStorage
 func AuthorsAidGet(c *gin.Context) {
-	// aid := c.Param("aid")
-	// result, err := SearchAuthors([]string{aid})
-	// if err != nil {
-	// 	c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
-	// 	return
-	// }
-	// for _, data := range result {
-	// 	if (data == Author{}) {
-	// 		errMsg := "aid '" + aid + "' cannot be found"
-	// 		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
-	// 		return
-	// 	}
-	// }
-	// c.JSON(http.StatusOK, result)
+	aid := c.Param("aid")
+	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+aid)
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodGet, qid: aid, url: fhirURL})
+
+	if result.err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
+		return
+	}
+	var author PractitionerFHIR
+	err := json.Unmarshal(result.response, &author)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	if author.ID != aid {
+		errMsg := "aid '" + aid + "' cannot be found"
+		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
+		return
+	}
+	c.JSON(http.StatusOK, author.ToAPISpec())
 }
 
 // AuthorsAidPut - Add or update author information

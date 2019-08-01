@@ -185,5 +185,34 @@ func PatientsPidGet(c *gin.Context) {
 
 // PatientsPidPut - Add or update basic patient information
 func PatientsPidPut(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	contentType := c.Request.Header.Get("Content-Type")
+	if contentType != "application/json" {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: "Expected Content-Type: 'application/json', got '" + contentType + "'"})
+		return
+	}
+
+	var data Patient
+	id := c.Param("pid")
+
+	decoder := json.NewDecoder(c.Request.Body)
+	err := decoder.Decode(&data)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: err.Error()})
+		return
+	}
+
+	if data.Pid != id {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: "pid in param and body do not match"})
+		return
+	}
+
+	dataFhir := data.ToFHIR()
+	jsonData, _ := json.Marshal(dataFhir)
+	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Patient/"+id)
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodPut, qid: id, url: fhirURL, body: string(jsonData)})
+	if result.err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
+		return
+	}
+	c.JSON(result.statusCode, dataFhir)
 }

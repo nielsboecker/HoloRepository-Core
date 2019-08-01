@@ -11,10 +11,10 @@ package openapi
 
 // Patient - Metadata of a single patient
 type Patient struct {
-	Pid       string     `json:"pid,omitempty"`
-	Gender    string     `json:"gender,omitempty"`
-	BirthDate string     `json:"birthDate,omitempty"`
-	Name      PersonName `json:"name,omitempty"`
+	Pid       string      `json:"pid,omitempty"`
+	Gender    string      `json:"gender,omitempty"`
+	BirthDate string      `json:"birthDate,omitempty"`
+	Name      *PersonName `json:"name,omitempty"`
 }
 
 // PatientFHIR - Components of the relevant Patient FHIR resource
@@ -32,9 +32,12 @@ func (r Patient) ToFHIR() PatientFHIR {
 	fhirData.ID = r.Pid
 	fhirData.Gender = r.Gender
 	fhirData.BirthDate = r.BirthDate
-	name := r.Name.ToFHIR()
-	if name.Text != "" {
-		fhirData.Name = append(fhirData.Name, name)
+
+	if r.Name != nil {
+		name := r.Name.ToFHIR()
+		if name.Text != "" || name.Family != "" || len(name.Prefix) > 0 || len(name.Given) > 0 {
+			fhirData.Name = append(fhirData.Name, name)
+		}
 	}
 
 	return fhirData
@@ -46,7 +49,8 @@ func (r PatientFHIR) ToAPISpec() Patient {
 	patientData.Gender = r.Gender
 	patientData.BirthDate = r.BirthDate
 	if len(r.Name) > 0 {
-		patientData.Name = r.Name[0].ToAPISpec()
+		name := r.Name[0].ToAPISpec()
+		patientData.Name = &name
 	}
 
 	return patientData

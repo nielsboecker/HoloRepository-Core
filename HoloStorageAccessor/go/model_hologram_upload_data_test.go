@@ -38,8 +38,8 @@ func TestGetHologramDataFromUpload(t *testing.T) {
 				CreationDate:        time.Date(2019, 1, 2, 12, 30, 45, 0, time.UTC),
 				CreationMode:        "GENERATE_FROM_IMAGING_STUDY",
 				CreationDescription: "From bone segmentation pipeline with HU threshold of 750",
-				Author:              Author{Aid: "author-456", Name: PersonName{Full: "Timothy David", Given: "Timothy", Family: "David", Title: "Dr"}},
-				Patient:             Patient{Pid: "patient-123", BirthDate: "2019-01-01", Gender: "female", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
+				Author:              Author{Aid: "author-456", Name: &PersonName{Full: "Timothy David", Given: "Timothy", Family: "David", Title: "Dr"}},
+				Patient:             Patient{Pid: "patient-123", BirthDate: "2019-01-01", Gender: "female", Name: &PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
 			},
 			want: Hologram{
 				Title:               "Hologram Title",
@@ -93,8 +93,8 @@ func TestGetHologramDocRefDataFromHologramUpload(t *testing.T) {
 				CreationDate:        time.Date(2019, 1, 2, 12, 30, 45, 0, time.UTC),
 				CreationMode:        "GENERATE_FROM_IMAGING_STUDY",
 				CreationDescription: "From bone segmentation pipeline with HU threshold of 750",
-				Author:              Author{Aid: "author-456", Name: PersonName{Full: "Timothy David", Given: "Timothy", Family: "David", Title: "Dr"}},
-				Patient:             Patient{Pid: "patient-123", BirthDate: "2019-01-01", Gender: "female", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
+				Author:              Author{Aid: "author-456", Name: &PersonName{Full: "Timothy David", Given: "Timothy", Family: "David", Title: "Dr"}},
+				Patient:             Patient{Pid: "patient-123", BirthDate: "2019-01-01", Gender: "female", Name: &PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
 			},
 			want: HologramDocumentReferenceFHIR{
 				ResourceType: "DocumentReference",

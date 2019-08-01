@@ -14,7 +14,7 @@ func TestPatientAPISpecToPatientFHIR(t *testing.T) {
 
 	tests := map[string]test{
 		"all_info": {
-			input: Patient{Pid: "123", BirthDate: "2019-01-01", Gender: "female", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
+			input: Patient{Pid: "123", BirthDate: "2019-01-01", Gender: "female", Name: &PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
 			want: PatientFHIR{
 				ResourceType: "Patient",
 				ID:           "123",
@@ -71,7 +71,7 @@ func TestPatientFHIRToPatientAPISpec(t *testing.T) {
 						Prefix: []string{"Mr"}},
 				},
 			},
-			want: Patient{Pid: "123", BirthDate: "2019-01-01", Gender: "female", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
+			want: Patient{Pid: "123", BirthDate: "2019-01-01", Gender: "female", Name: &PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
 		},
 		"multiple_names": {
 			input: PatientFHIR{
@@ -92,7 +92,7 @@ func TestPatientFHIRToPatientAPISpec(t *testing.T) {
 						Prefix: []string{"Mr"}},
 				},
 			},
-			want: Patient{Pid: "123", BirthDate: "2019-01-01", Gender: "female", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
+			want: Patient{Pid: "123", BirthDate: "2019-01-01", Gender: "female", Name: &PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
 		},
 		"all_info_extra_name_fields": {
 			input: PatientFHIR{
@@ -108,7 +108,7 @@ func TestPatientFHIRToPatientAPISpec(t *testing.T) {
 						Prefix: []string{"Mr", "Mister"}},
 				},
 			},
-			want: Patient{Pid: "123", BirthDate: "2019-01-01", Gender: "female", Name: PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
+			want: Patient{Pid: "123", BirthDate: "2019-01-01", Gender: "female", Name: &PersonName{Full: "Bobby Cane", Title: "Mr", Given: "Bobby", Family: "Cane"}},
 		},
 		"partial_info": {
 			input: PatientFHIR{ResourceType: "Patient", ID: "123", Gender: "female"},

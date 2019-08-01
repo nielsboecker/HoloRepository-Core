@@ -25,7 +25,7 @@ func TestHologramToHologramDocumentReferenceFHIR(t *testing.T) {
 			url:   "",
 			want: HologramDocumentReferenceFHIR{
 				ResourceType: "DocumentReference",
-				Status:       "Current",
+				Status:       "current",
 			},
 		},
 		"with_data": {
@@ -44,7 +44,7 @@ func TestHologramToHologramDocumentReferenceFHIR(t *testing.T) {
 			url: "www.storage.com/download/12345",
 			want: HologramDocumentReferenceFHIR{
 				ResourceType: "DocumentReference",
-				Status:       "Current",
+				Status:       "current",
 				Date:         time.Date(2019, 1, 2, 12, 30, 45, 0, time.UTC),
 				ID:           "123",
 				Type:         CodeableConceptFHIR{Text: "GENERATE_FROM_IMAGING_STUDY"},
@@ -86,13 +86,13 @@ func TestHologramDocumentReferenceFHIRToHologram(t *testing.T) {
 			want: Hologram{},
 			input: HologramDocumentReferenceFHIR{
 				ResourceType: "DocumentReference",
-				Status:       "Current",
+				Status:       "current",
 			},
 		},
 		"with_data:": {
 			input: HologramDocumentReferenceFHIR{
 				ResourceType: "DocumentReference",
-				Status:       "Current",
+				Status:       "current",
 				Date:         time.Date(2019, 1, 2, 12, 30, 45, 0, time.UTC),
 				ID:           "123",
 				Type:         CodeableConceptFHIR{Text: "GENERATE_FROM_IMAGING_STUDY"},

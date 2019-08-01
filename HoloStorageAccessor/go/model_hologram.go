@@ -93,7 +93,7 @@ func (h HologramDocumentReferenceFHIR) GetHoloMetadata() HologramMeta {
 }
 
 func (h Hologram) ToFHIR() HologramDocumentReferenceFHIR {
-	hologramDocRef := HologramDocumentReferenceFHIR{ResourceType: "DocumentReference", Status: "Current"}
+	hologramDocRef := HologramDocumentReferenceFHIR{ResourceType: "DocumentReference", Status: "current"}
 	hologramDocRef.ID = h.Hid
 	hologramDocRef.Date = h.CreationDate
 	hologramDocRef.Type = CodeableConceptFHIR{Text: h.CreationMode}

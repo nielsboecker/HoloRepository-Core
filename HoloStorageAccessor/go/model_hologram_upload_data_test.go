@@ -79,7 +79,7 @@ func TestGetHologramDocRefDataFromHologramUpload(t *testing.T) {
 			input: HologramUploadData{},
 			want: HologramDocumentReferenceFHIR{
 				ResourceType: "DocumentReference",
-				Status:       "Current",
+				Status:       "current",
 			},
 		},
 		"all_info": {
@@ -98,7 +98,7 @@ func TestGetHologramDocRefDataFromHologramUpload(t *testing.T) {
 			},
 			want: HologramDocumentReferenceFHIR{
 				ResourceType: "DocumentReference",
-				Status:       "Current",
+				Status:       "current",
 				Date:         time.Date(2019, 1, 2, 12, 30, 45, 0, time.UTC),
 				Type:         CodeableConceptFHIR{Text: "GENERATE_FROM_IMAGING_STUDY"},
 				HologramMeta: `{"description":"Hologram Description","creationDescription":"From bone segmentation pipeline with HU threshold of 750","bodySite":"Hips","dateOfImaging":"2017-07-15T15:20:25Z"}`,

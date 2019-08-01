@@ -137,12 +137,12 @@ func HologramsGet(c *gin.Context) {
 
 // HologramsHidDelete - Delete a hologram in HoloStorage
 func HologramsHidDelete(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, gin.H{"error": "Endpoint still under construction. Sorry for the inconvenience."})
 }
 
 // HologramsHidDownloadGet - Download holograms models based on the hologram id
 func HologramsHidDownloadGet(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, gin.H{"error": "Endpoint still under construction. Sorry for the inconvenience."})
 }
 
 // HologramsHidGet - Get a single hologram metadata based on the hologram id
@@ -172,7 +172,7 @@ func HologramsHidGet(c *gin.Context) {
 
 // HologramsPost - Upload hologram to HoloStorage
 func HologramsPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, gin.H{"error": "Endpoint still under construction. Sorry for the inconvenience."})
 }
 
 // PatientsGet - Mass query for patients metadata in HoloStorage

@@ -3,12 +3,10 @@ This is the accessor that provides a RESTful interface to manage all data flows 
 
 The APIs are designed and documented via OpenAPI. Server boilerplate was generated via openapi-generator.
 
-# Requirements
+## Requirements
 TODO
 
-# Usage
-## Running the server
-
+## Usage
 To run the server, follow these simple steps:
 
 ```
@@ -24,3 +22,13 @@ Once the image is built, just run
 ```
 docker run --rm -it openapi
 ```
+
+## Configuration
+Configurations are done in config.cfg
+
+| Field         | Description                                 |
+|---------------|---------------------------------------------|
+| fhirURL       | URL to the FHIR server accessor connects to |
+| blobStoreName | Name of blob store                          |
+| blobKey       | Access key to the blob store                |
+

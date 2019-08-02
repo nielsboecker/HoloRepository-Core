@@ -15,7 +15,17 @@ func ParseQueryIDs(query string) []string {
 	if len(ids) > 1 && ids[len(ids)-1] == "" {
 		ids = ids[:len(ids)-1]
 	}
-	return ids
+	// Remove duplicates
+	var final_ids []string
+	tempDict := make(map[string]bool)
+	for _, id := range ids {
+		_, present := tempDict[id]
+		if !present {
+			tempDict[id] = true
+			final_ids = append(final_ids, id)
+		}
+	}
+	return final_ids
 }
 
 func ConstructURL(baseurl string, pathComponent string) (string, error) {

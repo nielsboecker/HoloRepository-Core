@@ -13,10 +13,11 @@ func TestGetAllQueryIDs(t *testing.T) {
 	}
 
 	tests := map[string]test{
-		"Multiple queries": {input: "100,200,300", want: []string{"100", "200", "300"}},
-		"Trailing comma":   {input: "100,200,", want: []string{"100", "200"}},
-		"Single query":     {input: "100", want: []string{"100"}},
-		"No query":         {input: "", want: []string{""}},
+		"multiple_queries":   {input: "100,200,300", want: []string{"100", "200", "300"}},
+		"trialing_comma":     {input: "100,200,", want: []string{"100", "200"}},
+		"single_query":       {input: "100", want: []string{"100"}},
+		"no_query":           {input: "", want: []string{""}},
+		"duplicated_queries": {input: "100,100", want: []string{"100"}},
 	}
 
 	for name, tc := range tests {

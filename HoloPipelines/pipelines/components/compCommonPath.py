@@ -11,14 +11,9 @@ glb = cwd.joinpath("output", "glb")
 
 
 def main():
-    if not os.path.exists(str(medicalScans)):
-        os.mkdir(str(medicalScans))
-        os.mkdir(str(dicom))
-        os.mkdir(str(nifti))
-    if not os.path.exists(str(output)):
-        os.mkdir(str(output))
-        os.mkdir(str(obj))
-        os.mkdir(str(glb))
+    for path in [medicalScans, dicom, nifti, output, obj, glb]:
+    	if not os.path.exists(str(path)):
+        	os.mkdir(str(path))
 
 
 if __name__ == "__main__":

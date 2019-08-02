@@ -125,8 +125,13 @@ func HologramsGet(c *gin.Context) {
 		}
 	case "patient":
 		for _, id := range details.IDs {
-			fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference?subject="+id)
-			fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL}
+			query := make(map[string]string)
+			if creationMode != "" {
+				query["type:text"] = creationMode
+			}
+			query["subject"] = id
+			fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference")
+			fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL, query: query}
 		}
 	}
 
@@ -153,7 +158,42 @@ func HologramsGet(c *gin.Context) {
 		c.JSON(http.StatusOK, dataMap)
 
 	case "patient":
-		c.JSON(http.StatusOK, gin.H{"error": "Endpoint still under construction. Sorry for the inconvenience."})
+		type LinkFHIR struct {
+			Relation string `json:"relation"`
+			Url      string `json:"url"`
+		}
+		type EntryFHIR struct {
+			Resource json.RawMessage `json:"resource"`
+		}
+		type BundleFHIR struct {
+			Link  []LinkFHIR  `json:"link"`
+			Entry []EntryFHIR `json:"entry"`
+		}
+		continueQuery := true
+		for continueQuery {
+			fhirRequests = make(map[string]FHIRRequest)
+			for id, result := range results {
+				var bundleResult BundleFHIR
+				_ = json.Unmarshal(result.response, &bundleResult)
+				for _, link := range bundleResult.Link {
+					if link.Relation == "next" {
+						fhirRequests[id] = FHIRRequest{httpMethod: "GET", url: link.Url, qid: id}
+					}
+				}
+				for _, entry := range bundleResult.Entry {
+					var tempData HologramDocumentReferenceFHIR
+					_ = json.Unmarshal(entry.Resource, &tempData)
+					dataMap[id] = append(dataMap[id], tempData.ToAPISpec())
+				}
+			}
+
+			if len(fhirRequests) == 0 {
+				continueQuery = false
+			} else {
+				results = BatchFHIRQuery(fhirRequests)
+			}
+		}
+		c.JSON(http.StatusOK, dataMap)
 	}
 }
 

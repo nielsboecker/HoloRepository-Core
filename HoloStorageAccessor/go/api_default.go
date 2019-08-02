@@ -117,30 +117,44 @@ func HologramsGet(c *gin.Context) {
 	// Process requests
 	fhirRequests := make(map[string]FHIRRequest)
 
-	for _, id := range details.IDs {
-		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference/"+id)
-		fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL}
+	switch details.Mode {
+	case "hologram":
+		for _, id := range details.IDs {
+			fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference/"+id)
+			fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL}
+		}
+	case "patient":
+		for _, id := range details.IDs {
+			fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference?subject="+id)
+			fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL}
+		}
 	}
 
 	results := BatchFHIRQuery(fhirRequests)
 
-	dataMap := make(map[string]Hologram)
+	dataMap := make(map[string][]Hologram)
 	var emptyData Hologram
-	for id, result := range results {
-		if result.statusCode == 404 || result.statusCode == 410 {
-			dataMap[id] = emptyData
-		} else {
-			var tempData HologramDocumentReferenceFHIR
-			err := json.Unmarshal(result.response, &tempData)
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, err.Error())
-				return
-			}
-			dataMap[id] = tempData.ToAPISpec()
-		}
-	}
 
-	c.JSON(http.StatusOK, dataMap)
+	switch details.Mode {
+	case "hologram":
+		for id, result := range results {
+			if result.statusCode == 404 || result.statusCode == 410 {
+				dataMap[id] = append(dataMap[id], emptyData)
+			} else {
+				var tempData HologramDocumentReferenceFHIR
+				err := json.Unmarshal(result.response, &tempData)
+				if err != nil {
+					c.JSON(http.StatusInternalServerError, err.Error())
+					return
+				}
+				dataMap[id] = append(dataMap[id], tempData.ToAPISpec())
+			}
+		}
+		c.JSON(http.StatusOK, dataMap)
+
+	case "patient":
+		c.JSON(http.StatusOK, gin.H{"error": "Endpoint still under construction. Sorry for the inconvenience."})
+	}
 }
 
 // HologramsHidDelete - Delete a hologram in HoloStorage

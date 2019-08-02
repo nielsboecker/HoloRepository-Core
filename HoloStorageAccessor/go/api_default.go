@@ -105,10 +105,19 @@ func AuthorsGet(c *gin.Context) {
 
 // HologramsGet - Mass query for hologram metadata based on hologram ids
 func HologramsGet(c *gin.Context) {
-	fhirRequests := make(map[string]FHIRRequest)
-	ids := ParseQueryIDs(c.Query("hid"))
+	hid := c.Query("hid")
+	pid := c.Query("pid")
+	creationMode := c.Query("creationmode")
+	details, err := VerifyHologramQuery(hid, pid, creationMode)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: err.Error()})
+		return
+	}
 
-	for _, id := range ids {
+	// Process requests
+	fhirRequests := make(map[string]FHIRRequest)
+
+	for _, id := range details.IDs {
 		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference/"+id)
 		fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL}
 	}

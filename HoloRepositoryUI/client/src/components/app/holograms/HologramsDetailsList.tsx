@@ -26,7 +26,7 @@ import FilterStatusMessageBar from "../core/FilterStatusMessageBar";
 import { IHologram } from "../../../../../types";
 import { PidToPatientsMap, PropsWithContext, withAppContext } from "../../shared/AppState";
 
-// const unknownPersonName = "Unknown";
+const unknownPersonName = "Unknown";
 
 const defaultColumns: IColumn[] = [
   fileTypeCol,
@@ -284,30 +284,20 @@ class HologramsDetailsList extends Component<
   };
 
   private _getDisplayAuthorName = (hologram: IHologram): string => {
-    //    const { practitioner } = this.props.context!;
+    const { practitioner } = this.props.context!;
 
-    let authorName = "Unknown";
-    // TODO: Repair
-
-    //    if (!hologram.author || !hologram.author.name) {
-    //      authorName = unknownPersonName;
-    //    } else if (hologram.author.aid === practitioner!.pid) {
-    //      authorName = "You";
-    //    } else {
-    //      authorName = hologram.author.name.full;
-    //    }
-    return authorName;
+    // Note: If hologram was created by another practitioner, getting the name for the pid would
+    // require another network call, which may be obsolete with later versions of the Accessor
+    // API. Therefore, it is only "You" or "Unknown" for the time being.
+    if (practitioner!.pid === hologram.pid) {
+      return "You";
+    } else {
+      return hologram.authorName ? hologram.authorName : unknownPersonName;
+    }
   };
 
   private _getDisplaySubjectName = (hologram: IHologram): string => {
-    return "Unknown";
-    // TODO: Repair
-
-    //    if (!hologram.subject.name) {
-    //      return unknownPersonName;
-    //    } else {
-    //      return hologram.subject.name.full;
-    //    }
+    return hologram.patientName ? hologram.patientName : unknownPersonName;
   };
 }
 

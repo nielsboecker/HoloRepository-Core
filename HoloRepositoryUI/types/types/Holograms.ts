@@ -45,6 +45,9 @@ export interface IHologram {
   bodySite?: string;
   dateOfImaging?: string;
   contentType?: string;
+  // Note: the following fields are not present in the data from the Accessor API, they are added here in the UI
+  patientName?: string;
+  authorName?: string;
 }
 
 /**

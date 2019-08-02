@@ -12,6 +12,7 @@ type FHIRRequest struct {
 	url        string
 	qid        string
 	body       string
+	query      map[string]string
 }
 
 type FHIRResult struct {
@@ -62,6 +63,14 @@ func processFHIRQuery(fhirReq FHIRRequest, c chan FHIRResult) {
 		result.err = errors.New("Unsupported httpMethod: " + method)
 		c <- result
 		return
+	}
+
+	if fhirReq.query != nil {
+		urlQuery := req.URL.Query()
+		for queryKey, queryValue := range fhirReq.query {
+			urlQuery.Add(queryKey, queryValue)
+		}
+		req.URL.RawQuery = urlQuery.Encode()
 	}
 
 	resp, err := client.Do(req)

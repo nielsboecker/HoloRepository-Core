@@ -7,13 +7,83 @@ import (
 	"log"
 	"net/url"
 	"path"
+	"strconv"
 	"strings"
+	"time"
 )
 
 type HologramQueryDetails struct {
 	IDs          []string
 	Mode         string
 	CreationMode string
+}
+
+type HologramPostInput struct {
+	Hologram Hologram
+	Author   Author
+	Patient  Patient
+}
+
+func ParseHologramUploadPostInput(formData url.Values) (HologramPostInput, error) {
+	var authorData Author
+	var patientData Patient
+	var hologramData Hologram
+
+	for key, _ := range formData {
+		switch key {
+		case "patient":
+			err := json.Unmarshal([]byte(formData.Get(key)), &patientData)
+			if err != nil {
+				return HologramPostInput{}, errors.New("Unable to prase patient data")
+			}
+			if patientData.Pid == "" {
+				return HologramPostInput{}, errors.New("Patient ID is required")
+			}
+			hologramData.Pid = patientData.Pid
+		case "author":
+			err := json.Unmarshal([]byte(formData.Get(key)), &authorData)
+			if err != nil {
+				return HologramPostInput{}, errors.New("Unable to prase author data")
+			}
+			if authorData.Aid == "" {
+				return HologramPostInput{}, errors.New("Author ID is required")
+			}
+			hologramData.Aid = authorData.Aid
+		case "creationDate":
+			creationDate, err := time.Parse(time.RFC3339, formData.Get(key))
+			if err != nil {
+				return HologramPostInput{}, errors.New(key + " is not in RFC3339 standards")
+			}
+			hologramData.CreationDate = &creationDate
+		case "dateOfImaging":
+			dateOfImaging, err := time.Parse(time.RFC3339, formData.Get(key))
+			if err != nil {
+				return HologramPostInput{}, errors.New(key + " is not in RFC3339 standards")
+			}
+			hologramData.DateOfImaging = &dateOfImaging
+		case "title":
+			hologramData.Title = formData.Get(key)
+		case "description":
+			hologramData.Description = formData.Get(key)
+		case "contentType":
+			hologramData.ContentType = formData.Get(key)
+		case "fileSizeInKB":
+			fileSize, err := strconv.ParseUint(formData.Get(key), 10, 32)
+			if err != nil {
+				return HologramPostInput{}, errors.New(key + " is not a valid filesize")
+			}
+			hologramData.FileSizeInKb = uint32(fileSize)
+		case "bodySite":
+			hologramData.BodySite = formData.Get(key)
+		case "creationMode":
+			hologramData.CreationMode = formData.Get(key)
+		case "creationDescription":
+			hologramData.CreationDescription = formData.Get(key)
+		}
+	}
+
+	result := HologramPostInput{Author: authorData, Patient: patientData, Hologram: hologramData}
+	return result, nil
 }
 
 func VerifyHologramQuery(hid, pid, creationMode string) (HologramQueryDetails, error) {

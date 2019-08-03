@@ -12,6 +12,7 @@ package openapi
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -226,6 +227,7 @@ func HologramsHidDelete(c *gin.Context) {
 
 // HologramsHidDownloadGet - Download holograms models based on the hologram id
 func HologramsHidDownloadGet(c *gin.Context) {
+	// TODO: Blob storage download
 	c.JSON(http.StatusOK, gin.H{"error": "Endpoint still under construction. Sorry for the inconvenience."})
 }
 
@@ -256,7 +258,45 @@ func HologramsHidGet(c *gin.Context) {
 
 // HologramsPost - Upload hologram to HoloStorage
 func HologramsPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"error": "Endpoint still under construction. Sorry for the inconvenience."})
+	contentType := c.Request.Header.Get("Content-Type")
+	if !strings.HasPrefix(contentType, "multipart/form-data") {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: "Expected Content-Type: 'multipart/form-data', got '" + contentType + "'"})
+		return
+	}
+
+	err := c.Request.ParseMultipartForm(32 << 20) // Reserve 32 MB for multipart data
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: "Unable to parse multipart/form"})
+		return
+	}
+	postMetadata, err := ParseHologramUploadPostInput(c.Request.PostForm)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: err.Error()})
+		return
+	}
+
+	// TODO: Consider error handling for partial failures
+	result := PutDataIntoFHIR(accessorConfig.FhirURL, postMetadata.Author)
+	if result.err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
+		return
+	}
+	result = PutDataIntoFHIR(accessorConfig.FhirURL, postMetadata.Author)
+	if result.err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
+		return
+	}
+	result = PostDataIntoFHIR(accessorConfig.FhirURL, postMetadata.Hologram)
+	if result.err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
+		return
+	}
+
+	var newHologram HologramDocumentReferenceFHIR
+	_ = json.Unmarshal(result.response, &newHologram)
+
+	// TODO: Blob storage upload
+	c.JSON(http.StatusOK, newHologram.ToAPISpec())
 }
 
 // PatientsGet - Mass query for patients metadata in HoloStorage

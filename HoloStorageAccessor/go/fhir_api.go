@@ -1,7 +1,9 @@
 package openapi
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -60,7 +62,7 @@ func processFHIRQuery(fhirReq FHIRRequest, c chan FHIRResult) {
 		req, _ = http.NewRequest(fhirReq.httpMethod, fhirReq.url, strings.NewReader(fhirReq.body))
 		req.Header.Add("Content-Type", "application/fhir+json")
 	default:
-		result.err = errors.New("Unsupported httpMethod: " + method)
+		result.err = errors.New("Unsupported httpMethod: '" + method + "'")
 		c <- result
 		return
 	}
@@ -90,4 +92,50 @@ func processFHIRQuery(fhirReq FHIRRequest, c chan FHIRResult) {
 	result.statusCode = resp.StatusCode
 	result.response = body
 	c <- result
+}
+
+func PutDataIntoFHIR(fhirBaseUrl string, fhirData interface{}) FHIRResult {
+	var fhirRequest FHIRRequest
+	var url string
+	var jsonBody []byte
+
+	switch data := fhirData.(type) {
+	case Patient:
+		dataFhir := data.ToFHIR()
+		jsonBody, _ = json.Marshal(dataFhir)
+		url, _ = ConstructURL(fhirBaseUrl, "Patient/"+data.Pid)
+		fhirRequest = FHIRRequest{httpMethod: "PUT", qid: data.Pid, url: url, body: string(jsonBody)}
+	case Author:
+		dataFhir := data.ToFHIR()
+		jsonBody, _ = json.Marshal(dataFhir)
+		url, _ = ConstructURL(fhirBaseUrl, "Practitioner/"+data.Aid)
+		fhirRequest = FHIRRequest{httpMethod: "PUT", qid: data.Aid, url: url, body: string(jsonBody)}
+	case Hologram:
+		// Not implemented yet
+	default:
+		return FHIRResult{err: errors.New("Unsupported datatype")}
+	}
+
+	return SingleFHIRQuery(fhirRequest)
+}
+
+func PostDataIntoFHIR(fhirBaseUrl string, fhirData interface{}) FHIRResult {
+	var fhirRequest FHIRRequest
+	var url string
+	var jsonBody []byte
+
+	switch data := fhirData.(type) {
+	case Hologram:
+		dataFhir := data.ToFHIR()
+		jsonBody, _ = json.Marshal(dataFhir)
+		url, _ = ConstructURL(fhirBaseUrl, "DocumentReference")
+		fhirRequest = FHIRRequest{httpMethod: "POST", qid: "no-id", url: url, body: string(jsonBody)}
+	case Patient:
+	case Author:
+	default:
+		return FHIRResult{err: errors.New("Unsupported datatype")}
+	}
+
+	fmt.Println(fhirRequest)
+	return SingleFHIRQuery(fhirRequest)
 }

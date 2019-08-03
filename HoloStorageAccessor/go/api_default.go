@@ -20,7 +20,7 @@ import (
 func AuthorsAidGet(c *gin.Context) {
 	id := c.Param("aid")
 	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+id)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL})
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL})
 
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
@@ -64,7 +64,7 @@ func AuthorsAidPut(c *gin.Context) {
 	dataFhir := data.ToFHIR()
 	jsonData, _ := json.Marshal(dataFhir)
 	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+id)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodPut, qid: id, url: fhirURL, body: string(jsonData)})
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: "PUT", qid: id, url: fhirURL, body: string(jsonData)})
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return
@@ -79,7 +79,7 @@ func AuthorsGet(c *gin.Context) {
 
 	for _, id := range ids {
 		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+id)
-		fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL}
+		fhirRequests[id] = FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL}
 	}
 
 	results := BatchFHIRQuery(fhirRequests)
@@ -121,7 +121,7 @@ func HologramsGet(c *gin.Context) {
 	case "hologram":
 		for _, id := range details.IDs {
 			fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference/"+id)
-			fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL}
+			fhirRequests[id] = FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL}
 		}
 	case "patient":
 		for _, id := range details.IDs {
@@ -131,7 +131,7 @@ func HologramsGet(c *gin.Context) {
 			}
 			query["subject"] = id
 			fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference")
-			fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL, query: query}
+			fhirRequests[id] = FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL, query: query}
 		}
 	}
 
@@ -203,7 +203,7 @@ func HologramsGet(c *gin.Context) {
 func HologramsHidDelete(c *gin.Context) {
 	id := c.Param("hid")
 	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference/"+id)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL})
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL})
 
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
@@ -214,7 +214,7 @@ func HologramsHidDelete(c *gin.Context) {
 		return
 	}
 
-	result = SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodDelete, qid: id, url: fhirURL})
+	result = SingleFHIRQuery(FHIRRequest{httpMethod: "DELETE", qid: id, url: fhirURL})
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return
@@ -233,7 +233,7 @@ func HologramsHidDownloadGet(c *gin.Context) {
 func HologramsHidGet(c *gin.Context) {
 	id := c.Param("hid")
 	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference/"+id)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL})
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL})
 
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
@@ -266,7 +266,7 @@ func PatientsGet(c *gin.Context) {
 
 	for _, id := range ids {
 		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Patient/"+id)
-		fhirRequests[id] = FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL}
+		fhirRequests[id] = FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL}
 	}
 
 	results := BatchFHIRQuery(fhirRequests)
@@ -294,7 +294,7 @@ func PatientsGet(c *gin.Context) {
 func PatientsPidGet(c *gin.Context) {
 	id := c.Param("pid")
 	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Patient/"+id)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodGet, qid: id, url: fhirURL})
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL})
 
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
@@ -340,7 +340,7 @@ func PatientsPidPut(c *gin.Context) {
 	dataFhir := data.ToFHIR()
 	jsonData, _ := json.Marshal(dataFhir)
 	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Patient/"+id)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: http.MethodPut, qid: id, url: fhirURL, body: string(jsonData)})
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: "PUT", qid: id, url: fhirURL, body: string(jsonData)})
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return

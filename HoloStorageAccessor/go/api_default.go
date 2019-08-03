@@ -135,17 +135,19 @@ func HologramsGet(c *gin.Context) {
 		}
 	}
 
+	// Process queries to FHIR backend
 	results := BatchFHIRQuery(fhirRequests)
 
+	// Initialise blank results
 	dataMap := make(map[string][]Hologram)
-	var emptyData Hologram
+	for _, id := range details.IDs {
+		dataMap[id] = []Hologram{}
+	}
 
 	switch details.Mode {
 	case "hologram":
 		for id, result := range results {
-			if result.statusCode == 404 || result.statusCode == 410 {
-				dataMap[id] = append(dataMap[id], emptyData)
-			} else {
+			if result.statusCode != 404 && result.statusCode != 410 {
 				var tempData HologramDocumentReferenceFHIR
 				err := json.Unmarshal(result.response, &tempData)
 				if err != nil {

@@ -1,11 +1,14 @@
 # Azure Blob Tool
+
 A tool that performs basic operations on the Azure Blob Storage.
 
 ## Installation
+
 Install using `pipenv install` or `pip install -r requirements.txt`.
 
 ## Usage
-*Note: You must first configure `config.cfg` with your blob storage information*
+
+_Note: You must first configure `config.cfg` with your blob storage information_
 
 ```
 Usage:
@@ -26,9 +29,10 @@ Options:
 ```
 
 ## Configuration
+
 Configurations are done within `config.cfg`. Obtain the configuration values from your Azure Portal.
 
-| Field | Description |
-| --- | ---|
-| account_name | Name of azure blob storage service |
-| account_key | Key used to access azure blob storage service |
+| Field        | Description                                   |
+| ------------ | --------------------------------------------- |
+| account_name | Name of azure blob storage service            |
+| account_key  | Key used to access azure blob storage service |

@@ -52,7 +52,7 @@ func NewRouter(confFile string) *gin.Engine {
 
 	router := gin.Default()
 
-	router.Static("/app/1.0.0/ui/", "./cmd/swaggerui")
+	router.Static("/app/1.0.0/ui/", "./third_party/swaggerui")
 
 	for _, route := range routes {
 		switch route.Method {

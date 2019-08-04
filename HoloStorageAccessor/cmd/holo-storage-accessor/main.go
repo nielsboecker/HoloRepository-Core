@@ -17,7 +17,7 @@ import (
 )
 
 func main() {
-	router := sw.NewRouter("./configs/config.cfg")
+	router := sw.NewRouter()
 
 	log.Fatal(router.Run(":8080"))
 }

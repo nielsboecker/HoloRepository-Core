@@ -40,10 +40,9 @@ type AccessorConfig struct {
 var accessorConfig AccessorConfig
 
 // NewRouter returns a new router.
-func NewRouter(confFile string) *gin.Engine {
-	err := LoadConfiguration(confFile, &accessorConfig)
+func NewRouter() *gin.Engine {
+	err := LoadConfiguration(&accessorConfig)
 	if err != nil {
-		log.Printf("Error with configuration file: " + confFile)
 		log.Fatalln(err)
 	}
 

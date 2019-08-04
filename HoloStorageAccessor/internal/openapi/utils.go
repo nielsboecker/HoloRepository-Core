@@ -3,9 +3,10 @@ package openapi
 import (
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"fmt"
 	"log"
 	"net/url"
+	"os"
 	"path"
 	"strconv"
 	"strings"
@@ -139,16 +140,15 @@ func ConstructURL(baseurl string, pathComponent string) (string, error) {
 	return fhirURL.String(), nil
 }
 
-func LoadConfiguration(confFile string, config *AccessorConfig) error {
-	configfile, err := ioutil.ReadFile(confFile)
-	if err != nil {
-		return err
+func LoadConfiguration(config *AccessorConfig) error {
+	for _, config := range []string{"AZURE_STORAGE_ACCOUNT", "AZURE_STORAGE_ACCESS_KEY", "ACCESSOR_FHIR_URL"} {
+		if os.Getenv(config) == "" {
+			return fmt.Errorf("Environment config field '%s' is not set", config)
+		}
 	}
-
-	err = json.Unmarshal([]byte(configfile), config)
-	if err != nil {
-		return err
-	}
+	config.BlobStoreName = os.Getenv("AZURE_STORAGE_ACCOUNT")
+	config.BlobKey = os.Getenv("AZURE_STORAGE_ACCESS_KEY")
+	config.FhirURL = os.Getenv("ACCESSOR_FHIR_URL")
 
 	return nil
 }

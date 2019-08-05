@@ -1,4 +1,3 @@
-
 from components import compCommonPath
 
 from components import compNifti2numpy
@@ -26,4 +25,3 @@ def main(inputNiftiPath, outputGlbPath, threshold):
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2], sys.argv[3])
-

@@ -6,8 +6,7 @@ import pathlib
 import sys
 
 
-
-def main(jobID,inputNiftiPath, outputObjPath, threshold, flipNpy=False):
+def main(jobID, inputNiftiPath, outputObjPath, threshold, flipNpy=False):
     compJobStatus.updateStatus(jobID, "Pre-processing")
     generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(inputNiftiPath)))
 
@@ -19,6 +18,5 @@ def main(jobID,inputNiftiPath, outputObjPath, threshold, flipNpy=False):
     print("nifti2obj: done, obj saved to {}".format(generatedObjPath))
 
 
-
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],sys.argv[5])
+    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])

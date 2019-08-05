@@ -21,8 +21,7 @@ except ModuleNotFoundError as e:
     )
 
 
-
-
+def segment_airway(params, I, I_affine, Mlung, outputNiftiFolderPath):
     #####################################################
     # Initialize parameters
     #####################################################
@@ -63,6 +62,5 @@ except ModuleNotFoundError as e:
     nib.Nifti1Image(Mlung, I_affine).to_filename(
         str(pathlib.Path(outputNiftiFolderPath).joinpath("lung.nii.gz"))
     )
-
 
     return Mlung, Maw

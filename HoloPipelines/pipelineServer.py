@@ -50,6 +50,7 @@ def activate_status_cleaning_job():
 # update the status from pipeline
 @app.route("/status", methods=["POST"])
 def getTheStatus():
+
     global status
     current_job_status = request.get_json()
     status.update(current_job_status)

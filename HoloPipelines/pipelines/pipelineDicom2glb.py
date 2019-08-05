@@ -1,4 +1,4 @@
-
+from components import compJobStatus
 from components import compCommonPath
 from components import compDicom2numpy
 from components import compNumpy2obj
@@ -7,7 +7,7 @@ import pathlib
 import sys
 
 
-def main(jobID,dicomFolderPath, outputGlbPath, threshold):
+def main(jobID, dicomFolderPath, outputGlbPath, threshold):
     compJobStatus.updateStatus(jobID, "Pre-processing")
     generatedNumpyList = compDicom2numpy.main(str(pathlib.Path(dicomFolderPath)))
 
@@ -19,7 +19,6 @@ def main(jobID,dicomFolderPath, outputGlbPath, threshold):
             compCommonPath.obj.joinpath(
                 str(pathlib.PurePath(dicomFolderPath).parts[-1])
             )
-
         )
         + ".obj",
     )
@@ -28,8 +27,6 @@ def main(jobID,dicomFolderPath, outputGlbPath, threshold):
         generatedObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False
     )
     print("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
-
-
 
 
 if __name__ == "__main__":

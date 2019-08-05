@@ -1,5 +1,5 @@
-
 from components import compCommonPath
+from components import compJobStatus
 from components import compDcm2nifti
 from components.lungSegment.main import main as lungSegment
 from components import compNifti2numpy
@@ -9,8 +9,7 @@ import pathlib
 import sys
 
 
-
-def main(jobID,dicomPath, outputGlbPath):
+def main(jobID, dicomPath, outputGlbPath):
     compJobStatus.updateStatus(jobID, "Pre-processing")
     generatedNiftiPath = compDcm2nifti.main(
         str(dicomPath),
@@ -18,7 +17,6 @@ def main(jobID,dicomPath, outputGlbPath):
     )  # convert dcm and move to temp path inside nifti folder. nifti will be in a sub folder named after the input dicom folder
     generatedSegmentedLungsNiftiPath = lungSegment(
         generatedNiftiPath, str(compCommonPath.nifti.joinpath("segmentedLungs"))
-
     )
     generatedNumpyList = compNifti2numpy.main(
         str(pathlib.Path(generatedSegmentedLungsNiftiPath).joinpath("lung.nii.gz"))
@@ -29,7 +27,6 @@ def main(jobID,dicomPath, outputGlbPath):
         generatedNumpyList,
         0.5,
         str(compCommonPath.obj.joinpath("nifti2glb_tempObj.obj")),
-
     )
 
     compJobStatus.updateStatus(jobID, "3D format conversion")
@@ -40,8 +37,6 @@ def main(jobID,dicomPath, outputGlbPath):
         compressGlb=False,
     )
     print("lungDicom2glb: done, glb saved to {}".format(generatedGlbPath))
-
-
 
 
 if __name__ == "__main__":

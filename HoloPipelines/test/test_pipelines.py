@@ -79,7 +79,6 @@ def test_pipelines_dicom2glb(testSetup):
             "-c",
             "test/pipelineListForTesting.json",
             "dicom2glb",
-
             "-p",
             str(dicomPath.joinpath("3_Axial_CE")),
             str(glbPath.joinpath("testResult0.glb")),
@@ -130,6 +129,7 @@ def test_pipelines_nifti2obj(testSetup):
     )
 
     assert 0 == output.returncode
+
     assert os.path.isfile(objPath.joinpath("testResult2.obj"))
 
 
@@ -150,4 +150,5 @@ def test_pipelines_nifti2glb(testSetup):
     )
 
     assert 0 == output.returncode
+
     assert os.path.isfile(glbPath.joinpath("testResult3.glb"))

@@ -4,7 +4,7 @@ import os
 import scipy.ndimage
 import pathlib
 import sys
-
+import logging
 
 
 def loadScan(scanPath):
@@ -19,6 +19,7 @@ def loadScan(scanPath):
         )
 
     except Exception as e:
+        logging.warn("error in dicom to numpy: " + e.message)
 
         slickThickness = np.abs(slices[0].SliceLocation - slices[1].SliceLocation)
 
@@ -61,7 +62,7 @@ def resample(dataPath, new_spacing=[1, 1, 1]):
         )
         spacing = np.array(list(spacing))
     except Exception as e:
-
+        logging.warn("error in resample data: " + e.message)
         print(len(scan[0].PixelSpacing))
         print(
             "Pixel Spacing (row, col): (%f, %f) "

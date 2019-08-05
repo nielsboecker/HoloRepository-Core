@@ -56,6 +56,7 @@ def main():
             print(json.dumps(lsPipe, indent=4, sort_keys=False))
             sys.exit()
         if args.info:
+
             for key, value in lsPipe.items():
                 data = value
                 if args.info in data["name"]:
@@ -70,6 +71,7 @@ def main():
                     searchCounter += 1
             if searchCounter == 0:
                 sys.exit("pipelineController: no pipeline with such name")
+
             else:
                 print("pipelineController: " + str(searchCounter) + " results")
             sys.exit()
@@ -100,11 +102,13 @@ def startPipeline(jobID, plID, paramList=[]):
         print(str(["python", lsPipe[plID]["src"], jobID] + paramList))
         subprocess.run(["python", lsPipe[plID]["src"], jobID] + paramList, cwd=newCwd)
         # currently pipelineNifti2glb pipelineDicom2glb are the only pipelines that can take jobID
+
     json_file.close()
 
 
 def getPipelineList():
     configFileName = "pipelineList.json"  # hard coded
+
     with open(str(pathlib.Path(newCwd).joinpath(str(configFileName)))) as json_file:
         lsPipe = json.load(json_file)
     json_file.close()

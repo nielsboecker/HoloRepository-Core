@@ -40,6 +40,5 @@ def main(inputObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False)
     return outputGlbPath
 
 
-
 if __name__ == "__main__":
     print("component can't run on its own")

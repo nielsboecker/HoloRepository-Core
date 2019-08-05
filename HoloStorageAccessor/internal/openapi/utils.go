@@ -52,13 +52,13 @@ func ParseHologramUploadPostInput(formData url.Values) (HologramPostInput, error
 		case "creationDate":
 			creationDate, err := time.Parse(time.RFC3339, formData.Get(key))
 			if err != nil {
-				return HologramPostInput{}, errors.New(key + " is not in RFC3339 standards")
+				return HologramPostInput{}, fmt.Errorf("Key %s='%s' does not conform to RFC3339 standards", key, formData.Get(key))
 			}
 			hologramData.CreationDate = &creationDate
 		case "dateOfImaging":
 			dateOfImaging, err := time.Parse(time.RFC3339, formData.Get(key))
 			if err != nil {
-				return HologramPostInput{}, errors.New(key + " is not in RFC3339 standards")
+				return HologramPostInput{}, fmt.Errorf("Key %s='%s' does not conform to RFC3339 standards", key, formData.Get(key))
 			}
 			hologramData.DateOfImaging = &dateOfImaging
 		case "title":

@@ -32,9 +32,9 @@ type Route struct {
 type Routes []Route
 
 type AccessorConfig struct {
-	FhirURL       string `json:"fhirUrl"`
-	BlobStoreName string `json:"blobStoreName"`
-	BlobKey       string `json:"blobKey"`
+	FhirURL         string
+	BlobStorageName string
+	BlobStorageKey  string
 }
 
 var basePathComponent = "/api/1.0.0/"
@@ -49,7 +49,7 @@ func NewRouter() *gin.Engine {
 	}
 
 	log.Printf("FHIR Backend URL: %q", accessorConfig.FhirURL)
-	log.Printf("Blob Store: %q", accessorConfig.BlobStoreName)
+	log.Printf("Blob Store: %q", accessorConfig.BlobStorageName)
 
 	router := gin.Default()
 

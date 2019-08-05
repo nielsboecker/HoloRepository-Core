@@ -142,8 +142,8 @@ func LoadConfiguration(config *AccessorConfig) error {
 		}
 	}
 
-	config.BlobStoreName = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCOUNT"))
-	config.BlobKey = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCESS_KEY"))
+	config.BlobStorageName = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCOUNT"))
+	config.BlobStorageKey = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCESS_KEY"))
 	config.FhirURL = strings.TrimSpace(os.Getenv("ACCESSOR_FHIR_URL"))
 
 	_, err := url.ParseRequestURI(config.FhirURL)

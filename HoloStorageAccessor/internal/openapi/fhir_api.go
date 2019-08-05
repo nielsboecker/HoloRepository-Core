@@ -3,7 +3,6 @@ package openapi
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -110,8 +109,6 @@ func PutDataIntoFHIR(fhirBaseUrl string, fhirData interface{}) FHIRResult {
 		jsonBody, _ = json.Marshal(dataFhir)
 		url, _ = ConstructURL(fhirBaseUrl, "Practitioner/"+data.Aid)
 		fhirRequest = FHIRRequest{httpMethod: "PUT", qid: data.Aid, url: url, body: string(jsonBody)}
-	case Hologram:
-		// Not implemented yet
 	default:
 		return FHIRResult{err: errors.New("Unsupported datatype")}
 	}
@@ -130,12 +127,9 @@ func PostDataIntoFHIR(fhirBaseUrl string, fhirData interface{}) FHIRResult {
 		jsonBody, _ = json.Marshal(dataFhir)
 		url, _ = ConstructURL(fhirBaseUrl, "DocumentReference")
 		fhirRequest = FHIRRequest{httpMethod: "POST", qid: "no-id", url: url, body: string(jsonBody)}
-	case Patient:
-	case Author:
 	default:
 		return FHIRResult{err: errors.New("Unsupported datatype")}
 	}
 
-	fmt.Println(fhirRequest)
 	return SingleFHIRQuery(fhirRequest)
 }

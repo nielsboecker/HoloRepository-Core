@@ -14,7 +14,6 @@ parser.add_argument(
     "-c",
     "--config",
     default="./pipelineList.json",
-
     type=str,
     help="path to pipeline config file relative to pipelineController",
 )
@@ -22,14 +21,12 @@ parser.add_argument(
     "-l", "--ls", action="store_true", help="list all the available piplines"
 )
 parser.add_argument(
-
     "-i",
     "--info",
     default="",
     metavar="NAME",
     type=str,
     help="get info from pipeline's name",
-
 )
 parser.add_argument("pipelineID", type=str, nargs="?", help="ID of pipeline")
 parser.add_argument(
@@ -96,26 +93,22 @@ def main():
     json_file.close()
 
 
-
 def startPipeline(jobID, plID, paramList=[]):
     configFileName = "test/testList.json"  # hard coded
     with open(str(pathlib.Path(newCwd).joinpath(str(configFileName)))) as json_file:
         lsPipe = json.load(json_file)
         print(str(["python", lsPipe[plID]["src"], jobID] + paramList))
-        subprocess.run(
-            ["python", lsPipe[plID]["src"], jobID] + paramList, cwd=newCwd
-        )  
+        subprocess.run(["python", lsPipe[plID]["src"], jobID] + paramList, cwd=newCwd)
         # currently pipelineNifti2glb pipelineDicom2glb are the only pipelines that can take jobID
     json_file.close()
 
 
 def getPipelineList():
-    configFileName = "test/testList.json"  # hard coded
+    configFileName = "pipelineList.json"  # hard coded
     with open(str(pathlib.Path(newCwd).joinpath(str(configFileName)))) as json_file:
         lsPipe = json.load(json_file)
     json_file.close()
     return lsPipe
-
 
 
 if __name__ == "__main__":

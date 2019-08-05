@@ -42,12 +42,7 @@ To run the server, first configure the necessary [configurations](#configuration
 go run cmd/holo-storage-accessor/main.go
 ```
 
-Verify the accessor is running
-
-```
-curl localhost:8080/api/1.0.0/
-```
-
+Verify the accessor by visiting `localhost:8080/api/1.0.0` or `localhost:8080/api/1.0.0/ui`
 
 ### Testing
 

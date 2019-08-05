@@ -3,10 +3,8 @@ import path from "path";
 import bodyParser from "body-parser";
 import http from "http";
 import os from "os";
-import cookieParser from "cookie-parser";
 import logger from "./logger";
 import cors from "cors";
-import errorHandler from "../api/middlewares/error.handler";
 
 const app = express();
 
@@ -19,7 +17,6 @@ export default class ExpressServer {
     // Set configuration
     app.use(bodyParser.json({ limit: process.env.REQUEST_LIMIT || "100kb" }));
     app.use(bodyParser.urlencoded({ extended: true, limit: process.env.REQUEST_LIMIT || "100kb" }));
-    app.use(cookieParser(process.env.SESSION_SECRET));
 
     // Serve static assets
     app.use(express.static(`${root}/public`));
@@ -32,7 +29,8 @@ export default class ExpressServer {
     routes(app);
 
     // Middleware after routes
-    app.use(errorHandler);
+    // Note: using default Express error handler for now, may change soon
+    // app.use(errorHandler);
 
     return this;
   }

@@ -12,12 +12,11 @@ package main
 import (
 	"log"
 
-	// sw "github.com/nbckr/HoloRepository-Core/HoloStorageAccessor/go"
-	sw "../../internal/openapi"
+	apiserver "../../internal/openapi"
 )
 
 func main() {
-	router := sw.NewRouter()
+	router := apiserver.NewRouter()
 
 	log.Fatal(router.Run(":8080"))
 }

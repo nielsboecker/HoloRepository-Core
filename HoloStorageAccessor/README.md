@@ -13,6 +13,7 @@ The REST API is being carefully designed, so that it not only satisfies the requ
 
 The following technologies are used in this component:
 
+- Go 1.12.7
 - API specification using [OpenAPI v3.0.2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md)
 - Backend implementation using [Go Gin framework](https://github.com/gin-gonic/gin)
 - Server stub generated from OpenAPI specifications using [OpenAPI Generator](https://openapi-generator.tech/)
@@ -21,15 +22,28 @@ The following technologies are used in this component:
 
 The API specification can be found in the `api/` directory. A deployed version of the interactive documentation is available [here](https://app.swaggerhub.com/apis/boonwj/HoloRepository/).
 
+When the application is deployed, the documentation can also be viewed at the `/app/1.0.0/ui` endpoint.
+
+## Requirements
+- Go 1.12.7
+
 ## Development
-
-To run the server
+### Installation
+To install program dependencies
 
 ```
-go run main.go
+go get -d -v ./...
 ```
 
-## Testing
+### Run
+
+To run the server, first configure the necessary [configurations](#configuration) then run the following
+
+```
+go run cmd/holo-storage-accessor/main.go
+```
+
+### Testing
 
 To run the tests
 
@@ -42,14 +56,29 @@ go test ./...
 To run the server in a docker container
 
 ```
-docker build --network=host -t holostorageaccessor .
+docker build -t holo-storage-accessor .
 ```
 
-Once the image is built, just run
+Once the image is built load the configuration, just run
 
 ```
-docker run --rm -it holostorageaccessor
+docker run -it --rm --env-file config.env --network=host holo-storage-accessor
 ```
+You can then access the container via localhost:8080
+
+## Configuration
+Accessor application uses the following environmental variables as configuration.
+
+If using docker, the environment configuration fields can be set via `config.env`.
+
+If not, `export` the variables before running the program.
+
+| Field                    | Description                                      |
+|--------------------------|--------------------------------------------------|
+| ACCESSOR_FHIR_URL        | URL to the FHIR server that accessor connects to |
+| AZURE_STORAGE_ACCOUNT    | Name of blob store for holograms                 |
+| AZURE_STORAGE_ACCESS_KEY | Access key to the blob store                     |
+
 
 ## Contact and support
 

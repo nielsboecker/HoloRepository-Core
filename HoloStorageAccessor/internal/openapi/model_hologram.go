@@ -161,10 +161,10 @@ func (h HologramDocumentReferenceFHIR) ToAPISpec() Hologram {
 	hologramData.CreationDescription = meta.CreationDescription
 
 	if len(h.Content) > 0 {
-		attachment_data := h.Content[0].Attachment
-		hologramData.Title = attachment_data.Title
-		hologramData.FileSizeInKb = attachment_data.Size / 1024
-		hologramData.ContentType = attachment_data.ContentType
+		attachmentData := h.Content[0].Attachment
+		hologramData.Title = attachmentData.Title
+		hologramData.FileSizeInKb = attachmentData.Size / 1024
+		hologramData.ContentType = attachmentData.ContentType
 	}
 
 	return hologramData

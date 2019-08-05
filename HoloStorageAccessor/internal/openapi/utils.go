@@ -117,16 +117,16 @@ func ParseQueryIDs(query string) []string {
 		ids = ids[:len(ids)-1]
 	}
 	// Remove duplicates
-	var final_ids []string
+	var finalIDs []string
 	tempDict := make(map[string]bool)
 	for _, id := range ids {
 		_, present := tempDict[id]
 		if !present {
 			tempDict[id] = true
-			final_ids = append(final_ids, id)
+			finalIDs = append(finalIDs, id)
 		}
 	}
-	return final_ids
+	return finalIDs
 }
 
 func ConstructURL(baseurl string, pathComponent string) (string, error) {

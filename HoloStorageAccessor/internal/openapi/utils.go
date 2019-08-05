@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"net/url"
 	"os"
 	"path"
@@ -131,11 +130,7 @@ func ParseQueryIDs(query string) []string {
 }
 
 func ConstructURL(baseurl string, pathComponent string) (string, error) {
-	fhirURL, err := url.Parse(baseurl)
-	if err != nil {
-		log.Fatal(err)
-		return "", err
-	}
+	fhirURL, _ := url.Parse(baseurl)
 	fhirURL.Path = path.Join(fhirURL.Path, pathComponent)
 	return fhirURL.String(), nil
 }
@@ -146,9 +141,15 @@ func LoadConfiguration(config *AccessorConfig) error {
 			return fmt.Errorf("Environment config field '%s' is not set", config)
 		}
 	}
-	config.BlobStoreName = os.Getenv("AZURE_STORAGE_ACCOUNT")
-	config.BlobKey = os.Getenv("AZURE_STORAGE_ACCESS_KEY")
-	config.FhirURL = os.Getenv("ACCESSOR_FHIR_URL")
+
+	config.BlobStoreName = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCOUNT"))
+	config.BlobKey = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCESS_KEY"))
+	config.FhirURL = strings.TrimSpace(os.Getenv("ACCESSOR_FHIR_URL"))
+
+	_, err := url.ParseRequestURI(config.FhirURL)
+	if err != nil {
+		return fmt.Errorf("Error with ACCESSOR_FHIR_URL: %s", err.Error())
+	}
 
 	return nil
 }

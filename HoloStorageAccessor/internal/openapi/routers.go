@@ -46,8 +46,8 @@ func NewRouter() *gin.Engine {
 		log.Fatalln(err)
 	}
 
-	log.Printf("Fhir URL: %s", accessorConfig.FhirURL)
-	log.Printf("Blob Store: %s", accessorConfig.BlobStoreName)
+	log.Printf("Fhir URL: %q", accessorConfig.FhirURL)
+	log.Printf("Blob Store: %q", accessorConfig.BlobStoreName)
 
 	router := gin.Default()
 

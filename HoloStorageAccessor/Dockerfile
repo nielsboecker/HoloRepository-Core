@@ -1,9 +1,8 @@
 FROM golang:1.12.7 AS build
-CMD mkdir /workspace
+RUN mkdir /workspace
 WORKDIR /workspace
 COPY api ./api
 COPY cmd ./cmd
-COPY configs ./configs
 COPY internal ./internal
 COPY third_party ./third_party
 
@@ -15,7 +14,7 @@ FROM scratch AS runtime
 ENV GIN_MODE=release
 COPY --from=build /workspace/third_party ./third_party
 COPY --from=build /workspace/api ./api
-COPY --from=build /workspace/configs ./configs
 COPY --from=build /workspace/holo-storage-accessor ./
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 EXPOSE 8080/tcp
 ENTRYPOINT ["./holo-storage-accessor"]

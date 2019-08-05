@@ -1,34 +1,40 @@
 from flask import Flask, request, send_file, url_for, escape, jsonify
 from pipelineController import startPipeline, getPipelineList
-import json
 from flask_json import FlaskJSON, JsonError, json_response, as_json
+import pathlib, os, sched, time, uuid, json, threading
+
 
 app = Flask(__name__)
 
 status = {"j0":{ "status": "segment", "stamp": "2020"}}
 app.config["JSON_ADD_STATUS"] = False
-piprline = {}
+pipeline = {}
+jobID = ""
 
-jobID = 0
-pipeline0 = {}
-pipeline0["plid"] = "p1"
-pipeline0["paramlist"] = [
-    "/Users/apple/Desktop/newholo/HoloRepository-Core/HoloPipelines/medicalScans/nifti/1103_3_glm.nii",
-    "/Users/apple/Desktop/newholo/HoloRepository-Core/HoloPipelines/output/GLB/testtes.glb",
-    "10",
-]
+# cleaning the status
+@app.before_first_request
+def activate_status_cleaning_job():
+    def run_job():
+        while True:
+            global status
+            status={}
+            print(status)
+            time.sleep(5)
 
+    thread = threading.Thread(target=run_job)
+    thread.start()
 
+# update the status from pipeline
 @app.route("/status", methods=["POST"])
-def get_the_status():
+def getTheStatus():
     global status
     current_job_status = request.get_json()
     status.update(current_job_status)
     return json.dumps(status)
 
-
-@app.route("/pipelinapp", methods=["GET"])
-def send_list_of_pipapp():
+# get pipeline info
+@app.route("/pipelines", methods=["GET"])
+def sendListOfPipapp():
 
     # plid == p0
     # title == name
@@ -56,19 +62,26 @@ def send_list_of_pipapp():
 
     return json.dumps(pipelineDict)  # should we str() here?
 
-
+# use to start the pipeline
 @app.route("/job", methods=["POST"])
-def send_job_start_response():
-    #
-    # pipeline id and arguments relate to the pipeline pipielineID=s0
+def sendJobStartResponse():
+    pipelineList = getPipelineList()
+    job_request=request.get_json()
+    request_plid=job_request["plid"]
     global jobID
-    jobID += 1
-    startPipeline(str(jobID), pipeline0["plid"], pipeline0["paramlist"])
-    return json_response(jobID=jobID, status=202)
+    jobID = str(uuid.uuid1())
+    print(len(job_request["arglist"]))
 
+    if(pipelineList[request_plid]["param"]==str(len(job_request["arglist"]))):
+       startPipeline(jobID, job_request["plid"],job_request["arglist"])
+       return json_response(jobID=jobID, statuscode=202)
+    else:
+       return json_response(jobID="", statuscode=404)
+    
 
+# front end request the status
 @app.route("/job/<jobid>/status", methods=["GET"])
-def get_job_status(jobid):
+def getJobStatus(jobid):
     if jobid in status:
         status_for_current_jobid={jobid:status[jobid]}
     else:

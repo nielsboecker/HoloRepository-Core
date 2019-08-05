@@ -1,3 +1,4 @@
+
 from components import compCommonPath
 from components import compDicom2numpy
 from components import compNumpy2obj
@@ -6,8 +7,11 @@ import pathlib
 import sys
 
 
-def main(dicomFolderPath, outputGlbPath, threshold):
+def main(jobID,dicomFolderPath, outputGlbPath, threshold):
+    compJobStatus.updateStatus(jobID, "Pre-processing")
     generatedNumpyList = compDicom2numpy.main(str(pathlib.Path(dicomFolderPath)))
+
+    compJobStatus.updateStatus(jobID, "3D model generation")
     generatedObjPath = compNumpy2obj.main(
         generatedNumpyList,
         threshold,
@@ -19,6 +23,7 @@ def main(dicomFolderPath, outputGlbPath, threshold):
         )
         + ".obj",
     )
+    compJobStatus.updateStatus(jobID, "3D format conversion")
     generatedGlbPath = compObj2glbWrapper.main(
         generatedObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False
     )
@@ -26,5 +31,6 @@ def main(dicomFolderPath, outputGlbPath, threshold):
 
 
 
+
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3])
+    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])

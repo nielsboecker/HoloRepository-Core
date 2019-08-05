@@ -15,7 +15,7 @@
          "info":"Generate glb mesh from nifti",
          "addDate":"28/06/2019",
          "modDate":"28/06/2019",
-         "param":"3"
+         "param":"4"
       },
    "dicom2glb":
       {
@@ -24,7 +24,7 @@
          "info":"Generate glb mesh from dicom",
          "addDate":"01/07/2019",
          "modDate":"01/07/2019",
-         "param":"3"
+         "param":"4"
       },
    "lungDicom2glb":
       {

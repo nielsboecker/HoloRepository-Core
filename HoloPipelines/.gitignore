@@ -1,0 +1,10 @@
+temp/
+architectDiagram/
+*.dcm
+*.nii
+*.gz
+*.npy
+*.glb
+*.gltf
+medicalScans/dicom/*
+medicalScans/nifti/*

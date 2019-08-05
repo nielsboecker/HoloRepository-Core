@@ -1,0 +1,47 @@
+{
+   "samplePipeline":
+      {
+         "name":"Dummy pipeline for testing",
+         "src":"test/pipelineHelloWorld.py",
+         "info":"A dummy pipeline for testing. It will printout 'Hello World!",
+         "addDate":"26/06/2019",
+         "modDate":"26/06/2019",
+         "param":"0"
+      },
+   "nifti2obj":
+      {
+         "name":"Nifti to OBJ generation",
+         "src":"pipelines/pipelineNifti2obj.py",
+         "info":"Generate obj mesh from nifti",
+         "addDate":"27/06/2019",
+         "modDate":"27/06/2019",
+         "param":"4"
+      },
+   "nifti2glb":
+      {
+         "name":"Nifti to GLB generation",
+         "src":"pipelines/pipelineNifti2glb.py",
+         "info":"Generate glb mesh from nifti",
+         "addDate":"28/06/2019",
+         "modDate":"28/06/2019",
+         "param":"3"
+      },
+   "dicom2glb":
+      {
+         "name":"DICOM to glb generation",
+         "src":"pipelines/pipelineDicom2glb.py",
+         "info":"Generate glb mesh from dicom",
+         "addDate":"01/07/2019",
+         "modDate":"01/07/2019",
+         "param":"3"
+      },
+   "lungDicom2glb":
+      {
+         "name":"DICOM to segmented lung GLB generation",
+         "src":"pipelines/pipelineLungDicom2glb.py",
+         "info":"Generate segmented lungs (without air way) glb mesh from dicom",
+         "addDate":"01/07/2019",
+         "modDate":"01/07/2019",
+         "param":"2"
+      }
+}

@@ -37,6 +37,8 @@ type AccessorConfig struct {
 	BlobKey       string `json:"blobKey"`
 }
 
+var basePathComponent = "/api/1.0.0/"
+var uiPath = basePathComponent + "ui/"
 var accessorConfig AccessorConfig
 
 // NewRouter returns a new router.
@@ -46,12 +48,12 @@ func NewRouter() *gin.Engine {
 		log.Fatalln(err)
 	}
 
-	log.Printf("Fhir URL: %q", accessorConfig.FhirURL)
+	log.Printf("FHIR Backend URL: %q", accessorConfig.FhirURL)
 	log.Printf("Blob Store: %q", accessorConfig.BlobStoreName)
 
 	router := gin.Default()
 
-	router.Static("/app/1.0.0/ui/", "./third_party/swaggerui")
+	router.Static(uiPath, "./third_party/swaggerui")
 
 	for _, route := range routes {
 		switch route.Method {
@@ -71,91 +73,92 @@ func NewRouter() *gin.Engine {
 
 // Index is the index handler.
 func Index(c *gin.Context) {
-	c.String(http.StatusOK, "Hello World!")
+	welcome := "HoloStorage Accessor is running! View the different API endpoints at " + uiPath
+	c.String(http.StatusOK, welcome)
 }
 
 var routes = Routes{
 	{
 		"Index",
 		http.MethodGet,
-		"/api/1.0.0/",
+		basePathComponent,
 		Index,
 	},
 
 	{
 		"AuthorsAidGet",
 		http.MethodGet,
-		"/api/1.0.0/authors/:aid",
+		basePathComponent + "authors/:aid",
 		AuthorsAidGet,
 	},
 
 	{
 		"AuthorsAidPut",
 		http.MethodPut,
-		"/api/1.0.0/authors/:aid",
+		basePathComponent + "authors/:aid",
 		AuthorsAidPut,
 	},
 
 	{
 		"AuthorsGet",
 		http.MethodGet,
-		"/api/1.0.0/authors",
+		basePathComponent + "authors",
 		AuthorsGet,
 	},
 
 	{
 		"HologramsGet",
 		http.MethodGet,
-		"/api/1.0.0/holograms",
+		basePathComponent + "holograms",
 		HologramsGet,
 	},
 
 	{
 		"HologramsHidDelete",
 		http.MethodDelete,
-		"/api/1.0.0/holograms/:hid",
+		basePathComponent + "holograms/:hid",
 		HologramsHidDelete,
 	},
 
 	{
 		"HologramsHidDownloadGet",
 		http.MethodGet,
-		"/api/1.0.0/holograms/:hid/download",
+		basePathComponent + "holograms/:hid/download",
 		HologramsHidDownloadGet,
 	},
 
 	{
 		"HologramsHidGet",
 		http.MethodGet,
-		"/api/1.0.0/holograms/:hid",
+		basePathComponent + "holograms/:hid",
 		HologramsHidGet,
 	},
 
 	{
 		"HologramsPost",
 		http.MethodPost,
-		"/api/1.0.0/holograms",
+		basePathComponent + "holograms",
 		HologramsPost,
 	},
 
 	{
 		"PatientsGet",
 		http.MethodGet,
-		"/api/1.0.0/patients",
+		basePathComponent + "patients",
 		PatientsGet,
 	},
 
 	{
 		"PatientsPidGet",
 		http.MethodGet,
-		"/api/1.0.0/patients/:pid",
+		basePathComponent + "patients/:pid",
 		PatientsPidGet,
 	},
 
 	{
 		"PatientsPidPut",
 		http.MethodPut,
-		"/api/1.0.0/patients/:pid",
+		basePathComponent + "patients/:pid",
 		PatientsPidPut,
 	},
 }

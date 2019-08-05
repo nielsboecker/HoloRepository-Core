@@ -4,13 +4,6 @@ info:
   title: 'HoloStorage Accessor API'
   description: 'API to access holograms and metadata from HoloStorage'
 
-# Added by API Auto Mocking Plugin
-servers:
-  - description: HoloStorage Sample Server URL
-    url: https://holoaccessor.com/api/1.0.0
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/boonwj/HoloRepository/1.0.0
-
 paths:
   /patients:
     get:

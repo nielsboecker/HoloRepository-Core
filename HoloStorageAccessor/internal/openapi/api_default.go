@@ -9,6 +9,7 @@
 package openapi
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/http"
 	"strings"
@@ -227,7 +228,13 @@ func HologramsHidDelete(c *gin.Context) {
 // HologramsHidDownloadGet - Download holograms models based on the hologram id
 func HologramsHidDownloadGet(c *gin.Context) {
 	// TODO: Blob storage download
-	c.JSON(http.StatusOK, gin.H{"error": "Endpoint still under construction. Sorry for the inconvenience."})
+	var data bytes.Buffer
+	data, _ = DownloadHologramFromBlobStorage("teddy.obj")
+	extraHeaders := map[string]string{
+		"Content-Disposition": `attachment; filename="teddy.obj"`,
+	}
+	c.DataFromReader(http.StatusOK, int64(data.Len()), "obj", bytes.NewReader(data.Bytes()), extraHeaders)
+	// c.JSON(http.StatusOK, gin.H{"error": "Endpoint still under construction. Sorry for the inconvenience."})
 }
 
 // HologramsHidGet - Get a single hologram metadata based on the hologram id

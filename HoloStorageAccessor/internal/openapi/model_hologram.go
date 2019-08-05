@@ -12,7 +12,7 @@ package openapi
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
+	"log"
 	"strings"
 	"time"
 )
@@ -87,7 +87,7 @@ func (h HologramDocumentReferenceFHIR) GetHoloMetadata() HologramMeta {
 	data := HologramMeta{}
 	err := json.Unmarshal([]byte(h.HologramMeta), &data)
 	if err != nil {
-		fmt.Println(err)
+		log.Printf("Error parsing HologramMeta data: %s. Returning blank meta.", err.Error())
 		data = HologramMeta{}
 	}
 	return data

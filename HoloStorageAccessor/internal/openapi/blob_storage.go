@@ -26,7 +26,7 @@ func InitialiseBlobStorage(accountName, accountKey string) error {
 
 	blobContainerURL = azblob.NewContainerURL(*URL, pipeline)
 
-	log.Printf("Creating a blob container %q\n", containerName)
+	log.Printf("Connecting to blob storage and creating blob container %q\n", containerName)
 	ctx := context.Background()
 
 	_, err = blobContainerURL.Create(ctx, azblob.Metadata{}, azblob.PublicAccessNone)

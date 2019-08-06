@@ -1,21 +1,11 @@
+import AccesorClient from "../../../common/clients/HoloStorageAccesorClient";
 import logger from "../../../common/logger";
 import { IHologram } from "../../../../../types";
 
-import sampleHolograms from "../../../__tests__/samples/internal/sampleHolograms.json";
-
-const _sampleHolograms = sampleHolograms as IHologram[];
-
-// Note: This will have to remain mocked until HoloStorage API endpoints are ready
-
 export class HologramsService {
-  public getAll(): Promise<IHologram[]> {
-    logger.info("GET all Holograms");
-    return Promise.resolve(_sampleHolograms);
-  }
-
-  public getAllForPatient(pid: string) {
-    logger.info(`GET all Holograms for pid = '${pid}'`);
-    return Promise.resolve(_sampleHolograms);
+  public getAllForPatients(pids: string): Promise<Record<string, IHologram[]> | void> {
+    logger.info(`GET all Holograms for pids = '${pids}'`);
+    return AccesorClient.get<Record<string, IHologram[]>>("/", { pid: pids });
   }
 
   public downloadById(hid: string): Promise<BinaryType | string> {

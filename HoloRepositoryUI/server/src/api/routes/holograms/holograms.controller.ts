@@ -1,32 +1,14 @@
 import HologramsService from "./holograms.service";
 import { Request, Response } from "express";
-import logger from "../../../common/logger";
-import ImagingStudiesService from "../imagingStudies/imagingStudies.service";
 
 export class HologramsController {
   public async getAll(req: Request, res: Response): Promise<void> {
     const { pids } = req.query;
 
-    // Note: similar to getAll in ImagingStudyController, should be refactored
     if (pids) {
-      const pidsSplit = pids.split(",");
-      if (pidsSplit.length === 0) {
-        logger.warn(`Cannot get all holograms for pids = '${pids}'`);
-        res.status(400).end();
-      } else {
-        logger.info(`GET all holograms for pids = ${pidsSplit}`);
-        const hologramsForPids = {};
-        await Promise.all(
-          pidsSplit.map(pid =>
-            HologramsService.getAllForPatient(pid).then(
-              hologram => (hologramsForPids[pid] = hologram)
-            )
-          )
-        );
-        res.json(hologramsForPids);
-      }
+      HologramsService.getAllForPatients(pids).then(holograms => res.json(holograms));
     } else {
-      ImagingStudiesService.getAll().then(iss => res.json(iss));
+      res.json([]);
     }
   }
 

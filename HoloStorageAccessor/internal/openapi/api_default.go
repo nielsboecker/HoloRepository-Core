@@ -297,6 +297,7 @@ func HologramsPost(c *gin.Context) {
 	hologramFile, err := c.FormFile("hologramFile")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
+		return
 	}
 
 	// TODO: Consider error handling for partial failures
@@ -324,11 +325,13 @@ func HologramsPost(c *gin.Context) {
 	hologramFileIO, err := hologramFile.Open()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
+		return
 	}
 
 	err = UploadHologramToBlobStorage(newHologramAPISpec.Hid, hologramFileIO)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, newHologram.ToAPISpec())

@@ -2,8 +2,10 @@ import numpy as np
 import pydicom as dicom
 import os
 import scipy.ndimage
+import SimpleITK as sitk
 import pathlib
 import sys
+import logging
 
 
 def loadScan(scanPath):
@@ -17,6 +19,11 @@ def loadScan(scanPath):
             slices[0].ImagePositionscan[2] - slices[1].ImagePositionscan[2]
         )
     except Exception as e:
+        logging.warning(
+            "Unable to load sclice's image positon, using slice location instead: {}".format(
+                str(e)
+            )
+        )
         slickThickness = np.abs(slices[0].SliceLocation - slices[1].SliceLocation)
 
     for s in slices:
@@ -25,27 +32,21 @@ def loadScan(scanPath):
     return slices
 
 
-def getPixelsHU(scans):
-    image = np.stack([s.pixel_array for s in scans])
-    image = image.astype(np.int16)
+def loadPixelArray(inputPath):
+    reader = sitk.ImageSeriesReader()
 
-    image[image == -2000] = 0
+    dicomName = reader.GetGDCMSeriesFileNames(inputPath)
+    reader.SetFileNames(dicomName)
 
-    intercept = scans[0].RescaleIntercept
-    slope = scans[0].RescaleSlope
+    image = reader.Execute()
+    numpyArrayImage = sitk.GetArrayFromImage(image)
 
-    if slope != 1:
-        image = slope * image.astype(np.float64)
-        image = image.astype(np.int16)
-
-    image += np.int16(intercept)
-
-    return np.array(image, dtype=np.int16)
+    return numpyArrayImage
 
 
 def resample(dataPath, new_spacing=[1, 1, 1]):
     scan = loadScan(dataPath)
-    image = getPixelsHU(scan)
+    image = loadPixelArray(dataPath)
     print("Shape before resampling\t", image.shape)
     # Determine current pixel spacing
     try:
@@ -63,8 +64,9 @@ def resample(dataPath, new_spacing=[1, 1, 1]):
             "Pixel Spacing (row, col): (%f, %f) "
             % (scan[0].PixelSpacing[0], scan[0].PixelSpacing[1])
         )
-        sys.exit("dicom2numpy: error loading scan")
+        sys.exit("dicom2numpy: error loading scan: {}".format(str(e)))
 
+    # calculate resize factor
     resize_factor = spacing / new_spacing
     new_real_shape = image.shape * resize_factor
     new_shape = np.round(new_real_shape)

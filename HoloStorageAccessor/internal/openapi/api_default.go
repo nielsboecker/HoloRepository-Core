@@ -221,7 +221,11 @@ func HologramsHidDelete(c *gin.Context) {
 		return
 	}
 
-	// TODO: Blob storage deletion
+	err := DeleteHologramFromBlobStorage(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"success": "Deleted hid '" + id + "'"})
 }
 
@@ -241,11 +245,8 @@ func HologramsHidDownloadGet(c *gin.Context) {
 		return
 	}
 
-	hologramAPISpec := hologramFhir.ToAPISpec()
-
-	// TODO: Blob storage download
 	var data bytes.Buffer
-
+	hologramAPISpec := hologramFhir.ToAPISpec()
 	data, err = DownloadHologramFromBlobStorage(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})

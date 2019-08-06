@@ -73,6 +73,11 @@ func DownloadHologramFromBlobStorage(filename string) (bytes.Buffer, error) {
 }
 
 func DeleteHologramFromBlobStorage(filename string) error {
-	// TODO
+	blobUrl := blobContainerURL.NewBlockBlobURL(filename)
+	ctx := context.Background()
+	_, err := blobUrl.Delete(ctx, azblob.DeleteSnapshotsOptionInclude, azblob.BlobAccessConditions{})
+	if err != nil {
+		return err
+	}
 	return nil
 }

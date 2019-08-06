@@ -278,12 +278,12 @@ func HologramsHidGet(c *gin.Context) {
 
 // HologramsPost - Upload hologram to HoloStorage
 func HologramsPost(c *gin.Context) {
+	// Data Validation
 	contentType := c.Request.Header.Get("Content-Type")
 	if !strings.HasPrefix(contentType, "multipart/form-data") {
 		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: "Expected Content-Type: 'multipart/form-data', got '" + contentType + "'"})
 		return
 	}
-
 	err := c.Request.ParseMultipartForm(32 << 20) // Reserve 32 MB for multipart data
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: "Unable to parse multipart/form"})
@@ -300,6 +300,7 @@ func HologramsPost(c *gin.Context) {
 		return
 	}
 
+	// FHIR Metadata Insertion
 	// TODO: Consider error handling for partial failures
 	result := PutDataIntoFHIR(accessorConfig.FhirURL, postMetadata.Author)
 	if result.err != nil {
@@ -317,11 +318,11 @@ func HologramsPost(c *gin.Context) {
 		return
 	}
 
+	// Blob Storage Insertion
 	var newHologram HologramDocumentReferenceFHIR
 	_ = json.Unmarshal(result.response, &newHologram)
 	newHologramAPISpec := newHologram.ToAPISpec()
 
-	// TODO: Blob storage upload
 	hologramFileIO, err := hologramFile.Open()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})

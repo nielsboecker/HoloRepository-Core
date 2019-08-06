@@ -3,6 +3,7 @@ package openapi
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -132,4 +133,42 @@ func PostDataIntoFHIR(fhirBaseUrl string, fhirData interface{}) FHIRResult {
 	}
 
 	return SingleFHIRQuery(fhirRequest)
+}
+
+func GetSingleFHIRMetadata(fhirBaseurl, id string, fhirType interface{}) error {
+	var fhirURL string
+	var err error
+
+	switch fhirType := fhirType.(type) {
+	case *HologramDocumentReferenceFHIR:
+		fhirURL, _ = ConstructURL(fhirBaseurl, "DocumentReference/"+id)
+	case *PatientFHIR:
+		fhirURL, _ = ConstructURL(fhirBaseurl, "Patient/"+id)
+	case *PractitionerFHIR:
+		fhirURL, _ = ConstructURL(fhirBaseurl, "Practitioner/"+id)
+	default:
+		return fmt.Errorf("Unsupported fhirType struct: %T", fhirType)
+	}
+
+	result := SingleFHIRQuery(FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL})
+	if result.err != nil {
+		return fmt.Errorf("500:%s", result.err.Error())
+	} else if result.statusCode == 404 || result.statusCode == 410 {
+		errMsg := "id '" + id + "' cannot be found"
+		return fmt.Errorf("404:%s", errMsg)
+	}
+
+	switch fhirType := fhirType.(type) {
+	case *HologramDocumentReferenceFHIR:
+		err = json.Unmarshal(result.response, &fhirType)
+	case *PatientFHIR:
+		err = json.Unmarshal(result.response, &fhirType)
+	case *PractitionerFHIR:
+		err = json.Unmarshal(result.response, &fhirType)
+	}
+
+	if err != nil {
+		return fmt.Errorf("500:%s", err.Error())
+	}
+	return nil
 }

@@ -227,38 +227,52 @@ func HologramsHidDelete(c *gin.Context) {
 
 // HologramsHidDownloadGet - Download holograms models based on the hologram id
 func HologramsHidDownloadGet(c *gin.Context) {
+	var id = c.Param("hid")
+	var hologramFhir HologramDocumentReferenceFHIR
+	err := GetSingleFHIRMetadata(accessorConfig.FhirURL, id, &hologramFhir)
+	if err != nil {
+		errArray := strings.SplitN(err.Error(), ":", 2)
+		errCode, errMsg := errArray[0], errArray[1]
+		if errCode == "404" {
+			c.JSON(http.StatusNotFound, Error{ErrorCode: errCode, ErrorMessage: errMsg})
+			return
+		} else {
+			c.JSON(http.StatusInternalServerError, Error{ErrorCode: errCode, ErrorMessage: errMsg})
+			return
+		}
+	}
+
+	hologramAPISpec := hologramFhir.ToAPISpec()
+
 	// TODO: Blob storage download
 	var data bytes.Buffer
-	data, _ = DownloadHologramFromBlobStorage("teddy.obj")
-	extraHeaders := map[string]string{
-		"Content-Disposition": `attachment; filename="teddy.obj"`,
+
+	data, err = DownloadHologramFromBlobStorage(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
 	}
-	c.DataFromReader(http.StatusOK, int64(data.Len()), "obj", bytes.NewReader(data.Bytes()), extraHeaders)
-	// c.JSON(http.StatusOK, gin.H{"error": "Endpoint still under construction. Sorry for the inconvenience."})
+	extraHeaders := map[string]string{
+		"Content-Disposition": `attachment; filename="` + hologramAPISpec.Title + `.glb"`,
+	}
+	c.DataFromReader(http.StatusOK, int64(data.Len()), hologramAPISpec.ContentType, bytes.NewReader(data.Bytes()), extraHeaders)
 }
 
 // HologramsHidGet - Get a single hologram metadata based on the hologram id
 func HologramsHidGet(c *gin.Context) {
 	id := c.Param("hid")
-	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "DocumentReference/"+id)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL})
-
-	if result.err != nil {
-		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
-		return
-	} else if result.statusCode == 404 || result.statusCode == 410 {
-		errMsg := "id '" + id + "' cannot be found"
-		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
-		return
-	}
-
 	var data HologramDocumentReferenceFHIR
-	err := json.Unmarshal(result.response, &data)
+	err := GetSingleFHIRMetadata(accessorConfig.FhirURL, id, &data)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
-		return
+		errArray := strings.SplitN(err.Error(), ":", 2)
+		errCode, errMsg := errArray[0], errArray[1]
+		if errCode == "404" {
+			c.JSON(http.StatusNotFound, Error{ErrorCode: errCode, ErrorMessage: errMsg})
+			return
+		} else {
+			c.JSON(http.StatusInternalServerError, Error{ErrorCode: errCode, ErrorMessage: errMsg})
+			return
+		}
 	}
-
 	c.JSON(http.StatusOK, data.ToAPISpec())
 }
 
@@ -280,6 +294,10 @@ func HologramsPost(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: err.Error()})
 		return
 	}
+	hologramFile, err := c.FormFile("hologramFile")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
+	}
 
 	// TODO: Consider error handling for partial failures
 	result := PutDataIntoFHIR(accessorConfig.FhirURL, postMetadata.Author)
@@ -300,8 +318,19 @@ func HologramsPost(c *gin.Context) {
 
 	var newHologram HologramDocumentReferenceFHIR
 	_ = json.Unmarshal(result.response, &newHologram)
+	newHologramAPISpec := newHologram.ToAPISpec()
 
 	// TODO: Blob storage upload
+	hologramFileIO, err := hologramFile.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
+	}
+
+	err = UploadHologramToBlobStorage(newHologramAPISpec.Hid, hologramFileIO)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
+	}
+
 	c.JSON(http.StatusOK, newHologram.ToAPISpec())
 }
 

@@ -4,20 +4,20 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"net/url"
-	"os"
 
 	"github.com/Azure/azure-storage-blob-go/azblob"
 )
 
 var blobContainerURL azblob.ContainerURL
 
-func InitialiseBlobStorage(accountName, accountKey string) {
+func InitialiseBlobStorage(accountName, accountKey string) error {
 	containerName := "holograms"
 	credential, err := azblob.NewSharedKeyCredential(accountName, accountKey)
 	if err != nil {
-		log.Fatal("Invalid blob storage credentials with error: " + err.Error())
+		return fmt.Errorf("Invalid blob storage credentials with error: " + err.Error())
 	}
 
 	pipeline := azblob.NewPipeline(credential, azblob.PipelineOptions{})
@@ -31,23 +31,25 @@ func InitialiseBlobStorage(accountName, accountKey string) {
 
 	_, err = blobContainerURL.Create(ctx, azblob.Metadata{}, azblob.PublicAccessNone)
 	if err != nil {
-		if serr, ok := err.(azblob.StorageError); ok { // This error is a Service-specific
-			switch serr.ServiceCode() { // Compare serviceCode to ServiceCodeXxx constants
+		if serr, ok := err.(azblob.StorageError); ok {
+			switch serr.ServiceCode() {
 			case azblob.ServiceCodeContainerAlreadyExists:
 				log.Printf("Blob container %q already exists.", containerName)
-				return
+				return nil
 			}
 		}
-		log.Fatal(err)
+		return err
 	}
+	return nil
 }
 
-func UploadHologramToBlobStorage(filename string, file *os.File) error {
+func UploadHologramToBlobStorage(filename string, filedata io.Reader) error {
 	blobURL := blobContainerURL.NewBlockBlobURL(filename)
 	ctx := context.Background()
-	_, err := azblob.UploadFileToBlockBlob(ctx, file, blobURL, azblob.UploadToBlockBlobOptions{
-		BlockSize:   4 * 1024 * 1024,
-		Parallelism: 16})
+	bufferSize := 2 * 1024 * 1024 // Configure the size of the rotating buffers that are used when uploading
+	maxBuffers := 20              // Configure the number of rotating buffers that are used when uploading
+	_, err := azblob.UploadStreamToBlockBlob(ctx, filedata, blobURL,
+		azblob.UploadStreamToBlockBlobOptions{BufferSize: bufferSize, MaxBuffers: maxBuffers})
 	if err != nil {
 		return err
 	}
@@ -57,10 +59,13 @@ func UploadHologramToBlobStorage(filename string, file *os.File) error {
 func DownloadHologramFromBlobStorage(filename string) (bytes.Buffer, error) {
 	blobURL := blobContainerURL.NewBlockBlobURL(filename)
 	ctx := context.Background()
-	downloadResponse, _ := blobURL.Download(ctx, 0, azblob.CountToEnd, azblob.BlobAccessConditions{}, false)
+	downloadResponse, err := blobURL.Download(ctx, 0, azblob.CountToEnd, azblob.BlobAccessConditions{}, false)
+	if err != nil {
+		return bytes.Buffer{}, err
+	}
 	bodyStream := downloadResponse.Body(azblob.RetryReaderOptions{MaxRetryRequests: 20})
 	downloadedData := bytes.Buffer{}
-	_, err := downloadedData.ReadFrom(bodyStream)
+	_, err = downloadedData.ReadFrom(bodyStream)
 	if err != nil {
 		return bytes.Buffer{}, err
 	}

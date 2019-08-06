@@ -151,5 +151,10 @@ func LoadConfiguration(config *AccessorConfig) error {
 		return fmt.Errorf("Error with ACCESSOR_FHIR_URL: %s", err.Error())
 	}
 
+	err = InitialiseBlobStorage(config.BlobStorageName, config.BlobStorageKey)
+	if err != nil {
+		return fmt.Errorf("Error with BlobStorage Init: %s", err.Error())
+	}
+
 	return nil
 }

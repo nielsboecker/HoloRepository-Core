@@ -6,7 +6,7 @@
  * API version: 1.0.0
  */
 
-package openapi
+package holostorageaccessor
 
 // Patient - Metadata of a single patient
 type Patient struct {

@@ -52,6 +52,10 @@ To run the tests
 go test ./...
 ```
 
+To test the different API endpoints, there is a postman collection in the test folder.
+
+Import them into [postman](https://www.getpostman.com/) and run through them.
+
 ## Build and deployment
 
 To run the server in a docker container

@@ -13,7 +13,17 @@ paths:
 
         Multiple IDs can be passed with the syntax `/patients?pid=id1,id2,id3,...,idx`
 
-        Using no query pids will result in an empty result set.
+        Not querying any `pid` will result in an empty result set.
+
+        Mass query results will return with `ID:{result}`
+        ```
+        {
+          "id1": {result of id1},
+          "id2": {result of id2},
+          "id3": {}
+          ...
+        }
+        ```
 
       parameters:
         - $ref: '#/components/parameters/PIDQuery'
@@ -82,7 +92,17 @@ paths:
 
         Additional filtering for CreationMode can be done with `&creationmode=...`
 
-        Using neither `?pid` nor `?hid` will result in an empty result set.
+        Not querying either `?pid` or `?hid` will result in an empty result set.
+
+        Regardless of `pid` or `hid` queries, mass query results will return a format of `ID:[{result}]`
+        ```
+        {
+          "id1": [{result1 of id1}, {result2 of id1}],
+          "id2": [{result1 of id2}],
+          "id3": []
+          ...
+        }
+        ```
 
       parameters:
         - $ref: '#/components/parameters/HIDQuery'
@@ -187,7 +207,18 @@ paths:
 
         Multiple IDs can be passed with the syntax `/authors?aid=id1,id2,id3,...,idx`
 
-        Using no queries will result in an empty result set.
+        Not querying any `aid` will result in an empty result set.
+
+        Mass query results will return with `ID:{result}`
+        ```
+        {
+          "id1": {result of id1},
+          "id2": {result of id2},
+          "id3": {}
+          ...
+        }
+        ```
+
       parameters:
         - $ref: '#/components/parameters/AIDQuery'
 

@@ -97,22 +97,24 @@ func processFHIRQuery(fhirReq FHIRRequest, c chan FHIRResult) {
 func PutDataIntoFHIR(fhirBaseUrl string, fhirData interface{}) FHIRResult {
 	var fhirRequest FHIRRequest
 	var url string
+	var id string
 	var jsonBody []byte
 
 	switch data := fhirData.(type) {
 	case Patient:
 		dataFhir := data.ToFHIR()
 		jsonBody, _ = json.Marshal(dataFhir)
-		url, _ = ConstructURL(fhirBaseUrl, "Patient/"+data.Pid)
-		fhirRequest = FHIRRequest{httpMethod: "PUT", qid: data.Pid, url: url, body: string(jsonBody)}
+		id = data.Pid
+		url, _ = ConstructURL(fhirBaseUrl, "Patient/"+id)
 	case Author:
 		dataFhir := data.ToFHIR()
 		jsonBody, _ = json.Marshal(dataFhir)
-		url, _ = ConstructURL(fhirBaseUrl, "Practitioner/"+data.Aid)
-		fhirRequest = FHIRRequest{httpMethod: "PUT", qid: data.Aid, url: url, body: string(jsonBody)}
+		id = data.Aid
+		url, _ = ConstructURL(fhirBaseUrl, "Practitioner/"+id)
 	default:
 		return FHIRResult{err: errors.New("Unsupported datatype")}
 	}
+	fhirRequest = FHIRRequest{httpMethod: "PUT", qid: id, url: url, body: string(jsonBody)}
 
 	return SingleFHIRQuery(fhirRequest)
 }

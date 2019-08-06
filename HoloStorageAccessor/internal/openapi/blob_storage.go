@@ -71,3 +71,8 @@ func DownloadHologramFromBlobStorage(filename string) (bytes.Buffer, error) {
 	}
 	return downloadedData, nil
 }
+
+func DeleteHologramFromBlobStorage(filename string) error {
+	// TODO
+	return nil
+}

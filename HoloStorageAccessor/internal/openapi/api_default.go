@@ -235,11 +235,10 @@ func HologramsHidDownloadGet(c *gin.Context) {
 		errCode, errMsg := errArray[0], errArray[1]
 		if errCode == "404" {
 			c.JSON(http.StatusNotFound, Error{ErrorCode: errCode, ErrorMessage: errMsg})
-			return
 		} else {
 			c.JSON(http.StatusInternalServerError, Error{ErrorCode: errCode, ErrorMessage: errMsg})
-			return
 		}
+		return
 	}
 
 	hologramAPISpec := hologramFhir.ToAPISpec()
@@ -250,9 +249,10 @@ func HologramsHidDownloadGet(c *gin.Context) {
 	data, err = DownloadHologramFromBlobStorage(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
+		return
 	}
 	extraHeaders := map[string]string{
-		"Content-Disposition": `attachment; filename="` + hologramAPISpec.Title + `.glb"`,
+		"Content-Disposition": `attachment; filename="` + id + `.glb"`,
 	}
 	c.DataFromReader(http.StatusOK, int64(data.Len()), hologramAPISpec.ContentType, bytes.NewReader(data.Bytes()), extraHeaders)
 }
@@ -267,11 +267,10 @@ func HologramsHidGet(c *gin.Context) {
 		errCode, errMsg := errArray[0], errArray[1]
 		if errCode == "404" {
 			c.JSON(http.StatusNotFound, Error{ErrorCode: errCode, ErrorMessage: errMsg})
-			return
 		} else {
 			c.JSON(http.StatusInternalServerError, Error{ErrorCode: errCode, ErrorMessage: errMsg})
-			return
 		}
+		return
 	}
 	c.JSON(http.StatusOK, data.ToAPISpec())
 }

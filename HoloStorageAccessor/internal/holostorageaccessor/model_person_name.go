@@ -6,7 +6,7 @@
  * API version: 1.0.0
  */
 
-package openapi
+package holostorageaccessor
 
 // PersonName - Components that make up the name of a person
 type PersonName struct {

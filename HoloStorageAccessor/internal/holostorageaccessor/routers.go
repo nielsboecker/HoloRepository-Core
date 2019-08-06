@@ -6,7 +6,7 @@
  * API version: 1.0.0
  */
 
-package openapi
+package holostorageaccessor
 
 import (
 	"log"
@@ -67,6 +67,7 @@ func NewRouter() *gin.Engine {
 		}
 	}
 
+	log.Printf("HoloStorageAccessor is running!")
 	return router
 }
 

@@ -1,4 +1,4 @@
-package openapi
+package holostorageaccessor
 
 import (
 	"encoding/json"
@@ -149,6 +149,11 @@ func LoadConfiguration(config *AccessorConfig) error {
 	_, err := url.ParseRequestURI(config.FhirURL)
 	if err != nil {
 		return fmt.Errorf("Error with ACCESSOR_FHIR_URL: %s", err.Error())
+	}
+
+	err = InitialiseBlobStorage(config.BlobStorageName, config.BlobStorageKey)
+	if err != nil {
+		return fmt.Errorf("Error with BlobStorage Init: %s", err.Error())
 	}
 
 	return nil

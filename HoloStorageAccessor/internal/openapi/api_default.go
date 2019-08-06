@@ -69,6 +69,9 @@ func AuthorsAidPut(c *gin.Context) {
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return
+	} else if result.statusCode >= 400 {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: string(result.response)})
+		return
 	}
 	c.JSON(result.statusCode, dataFhir)
 }
@@ -88,7 +91,7 @@ func AuthorsGet(c *gin.Context) {
 	dataMap := make(map[string]Author)
 	var emptyData Author
 	for id, result := range results {
-		if result.statusCode == 404 || result.statusCode == 410 {
+		if result.statusCode >= 400 {
 			dataMap[id] = emptyData
 		} else {
 			var tempData PractitionerFHIR
@@ -422,6 +425,9 @@ func PatientsPidPut(c *gin.Context) {
 	result := SingleFHIRQuery(FHIRRequest{httpMethod: "PUT", qid: id, url: fhirURL, body: string(jsonData)})
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
+		return
+	} else if result.statusCode >= 400 {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: string(result.response)})
 		return
 	}
 	c.JSON(result.statusCode, dataFhir)

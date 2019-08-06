@@ -67,6 +67,7 @@ func NewRouter() *gin.Engine {
 		}
 	}
 
+	log.Printf("HoloStorageAccessor is running!")
 	return router
 }
 

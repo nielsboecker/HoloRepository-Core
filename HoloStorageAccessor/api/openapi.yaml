@@ -1,0 +1,531 @@
+openapi: 3.0.2
+info:
+  version: "1.0.0"
+  title: 'HoloStorage Accessor API'
+  description: 'API to access holograms and metadata from HoloStorage'
+
+paths:
+  /patients:
+    get:
+      summary: Mass query for patients metadata in HoloStorage
+      description: |-
+        Obtain patient information stored within HoloStorage.
+
+        Multiple IDs can be passed with the syntax `/patients?pid=id1,id2,id3,...,idx`
+
+        Using no query pids will result in an empty result set.
+
+      parameters:
+        - $ref: '#/components/parameters/PIDQuery'
+
+      responses:
+        200:
+          description: Successful pulling of patients metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patients'
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /patients/{pid}:
+    get:
+      summary: Get a single patient metadata in HoloStorage
+      description: Endpoint for a singular patient lookup
+      parameters:
+        - $ref: '#/components/parameters/PIDPath'
+      responses:
+        200:
+          description: Successful pulling of the patient's metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+    put:
+      summary: Add or update basic patient information
+      description: |-
+        This endpoint allows you to add new patient information in HoloStorage. A new Patient will be created if PID does not exist, else it will be updated.
+
+        PID in path and request body will be checked as a means to ensure that the insertion is intended.
+      parameters:
+        - $ref: '#/components/parameters/PIDPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+      responses:
+        200:
+          description: Successful modification
+        201:
+          description: Successful created
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /holograms:
+    get:
+      summary: Mass query for hologram metadata based on hologram ids
+      description: |-
+        Obtain hologram information stored within HoloStorage.
+
+        Multiple IDs can be passed with either syntax:
+
+        `/holograms?hid=id1,id2,id3,...,idx` or `/holograms?pid=id1,id2,id3,...,idx`
+
+        **Note: You can only use either hid or pid**
+
+        Additional filtering for CreationMode can be done with `&creationmode=...`
+
+        Using neither `?pid` nor `?hid` will result in an empty result set.
+
+      parameters:
+        - $ref: '#/components/parameters/HIDQuery'
+        - $ref: '#/components/parameters/PIDQuery'
+        - $ref: '#/components/parameters/CreationQuery'
+
+      responses:
+        200:
+          description: Successfully found all hologram metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Holograms'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      summary: 'Upload hologram to HoloStorage'
+      description: 'Hologram and associated metadata to be uploaded onto HoloStorage. The UUID will be generated automatically by the accessor'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/HologramUploadData'
+      responses:
+        201:
+          description: Successfully created hologram
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hologram'
+        400:
+          description: Unaccepted input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /holograms/{hid}:
+    get:
+      summary: Get a single hologram metadata based on the hologram id
+      description: Endpoint for a single hologram lookup
+      parameters:
+        - $ref: '#/components/parameters/HIDPath'
+      responses:
+        200:
+          description: Successfully found all hologram metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Holograms'
+        400:
+          description: Unaccepted input
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+    delete:
+      summary: Delete a hologram in HoloStorage
+      description: Delete holograms based on ID
+      parameters:
+        - $ref: '#/components/parameters/HIDPath'
+      responses:
+        200:
+          description: Successful deletion of hologram
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /holograms/{hid}/download:
+    get:
+      summary: Download holograms models based on the hologram id
+      description: Initiates download operation for the specified hid
+      parameters:
+        - $ref: '#/components/parameters/HIDPath'
+      responses:
+        200:
+          description: Download a single hologram based on id
+          content:
+            model/gltf-binary:
+              schema:
+                type: string
+                format: binary
+                example: '[file content goes here]'
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /authors:
+    get:
+      summary: Mass query for author metadata in HoloStorage
+      description: |-
+        Obtain author information stored within HoloStorage.
+
+        Multiple IDs can be passed with the syntax `/authors?aid=id1,id2,id3,...,idx`
+
+        Using no queries will result in an empty result set.
+      parameters:
+        - $ref: '#/components/parameters/AIDQuery'
+
+      responses:
+        200:
+          description: Successful getting all author metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Authors'
+        500:
+          $ref: "#/components/responses/InternalError"
+
+  /authors/{aid}:
+    get:
+      summary: Get a single author metadata in HoloStorage
+      description: Endpoint for a singular author lookup
+      parameters:
+        - $ref: '#/components/parameters/AIDPath'
+      responses:
+        200:
+          description: Successful getting author metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalError"
+
+    put:
+      summary: Add or update author information
+      description: |-
+        This endpoint allows you to add new author information in HoloStorage. A new author will be created if AID does not exist, else it will be updated.
+
+        AID in path and request body will be checked as a means to ensure that the insertion is intended.
+      parameters:
+        - $ref: '#/components/parameters/AIDPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+      responses:
+        200:
+          description: Successful modification
+        201:
+          description: Successful creation
+        500:
+          $ref: "#/components/responses/InternalError"
+
+
+components:
+  responses:
+    NotFound:
+      description: Requested data is not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid usage of message parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalError:
+      description: Internal error encountered
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  parameters:
+    PIDQuery:
+      in: query
+      name: pid
+      schema:
+        type: string
+        format: uuid
+        example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+      style: form
+      explode: false
+      description: The UUID assigned to a patient
+
+    PIDPath:
+      in: path
+      name: pid
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+      description: The UUID assigned to a patient
+
+    HIDQuery:
+      in: query
+      name: hid
+      schema:
+        type: string
+        format: uuid
+        example: 09462b7a-82d5-427e-b843-c500d342245a
+      style: form
+      explode: false
+      description: The UUID assigned to a hologram
+
+    HIDPath:
+      in: path
+      name: hid
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 09462b7a-82d5-427e-b843-c500d342245a
+      description: The UUID assigned to a hologram
+
+    CreationQuery:
+      in: query
+      name: creationmode
+      required: false
+      schema:
+        type: string
+        enum: [GENERATE_FROM_IMAGING_STUDY, UPLOAD_EXISTING_MODEL, FROM_DEPTHVISOR_RECORDING]
+        example: GENERATE_FROM_IMAGING_STUDY
+      style: form
+      explode: false
+      description: CreationMode assigned to a hologram
+
+    AIDQuery:
+      in: query
+      name: aid
+      schema:
+        type: string
+        format: uuid
+        example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+      style: form
+      explode: false
+      description: The UUID assigned to an author
+
+    AIDPath:
+      in: path
+      name: aid
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+      description: The UUID assigned to an author
+
+  schemas:
+    PersonName:
+      description: Components that make up the name of a person
+      type: object
+      properties:
+        full:
+          type: string
+          example: Marvin Portebello
+        title:
+          type: string
+          example: Mr
+        given:
+          type: string
+          example: Marvin
+        family:
+          type: string
+          example: Portebello
+
+    Patients:
+      title: Patients
+      description: An array of patient metadata
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Patient'
+
+    Patient:
+      title: Patient Info
+      description: Metadata of a single patient
+      type: object
+      properties:
+        pid:
+          type: string
+          example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+        gender:
+          type: string
+          example: male
+          enum: [male, female, unknown, other]
+        birthDate:
+          type: string
+          format: date
+        name:
+          $ref: '#/components/schemas/PersonName'
+
+    Holograms:
+      description: An array of hologram metadata
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          $ref: '#/components/schemas/Hologram'
+
+    HologramUploadData:
+      title: Hologram Upload
+      description: Data structure to upload holograms to HoloStorage
+      type: object
+      properties:
+        title:
+          type: string
+          description: Summary of the hologram
+          example: Malformed hip bones
+        description:
+          type: string
+          description: Further elaborations on the hologram with additional details
+          example: Malformed hip bones on an 8 year old child suffering from a birth defect
+        contentType:
+          type: string
+          description: The mimetype of the hologram file
+          example: model/gltf-binary
+        fileSizeInKb:
+          type: integer
+          description: The size of the hologram in KB
+          example: 5120
+        bodySite:
+          type: string
+          description: The body part the hologram represents
+          example: hips
+        dateOfImaging:
+          type: string
+          format: date-time
+          description: The date when the imaging was done
+          example: '2017-07-15T15:20:25Z'
+        creationDate:
+          type: string
+          format: date-time
+          description: The date the hologram was generated
+          example: '2017-07-21T17:32:28Z'
+        creationMode:
+          type: string
+          enum: [GENERATE_FROM_IMAGING_STUDY, UPLOAD_EXISTING_MODEL, FROM_DEPTHVISOR_RECORDING]
+          description: The way the hologram was created
+          example: GENERATE_FROM_IMAGING_STUDY
+        creationDescription:
+          type: string
+          description: The description associated with the creation method of the hologram
+          example: By bone segmentation pipeline with HU threshold 750
+        hologramFile:
+          type: string
+          format: binary
+          example: [file content goes here]
+          description: The raw binary of the hologram model
+        author:
+          $ref: '#/components/schemas/Author'
+        patient:
+          $ref: '#/components/schemas/Patient'
+
+    Hologram:
+      title: Hologram info
+      description: Metadata of a hologram
+      type: object
+      properties:
+        hid:
+          type: string
+          description: UUID of a hologram
+          example: 09462b7a-82d5-427e-b843-c500d342245a
+        title:
+          type: string
+          description: Summary of the hologram
+          example: Malformed hip bones
+        description:
+          type: string
+          description: Further elaborations on the hologram with additional details
+          example: Malformed hip bones on an 8 year old child suffering from a birth defect
+        contentType:
+          type: string
+          description: The mimetype of the hologram file
+          example: model/gltf-binary
+        fileSizeInKb:
+          type: integer
+          description: The size of the hologram in KB
+          example: 5120
+        bodySite:
+          type: string
+          description: The body part the hologram represents
+          example: hips
+        dateOfImaging:
+          type: string
+          format: date-time
+          description: The date when the imaging was done
+          example: '2017-07-15T15:20:25Z'
+        creationDate:
+          type: string
+          format: date-time
+          description: The date the hologram was generated
+          example: '2017-07-21T17:32:28Z'
+        creationMode:
+          type: string
+          enum: [GENERATE_FROM_IMAGING_STUDY, UPLOAD_EXISTING_MODEL, FROM_DEPTHVISOR_RECORDING]
+          description: The way the hologram was created
+          example: GENERATE_FROM_IMAGING_STUDY
+        creationDescription:
+          type: string
+          description: The description associated with the creation method of the hologram
+          example: By bone segmentation pipeline with HU threshold 750
+        aid:
+          type: string
+          description: The UUID of the author of this hologram
+          example: 02705d77-1de1-41bb-98fb-d8cd09f41cb6
+        pid:
+          type: string
+          description: The UUID of the patient associated with this hologram
+          example: 2321e0b8-99ea-4961-aab7-b65fbc8f9673
+
+    Authors:
+      title: Authors
+      description: An array of author metadata
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Author'
+
+    Author:
+      title: Author Info
+      description: Who authored the Hologram
+      type: object
+      properties:
+        aid:
+          type: string
+          description: The author ID
+          example: 02705d77-1de1-41bb-98fb-d8cd09f41cb6
+        name:
+          $ref: '#/components/schemas/PersonName'
+
+    Error:
+      title: Error Response
+      description: Error responses
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMessage:
+          type: string

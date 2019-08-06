@@ -1,0 +1,8 @@
+# Note: File is in this directory because it is the build context for nested sub-directories
+**/node_modules/
+**/dist/
+**/build/
+**/__test_utils__/
+
+# Note: Can be just all in **/__tests__/ after JSONs in test directory not needed for static mock data anymore
+**/__tests__/**/*.ts

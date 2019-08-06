@@ -1,4 +1,4 @@
-import { R4 } from "@Ahryman40k/ts-fhir-types";
+import { R4 } from "@ahryman40k/ts-fhir-types";
 import { _normaliseDateString, getAdapterFunction } from "../common/adapters/fhirAdapter";
 import { SupportedFhirResourceType } from "../common/clients/fhirClient";
 import { IPatient, IPractitioner, IImagingStudy } from "../../../types";

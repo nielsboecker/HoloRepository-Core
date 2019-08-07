@@ -79,10 +79,18 @@ def resample(dataPath, new_spacing=[1, 1, 1]):
     return image, new_spacing
 
 
+def reorientateNumpyList(numpyList):
+    # tanspose numpy i.e. (z, y, x) ---> (x, y, z)
+    numpyList = numpyList.transpose(2, 1, 0)
+    numpyList = np.flip(numpyList, 0)
+    numpyList = np.flip(numpyList, 1)
+
+
 def main(dicomPath):
     print("dicom2numpy: resampling dicom...")
     imgs_after_resamp, spacing = resample(dicomPath)
     print("dicom2numpy: resampling done")
+    imgs_after_resamp = reorientateNumpyList(imgs_after_resamp)
     return imgs_after_resamp
 
 

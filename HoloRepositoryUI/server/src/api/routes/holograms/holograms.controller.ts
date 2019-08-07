@@ -3,13 +3,7 @@ import { Request, Response } from "express";
 
 export class HologramsController {
   public async getAll(req: Request, res: Response): Promise<void> {
-    const { pids } = req.query;
-
-    if (pids) {
-      HologramsService.getAllForPatients(pids).then(holograms => res.json(holograms));
-    } else {
-      res.json([]);
-    }
+    res.redirect(HologramsService.getAllForPatientsURL(req.query.pids));
   }
 
   public downloadById(req: Request, res: Response): void {
@@ -17,17 +11,12 @@ export class HologramsController {
   }
 
   public deleteById(req: Request, res: Response): void {
-    HologramsService.deleteById(req.params.hid).then(success => {
-      if (success) res.status(200).end();
-      else res.status(404).end();
-    });
+    res.redirect(307, HologramsService.getEndpointURL(req.params.hid));
   }
 
   public upload(req: Request, res: Response): void {
-    HologramsService.upload().then(success => {
-      if (success) res.status(200).end();
-      else res.status(404).end();
-    });
+    // Note: Ideally, the request should be checked for validity
+    res.redirect(307, HologramsService.getBaseURL());
   }
 
   public generate(req: Request, res: Response): void {

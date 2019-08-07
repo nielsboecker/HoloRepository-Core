@@ -13,6 +13,23 @@ const _holoStorageAccessorAxios = axios.create({
   timeout: 30000
 });
 
+const getBaseURL = () => baseURL;
+
+const getDownloadURL = (hid: string): string => {
+  return `${baseURL}/${hid}/download`;
+};
+
+const getEndpointURL = (hid: string): string => {
+  return `${baseURL}/${hid}`;
+};
+
+const getAllForPatientsURL = (pids: string): string => {
+  return `${baseURL}?pid=${pids}`;
+};
+
+/**
+ * @deprecated Use redirects instead
+ */
 const handleAxiosError = error => {
   if (error.response && error.response.data) {
     console.error(`Error ${error.response.data.errorCode}: "${error.response.data.errorMessage}"`);
@@ -22,6 +39,9 @@ const handleAxiosError = error => {
   return null;
 };
 
+/**
+ * @deprecated Use redirects instead
+ */
 const getJson = async <T = any>(url: string, params: Record<string, string> = {}): Promise<T> => {
   return _holoStorageAccessorAxios
     .get<T>(url, {
@@ -32,11 +52,9 @@ const getJson = async <T = any>(url: string, params: Record<string, string> = {}
     .catch(handleAxiosError);
 };
 
-const getDownloadURL = (hid: string): string => {
-  return `${baseURL}/${hid}/download`;
-};
-
 export default {
-  getJson,
-  getDownloadURL
+  getBaseURL,
+  getDownloadURL,
+  getEndpointURL,
+  getAllForPatientsURL
 };

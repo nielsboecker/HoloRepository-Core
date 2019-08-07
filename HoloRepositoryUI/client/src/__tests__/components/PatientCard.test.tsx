@@ -4,7 +4,7 @@ import PatientCard from "../../components/app/patients/PatientCard";
 import samplePatients from "../samples/samplePatients.json";
 import { getAgeFromDobString } from "../../util/PatientUtil";
 import { IPatient } from "../../../../types";
-import { mountWithContextProvider } from "../../util/TestUtils";
+import { mountWithContextProvider } from "../../__test_utils__/MockContextProvider";
 
 it("should render patient details correctly", () => {
   const patient = samplePatients[0] as IPatient;

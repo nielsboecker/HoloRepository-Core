@@ -11,7 +11,12 @@
     "composite": true,
     "resolveJsonModule": true
   },
-  "include": ["typings.d.ts", "src/**/*.ts"],
+  "include": [
+    "typings.d.ts",
+    "src/**/*.ts",
+    "src/**/*.ts",
+    "src/__tests__/samples/**/*.json"
+  ],
   "exclude": ["node_modules"],
   "references": [
     {

@@ -84,6 +84,7 @@ def reorientateNumpyList(numpyList):
     numpyList = numpyList.transpose(2, 1, 0)
     numpyList = np.flip(numpyList, 0)
     numpyList = np.flip(numpyList, 1)
+    return numpyList
 
 
 def main(dicomPath):

@@ -1,4 +1,4 @@
-import compDicom2numpy
+from components import compDicom2numpy
 import nibabel as nib
 import numpy as np
 

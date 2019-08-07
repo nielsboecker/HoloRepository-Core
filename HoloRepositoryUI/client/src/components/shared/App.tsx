@@ -89,6 +89,10 @@ class App extends Component<any, IAppState> {
       for (const pid in combinedResult) {
         const holograms = combinedResult[pid];
         const patient = patients[pid];
+
+        // Note: As the Accessor API only includes pid for patients, set patient name to current patient
+        holograms.forEach(hologram => (hologram.patientName = patient.name.full));
+
         patient.holograms = holograms;
         this.setState({
           patients: {

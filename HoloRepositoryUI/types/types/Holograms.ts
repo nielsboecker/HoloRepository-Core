@@ -23,8 +23,9 @@ export interface IImagingStudy {
  * Creation modes for holograms.
  */
 export enum HologramCreationMode {
-  generateFromImagingStudy = "GENERATE_FROM_IMAGING_STUDY",
-  uploadExistingModel = "UPLOAD_EXISTING_MODEL"
+  GENERATE_FROM_IMAGING_STUDY = "GENERATE_FROM_IMAGING_STUDY",
+  UPLOAD_EXISTING_MODEL = "UPLOAD_EXISTING_MODEL",
+  FROM_DEPTHVISOR_RECORDING = "FROM_DEPTHVISOR_RECORDING"
 }
 
 /**
@@ -34,23 +35,19 @@ export enum HologramCreationMode {
 export interface IHologram {
   hid: string;
   title: string;
-  subject: {
-    pid: string;
-    name?: IHumanName;
-  };
-  author: {
-    aid: string;
-    name?: IHumanName;
-  };
-  createdDate: string;
+  pid: string;
+  aid: string;
   fileSizeInKb: number;
-  imagingStudyId?: string;
+  creationDate: string;
+  creationDescription?: string;
+  creationMode?: HologramCreationMode;
   description?: string;
   bodySite?: string;
-  encounterDate?: string;
+  dateOfImaging?: string;
   contentType?: string;
-  pipelineId?: string;
-  creationMode?: HologramCreationMode;
+  // Note: the following fields are not present in the data from the Accessor API, they are added here in the UI
+  patientName?: string;
+  authorName?: string;
 }
 
 /**

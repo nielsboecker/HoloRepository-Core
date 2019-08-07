@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "description": "The TypeScript definitions that are used by the HoloRepository sub-projects",
   "scripts": {
-    "build": "tsc --build"
+    "build": "tsc --build",
+    "format": "prettier --write './**/*.ts'"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2",
   },
   "dependencies": {
     "typescript": "^3.5.3"

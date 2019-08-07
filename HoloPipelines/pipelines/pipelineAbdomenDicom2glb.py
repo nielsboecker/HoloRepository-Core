@@ -1,13 +1,13 @@
-from components import compDicom2nifti_sitk as compDcm2nifti
-from components import compJobStatus
+from components import compDicom2nifti_sitk
+from components import compHttpRequest
 from components import compNifti2numpy
 from components import compSeparateNumpy
 import sys
 
 
 def main(inputDicomPath, outputGlbFolderPath):
-    generatedNiftiPath = compDcm2nifti.main(inputDicomPath, "_temp.nii")
-    segmentedNiftiPath = compJobStatus.sendFilePostRequest(
+    generatedNiftiPath = compDicom2nifti_sitk.main(inputDicomPath, "_temp.nii")
+    segmentedNiftiPath = compHttpRequest.sendFilePostRequest(
         "http://localhost:5000/model",
         generatedNiftiPath,
         "_tempAbdomenSegmented.nii.gz",

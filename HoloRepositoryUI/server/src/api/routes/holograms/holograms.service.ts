@@ -1,18 +1,17 @@
-import AccesorClient from "../../../common/clients/HoloStorageAccesorClient";
+import AccessorClient from "../../../common/clients/HoloStorageAccesorClient";
 import logger from "../../../common/logger";
 import { IHologram } from "../../../../../types";
 
 export class HologramsService {
   public getAllForPatients(pids: string): Promise<Record<string, IHologram[]> | void> {
     logger.info(`GET all Holograms for pids = '${pids}'`);
-    return AccesorClient.get<Record<string, IHologram[]>>("/", { pid: pids });
+    return AccessorClient.getJson<Record<string, IHologram[]>>("/", { pid: pids });
   }
 
-  public downloadById(hid: string): Promise<BinaryType | string> {
-    // TODO: Implement
-    logger.warn("Download not implemented yet", hid);
-    return Promise.resolve("<holo-file>");
-  }
+  public getDownloadURL = (hid: string): string => {
+    logger.info(`GET download hologram for pid = '${hid}'`);
+    return AccessorClient.getDownloadURL(hid);
+  };
 
   public deleteById(hid: string): Promise<boolean> {
     // TODO: Implement

@@ -13,10 +13,7 @@ export class HologramsController {
   }
 
   public downloadById(req: Request, res: Response): void {
-    HologramsService.downloadById(req.params.hid).then(hologram => {
-      if (hologram) res.send(hologram);
-      else res.status(404).end();
-    });
+    res.redirect(HologramsService.getDownloadURL(req.params.hid));
   }
 
   public deleteById(req: Request, res: Response): void {

@@ -2,12 +2,23 @@ from flask import Flask, request
 from pipelineController import startPipeline, getPipelineList
 from flask_json import json_response
 from datetime import datetime
+from pathlib import Path
 import uuid
 import json
 import threading
 import time
+import logging
+import requests
+import os
+import pathlib
+from zipfile import ZipFile
 
 app = Flask(__name__)
+this_cwd = pathlib.Path.cwd()
+save_directory = Path("input")
+pipeline_list = getPipelineList()
+FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
+logging.basicConfig(level=logging.INFO, format=FORMAT)
 
 # status = {"j0":{ "status": "segment", "stamp":datetime.now().strftime('%Y-%m-%d %H:%M:%S') }}
 status = {
@@ -16,7 +27,7 @@ status = {
 }
 app.config["JSON_ADD_STATUS"] = False
 pipeline = {}
-jobID = ""
+
 
 # cleaning the status
 @app.before_first_request
@@ -24,25 +35,26 @@ def activate_status_cleaning_job():
     def run_job():
         while True:
             global status
-            # print("initial status: "status)
+            # logging.info("status before loop: " +str(status))
 
             for job in status.copy():
 
                 job_time_string = status[job]["stamp"]
-                # print("job time in sting: "+job_time_string)
+                # logging.info("job-time: "+job_time_string)
 
                 job_time_obj = datetime.strptime(job_time_string, "%Y-%m-%d %H:%M:%S")
-                # print("job time in obj: "+str(job_time_obj))
 
                 current_time = datetime.now()
                 delta_time = (current_time - job_time_obj).total_seconds()
-                # print("time difference: "+str(delta_time))
+                # logging.info("time difference: "+str(delta_time))
 
+                # if job exists more than 30 mins delete it from dictionary
                 if delta_time >= 1800.0:
                     status.pop(job)
-            # print("status: "+str(status))
+
             time.sleep(30)
 
+    # logging.info("status after loop: "+str(status))
     thread = threading.Thread(target=run_job)
     thread.start()
 
@@ -60,21 +72,13 @@ def getTheStatus():
 # get pipeline info
 @app.route("/pipelines", methods=["GET"])
 def sendListOfPipapp():
-
-    # plid == p0
-    # title == name
-    # description == info
-    # input constraint == ?
-    # input sample imageurl ==?
-    # output sample imageurl ==?
-
-    pipelineList = getPipelineList()
+    global pipeline_list
     pipelineDict = {}
     for (
         key,
         value,
     ) in (
-        pipelineList.items()
+        pipeline_list.items()
     ):  # not complete. the value for inputConstraints is wrong (atm it's just number of param)
         pipelineDict[key] = {
             "plid": key,
@@ -91,21 +95,43 @@ def sendListOfPipapp():
 # use to start the pipeline
 @app.route("/job", methods=["POST"])
 def sendJobStartResponse():
-    pipelineList = getPipelineList()
+    # get the request
     job_request = request.get_json()
-    request_plid = job_request["plid"]
-    global jobID
+    request_plid = job_request["pid"]
+    request_input_data_URL = job_request["imagingStudyEndpoint"]
+    if request_input_data_URL.find("/"):
+        filename = request_input_data_URL.rsplit("/", 1)[1]
+        logging.info("filename: " + filename)
+
+    # save file to input file
+    global save_directory
+    if not save_directory.is_dir():
+        os.mkdir("input")
+    response = requests.get(request_input_data_URL)
+    input_dir = "input"
+    file_dir = this_cwd.joinpath(input_dir, filename)
+    open(file_dir, "wb+").write(response.content)
+    logging.info("file dir: " + str(file_dir))
+
+    # get unzip input filename
+    filename_unzip = filename.rsplit(".", 1)[0]
+    logging.info("unzip file name:" + filename_unzip)
+
+    # unzip the input file
+    path_to_store_unzip_file = this_cwd.joinpath(filename_unzip)
+    with ZipFile(str(file_dir), "r") as zipObj:  # unzip
+        zipObj.extractall(str(path_to_store_unzip_file))
+
     jobID = str(uuid.uuid1())
-    print(len(job_request["arglist"]))
+    # arglist = [jobID, "input_for_PACS/" + filename_unzip]
 
-    if pipelineList[request_plid]["param"] == str(len(job_request["arglist"])):
-        startPipeline(jobID, job_request["plid"], job_request["arglist"])
-        return json_response(jobID=jobID, statuscode=202)
-    else:
-        return json_response(jobID="", statuscode=404)
+    if pipeline_list[request_plid]["param"] == str(len(job_request["arglist"])):
+        startPipeline(jobID, job_request["pid"], job_request["arglist"])
+    return json_response(jobID=jobID, status_code=202)
+    # else:
+    # return json_response(jobID="", status_code=404)
 
 
-# front end request the status
 @app.route("/job/<jobid>/status", methods=["GET"])
 def getJobStatus(jobid):
     if jobid in status:

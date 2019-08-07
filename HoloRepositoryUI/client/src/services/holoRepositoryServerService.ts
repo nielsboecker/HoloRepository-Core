@@ -1,15 +1,9 @@
 import serverAxios, { routes } from "./holoRepositoryServerAxios";
-import {
-  IPatient,
-  IPractitioner,
-  IHologram,
-  IImagingStudy,
-  IPipeline
-} from "../../../types";
+import { IPatient, IPractitioner, IHologram, IImagingStudy, IPipeline } from "../../../types";
 import { PidToPatientsMap } from "../components/shared/AppState";
 import { AxiosResponse } from "axios";
 
-const handleError = (error: Error): null => {
+const handleError = (error: Error): any => {
   console.log("Encountered an error while fetching data from backend: ", error.message);
   return null;
 };
@@ -21,7 +15,7 @@ export class HoloRepositoryServerService {
   public async getPractitioner(pid: string): Promise<IPractitioner | null> {
     return serverAxios
       .get<IPractitioner>(`${routes.practitioners}/${pid}`)
-      .then(practitioner => practitioner.data)
+      .then(practitioner => practitioner.data as IPractitioner)
       .catch(handleError);
   }
 
@@ -32,7 +26,7 @@ export class HoloRepositoryServerService {
           practitioner: pid
         }
       })
-      .then(patients => patients.data)
+      .then(patients => patients.data as IPatient[])
       .catch(handleError);
   }
 
@@ -45,7 +39,7 @@ export class HoloRepositoryServerService {
           pids: _extractCombinedPidsString(patients)
         }
       })
-      .then(holograms => holograms.data)
+      .then(holograms => holograms.data as HologramsCombinedResult)
       .catch(handleError);
   }
 
@@ -91,14 +85,14 @@ export class HoloRepositoryServerService {
       .get<ImagingStudiesCombinedResult>(`${routes.imagingStudies}`, {
         params: { pids: _extractCombinedPidsString(patients) }
       })
-      .then(iss => iss.data)
+      .then(iss => iss.data as ImagingStudiesCombinedResult)
       .catch(handleError);
   }
 
   public async getAllPipelines(): Promise<IPipeline[] | null> {
     return serverAxios
       .get<IPipeline[]>(routes.pipelines)
-      .then(pipeline => pipeline.data)
+      .then(pipeline => pipeline.data as IPipeline[])
       .catch(handleError);
   }
 }

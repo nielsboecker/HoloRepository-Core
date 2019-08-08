@@ -14,7 +14,9 @@ import { HologramCreationMode } from "../../../types";
 import {
   IHologramCreationRequest,
   IHologramCreationRequest_Generate,
-  IHologramCreationRequest_Upload
+  IHologramCreationRequest_Upload,
+  IPractitioner,
+  IAuthor
 } from "../../../../../types";
 import { PropsWithContext, withAppContext } from "../../shared/AppState";
 
@@ -62,6 +64,14 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     this.setState({ hologramFile });
   };
 
+  private _handleSelectedPipelineChange = (selectedPipelineId: string) => {
+    this.setState({ selectedPipelineId });
+  };
+
+  private _handleSelectedImagingStudyChange = (selectedImagingStudyEndpoint: string) => {
+    this.setState({ selectedImagingStudyEndpoint });
+  };
+
   private _handleSubmit_Upload = () => {
     const metaData = this._generatePostRequestMetaData_Upload();
     if (!metaData) {
@@ -89,7 +99,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
 
     return {
       patient: patient,
-      author: practitioner,
+      author: this._transformPractitionerToAuthor(practitioner),
       title: title || "",
       description: description || "",
       bodySite: bodySite || "",
@@ -137,6 +147,13 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     };
   };
 
+  private _transformPractitionerToAuthor = (practitioner: IPractitioner): IAuthor => {
+    const result: any = Object.assign({}, practitioner);
+    result["aid"] = result["pid"];
+    delete result["pid"];
+    return result;
+  };
+
   private _logErrorAndReturnNull = (additionalMessage?: string): null => {
     // This should never happen
     console.error("Fatal error, aborting upload.", additionalMessage);
@@ -156,11 +173,17 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       },
       {
         title: "Select pipeline",
-        content: <PipelineSelectionStep />
+        content: (
+          <PipelineSelectionStep onPipelineSelectionChange={this._handleSelectedPipelineChange} />
+        )
       },
       {
         title: "Select input data",
-        content: <ImagingStudySelectionStep />
+        content: (
+          <ImagingStudySelectionStep
+            onSelectedImagingStudyChange={this._handleSelectedImagingStudyChange}
+          />
+        )
       },
       {
         title: "Enter details",

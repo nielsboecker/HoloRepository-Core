@@ -80,11 +80,11 @@ it("renders ImagingStudyDetailsCard without crashing", () => {
 });
 
 it("renders ImagingStudySelectionStep without crashing", () => {
-  mountWithContextProvider(<ImagingStudySelectionStep />);
+  mountWithContextProvider(<ImagingStudySelectionStep onSelectedImagingStudyChange={jest.fn()} />);
 });
 
 it("renders PipelineSelectionStep without crashing", () => {
-  mountWithContextProvider(<PipelineSelectionStep />);
+  mountWithContextProvider(<PipelineSelectionStep onPipelineSelectionChange={jest.fn()} />);
 });
 
 it("renders PipelineSpecificationCard without crashing", () => {

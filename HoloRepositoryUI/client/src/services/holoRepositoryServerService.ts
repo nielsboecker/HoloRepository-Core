@@ -77,12 +77,6 @@ export class HoloRepositoryServerService {
   public async uploadHologram(metaData: IHologramCreationRequest_Upload): Promise<boolean> {
     const formData = new FormData();
     for (let [key, value] of Object.entries(metaData)) {
-      // Note: A little hack due to Accessor API expecting "aid"
-      if (key === "author") {
-        value["aid"] = value["pid"];
-        delete value["pid"];
-      }
-
       // Note: Manually serialise objects, but not "hologramFile"
       if (key === "author" || key === "patient") {
         value = JSON.stringify(value);

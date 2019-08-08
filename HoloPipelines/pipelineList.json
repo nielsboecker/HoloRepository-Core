@@ -11,28 +11,52 @@
    "nifti2glb":
       {
          "name":"Nifti to GLB generation",
+         "title": "Generic bone segmentation",
          "src":"pipelines/pipelineNifti2glb.py",
          "info":"Generate glb mesh from nifti",
          "addDate":"28/06/2019",
          "modDate":"28/06/2019",
-         "param":"4"
+         "description": "This pipeline utilises a marching cube algorithm to generate a 3D model from a series of CT scans. As it performs the segmentation based on Hounsfield units, it is agnostic to the specific body site.",
+         "param":"4",
+         "inputConstraints": [
+            ["Body site", "Any"],
+            ["Imaging study type", "CT scan, Micro CT scan"],
+            ["Image resolution", "Any"],
+            ["Image data format", "DICOM, NIfTI"]
+          ]
       },
    "dicom2glb":
       {
          "name":"DICOM to glb generation",
+         "title": "Generic bone segmentation",
          "src":"pipelines/pipelineDicom2glb.py",
          "info":"Generate glb mesh from dicom",
          "addDate":"01/07/2019",
          "modDate":"01/07/2019",
-         "param":"4"
+         "description": "This pipeline utilises a marching cube algorithm to generate a 3D model from a series of CT scans. As it performs the segmentation based on Hounsfield units, it is agnostic to the specific body site.",
+         "param":"4",
+         "inputConstraints": [
+            ["Body site", "Any"],
+            ["Imaging study type", "CT scan, Micro CT scan"],
+            ["Image resolution", "Any"],
+            ["Image data format", "DICOM"]
+          ]
       },
    "lungDicom2glb":
       {
          "name":"DICOM to segmented lung GLB generation",
+         "title": "Lungs segmentation",
          "src":"pipelines/pipelineLungDicom2glb.py",
          "info":"Generate segmented lungs (without air way) glb mesh from dicom",
          "addDate":"01/07/2019",
          "modDate":"01/07/2019",
-         "param":"2"
+         "description": "This pipeline segments the lungs and the airway from a series of CT scans.",
+         "param":"2",
+         "inputConstraints": [
+            ["Body site", "Chest region"],
+            ["Imaging study type", "CT scan"],
+            ["Image resolution", "Any"],
+            ["Image data format", "DICOM"]
+          ]
       }
 }

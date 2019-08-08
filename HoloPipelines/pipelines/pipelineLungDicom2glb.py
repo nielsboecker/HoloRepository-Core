@@ -37,6 +37,7 @@ def main(jobID, dicomPath, outputGlbPath):
         compressGlb=False,
     )
     print("lungDicom2glb: done, glb saved to {}".format(generatedGlbPath))
+    compJobStatus.updateStatus(jobID, "Finished")
 
 
 if __name__ == "__main__":

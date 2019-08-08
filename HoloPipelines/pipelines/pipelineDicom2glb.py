@@ -27,7 +27,7 @@ def main(jobID, dicomFolderPath, outputGlbPath, threshold):
         generatedObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False
     )
     print("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
-
+    compJobStatus.updateStatus(jobID, "Finished")
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])

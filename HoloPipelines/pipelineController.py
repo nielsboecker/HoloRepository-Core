@@ -96,7 +96,7 @@ def main():
 
 
 def startPipeline(jobID, plID, paramList=[]):
-    configFileName = "test/testList.json"  # hard coded
+    configFileName = "pipelineList.json"  # hard coded
     with open(str(pathlib.Path(newCwd).joinpath(str(configFileName)))) as json_file:
         lsPipe = json.load(json_file)
         print(str(["python", lsPipe[plID]["src"], jobID] + paramList))

@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "31b4dd38-5118-4d12-a2f8-8aba30a573a9",
-		"name": "HoloAccessor",
+		"_postman_id": "b541d019-db14-4a93-862e-ee42074bee11",
+		"name": "HoloStorageAccessor",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -22,14 +22,14 @@
 					"raw": "{\n    \"aid\": \"a1000\",\n    \"name\": {\n    \t\"full\": \"Roy Campbell\",\n        \"title\": \"Mr.\",\n        \"given\": \"Roy\",\n        \"family\": \"Campbell\"\n    }\n}"
 				},
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/authors/a1000",
+					"raw": "localhost:3200/api/v1/authors/a1000",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
+						"v1",
 						"authors",
 						"a1000"
 					]
@@ -44,16 +44,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/authors/a-1000",
+					"raw": "localhost:3200/api/v1/authors/a1000",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
+						"v1",
 						"authors",
-						"a-1000"
+						"a1000"
 					]
 				}
 			},
@@ -65,20 +65,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/authors?aid=a1000,a-100,a-101,a-102",
+					"raw": "localhost:3200/api/v1/authors?aids=a1000,a100,a101,a102",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
+						"v1",
 						"authors"
 					],
 					"query": [
 						{
-							"key": "aid",
-							"value": "a1000,a-100,a-101,a-102"
+							"key": "aids",
+							"value": "a1000,a100,a101,a102"
 						}
 					]
 				}
@@ -99,19 +99,19 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"pid\": \"p111\",\n    \"name\": {\n        \"title\": \"Mr.\",\n        \"given\": \"Timothy\",\n        \"family\": \"Jones\",\n        \"full\": \"Timothy Jones\"\n    },\n    \"gender\": \"male\",\n    \"birthDate\": \"1990-10-10\"\n}"
+					"raw": "{\n    \"pid\": \"p1000\",\n    \"name\": {\n        \"title\": \"Mr.\",\n        \"given\": \"Timothy\",\n        \"family\": \"Jones\",\n        \"full\": \"Timothy Jones\"\n    },\n    \"gender\": \"male\",\n    \"birthDate\": \"1990-10-10\"\n}"
 				},
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/patients/p111",
+					"raw": "localhost:3200/api/v1/patients/p1000",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
+						"v1",
 						"patients",
-						"p111"
+						"p1000"
 					]
 				}
 			},
@@ -123,16 +123,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/authors/a1000",
+					"raw": "localhost:3200/api/v1/patients/p1000",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
-						"authors",
-						"a1000"
+						"v1",
+						"patients",
+						"p1000"
 					]
 				}
 			},
@@ -144,20 +144,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/patients?pid=p111,p112,p113,p100,p1010101",
+					"raw": "localhost:3200/api/v1/patients?pids=p1000,p100,p101,p102,p103",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
+						"v1",
 						"patients"
 					],
 					"query": [
 						{
-							"key": "pid",
-							"value": "p111,p112,p113,p100,p1010101"
+							"key": "pids",
+							"value": "p1000,p100,p101,p102,p103"
 						}
 					]
 				}
@@ -248,14 +248,14 @@
 					]
 				},
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/holograms",
+					"raw": "localhost:3200/api/v1/holograms",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
+						"v1",
 						"holograms"
 					]
 				}
@@ -268,14 +268,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/holograms/hid-from-post-method",
+					"raw": "localhost:3200/api/v1/holograms/hid-from-post-method",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
+						"v1",
 						"holograms",
 						"hid-from-post-method"
 					]
@@ -290,20 +290,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/holograms?hid=h-100,h-101,h-102,h-103,h-104,",
+					"raw": "localhost:3200/api/v1/holograms?hids=h100,h101,h102,h103,h104,",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
+						"v1",
 						"holograms"
 					],
 					"query": [
 						{
-							"key": "hid",
-							"value": "h-100,h-101,h-102,h-103,h-104,"
+							"key": "hids",
+							"value": "h100,h101,h102,h103,h104,"
 						}
 					]
 				}
@@ -316,20 +316,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/holograms?pid=p-101,p-102,p-103,p-104",
+					"raw": "localhost:3200/api/v1/holograms?pids=p101,p102,p103,p104",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
+						"v1",
 						"holograms"
 					],
 					"query": [
 						{
-							"key": "pid",
-							"value": "p-101,p-102,p-103,p-104"
+							"key": "pids",
+							"value": "p101,p102,p103,p104"
 						}
 					]
 				}
@@ -342,20 +342,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/holograms?pid=p-500&creationmode=UPLOAD_EXISTING_MODEL",
+					"raw": "localhost:3200/api/v1/holograms?pids=p500&creationmode=UPLOAD_EXISTING_MODEL",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
+						"v1",
 						"holograms"
 					],
 					"query": [
 						{
-							"key": "pid",
-							"value": "p-500"
+							"key": "pids",
+							"value": "p500"
 						},
 						{
 							"key": "creationmode",
@@ -372,16 +372,16 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/holograms/use-hid-from-post-method",
+					"raw": "localhost:3200/api/v1/holograms/hid-from-post-method",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
+						"v1",
 						"holograms",
-						"use-hid-from-post-method"
+						"hid-from-post-method"
 					]
 				}
 			},
@@ -393,14 +393,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3200/api/1.0.0/holograms/hid-from-post-method/download",
+					"raw": "localhost:3200/api/v1/holograms/hid-from-post-method/download",
 					"host": [
 						"localhost"
 					],
 					"port": "3200",
 					"path": [
 						"api",
-						"1.0.0",
+						"v1",
 						"holograms",
 						"hid-from-post-method",
 						"download"

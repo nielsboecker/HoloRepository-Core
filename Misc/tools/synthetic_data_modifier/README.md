@@ -10,10 +10,10 @@ In particular, it does the following:
 
 Output data can then be uploaded into FHIR servers via the `holo_fhir_tool`.
 
-# Installation
+## Installation
 Install with `pipenv install`
 
-# Usage
+## Usage
 ```shell
 synthea_data_modifier.py convert in_dir out_dir [--config config.cfg]
 
@@ -23,7 +23,7 @@ synthea_data_modifier.py convert in_dir out_dir [--config config.cfg]
     --config    path to configuration file (default: config.cfg)
 ```
 
-# Configuration
+## Configuration
 Configure specific input synthea files to be modified with specific imaging study resource information.
 ```cfg
 {
@@ -43,7 +43,7 @@ Configure specific input synthea files to be modified with specific imaging stud
 }
 ```
 
-# Misc: Data Selection From Synthea
+## Misc: Data Selection From Synthea
 Patient data used in this module is obtained from synthea via the following steps:
 1. Generate a large number of data from synthea
 2. Select those containing ImagingStudy resource

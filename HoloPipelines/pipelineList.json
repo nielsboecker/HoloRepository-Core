@@ -1,13 +1,4 @@
 {
-   "nifti2obj":
-      {
-         "name":"Nifti to OBJ generation",
-         "src":"pipelines/pipelineNifti2obj.py",
-         "info":"Generate obj mesh from nifti",
-         "addDate":"27/06/2019",
-         "modDate":"27/06/2019",
-         "param":"4"
-      },
    "nifti2glb":
       {
          "name":"Nifti to GLB generation",
@@ -23,7 +14,9 @@
             ["Imaging study type", "CT scan, Micro CT scan"],
             ["Image resolution", "Any"],
             ["Image data format", "DICOM, NIfTI"]
-          ]
+          ],
+          "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_2_input.png",
+          "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_2_output.png"
       },
    "dicom2glb":
       {
@@ -40,7 +33,9 @@
             ["Imaging study type", "CT scan, Micro CT scan"],
             ["Image resolution", "Any"],
             ["Image data format", "DICOM"]
-          ]
+          ],
+          "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_2_input.png",
+          "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_2_output.png"
       },
    "lungDicom2glb":
       {
@@ -57,6 +52,8 @@
             ["Imaging study type", "CT scan"],
             ["Image resolution", "Any"],
             ["Image data format", "DICOM"]
-          ]
+          ],
+          "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_3_input.png",
+          "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_3_output.png"
       }
 }

@@ -25,17 +25,16 @@ status = {
     "j0": {"status": "segment", "stamp": "2019-08-05 14:09:19"},
     "j1": {"status": "segment", "stamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")},
 }
-jobid2plid={"j0":"nifti2glb", "j1":"dicom2glb"}
-job2inputURL={"j0":"url"}
-job2outputURL={}
+jobid2plid = {"j0": "nifti2glb", "j1": "dicom2glb"}
+job2inputURL = {"j0": "url"}
+job2outputURL = {}
 
 # logging formatting
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
 logging.basicConfig(level=logging.INFO, format=FORMAT)
 
 
-
-def save_request_file_to_input_dir(filename,request_input_data_URL):
+def save_request_file_to_input_dir(filename, request_input_data_URL):
     global save_directory
     if not save_directory.is_dir():
         os.mkdir("input")
@@ -46,19 +45,19 @@ def save_request_file_to_input_dir(filename,request_input_data_URL):
     open(file_dir, "wb+").write(response.content)
     logging.info("file dir: " + str(file_dir))
 
+
 def unzip_the_file(filename):
     # get unzip input filename
     filename_unzip = filename.rsplit(".", 1)[0]
     logging.info("unzip file name:" + filename_unzip)
-    
+
     # unzip the input file
     file_dir = this_cwd.joinpath(str(save_directory), filename)
-    path_to_store_unzip_file = this_cwd.joinpath(str(save_directory),filename_unzip)
+    path_to_store_unzip_file = this_cwd.joinpath(str(save_directory), filename_unzip)
     with ZipFile(str(file_dir), "r") as zipObj:
-          # unzip
-          zipObj.extractall(str(path_to_store_unzip_file))
+        # unzip
+        zipObj.extractall(str(path_to_store_unzip_file))
     return str(path_to_store_unzip_file)
-
 
 
 # cleaning the status
@@ -101,9 +100,8 @@ def getTheStatus():
     return json.dumps(status)
 
 
-
 # get pipeline info
-@app.route("api/v1/pipelines", methods=["GET"])
+@app.route("/api/v1/pipelines", methods=["GET"])
 def send_list_of_pipelines():
     global pipeline_list
     pipeline_dict = {}
@@ -116,14 +114,13 @@ def send_list_of_pipelines():
         pipeline_dict[key] = {
             "plid": key,
             "title": value["name"],
-            "description": value["info"],
-            "inputConstraints": value["param"],
-            "inputExampleImageUrl": "NothingToSeeHere",
-            "outputExampleImageUrl": "NothingToSeeHere",
+            "description": value["description"],
+            "inputConstraints": value["inputConstraints"],
+            "inputExampleImageUrl": value["inputExampleImageUrl"],
+            "outputExampleImageUrl": value["outputExampleImageUrl"],
         }
 
     return json.dumps(pipeline_dict)  # should we str() here?
-
 
 
 # use to start the pipeline
@@ -139,57 +136,57 @@ def send_job_start_response():
     if request_input_data_URL.find("/"):
         filename = request_input_data_URL.rsplit("/", 1)[1]
         logging.info("filename: " + filename)
-        
-    save_request_file_to_input_dir(filename,request_input_data_URL)
-    unzip_file_dir=unzip_the_file(filename)
+
+    save_request_file_to_input_dir(filename, request_input_data_URL)
+    unzip_file_dir = unzip_the_file(filename)
 
     # create output dir
     global output_directory
     if not output_directory.is_dir():
         os.mkdir("output")
 
-    # create arglist pass to pipeline controller 
-    # (this part will change later, we should not check the pipeline arglist in this way)   
+    # create arglist pass to pipeline controller
+    # (this part will change later, we should not check the pipeline arglist in this way)
     jobID = str(uuid.uuid1())
     global jobid2plid
-    jobid2plid.update({jobID:request_plid})
+    jobid2plid.update({jobID: request_plid})
     if request_plid != "lungDicom2glb":
-        arglist = [jobID, unzip_file_dir,str(this_cwd.joinpath(str(output_directory), unzip_file_dir.rsplit("/", 1)[1]+".glb")),"300"]
+        arglist = [
+            jobID,
+            unzip_file_dir,
+            str(
+                this_cwd.joinpath(
+                    str(output_directory), unzip_file_dir.rsplit("/", 1)[1] + ".glb"
+                )
+            ),
+            "300",
+        ]
     else:
-        arglist = [jobID, unzip_file_dir,str(this_cwd.joinpath(str(output_directory), unzip_file_dir.rsplit("/", 1)[1]+".glb"))]
-    logging.info("arglist: "+str(arglist))
+        arglist = [
+            jobID,
+            unzip_file_dir,
+            str(
+                this_cwd.joinpath(
+                    str(output_directory), unzip_file_dir.rsplit("/", 1)[1] + ".glb"
+                )
+            ),
+        ]
+    logging.info("arglist: " + str(arglist))
 
     # pass to controller to start pipeline
     startPipeline(jobID, request_plid, arglist)
     return json_response(jobID=jobID, status_code=202)
 
 
-
 @app.route("/job/<jobid>/status", methods=["GET"])
 def get_job_status(jobid):
     if jobid in status:
-        if status[jobid]["status"] == "Finished":
-            global pipeline_list
-            global jobid2plid
-            plid=jobid2plid[jobid]
-            status_for_current_jobid={
-                "plid" : plid ,
-                "title" : pipeline_list[plid]["title"],
-                "description" : pipeline_list[plid]["description"],
-                "inputExampleImageUrl" : 
-            }
-
-        status_for_current_jobid = {jobid: status[jobid]}
+        status_for_current_jobid = {jobid: status[jobid]["status"]}
     else:
         status_for_current_jobid = {jobid: "does not exist"}
-    
-    
 
     return json.dumps(status_for_current_jobid)
 
-
-
-    
 
 if __name__ == "__main__":
     app.run(debug=True, host="127.0.0.1")

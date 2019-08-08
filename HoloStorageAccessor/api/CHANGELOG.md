@@ -4,6 +4,10 @@ All changes done to the HoloStorage Accessor API spec will be documented here.
 View the interactive documentation of the most updated API at the following link:
 https://app.swaggerhub.com/apis/boonwj/HoloRepository/
 
+## [1.0.1] - 2019-08-08
+### Changed
+- `GET /patients`, `GET /holograms` and `GET /authors` to return 400 error when no query parameters are provided
+
 ## [1.0.0] - 2019-08-05
 ### Changed
 - Update api description to be more explict with the return results of mass queries of `holograms`, `authors` and `patients`

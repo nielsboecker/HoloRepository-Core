@@ -1,4 +1,4 @@
-from components import compDicom2nifti_sitk
+from components import compDicom2nifti
 from components import compHttpRequest
 from components import compNifti2numpy
 from components import compSeparateNumpy
@@ -7,7 +7,7 @@ import sys
 
 
 def main(inputDicomPath, outputGlbFolderPath):
-    generatedNiftiPath = compDicom2nifti_sitk.main(inputDicomPath, "_temp.nii")
+    generatedNiftiPath = compDicom2nifti.main(inputDicomPath, "_temp.nii")
     segmentedNiftiPath = compHttpRequest.sendFilePostRequest(
         "http://localhost:5000/model",
         generatedNiftiPath,

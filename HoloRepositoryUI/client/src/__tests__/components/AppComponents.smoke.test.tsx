@@ -92,7 +92,7 @@ it("renders PipelineSpecificationCard without crashing", () => {
 });
 
 it("renders NewHologramPage without crashing", () => {
-  shallow(<NewHologramPage />);
+  mountWithContextProvider(<NewHologramPage />);
 });
 
 it("renders CreationModeSelectionStep without crashing", () => {
@@ -124,11 +124,11 @@ it("renders NewHologramControlsAndProgress without crashing", () => {
 });
 
 it("renders FileUploadStep without crashing", () => {
-  shallow(<FileUploadStep />);
+  shallow(<FileUploadStep onHologramFileChange={jest.fn()} />);
 });
 
 it("renders UploadProcessingStep without crashing", () => {
-  shallow(<UploadProcessingStep />);
+  shallow(<UploadProcessingStep onComponentDidMount={jest.fn()} />);
 });
 
 it("renders PatientBreadcrumb without crashing", () => {

@@ -112,7 +112,7 @@ func VerifyHologramQuery(hid, pid, creationMode string) (HologramQueryDetails, e
 	case "GENERATE_FROM_IMAGING_STUDY", "UPLOAD_EXISTING_MODEL", "FROM_DEPTHVISOR_RECORDING":
 		details.CreationMode = creationMode
 	default:
-		return HologramQueryDetails{}, errors.New("Invalid value used in creationmode")
+		return HologramQueryDetails{}, errors.New(`Invalid value used in creationmode. Expecting: GENERATE_FROM_IMAGING_STUDY, UPLOAD_EXISTING_MODEL, FROM_DEPTHVISOR_RECORDING`)
 	}
 
 	return details, nil

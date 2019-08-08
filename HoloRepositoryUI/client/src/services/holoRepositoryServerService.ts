@@ -94,7 +94,7 @@ export class HoloRepositoryServerService {
 
   public async generateHologram(metaData: IHologramCreationRequest_Generate): Promise<boolean> {
     return serverAxios
-      .post(`${routes.holograms}/generate`, metaData)
+      .post(`${routes.pipelines}/generate`, metaData)
       .then(response => response.status === 200 || response.status === 201)
       .catch(handleError);
   }

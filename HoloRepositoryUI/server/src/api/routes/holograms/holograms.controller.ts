@@ -19,12 +19,6 @@ export class HologramsController {
     // Note: Upload models goes directly to the POST /holograms of HoloStorageAccessor
     res.redirect(308, HologramsService.getBaseURL());
   }
-
-  public generate(req: Request, res: Response): void {
-    // Note: Ideally, the request should be checked for validity
-    // Note: Upload models goes directly to the POST /job of HoloPipelines
-    res.redirect(308, HologramsService.getPipelineJobURL());
-  }
 }
 
 export default new HologramsController();

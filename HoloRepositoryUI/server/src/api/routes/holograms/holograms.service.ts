@@ -1,5 +1,4 @@
 import AccessorClient from "../../../common/clients/HoloStorageAccesorClient";
-import PipelinesClient from "../../../common/clients/HoloPipelinesClient";
 import logger from "../../../common/logger";
 
 export class HologramsService {
@@ -20,10 +19,6 @@ export class HologramsService {
 
   public getBaseURL = (): string => {
     return AccessorClient.getBaseURL();
-  };
-
-  public getPipelineJobURL = (): string => {
-    return PipelinesClient.getJobURL();
   };
 }
 

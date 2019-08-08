@@ -1,5 +1,5 @@
 const accessorBaseUrl = "http://localhost";
-const port = 8080;
+const port = 3200;
 const apiPrefix = `api/1.0.0`;
 const hologramsEndpoint = "holograms";
 const baseURL = `${accessorBaseUrl}:${port}/${apiPrefix}/${hologramsEndpoint}`;

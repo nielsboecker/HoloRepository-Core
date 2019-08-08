@@ -1,5 +1,12 @@
 import serverAxios, { routes } from "./holoRepositoryServerAxios";
-import { IPatient, IPractitioner, IHologram, IImagingStudy, IPipeline } from "../../../types";
+import {
+  IHologram,
+  IHologramCreationRequest_Upload,
+  IImagingStudy,
+  IPatient,
+  IPipeline,
+  IPractitioner
+} from "../../../types";
 import { PidToPatientsMap } from "../components/shared/AppState";
 import { AxiosResponse } from "axios";
 
@@ -66,10 +73,28 @@ export class HoloRepositoryServerService {
       .catch(handleError);
   }
 
-  public async uploadHologram(): Promise<boolean> {
-    // TODO: Implement
-    console.warn("Upload not implemented yet");
-    return Promise.resolve(true);
+  public async uploadHologram(metaData: IHologramCreationRequest_Upload): Promise<boolean> {
+    const formData = new FormData();
+    for (let [key, value] of Object.entries(metaData)) {
+      // Note: A little hack due to Accessor API expecting "aid"
+      if (key === "author") {
+        value["aid"] = value["pid"];
+        delete value["pid"];
+      }
+
+      // Note: Manually serialise objects, but not "hologramFile"
+      if (key === "author" || key === "patient") {
+        value = JSON.stringify(value);
+      }
+      formData.set(key, value);
+    }
+
+    return serverAxios
+      .post(`${routes.holograms}/upload`, formData, {
+        headers: { "content-type": "multipart/form-data" }
+      })
+      .then(response => response.status === 200 || response.status === 201)
+      .catch(handleError);
   }
 
   public async generateHologram(): Promise<boolean | null> {

@@ -78,8 +78,14 @@ func AuthorsAidPut(c *gin.Context) {
 
 // AuthorsGet - Mass query for author metadata in HoloStorage
 func AuthorsGet(c *gin.Context) {
+	aids := c.Query("aid")
+	if aids == "" {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: "No aids were provided for this query"})
+		return
+	}
+
 	fhirRequests := make(map[string]FHIRRequest)
-	ids := ParseQueryIDs(c.Query("aid"))
+	ids := ParseQueryIDs(aids)
 
 	for _, id := range ids {
 		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+id)
@@ -343,8 +349,14 @@ func HologramsPost(c *gin.Context) {
 
 // PatientsGet - Mass query for patients metadata in HoloStorage
 func PatientsGet(c *gin.Context) {
+	pids := c.Query("pid")
+	if pids == "" {
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: "No pids were provided for this query"})
+		return
+	}
+
 	fhirRequests := make(map[string]FHIRRequest)
-	ids := ParseQueryIDs(c.Query("pid"))
+	ids := ParseQueryIDs(pids)
 
 	for _, id := range ids {
 		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Patient/"+id)

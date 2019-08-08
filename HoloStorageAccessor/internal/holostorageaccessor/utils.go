@@ -96,6 +96,8 @@ func VerifyHologramQuery(hid, pid, creationMode string) (HologramQueryDetails, e
 	var details HologramQueryDetails
 	if hid != "" && pid != "" {
 		return HologramQueryDetails{}, errors.New("Use either pid or hid, not both")
+	} else if hid == "" && pid == "" {
+		return HologramQueryDetails{}, errors.New("No hids or pids were provided for this query")
 	} else if hid != "" {
 		details.IDs = ParseQueryIDs(hid)
 		details.Mode = "hologram"

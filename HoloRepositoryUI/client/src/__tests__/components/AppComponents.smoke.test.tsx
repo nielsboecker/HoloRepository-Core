@@ -72,7 +72,7 @@ it("renders HologramsListPage without crashing", () => {
 });
 
 it("renders GenerationProcessingStep without crashing", () => {
-  shallow(<GenerationProcessingStep />);
+  shallow(<GenerationProcessingStep onComponentDidMount={jest.fn()} />);
 });
 
 it("renders ImagingStudyDetailsCard without crashing", () => {

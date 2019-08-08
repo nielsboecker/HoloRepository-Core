@@ -11,7 +11,11 @@ import UploadProcessingStep from "./upload/UploadProcessingStep";
 import NewHologramControlsAndProgress from "./shared/NewHologramControlsAndProgress";
 import GenerationProcessingStep from "./generate/GenerationProcessingStep";
 import { HologramCreationMode } from "../../../types";
-import { IHologramCreationRequest, IHologramCreationRequest_Upload } from "../../../../../types";
+import {
+  IHologramCreationRequest,
+  IHologramCreationRequest_Generate,
+  IHologramCreationRequest_Upload
+} from "../../../../../types";
 import { PropsWithContext, withAppContext } from "../../shared/AppState";
 
 export interface IHologramCreationStep {
@@ -24,15 +28,21 @@ export interface IHologramCreationSteps {
   [HologramCreationMode.UPLOAD_EXISTING_MODEL]: IHologramCreationStep[];
 }
 
-interface INewHologramPageInternalState {
-  currentStep: number;
-  creationMode: HologramCreationMode;
-}
-
 type INewHologramPageProps = RouteComponentProps & PropsWithContext;
 
-type INewHologramPageState = INewHologramPageInternalState &
-  Partial<IHologramCreationRequest> & { hologramFile?: File };
+interface INewHologramPageInternalState {
+  // Operation of the multi-step process
+  currentStep: number;
+  creationMode: HologramCreationMode;
+
+  // User selections and actions in child components
+  hologramFile?: File;
+  selectedPipelineId?: string;
+  selectedImagingStudyEndpoint?: string;
+}
+
+// Union with Partial<IHologramCreationRequest> to allow subsequent filling of the respective fields
+type INewHologramPageState = INewHologramPageInternalState & Partial<IHologramCreationRequest>;
 
 class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageState> {
   state: INewHologramPageState = {
@@ -60,12 +70,37 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     BackendService.uploadHologram(metaData).then(response => console.log(response)); // boolean
   };
 
-  private _generatePostRequestMetaData_Upload = (): IHologramCreationRequest_Upload | null => {
-    const { hologramFile, title, description, bodySite, dateOfImaging } = this.state;
+  private _handleSubmit_Generate = () => {
+    const metaData = this._generatePostRequestMetaData_Generate();
+    if (!metaData) {
+      return this._logErrorAndReturnNull();
+    }
+    BackendService.generateHologram(metaData).then(response => console.log(response)); // boolean
+  };
+
+  private _generatePostRequestMetaData_Shared = (): IHologramCreationRequest | null => {
+    const { title, description, bodySite, dateOfImaging } = this.state;
     const { patients, selectedPatientId, practitioner } = this.props.context!;
     const patient = selectedPatientId && patients[selectedPatientId];
 
-    if (!practitioner || !patient || !hologramFile) {
+    if (!practitioner || !patient) {
+      return this._logErrorAndReturnNull();
+    }
+
+    return {
+      patient: patient,
+      author: practitioner,
+      title: title || "",
+      description: description || "",
+      bodySite: bodySite || "",
+      dateOfImaging: dateOfImaging || ""
+    };
+  };
+
+  private _generatePostRequestMetaData_Upload = (): IHologramCreationRequest_Upload | null => {
+    const { hologramFile } = this.state;
+    const sharedMetaData = this._generatePostRequestMetaData_Shared();
+    if (!hologramFile || !sharedMetaData) {
       return this._logErrorAndReturnNull();
     }
 
@@ -79,14 +114,26 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
 
     // @ts-ignore because of creationMode type definitions from different directories
     return {
-      patient: patient,
-      author: practitioner,
-      hologramFile: hologramFile,
-      title: title || "",
-      description: description || "",
-      bodySite: bodySite || "",
-      dateOfImaging: dateOfImaging || "",
+      hologramFile,
+      ...sharedMetaData,
       ...originalUploadData
+    };
+  };
+
+  private _generatePostRequestMetaData_Generate = (): IHologramCreationRequest_Generate | null => {
+    const {
+      selectedPipelineId: plid,
+      selectedImagingStudyEndpoint: imagingStudyEndpoint
+    } = this.state;
+    const sharedMetaData = this._generatePostRequestMetaData_Shared();
+    if (!plid || !imagingStudyEndpoint || !sharedMetaData) {
+      return this._logErrorAndReturnNull();
+    }
+
+    return {
+      plid,
+      imagingStudyEndpoint,
+      ...sharedMetaData
     };
   };
 
@@ -121,7 +168,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       },
       {
         title: "Process",
-        content: <GenerationProcessingStep />
+        content: <GenerationProcessingStep onComponentDidMount={this._handleSubmit_Generate} />
       }
     ],
     [HologramCreationMode.UPLOAD_EXISTING_MODEL]: [

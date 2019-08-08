@@ -11,7 +11,7 @@ paths:
       description: |-
         Obtain patient information stored within HoloStorage.
 
-        Multiple IDs can be passed with the syntax `/patients?pid=id1,id2,id3,...,idx`
+        Multiple IDs can be passed with the syntax `/patients?pids=id1,id2,id3,...,idx`
 
         Mass query results will return with `ID:{result}`
         ```
@@ -86,7 +86,7 @@ paths:
 
         Multiple IDs can be passed with either syntax:
 
-        `/holograms?hid=id1,id2,id3,...,idx` or `/holograms?pid=id1,id2,id3,...,idx`
+        `/holograms?hids=id1,id2,id3,...,idx` or `/holograms?pids=id1,id2,id3,...,idx`
 
         **Note: You can only use either hid or pid**
 
@@ -203,7 +203,7 @@ paths:
       description: |-
         Obtain author information stored within HoloStorage.
 
-        Multiple IDs can be passed with the syntax `/authors?aid=id1,id2,id3,...,idx`
+        Multiple IDs can be passed with the syntax `/authors?aids=id1,id2,id3,...,idx`
 
         Mass query results will return with `ID:{result}`
         ```
@@ -295,7 +295,7 @@ components:
   parameters:
     PIDQuery:
       in: query
-      name: pid
+      name: pids
       schema:
         type: string
         format: uuid
@@ -316,7 +316,7 @@ components:
 
     HIDQuery:
       in: query
-      name: hid
+      name: hids
       schema:
         type: string
         format: uuid
@@ -349,7 +349,7 @@ components:
 
     AIDQuery:
       in: query
-      name: aid
+      name: aids
       schema:
         type: string
         format: uuid

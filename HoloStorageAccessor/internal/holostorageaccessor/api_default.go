@@ -78,7 +78,7 @@ func AuthorsAidPut(c *gin.Context) {
 
 // AuthorsGet - Mass query for author metadata in HoloStorage
 func AuthorsGet(c *gin.Context) {
-	aids := c.Query("aid")
+	aids := c.Query("aids")
 	if aids == "" {
 		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: "No aids were provided for this query"})
 		return
@@ -115,10 +115,10 @@ func AuthorsGet(c *gin.Context) {
 
 // HologramsGet - Mass query for hologram metadata based on hologram ids
 func HologramsGet(c *gin.Context) {
-	hid := c.Query("hid")
-	pid := c.Query("pid")
+	hids := c.Query("hids")
+	pids := c.Query("pids")
 	creationMode := c.Query("creationmode")
-	details, err := VerifyHologramQuery(hid, pid, creationMode)
+	details, err := VerifyHologramQuery(hids, pids, creationMode)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: err.Error()})
 		return
@@ -349,7 +349,7 @@ func HologramsPost(c *gin.Context) {
 
 // PatientsGet - Mass query for patients metadata in HoloStorage
 func PatientsGet(c *gin.Context) {
-	pids := c.Query("pid")
+	pids := c.Query("pids")
 	if pids == "" {
 		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: "No pids were provided for this query"})
 		return

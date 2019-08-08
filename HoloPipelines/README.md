@@ -56,16 +56,7 @@ pip install -r requirements.txt
 
 Some dependencies are not available through pip, they are listed below with their installation instructions
 
-**GDCM (Debian/Ubuntu)**
-
-```
-sudo apt-get install libgdcm2.8
-sudo apt-get install libgdcm-tools
-```
-
-Verify installation success and see if `gdcmdump` or `gdcmconv` commands can be executed.
-
-The final 2 dependencies can be installed using Node.js package manager. Please make sure to have the latest version of npm installed.
+These 2 dependencies can be installed using Node.js package manager. Please make sure to have the latest version of npm installed.
 
 **obj2gltf** https://github.com/AnalyticalGraphicsInc/OBJ2GLTF
 

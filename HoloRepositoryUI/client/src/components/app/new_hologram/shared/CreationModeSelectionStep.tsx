@@ -5,7 +5,7 @@ import { HologramCreationMode } from "../../../../types";
 
 const choiceGroupOptions: IChoiceGroupOption[] = [
   {
-    key: HologramCreationMode.generateFromImagingStudy,
+    key: HologramCreationMode.GENERATE_FROM_IMAGING_STUDY,
     text: "Generate from an imaging study",
     onRenderLabel: () => (
       <ExtendedChoiceGroupLabel
@@ -17,7 +17,7 @@ const choiceGroupOptions: IChoiceGroupOption[] = [
     )
   } as IChoiceGroupOption,
   {
-    key: HologramCreationMode.uploadExistingModel,
+    key: HologramCreationMode.UPLOAD_EXISTING_MODEL,
     text: "Upload an existing 3D model",
     onRenderLabel: () => (
       <ExtendedChoiceGroupLabel

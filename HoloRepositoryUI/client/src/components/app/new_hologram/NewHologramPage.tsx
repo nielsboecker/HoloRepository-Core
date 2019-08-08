@@ -85,7 +85,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       title: title || "",
       description: description || "",
       bodySite: bodySite || "",
-      dateOfImaging: dateOfImaging || "1970-01-01T00:00:00.000Z",
+      dateOfImaging: dateOfImaging || "",
       ...originalUploadData
     };
   };

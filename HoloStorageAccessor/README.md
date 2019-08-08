@@ -42,7 +42,7 @@ To run the server, first configure the necessary [configurations](#configuration
 go run cmd/holo-storage-accessor/main.go
 ```
 
-Verify the accessor by visiting `localhost:8080/api/1.0.0` or `localhost:8080/api/1.0.0/ui`
+Verify the accessor by visiting `localhost:3200/api/1.0.0` or `localhost:3200/api/1.0.0/ui`
 
 ### Testing
 
@@ -67,9 +67,9 @@ docker build -t holo-storage-accessor .
 Once the image is built load the configuration, just run
 
 ```
-docker run -it --rm --env-file config.env -p 8080:8080 holo-storage-accessor
+docker run -it --rm --env-file config.env -p 3200:3200 holo-storage-accessor
 ```
-You can then access the container via localhost:8080
+You can then access the container via localhost:3200
 
 ## Configuration
 Accessor application uses the following environmental variables as configuration.

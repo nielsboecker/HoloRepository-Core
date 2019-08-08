@@ -22,11 +22,11 @@
 					"raw": "{\n    \"aid\": \"a1000\",\n    \"name\": {\n    \t\"full\": \"Roy Campbell\",\n        \"title\": \"Mr.\",\n        \"given\": \"Roy\",\n        \"family\": \"Campbell\"\n    }\n}"
 				},
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/authors/a1000",
+					"raw": "localhost:3200/api/1.0.0/authors/a1000",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",
@@ -44,11 +44,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/authors/a-1000",
+					"raw": "localhost:3200/api/1.0.0/authors/a-1000",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",
@@ -65,11 +65,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/authors?aid=a1000,a-100,a-101,a-102",
+					"raw": "localhost:3200/api/1.0.0/authors?aid=a1000,a-100,a-101,a-102",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",
@@ -102,11 +102,11 @@
 					"raw": "{\n    \"pid\": \"p111\",\n    \"name\": {\n        \"title\": \"Mr.\",\n        \"given\": \"Timothy\",\n        \"family\": \"Jones\",\n        \"full\": \"Timothy Jones\"\n    },\n    \"gender\": \"male\",\n    \"birthDate\": \"1990-10-10\"\n}"
 				},
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/patients/p111",
+					"raw": "localhost:3200/api/1.0.0/patients/p111",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",
@@ -123,11 +123,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/authors/a1000",
+					"raw": "localhost:3200/api/1.0.0/authors/a1000",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",
@@ -144,11 +144,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/patients?pid=p111,p112,p113,p100,p1010101",
+					"raw": "localhost:3200/api/1.0.0/patients?pid=p111,p112,p113,p100,p1010101",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",
@@ -248,11 +248,11 @@
 					]
 				},
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/holograms",
+					"raw": "localhost:3200/api/1.0.0/holograms",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",
@@ -268,11 +268,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/holograms/hid-from-post-method",
+					"raw": "localhost:3200/api/1.0.0/holograms/hid-from-post-method",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",
@@ -290,11 +290,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/holograms?hid=h-100,h-101,h-102,h-103,h-104,",
+					"raw": "localhost:3200/api/1.0.0/holograms?hid=h-100,h-101,h-102,h-103,h-104,",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",
@@ -316,11 +316,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/holograms?pid=p-101,p-102,p-103,p-104",
+					"raw": "localhost:3200/api/1.0.0/holograms?pid=p-101,p-102,p-103,p-104",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",
@@ -342,11 +342,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/holograms?pid=p-500&creationmode=UPLOAD_EXISTING_MODEL",
+					"raw": "localhost:3200/api/1.0.0/holograms?pid=p-500&creationmode=UPLOAD_EXISTING_MODEL",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",
@@ -372,11 +372,11 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/holograms/use-hid-from-post-method",
+					"raw": "localhost:3200/api/1.0.0/holograms/use-hid-from-post-method",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",
@@ -393,11 +393,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/1.0.0/holograms/hid-from-post-method/download",
+					"raw": "localhost:3200/api/1.0.0/holograms/hid-from-post-method/download",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3200",
 					"path": [
 						"api",
 						"1.0.0",

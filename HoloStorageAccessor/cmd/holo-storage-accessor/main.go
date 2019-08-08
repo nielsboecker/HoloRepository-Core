@@ -17,5 +17,5 @@ import (
 func main() {
 	router := apiserver.NewRouter()
 
-	log.Fatal(router.Run(":8080"))
+	log.Fatal(router.Run(":3200"))
 }

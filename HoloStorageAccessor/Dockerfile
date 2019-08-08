@@ -16,5 +16,5 @@ COPY --from=build /workspace/third_party ./third_party
 COPY --from=build /workspace/api ./api
 COPY --from=build /workspace/holo-storage-accessor ./
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-EXPOSE 8080/tcp
+EXPOSE 3200
 ENTRYPOINT ["./holo-storage-accessor"]

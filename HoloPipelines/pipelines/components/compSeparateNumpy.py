@@ -22,7 +22,7 @@ def main(inputNumpy, outputPath):
                 "getMultipleNumpy: error occured while loading numpy. Please make sure the path to numpy is correct."
             )
 
-    # get frequency. Maybe can add clustering later?
+    # get frequency
     unique, counts = np.unique(originalNumpy, return_counts=True)
 
     logging.info(np.asarray(unique))
@@ -39,7 +39,7 @@ def main(inputNumpy, outputPath):
                 0,
                 pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),
             )
-            makeGlb.main(  # need to change temp to dicom folder name
+            makeGlb.main(
                 pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),
                 outputPath.joinpath("organNo" + str(integer) + ".glb"),
                 True,

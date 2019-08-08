@@ -1,4 +1,4 @@
-import { IHumanName, IPractitioner, IPatient } from "./Patients";
+import { IAuthor, IHumanName, IPractitioner, IPatient } from "./Patients";
 
 /**
  * Interface representing one image series in a DICOM imaging study. For this project, we assume that every study
@@ -71,7 +71,7 @@ export interface IPipeline {
  */
 export interface IHologramCreationRequest {
   patient: IPatient;
-  author: IPractitioner;
+  author: IAuthor;
   title: string;
   description: string;
   bodySite: string;

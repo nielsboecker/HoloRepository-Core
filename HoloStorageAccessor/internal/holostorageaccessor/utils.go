@@ -50,17 +50,23 @@ func ParseHologramUploadPostInput(formData url.Values) (HologramPostInput, error
 			}
 			hologramData.Aid = authorData.Aid
 		case "creationDate":
-			creationDate, err := time.Parse(time.RFC3339, formData.Get(key))
-			if err != nil {
-				return HologramPostInput{}, fmt.Errorf("Key %s='%s' does not conform to RFC3339 standards", key, formData.Get(key))
+			dateString := formData.Get(key)
+			if dateString != "" {
+				creationDate, err := time.Parse(time.RFC3339, dateString)
+				if err != nil {
+					return HologramPostInput{}, fmt.Errorf("Key %s='%s' does not conform to RFC3339 standards", key, formData.Get(key))
+				}
+				hologramData.CreationDate = &creationDate
 			}
-			hologramData.CreationDate = &creationDate
 		case "dateOfImaging":
-			dateOfImaging, err := time.Parse(time.RFC3339, formData.Get(key))
-			if err != nil {
-				return HologramPostInput{}, fmt.Errorf("Key %s='%s' does not conform to RFC3339 standards", key, formData.Get(key))
+			dateString := formData.Get(key)
+			if dateString != "" {
+				dateOfImaging, err := time.Parse(time.RFC3339, dateString)
+				if err != nil {
+					return HologramPostInput{}, fmt.Errorf("Key %s='%s' does not conform to RFC3339 standards", key, formData.Get(key))
+				}
+				hologramData.DateOfImaging = &dateOfImaging
 			}
-			hologramData.DateOfImaging = &dateOfImaging
 		case "title":
 			hologramData.Title = formData.Get(key)
 		case "description":

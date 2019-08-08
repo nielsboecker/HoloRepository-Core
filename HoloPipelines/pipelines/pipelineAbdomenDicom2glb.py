@@ -2,6 +2,7 @@ from components import compDicom2nifti_sitk
 from components import compHttpRequest
 from components import compNifti2numpy
 from components import compSeparateNumpy
+from components import compNumpyTransformation
 import sys
 
 
@@ -13,9 +14,8 @@ def main(inputDicomPath, outputGlbFolderPath):
         "_tempAbdomenSegmented.nii.gz",
     )
     generatedNumpyList = compNifti2numpy.main(segmentedNiftiPath)
-    generatedGlbPathList = compSeparateNumpy.main(
-        generatedNumpyList, outputGlbFolderPath
-    )
+    resizedNumpyList = compNumpyTransformation.sizeLimit(generatedNumpyList, 300)
+    generatedGlbPathList = compSeparateNumpy.main(resizedNumpyList, outputGlbFolderPath)
     print(
         "abdomenDicom2glb: done, glb models generated at "
         + ",".join(generatedGlbPathList)

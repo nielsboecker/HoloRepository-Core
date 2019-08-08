@@ -16,14 +16,14 @@ export class HologramsController {
 
   public upload(req: Request, res: Response): void {
     // Note: Ideally, the request should be checked for validity
+    // Note: Upload models goes directly to the POST /holograms of HoloStorageAccessor
     res.redirect(307, HologramsService.getBaseURL());
   }
 
   public generate(req: Request, res: Response): void {
-    HologramsService.generate().then(success => {
-      if (success) res.status(200).end();
-      else res.status(404).end();
-    });
+    // Note: Ideally, the request should be checked for validity
+    // Note: Upload models goes directly to the POST /job of HoloPipelines
+    res.redirect(307, HologramsService.getPipelineJobURL());
   }
 }
 

@@ -1,4 +1,5 @@
 import AccessorClient from "../../../common/clients/HoloStorageAccesorClient";
+import PipelinesClient from "../../../common/clients/HoloPipelinesClient";
 import logger from "../../../common/logger";
 
 export class HologramsService {
@@ -21,11 +22,9 @@ export class HologramsService {
     return AccessorClient.getBaseURL();
   };
 
-  public generate(): Promise<boolean> {
-    // TODO: Generate
-    logger.warn("Generate not implemented yet");
-    return Promise.resolve(true);
-  }
+  public getPipelineJobURL = (): string => {
+    return PipelinesClient.getJobURL();
+  };
 }
 
 export default new HologramsService();

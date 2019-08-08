@@ -11,9 +11,14 @@ import string
 
 class ModifySyntheaData:
     def __init__(self, config="config.cfg"):
-        self.config = None
+        self._config = None
         with open(config, "r") as config_f:
-            self.config = json.load(config_f)
+            self._config = json.load(config_f)
+        self._photo_rand = random.Random(self._config["general"]["seed"])
+        self._practitioners_rand = random.Random(self._config["general"]["seed"])
+        self._practitioners_per_patient = self._config["general"][
+            "practitioners_per_patient"
+        ]
 
     def _create_contained_endpoint(self, tag, url):
         endpoint = {
@@ -111,7 +116,7 @@ class ModifySyntheaData:
 
     def _add_photo(self, data):
         gender = None
-        pic_num = random.randrange(100)
+        pic_num = self._photo_rand.randrange(100)
         if "gender" in data["resource"]:
             if data["resource"]["gender"] == "male":
                 gender = "men"
@@ -134,7 +139,14 @@ class ModifySyntheaData:
         """
         logging.info("\tIncluding Patient resource")
         general_practitioners = []
-        for pid in prac_ids:
+
+        if self._practitioners_per_patient > len(prac_ids):
+            sample_size = len(prac_ids)
+        else:
+            sample_size = self._practitioners_per_patient
+
+        selected_practitioners = self._practitioners_rand.sample(prac_ids, sample_size)
+        for pid in selected_practitioners:
             logging.debug(f"\tAdding generalPractitioner: {pid}")
             general_practitioners.append({"reference": "Practitioner/" + pid})
         data["resource"]["generalPractitioner"] = general_practitioners
@@ -157,19 +169,19 @@ class ModifySyntheaData:
 
     def _imaging_study_handler(self, data, filename):
         result = None
-        if filename in self.config:
+        if filename in self._config["imagingStudy"]:
             logging.info("\tIncluding ImagingStudy resource")
-            title, num_instances, display_name, url = self.config[filename]
+            title, num_instances, display_name, url = self._config["imagingStudy"][
+                filename
+            ]
             result = self._modify_imaging_study(data, num_instances, display_name, url)
         return result
 
     def convert(self, in_dir, out_dir):
+        practitioner_ids = []
+
         for filepath in sorted(glob.glob(os.path.join(in_dir, "*.json"))):
-            logging.info(f"Processing: {filepath}")
-            data = None
-            entry_data = []
-            practitioner_ids = []
-            already_included_img_study = False
+            logging.info(f"PreProcessing: {filepath}")
             with open(filepath, "r") as read_patient_file:
                 data = json.load(read_patient_file)
 
@@ -180,6 +192,19 @@ class ModifySyntheaData:
                     pid = resource["resource"]["id"]
                     practitioner_ids.append(pid)
                     logging.debug(f"Found practitioner: {pid}")
+
+        if self._practitioners_per_patient > len(practitioner_ids):
+            logging.warning(
+                f"Insufficient practitioners to assign per patient: {len(practitioner_ids)} found"
+            )
+
+        for filepath in sorted(glob.glob(os.path.join(in_dir, "*.json"))):
+            logging.info(f"Processing: {filepath}")
+            data = None
+            entry_data = []
+            already_included_img_study = False
+            with open(filepath, "r") as read_patient_file:
+                data = json.load(read_patient_file)
 
             # Actual processing
             for resource in data["entry"]:

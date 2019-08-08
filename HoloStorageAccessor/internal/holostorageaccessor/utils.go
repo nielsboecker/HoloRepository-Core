@@ -34,7 +34,7 @@ func ParseHologramUploadPostInput(formData url.Values) (HologramPostInput, error
 		case "patient":
 			err := json.Unmarshal([]byte(formData.Get(key)), &patientData)
 			if err != nil {
-				return HologramPostInput{}, errors.New("Unable to prase patient data")
+				return HologramPostInput{}, errors.New("Unable to parse patient data")
 			}
 			if patientData.Pid == "" {
 				return HologramPostInput{}, errors.New("Patient ID is required")
@@ -43,7 +43,7 @@ func ParseHologramUploadPostInput(formData url.Values) (HologramPostInput, error
 		case "author":
 			err := json.Unmarshal([]byte(formData.Get(key)), &authorData)
 			if err != nil {
-				return HologramPostInput{}, errors.New("Unable to prase author data")
+				return HologramPostInput{}, errors.New("Unable to parse author data")
 			}
 			if authorData.Aid == "" {
 				return HologramPostInput{}, errors.New("Author ID is required")

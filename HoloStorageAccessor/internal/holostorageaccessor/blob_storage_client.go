@@ -31,8 +31,8 @@ func InitialiseBlobStorage(accountName, accountKey string) error {
 
 	_, err = blobContainerURL.Create(ctx, azblob.Metadata{}, azblob.PublicAccessNone)
 	if err != nil {
-		if serr, ok := err.(azblob.StorageError); ok {
-			switch serr.ServiceCode() {
+		if serviceErr, ok := err.(azblob.StorageError); ok {
+			switch serviceErr.ServiceCode() {
 			case azblob.ServiceCodeContainerAlreadyExists:
 				log.Printf("Blob container %q already exists.", containerName)
 				return nil

@@ -1,6 +1,7 @@
 import serverAxios, { routes } from "./holoRepositoryServerAxios";
 import {
   IHologram,
+  IHologramCreationRequest_Generate,
   IHologramCreationRequest_Upload,
   IImagingStudy,
   IPatient,
@@ -97,10 +98,11 @@ export class HoloRepositoryServerService {
       .catch(handleError);
   }
 
-  public async generateHologram(): Promise<boolean | null> {
-    // TODO: Implement
-    console.warn("Generate not implemented yet");
-    return Promise.resolve(true).catch(handleError);
+  public async generateHologram(metaData: IHologramCreationRequest_Generate): Promise<boolean> {
+    return serverAxios
+      .post(`${routes.holograms}/generate`, metaData)
+      .then(response => response.status === 200 || response.status === 201)
+      .catch(handleError);
   }
 
   public async getImagingStudiesForAllPatients(

@@ -20,13 +20,19 @@ def resize(img, ratioX, ratioY, ratioZ):
 
 
 def sizeLimit(img, limit):
-    x, y, z = img.shape
+    if len(img.shape) == 5:
+        x, y, z, t1, t2 = img.shape
+    else:
+        x, y, z = img.shape
     highest = max(x, y, z)
     if highest > limit:
         rezieRatio = limit / highest
         img = resize(img, rezieRatio, rezieRatio, rezieRatio)
 
-        x, y, z = img.shape
+        if len(img.shape) == 5:
+            x, y, z, t1, t2 = img.shape
+        else:
+            x, y, z = img.shape
         highest = max(x, y, z)
         if highest > limit:
             img = crop(img, limit, limit, limit)

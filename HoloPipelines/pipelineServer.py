@@ -29,6 +29,7 @@ jobid2plid = {"j0": "nifti2glb", "j1": "dicom2glb"}
 job2inputURL = {"j0": "url"}
 job2outputURL = {}
 
+
 # logging formatting
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
 logging.basicConfig(level=logging.INFO, format=FORMAT)
@@ -130,7 +131,7 @@ def send_job_start_response():
     # get the info from request
     job_request = request.get_json()
     request_plid = job_request["plid"]
-    request_input_data_URL = job_request["imagingStudyEndpoint"]
+    request_input_data_URL = job_request["imageStudyEndpoint"]
 
     # get filename
     if request_input_data_URL.find("/"):
@@ -156,7 +157,7 @@ def send_job_start_response():
             unzip_file_dir,
             str(
                 this_cwd.joinpath(
-                    str(output_directory), unzip_file_dir.rsplit("/", 1)[1] + ".glb"
+                    str(output_directorylsPipe unzip_file_dir.rsplit("/", 1)[1] + ".glb"
                 )
             ),
             "300",

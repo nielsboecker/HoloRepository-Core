@@ -31,14 +31,17 @@ def main(jobID, dicomFolderPath, outputGlbPath, threshold,infoForAccessor):
     print("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
     compJobStatus.updateStatus(jobID, "Finished")
     compHttpRequest.sendFilePostRequestToAccessor(
-        "http://localhost:3200",
-        infoForAccessor["description"],
-        outputGlbPath,infoForAccessor["bodySite"],
-        infoForAccessor["dateOfImaging"],
-        datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        infoForAccessor["author"],
-        infoForAccessor["patient"]
-        )
+           infoForAccessor["bodySite"]+"apply on generic bone segmentation",
+           "http://localhost:3200/api/v1/holograms",
+           outputGlbPath,
+           infoForAccessor["description"],
+           infoForAccessor["bodySite"],
+           infoForAccessor["dateOfImaging"],
+           datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+           "Generate glb mesh from dicom",
+           infoForAccessor["author"],
+           infoForAccessor["patient"]
+          )
     
 
 if __name__ == "__main__":

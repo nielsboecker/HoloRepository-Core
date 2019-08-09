@@ -30,11 +30,13 @@ def main(jobID, inputNiftiPath, outputGlbPath, threshold,infoForAccessor):
     print("nifti2glb: done, glb saved to {}".format(generatedGlbPath))
     compJobStatus.updateStatus(jobID, "Finished")
     compHttpRequest.sendFilePostRequestToAccessor(
-        "http://localhost:3200",
+        infoForAccessor["bodySite"]+"apply on generic bone segmentation",
+        "http://localhost:3200/api/v1/holograms"
         infoForAccessor["description"],
         outputGlbPath,infoForAccessor["bodySite"],
         infoForAccessor["dateOfImaging"],
         datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Generate glb mesh from nifti",
         infoForAccessor["author"],
         infoForAccessor["patient"]
         )

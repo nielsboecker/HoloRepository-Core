@@ -17,11 +17,11 @@ def sendFilePostRequest(url, inputFile, outputFile):
     return outputFile
 
 
-def sendFilePostRequestToAccessor(url, outputFileDir,description,bodySite,dateOfImaging,creationDate,author,patient):
+def sendFilePostRequestToAccessor(title,url, outputFileDir,description,bodySite,dateOfImaging,creationDate,creationDescription,author,patient):
     outputFileDir = str(pathlib.Path(outputFileDir))
     sizeOfOutputFile=str(path.getsize(outputFileDir)/1000)
     file = {"file": open(outputFileDir, "rb")}
-    print("file: "+file)
+    #print("file: "+str(file)
     # get the pipelinelist json file
     this_cwd = pathlib.Path.cwd()
     pipelineListjson=Path("pipelineList.json")
@@ -45,7 +45,7 @@ def sendFilePostRequestToAccessor(url, outputFileDir,description,bodySite,dateOf
 
 
     requestBody = {
-        "title": bodySite+" "+lsPipe["title"],
+        "title": title,
         "description": description,
         "contentType": "model/gltf-binary",
         "fileSizeInKb": sizeOfOutputFile,
@@ -53,7 +53,7 @@ def sendFilePostRequestToAccessor(url, outputFileDir,description,bodySite,dateOf
         "dateOfImaging":dateOfImaging,
         "creationDate":creationDate,
         "creationMode": "GENERATE_FROM_IMAGING_STUDY",
-        "creationDescription":lsPipe["info"],
+        "creationDescription":creationDescription,
         "hologramFile":[file],
         "author": authorForAccessor,
         "patient": patientForAccessor

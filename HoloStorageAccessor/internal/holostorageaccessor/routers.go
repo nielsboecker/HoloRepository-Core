@@ -36,7 +36,7 @@ type AccessorConfig struct {
 	BlobStorageKey  string
 }
 
-var basePathComponent = "/api/1.0.0/"
+var basePathComponent = "/api/v1/"
 var uiPath = basePathComponent + "ui/"
 var accessorConfig AccessorConfig
 

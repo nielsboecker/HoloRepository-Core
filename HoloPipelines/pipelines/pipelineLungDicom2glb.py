@@ -5,11 +5,13 @@ from components.lungSegment.main import main as lungSegment
 from components import compNifti2numpy
 from components import compNumpy2obj
 from components import compObj2glbWrapper
+from components import compHttpRequest
+from datetime import datetime
 import pathlib
 import sys
 
 
-def main(jobID, dicomPath, outputGlbPath):
+def main(jobID, dicomPath, outputGlbPath,infoForAccessor):
     compJobStatus.updateStatus(jobID, "Pre-processing")
     generatedNiftiPath = compDcm2nifti.main(
         str(dicomPath),
@@ -38,7 +40,16 @@ def main(jobID, dicomPath, outputGlbPath):
     )
     print("lungDicom2glb: done, glb saved to {}".format(generatedGlbPath))
     compJobStatus.updateStatus(jobID, "Finished")
+    compHttpRequest.sendFilePostRequestToAccessor(
+        "http://localhost:3200",
+        infoForAccessor["description"],
+        outputGlbPath,infoForAccessor["bodySite"],
+        infoForAccessor["dateOfImaging"],
+        datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        infoForAccessor["author"],
+        infoForAccessor["patient"]
+        )
 
 
 if __name__ == "__main__":
-    main(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3]))
+    main(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3],str(sys.argv[4])))

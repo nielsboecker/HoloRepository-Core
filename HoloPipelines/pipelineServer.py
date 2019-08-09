@@ -173,8 +173,17 @@ def send_job_start_response():
         ]
     logging.info("arglist: " + str(arglist))
 
+    #create a list that fetch the response info that needs to post with hologram to the accessor (checking is missing)
+    info_for_accesor={
+        "bodySite":job_request["bodySite"],
+        "dateOfImaging":job_request["dateOfImaging"],
+        "description":job_request["description"],
+        "author":job_request["author"],
+        "patient":job_request["patient"]
+        }
+
     # pass to controller to start pipeline
-    startPipeline(jobID, request_plid, arglist)
+    startPipeline(jobID, request_plid, arglist,info_for_accesor)
     return json_response(jobID=jobID, status_code=202)
 
 

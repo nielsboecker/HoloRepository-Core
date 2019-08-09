@@ -80,7 +80,7 @@ def resample(dataPath, new_spacing=[1, 1, 1]):
 
 
 def reorientateNumpyList(numpyList):
-    # tanspose numpy i.e. (z, y, x) ---> (x, y, z)
+    # transpose numpy i.e. (z, y, x) ---> (x, y, z)
     numpyList = numpyList.transpose(2, 1, 0)
     numpyList = np.flip(numpyList, 0)
     numpyList = np.flip(numpyList, 1)

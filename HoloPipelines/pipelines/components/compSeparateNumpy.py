@@ -4,23 +4,11 @@ import pathlib
 from components import compNumpy2obj as makeObj
 from components import compObj2glbWrapper as makeGlb
 import numpy as np
-import sys
 import logging
 
 
-def main(inputNumpy, outputPath):
+def main(originalNumpy, outputPath):
     outputPath = pathlib.Path(outputPath)
-    # load numpy
-    if isinstance(inputNumpy, np.ndarray):
-        originalNumpy = inputNumpy
-    else:
-        try:
-            # if inputNumpy is path to npy file
-            originalNumpy = np.load(str(pathlib.Path(inputNumpy)))
-        except Exception:
-            sys.exit(
-                "getMultipleNumpy: error occured while loading numpy. Please make sure the path to numpy is correct."
-            )
 
     # get frequency
     unique, counts = np.unique(originalNumpy, return_counts=True)
@@ -36,13 +24,13 @@ def main(inputNumpy, outputPath):
             singleHUnumpy = singleHUnumpy.astype(int)
             makeObj.main(
                 singleHUnumpy,
-                0,
-                pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),
+                threshold=0,
+                outputPath=pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),
             )
             makeGlb.main(
                 pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),
                 outputPath.joinpath("organNo" + str(integer) + ".glb"),
-                True,
+                deleteOriginalObj=True,
             )
             outputGlbPathList.append(
                 str(outputPath.joinpath("organNo" + str(integer) + ".glb"))

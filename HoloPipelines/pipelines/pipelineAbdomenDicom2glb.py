@@ -6,12 +6,10 @@ from components import compNumpyTransformation
 import sys
 
 
-def main(inputDicomPath, outputGlbFolderPath):
+def main(inputDicomPath, outputGlbFolderPath, segmentationModelUrl):
     generatedNiftiPath = compDicom2nifti.main(inputDicomPath, "_temp.nii")
     segmentedNiftiPath = compHttpRequest.sendFilePostRequest(
-        "http://localhost:5000/model",
-        generatedNiftiPath,
-        "_tempAbdomenSegmented.nii.gz",
+        segmentationModelUrl, generatedNiftiPath, "_tempAbdomenSegmented.nii.gz"
     )
     generatedNumpyList = compNifti2numpy.main(segmentedNiftiPath)
     resizedNumpyList = compNumpyTransformation.sizeLimit(generatedNumpyList, 300)
@@ -23,4 +21,4 @@ def main(inputDicomPath, outputGlbFolderPath):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1], sys.argv[2], sys.argv[3])

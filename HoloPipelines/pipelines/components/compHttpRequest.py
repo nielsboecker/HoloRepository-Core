@@ -1,17 +1,24 @@
 import requests
 import pathlib
+import sys
 
 
 def sendFilePostRequest(url, inputFile, outputFile):
     inputFile = str(pathlib.Path(inputFile))
     outputFile = str(pathlib.Path(outputFile))
-    file = {"file": open(inputFile, "rb")}
-    response = requests.post(url, files=file)
-    file = open(outputFile, "wb")
-    file.write(response.content)
-    file.close()
-    returnCode = response.status_code
-    print(returnCode)
+    with open(inputFile, "rb") as inputFileData:
+        file = {"file": inputFileData}
+        try:
+            response = requests.post(url, files=file, timeout=10)
+            returnCode = response.status_code
+        except Exception:
+            sys.exit(
+                "compHttpReuest: an error happened in a POST reuqest (might be due to timeout or bad request), response code{}".format(
+                    returnCode
+                )
+            )
+    with open(outputFile, "wb") as file:
+        file.write(response.content)
     return outputFile
 
 

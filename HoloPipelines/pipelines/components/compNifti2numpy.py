@@ -1,5 +1,6 @@
 import numpy as np
 import nibabel as nib
+import os
 
 
 def resample(imageData, new_spacing=[1, 1, 1]):
@@ -27,7 +28,7 @@ def resample(imageData, new_spacing=[1, 1, 1]):
     return image, new_spacing
 
 
-def main(inputNiftiPath):
+def main(inputNiftiPath, deleteNiftiWhenDone=False):
     # https://github.com/nipy/nibabel/issues/626
     nib.Nifti1Header.quaternion_threshold = -1e-06
     img = nib.load(inputNiftiPath)
@@ -35,6 +36,10 @@ def main(inputNiftiPath):
     img, newSpacing = resample(img)
 
     numpyList = np.array(img.dataobj)
+
+    if deleteNiftiWhenDone:
+        os.remove(inputNiftiPath)
+
     return numpyList
 
 

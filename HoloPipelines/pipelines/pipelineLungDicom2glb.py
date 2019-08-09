@@ -1,9 +1,9 @@
 from components import compCommonPath
 from components import compDicom2nifti
-from components.lungSegment.main import main as lungSegment
 from components import compNifti2numpy
 from components import compNumpy2obj
 from components import compObj2glbWrapper
+import components.lungSegment.main as compLungSegment
 import pathlib
 import sys
 
@@ -13,7 +13,7 @@ def main(dicomPath, outputGlbPath):
         str(dicomPath),
         str(compCommonPath.nifti.joinpath(str(pathlib.PurePath(dicomPath).parts[-1]))),
     )  # convert dcm and move to temp path inside nifti folder. nifti will be in a sub folder named after the input dicom folder
-    generatedSegmentedLungsNiftiPath = lungSegment(
+    generatedSegmentedLungsNiftiPath = compLungSegment.main(
         generatedNiftiPath, str(compCommonPath.nifti.joinpath("segmentedLungs"))
     )
     generatedNumpyList = compNifti2numpy.main(

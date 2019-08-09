@@ -1,45 +1,47 @@
 import scipy.ndimage
+import sys
 
 
-def crop(img, cropx, cropy, cropz):
+def res(img, newX, newY, newZ):
     x, y, z = img.shape
 
-    startX = x // 2 - (cropx // 2)
-    startY = y // 2 - (cropy // 2)
-    startZ = z // 2 - (cropz // 2)
+    startX = x // 2 - (newX // 2)
+    startY = y // 2 - (newY // 2)
+    startZ = z // 2 - (newZ // 2)
 
-    endX = startX + cropx
-    endY = startY + cropy
-    endZ = startZ + cropz
+    endX = startX + newX
+    endY = startY + newY
+    endZ = startZ + newZ
 
     return img[startX:endX, startY:endY, startZ:endZ]
 
 
-def resize(img, ratioX, ratioY, ratioZ):
-    return scipy.ndimage.interpolation.zoom(img, [ratioX, ratioY, ratioZ])
-
-
 def sizeLimit(img, limit):
-    if len(img.shape) == 5:
-        x, y, z, t1, t2 = img.shape
+    if len(img.shape) >= 3:
+        x = img.shape[0]
+        y = img.shape[1]
+        z = img.shape[2]
     else:
-        x, y, z = img.shape
+        sys.exit("compNumpyTransformation: invalid array dimension (at least x, y, z)")
     highest = max(x, y, z)
     if highest > limit:
-        rezieRatio = limit / highest
-        img = resize(img, rezieRatio, rezieRatio, rezieRatio)
+        resizeRatio = limit / highest
+        img = scipy.ndimage.interpolation.zoom(
+            img, [resizeRatio, resizeRatio, resizeRatio]
+        )
 
-        if len(img.shape) == 5:
-            x, y, z, t1, t2 = img.shape
-        else:
-            x, y, z = img.shape
+        x = img.shape[0]
+        y = img.shape[1]
+        z = img.shape[2]
         highest = max(x, y, z)
         if highest > limit:
-            img = crop(img, limit, limit, limit)
+            img = res(img, limit, limit, limit)
 
-        print("array resize done")
+        print("compNumpyTransformation: array resize done")
     else:
-        print("array smaller than limit given, no resize has been done")
+        print(
+            "compNumpyTransformation: array smaller than limit given, no resize has been done"
+        )
     return img
 
 

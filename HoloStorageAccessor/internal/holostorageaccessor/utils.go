@@ -73,7 +73,7 @@ func ParseHologramUploadPostInput(formData url.Values) (HologramPostInput, error
 			hologramData.Description = formData.Get(key)
 		case "contentType":
 			hologramData.ContentType = formData.Get(key)
-		case "fileSizeInKB":
+		case "fileSizeInKb":
 			fileSize, err := strconv.ParseUint(formData.Get(key), 10, 32)
 			if err != nil {
 				return HologramPostInput{}, errors.New(key + " is not a valid filesize")

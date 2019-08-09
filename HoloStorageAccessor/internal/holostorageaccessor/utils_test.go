@@ -1,10 +1,17 @@
 package holostorageaccessor
 
 import (
+	"net/url"
 	"testing"
+	"time"
 
 	"github.com/google/go-cmp/cmp"
 )
+
+func returnTime(timeString string) *time.Time {
+	time, _ := time.Parse(time.RFC3339, timeString)
+	return &time
+}
 
 func TestGetAllQueryIDs(t *testing.T) {
 	type test struct {
@@ -83,6 +90,89 @@ func TestVerifyHologramQuery(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			got, err := VerifyHologramQuery(tc.in_hid, tc.in_pid, tc.in_creationMode)
 			diff := cmp.Diff(tc.want_details, got)
+			if diff != "" {
+				t.Fatalf(diff)
+			}
+			if err != nil && tc.want_err != "" {
+				err_diff := cmp.Diff(tc.want_err, err.Error())
+				if err_diff != "" {
+					t.Fatalf(err_diff)
+				}
+			} else if err != nil {
+				t.Fatalf("Error not wanted but returned: " + err.Error())
+			} else if tc.want_err != "" {
+				t.Fatalf("Error wanted but not returned: " + tc.want_err)
+			}
+		})
+	}
+}
+
+func TestParseHologramUploadPostInput(t *testing.T) {
+
+	type test struct {
+		input    url.Values
+		want     HologramPostInput
+		want_err string
+	}
+
+	inputs := make(map[string]url.Values)
+
+	inputs["empty"] = url.Values{}
+	inputs["full_data"] = url.Values{}
+	inputs["full_data"].Set("title", "test title")
+	inputs["full_data"].Set("description", "test desc")
+	inputs["full_data"].Set("contentType", "test/type")
+	inputs["full_data"].Set("fileSizeInKb", "5000")
+	inputs["full_data"].Set("bodySite", "test bodysite")
+	inputs["full_data"].Set("dateOfImaging", "2017-11-11T11:11:11Z")
+	inputs["full_data"].Set("creationDate", "2017-12-12T12:12:12Z")
+	inputs["full_data"].Set("creationMode", "GENERATE_FROM_IMAGING_STUDY")
+	inputs["full_data"].Set("creationDescription", "test creation desc")
+	inputs["full_data"].Set("patient", `{"pid":"p2000","name":{"full":"Marvin Portebello","title":"Mr","given":"Marvin","family":"Portebello"},"gender":"male","birthDate":"2019-07-16"}`)
+	inputs["full_data"].Set("author", `{"aid":"a2000","name":{"full":"Tom Sawyer","title":"Mr","given":"Tom","family":"Sawyer"}}`)
+
+	tests := map[string]test{
+		"empty": {input: inputs["empty"], want: HologramPostInput{}},
+		"full_data": {input: inputs["full_data"], want: HologramPostInput{
+			Author: Author{
+				Aid: "a2000",
+				Name: &PersonName{
+					Family: "Sawyer",
+					Given:  "Tom",
+					Full:   "Tom Sawyer",
+					Title:  "Mr",
+				},
+			},
+			Patient: Patient{
+				Pid: "p2000", Gender: "male",
+				BirthDate: "2019-07-16",
+				Name: &PersonName{
+					Family: "Portebello",
+					Given:  "Marvin",
+					Title:  "Mr",
+					Full:   "Marvin Portebello",
+				},
+			},
+			Hologram: Hologram{
+				Aid:                 "a2000",
+				Pid:                 "p2000",
+				BodySite:            "test bodysite",
+				ContentType:         "test/type",
+				DateOfImaging:       returnTime("2017-11-11T11:11:11Z"),
+				CreationDate:        returnTime("2017-12-12T12:12:12Z"),
+				CreationMode:        "GENERATE_FROM_IMAGING_STUDY",
+				CreationDescription: "test creation desc",
+				Description:         "test desc",
+				FileSizeInKb:        uint32(5000),
+				Title:               "test title",
+			},
+		}},
+	}
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			got, err := ParseHologramUploadPostInput(tc.input)
+			diff := cmp.Diff(tc.want, got)
 			if diff != "" {
 				t.Fatalf(diff)
 			}

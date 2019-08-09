@@ -76,7 +76,7 @@ func ParseHologramUploadPostInput(formData url.Values) (HologramPostInput, error
 		case "fileSizeInKb":
 			fileSize, err := strconv.ParseUint(formData.Get(key), 10, 32)
 			if err != nil {
-				return HologramPostInput{}, errors.New(key + " is not a valid filesize")
+				return HologramPostInput{}, fmt.Errorf("Key %s='%s' is not a valid filesize value", key, formData.Get(key))
 			}
 			hologramData.FileSizeInKb = uint32(fileSize)
 		case "bodySite":

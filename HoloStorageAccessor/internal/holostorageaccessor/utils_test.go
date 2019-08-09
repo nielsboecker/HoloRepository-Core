@@ -110,7 +110,7 @@ func TestVerifyHologramQuery(t *testing.T) {
 func TestParseHologramUploadPostInput(t *testing.T) {
 
 	type test struct {
-		input    url.Values
+		input    map[string]url.Values
 		want     HologramPostInput
 		want_err string
 	}
@@ -130,10 +130,31 @@ func TestParseHologramUploadPostInput(t *testing.T) {
 	inputs["full_data"].Set("creationDescription", "test creation desc")
 	inputs["full_data"].Set("patient", `{"pid":"p2000","name":{"full":"Marvin Portebello","title":"Mr","given":"Marvin","family":"Portebello"},"gender":"male","birthDate":"2019-07-16"}`)
 	inputs["full_data"].Set("author", `{"aid":"a2000","name":{"full":"Tom Sawyer","title":"Mr","given":"Tom","family":"Sawyer"}}`)
+	inputs["bad_creationDate"] = url.Values{}
+	inputs["bad_creationDate"].Set("creationDate", "2017-12-12T1:1:1Z")
+	inputs["bad_dateOfImaging"] = url.Values{}
+	inputs["bad_dateOfImaging"].Set("dateOfImaging", "2017-12-12T1:1:1Z")
+	inputs["bad_filesize"] = url.Values{}
+	inputs["bad_filesize"].Set("fileSizeInKb", "invalid-filesize")
+	inputs["no_pid"] = url.Values{}
+	inputs["no_pid"].Set("patient", `{"name":{"full":"Marvin Portebello","title":"Mr","given":"Marvin","family":"Portebello"},"gender":"male","birthDate":"2019-07-16"}`)
+	inputs["bad_patient_data"] = url.Values{}
+	inputs["bad_patient_data"].Set("patient", `invalid-json-content`)
+	inputs["no_aid"] = url.Values{}
+	inputs["no_aid"].Set("author", `{"aid":"","name":{"full":"Tom Sawyer","title":"Mr","given":"Tom","family":"Sawyer"}}`)
+	inputs["bad_author_data"] = url.Values{}
+	inputs["bad_author_data"].Set("author", `invalid-json-content`)
 
 	tests := map[string]test{
-		"empty": {input: inputs["empty"], want: HologramPostInput{}},
-		"full_data": {input: inputs["full_data"], want: HologramPostInput{
+		"empty":             {input: inputs, want: HologramPostInput{}},
+		"bad_creationDate":  {input: inputs, want: HologramPostInput{}, want_err: "Key creationDate='2017-12-12T1:1:1Z' does not conform to RFC3339 standards"},
+		"bad_dateOfImaging": {input: inputs, want: HologramPostInput{}, want_err: "Key dateOfImaging='2017-12-12T1:1:1Z' does not conform to RFC3339 standards"},
+		"bad_filesize":      {input: inputs, want: HologramPostInput{}, want_err: "Key fileSizeInKb='invalid-filesize' is not a valid filesize value"},
+		"no_pid":            {input: inputs, want: HologramPostInput{}, want_err: "Patient ID is required"},
+		"no_aid":            {input: inputs, want: HologramPostInput{}, want_err: "Author ID is required"},
+		"bad_patient_data":  {input: inputs, want: HologramPostInput{}, want_err: "Unable to parse patient data"},
+		"bad_author_data":   {input: inputs, want: HologramPostInput{}, want_err: "Unable to parse author data"},
+		"full_data": {input: inputs, want: HologramPostInput{
 			Author: Author{
 				Aid: "a2000",
 				Name: &PersonName{
@@ -171,7 +192,7 @@ func TestParseHologramUploadPostInput(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			got, err := ParseHologramUploadPostInput(tc.input)
+			got, err := ParseHologramUploadPostInput(tc.input[name])
 			diff := cmp.Diff(tc.want, got)
 			if diff != "" {
 				t.Fatalf(diff)

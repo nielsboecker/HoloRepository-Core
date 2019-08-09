@@ -295,7 +295,7 @@ func HologramsPost(c *gin.Context) {
 	}
 	err := c.Request.ParseMultipartForm(32 << 20) // Reserve 32 MB for multipart data
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: "Unable to parse multipart/form"})
+		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: "Unable to parse multipart/form-data: " + err.Error()})
 		return
 	}
 	postMetadata, err := ParseHologramUploadPostInput(c.Request.PostForm)
@@ -316,7 +316,7 @@ func HologramsPost(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return
 	}
-	result = PutDataIntoFHIR(accessorConfig.FhirURL, postMetadata.Author)
+	result = PutDataIntoFHIR(accessorConfig.FhirURL, postMetadata.Patient)
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return

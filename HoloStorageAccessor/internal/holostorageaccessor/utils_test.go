@@ -153,8 +153,8 @@ func TestParseHologramUploadPostInput(t *testing.T) {
 		"bad_filesize":      {input: inputs, want: HologramPostInput{}, want_err: "Key fileSizeInKb='invalid-filesize' is not a valid filesize value"},
 		"no_pid":            {input: inputs, want: HologramPostInput{}, want_err: "Patient ID is required"},
 		"no_aid":            {input: inputs, want: HologramPostInput{}, want_err: "Author ID is required"},
-		"bad_patient_data":  {input: inputs, want: HologramPostInput{}, want_err: "Unable to parse patient data"},
-		"bad_author_data":   {input: inputs, want: HologramPostInput{}, want_err: "Unable to parse author data"},
+		"bad_patient_data":  {input: inputs, want: HologramPostInput{}, want_err: "Unable to parse patient data: invalid character 'i' looking for beginning of value"},
+		"bad_author_data":   {input: inputs, want: HologramPostInput{}, want_err: "Unable to parse author data: invalid character 'i' looking for beginning of value"},
 		"full_data": {input: inputs, want: HologramPostInput{
 			Author: Author{
 				Aid: "a2000",

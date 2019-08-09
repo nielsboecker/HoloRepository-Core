@@ -13,6 +13,9 @@ const defaultContext: IAppState = {
 /**
  * Wraps component with context in order to provide for components that rely on the Context API.
  */
-export const mountWithContextProvider = (component: JSX.Element, context: IAppState = defaultContext) => {
+export const mountWithContextProvider = (
+  component: JSX.Element,
+  context: IAppState = defaultContext
+) => {
   return mount(<AppContext.Provider value={context}>{component}</AppContext.Provider>);
 };

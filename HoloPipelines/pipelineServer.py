@@ -91,7 +91,7 @@ def activate_status_cleaning_job():
 
 
 # update the status from pipeline
-@app.route("/status", methods=["POST"])
+@app.route("/api/v1/status", methods=["POST"])
 def getTheStatus():
 
     global status
@@ -124,7 +124,7 @@ def send_list_of_pipelines():
 
 
 # use to start the pipeline
-@app.route("/job", methods=["POST"])
+@app.route("/api/v1/job", methods=["POST"])
 def send_job_start_response():
 
     # get the info from request
@@ -187,7 +187,7 @@ def send_job_start_response():
     return json_response(jobID=jobID, status_code=202)
 
 
-@app.route("/job/<jobid>/status", methods=["GET"])
+@app.route("/api/v1/job/<jobid>/status", methods=["GET"])
 def get_job_status(jobid):
     if jobid in status:
         status_for_current_jobid = {jobid: status[jobid]["status"]}

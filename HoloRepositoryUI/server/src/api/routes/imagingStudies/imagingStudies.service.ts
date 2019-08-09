@@ -1,25 +1,30 @@
 import logger from "../../../common/logger";
 import { IImagingStudy } from "../../../../../types";
-import {
-  getAllImagingStudies,
-  getImagingStudy,
-  getImagingStudiesForPatient
-} from "../../../common/data.service";
+import FhirClient, { SupportedFhirResourceType } from "../../../common/clients/fhirClient";
+import { R4 } from "@ahryman40k/ts-fhir-types";
 
 export class ImagingStudiesService {
   public getAll(): Promise<IImagingStudy[]> {
     logger.info("GET all ImagingStudies");
-    return getAllImagingStudies();
+    return FhirClient.getAllAndMap<R4.IImagingStudy, IImagingStudy>(
+      SupportedFhirResourceType.ImagingStudy
+    );
   }
 
   public async getAllForPatient(pid: string): Promise<IImagingStudy[]> {
     logger.info(`GET all ImagingStudies for 'Patient/${pid}'`);
-    return getImagingStudiesForPatient(pid);
+    return FhirClient.getAllAndMap<R4.IImagingStudy, IImagingStudy>(
+      SupportedFhirResourceType.ImagingStudy,
+      { patient: pid }
+    );
   }
 
   public getById(isid: string): Promise<IImagingStudy> {
     logger.info(`GET ImagingStudies by id '${isid}'`);
-    return getImagingStudy(isid);
+    return FhirClient.getAndMap<R4.IImagingStudy, IImagingStudy>(
+      SupportedFhirResourceType.ImagingStudy,
+      isid
+    );
   }
 }
 

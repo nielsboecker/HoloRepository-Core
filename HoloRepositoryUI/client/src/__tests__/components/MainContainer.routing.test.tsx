@@ -7,7 +7,7 @@ import { createHistory, createMemorySource, LocationProvider } from "@reach/rout
 import LandingPage from "../../components/public/LandingPage";
 import PatientListPage from "../../components/app/patients/PatientListPage";
 import ErrorPage from "../../components/public/ErrorPage";
-import { mountWithContextProvider } from "../../util/TestUtils";
+import { mountWithContextProvider } from "../../__test_utils__/MockContextProvider";
 
 it("should render PublicContainer for route '/'", () => {
   const underTest = prepareAndMountComponent("/");
@@ -51,7 +51,7 @@ it("should render ErrorPage for invalid URLs under the '/app' main route", () =>
 function prepareAndMountComponent(route: string): ReactWrapper {
   return mountWithContextProvider(
     <LocationProvider history={createHistory(createMemorySource(route))}>
-        <MainContainer />
+      <MainContainer />
     </LocationProvider>
   );
 }

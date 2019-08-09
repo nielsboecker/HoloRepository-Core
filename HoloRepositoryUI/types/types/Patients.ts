@@ -1,9 +1,13 @@
 import { IHologram, IImagingStudy } from "./Holograms";
 
+/**
+ * Type representing a person's gener.
+ * Semantics is similar to the corresponding FHIR resource.
+ */
 export type Gender = "male" | "female" | "other" | "unknown";
 
 /**
- * Interface representing a human name.
+ * Interface representing a person's name.
  * Semantics is similar to the corresponding FHIR resource; however, the structure
  * here is purposefully kept much simpler to avoid unnecessary complexity.
  */
@@ -23,7 +27,7 @@ export interface IAddress {
   city?: string;
   state?: string;
   postcode?: string | number;
-};
+}
 
 /**
  * Common attributes of Patients and Practitioners.
@@ -41,12 +45,10 @@ export interface IPerson {
 }
 
 /**
- * Interface representing the users of the system.
- * Semantics is similar to the corresponding FHIR resource, apart from the "patients" attribute.
+ * Interface representing a Practitioner, the user of the system.
+ * Semantics is similar to the corresponding FHIR resource.
  */
-export interface IPractitioner extends IPerson {
-  patients?: IPatient[];
-}
+export interface IPractitioner extends IPerson {}
 
 /**
  * Interface representing the subjects of the system.

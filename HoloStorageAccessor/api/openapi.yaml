@@ -1,15 +1,8 @@
 openapi: 3.0.2
 info:
-  version: "1.0.0"
+  version: "1.1.0"
   title: 'HoloStorage Accessor API'
   description: 'API to access holograms and metadata from HoloStorage'
-
-# Added by API Auto Mocking Plugin
-servers:
-  - description: HoloStorage Sample Server URL
-    url: https://holoaccessor.com/api/1.0.0
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/boonwj/HoloRepository/1.0.0
 
 paths:
   /patients:
@@ -18,9 +11,17 @@ paths:
       description: |-
         Obtain patient information stored within HoloStorage.
 
-        Multiple IDs can be passed with the syntax `/patients?pid=id1,id2,id3,...,idx`
+        Multiple IDs can be passed with the syntax `/patients?pids=id1,id2,id3,...,idx`
 
-        Using no query pids will result in an empty result set.
+        Mass query results will return with `ID:{result}`
+        ```
+        {
+          "id1": {result of id1},
+          "id2": {result of id2},
+          "id3": {}
+          ...
+        }
+        ```
 
       parameters:
         - $ref: '#/components/parameters/PIDQuery'
@@ -32,6 +33,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Patients'
+        400:
+          $ref: '#/components/responses/BadRequest'
         500:
           $ref: "#/components/responses/InternalError"
 
@@ -83,13 +86,21 @@ paths:
 
         Multiple IDs can be passed with either syntax:
 
-        `/holograms?hid=id1,id2,id3,...,idx` or `/holograms?pid=id1,id2,id3,...,idx`
+        `/holograms?hids=id1,id2,id3,...,idx` or `/holograms?pids=id1,id2,id3,...,idx`
 
         **Note: You can only use either hid or pid**
 
         Additional filtering for CreationMode can be done with `&creationmode=...`
 
-        Using neither `?pid` nor `?hid` will result in an empty result set.
+        Regardless of `pid` or `hid` queries, mass query results will return a format of `ID:[{result}]`
+        ```
+        {
+          "id1": [{result1 of id1}, {result2 of id1}],
+          "id2": [{result1 of id2}],
+          "id3": []
+          ...
+        }
+        ```
 
       parameters:
         - $ref: '#/components/parameters/HIDQuery'
@@ -192,9 +203,18 @@ paths:
       description: |-
         Obtain author information stored within HoloStorage.
 
-        Multiple IDs can be passed with the syntax `/authors?aid=id1,id2,id3,...,idx`
+        Multiple IDs can be passed with the syntax `/authors?aids=id1,id2,id3,...,idx`
 
-        Using no queries will result in an empty result set.
+        Mass query results will return with `ID:{result}`
+        ```
+        {
+          "id1": {result of id1},
+          "id2": {result of id2},
+          "id3": {}
+          ...
+        }
+        ```
+
       parameters:
         - $ref: '#/components/parameters/AIDQuery'
 
@@ -205,6 +225,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Authors'
+        400:
+          $ref: '#/components/responses/BadRequest'
         500:
           $ref: "#/components/responses/InternalError"
 
@@ -273,7 +295,7 @@ components:
   parameters:
     PIDQuery:
       in: query
-      name: pid
+      name: pids
       schema:
         type: string
         format: uuid
@@ -294,7 +316,7 @@ components:
 
     HIDQuery:
       in: query
-      name: hid
+      name: hids
       schema:
         type: string
         format: uuid
@@ -327,7 +349,7 @@ components:
 
     AIDQuery:
       in: query
-      name: aid
+      name: aids
       schema:
         type: string
         format: uuid

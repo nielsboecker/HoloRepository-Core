@@ -78,13 +78,13 @@ const titleCol: IColumn = {
 const dateCol: IColumn = {
   key: "col:date",
   name: "Date created",
-  fieldName: "createdDateValue",
+  fieldName: "creationDateValue",
   minWidth: 70,
   maxWidth: 90,
   isResizable: true,
   data: "number",
   onRender: (item: IHologramDocument) => {
-    return <span>{item.createdDateDisplay}</span>;
+    return <span>{item.creationDateDisplay}</span>;
   },
   isPadded: true
 };

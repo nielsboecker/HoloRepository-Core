@@ -1,0 +1,413 @@
+{
+	"info": {
+		"_postman_id": "b541d019-db14-4a93-862e-ee42074bee11",
+		"name": "HoloStorageAccessor",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authors - Put an Author",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"aid\": \"a1000\",\n    \"name\": {\n    \t\"full\": \"Roy Campbell\",\n        \"title\": \"Mr.\",\n        \"given\": \"Roy\",\n        \"family\": \"Campbell\"\n    }\n}"
+				},
+				"url": {
+					"raw": "localhost:3200/api/v1/authors/a1000",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"authors",
+						"a1000"
+					]
+				},
+				"description": "Create and put an author into the holostorage server"
+			},
+			"response": []
+		},
+		{
+			"name": "Authors - Get an Author",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3200/api/v1/authors/a1000",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"authors",
+						"a1000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Authors - Get Multiple Authors",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3200/api/v1/authors?aids=a1000,a100,a101,a102",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"authors"
+					],
+					"query": [
+						{
+							"key": "aids",
+							"value": "a1000,a100,a101,a102"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patients Put",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pid\": \"p1000\",\n    \"name\": {\n        \"title\": \"Mr.\",\n        \"given\": \"Timothy\",\n        \"family\": \"Jones\",\n        \"full\": \"Timothy Jones\"\n    },\n    \"gender\": \"male\",\n    \"birthDate\": \"1990-10-10\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3200/api/v1/patients/p1000",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"patients",
+						"p1000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patients - Get a Patient",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3200/api/v1/patients/p1000",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"patients",
+						"p1000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patients - Get Multiple Patients",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3200/api/v1/patients?pids=p1000,p100,p101,p102,p103",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"patients"
+					],
+					"query": [
+						{
+							"key": "pids",
+							"value": "p1000,p100,p101,p102,p103"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hologram - Post Hologram Info",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "multipart/form-data",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "Malformed hip bones",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Malformed hip bones on an 8 year old child suffering from a birth defect",
+							"type": "text"
+						},
+						{
+							"key": "contentType",
+							"value": "model/gltf-binary",
+							"type": "text"
+						},
+						{
+							"key": "fileSizeInKb",
+							"value": "5120",
+							"type": "text"
+						},
+						{
+							"key": "bodySite",
+							"value": "hip",
+							"type": "text"
+						},
+						{
+							"key": "dateOfImaging",
+							"value": "2017-07-18T12:00:30Z",
+							"type": "text"
+						},
+						{
+							"key": "creationDate",
+							"value": "2017-07-21T17:32:28Z",
+							"type": "text"
+						},
+						{
+							"key": "creationMode",
+							"value": "GENERATE_FROM_IMAGING_STUDY",
+							"type": "text"
+						},
+						{
+							"key": "creationDescription",
+							"value": "Created using bone pipelines with HU threshold of 750 ",
+							"type": "text"
+						},
+						{
+							"key": "patient",
+							"value": "{\n  \"pid\": \"p2000\",\n  \"name\": {\n    \"full\": \"Marvin Portebello\",\n    \"title\": \"Mr\",\n    \"given\": \"Marvin\",\n    \"family\": \"Portebello\"\n  },\n  \"gender\": \"male\",\n  \"birthDate\": \"2019-07-16\"\n}",
+							"type": "text"
+						},
+						{
+							"key": "author",
+							"value": "{\n  \"aid\": \"a2000\",\n  \"name\": {\n    \"full\": \"Tom Sawyer\",\n    \"title\": \"Mr\",\n    \"given\": \"Tom\",\n    \"family\": \"Sawyer\"\n  }\n}",
+							"type": "text"
+						},
+						{
+							"key": "hologramFile",
+							"type": "file",
+							"src": "Avocado.glb"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3200/api/v1/holograms",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"holograms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hologram - Get a Hologram",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3200/api/v1/holograms/hid-from-post-method",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"holograms",
+						"hid-from-post-method"
+					]
+				},
+				"description": "Use the HID value obtained from the previous \"POST\" method"
+			},
+			"response": []
+		},
+		{
+			"name": "Hologram - Get Multiple Holograms by HID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3200/api/v1/holograms?hids=h100,h101,h102,h103,h104,",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"holograms"
+					],
+					"query": [
+						{
+							"key": "hids",
+							"value": "h100,h101,h102,h103,h104,"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hologram - Get Multiple Holograms by PID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3200/api/v1/holograms?pids=p101,p102,p103,p104",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"holograms"
+					],
+					"query": [
+						{
+							"key": "pids",
+							"value": "p101,p102,p103,p104"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hologram Get Holograms Filter by creationmode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3200/api/v1/holograms?pids=p500&creationmode=UPLOAD_EXISTING_MODEL",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"holograms"
+					],
+					"query": [
+						{
+							"key": "pids",
+							"value": "p500"
+						},
+						{
+							"key": "creationmode",
+							"value": "UPLOAD_EXISTING_MODEL"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hologram Delete URL",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3200/api/v1/holograms/hid-from-post-method",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"holograms",
+						"hid-from-post-method"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hologram Get Download",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3200/api/v1/holograms/hid-from-post-method/download",
+					"host": [
+						"localhost"
+					],
+					"port": "3200",
+					"path": [
+						"api",
+						"v1",
+						"holograms",
+						"hid-from-post-method",
+						"download"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -66,6 +67,8 @@ func NewRouter() *gin.Engine {
 			router.DELETE(route.Pattern, route.HandlerFunc)
 		}
 	}
+
+	router.Use(cors.Default())
 
 	log.Printf("HoloStorageAccessor is running!")
 	return router

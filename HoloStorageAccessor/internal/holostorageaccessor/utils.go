@@ -143,31 +143,26 @@ func ConstructURL(baseurl string, pathComponent string) (string, error) {
 	return fhirURL.String(), nil
 }
 
-func LoadConfiguration(config *AccessorConfig) error {
+func LoadConfiguration(accConfig *AccessorConfig) error {
 	for _, config := range []string{"AZURE_STORAGE_ACCOUNT", "AZURE_STORAGE_ACCESS_KEY", "ACCESSOR_FHIR_URL", "ENABLE_CORS"} {
 		if os.Getenv(config) == "" {
 			return fmt.Errorf("Environment config field '%s' is not set", config)
 		}
 	}
 
-	config.BlobStorageName = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCOUNT"))
-	config.BlobStorageKey = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCESS_KEY"))
-	config.FhirURL = strings.TrimSpace(os.Getenv("ACCESSOR_FHIR_URL"))
+	accConfig.BlobStorageName = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCOUNT"))
+	accConfig.BlobStorageKey = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCESS_KEY"))
+	accConfig.FhirURL = strings.TrimSpace(os.Getenv("ACCESSOR_FHIR_URL"))
 
 	enableCORS, err := strconv.ParseBool(strings.TrimSpace(os.Getenv("ENABLE_CORS")))
 	if err != nil {
-		return fmt.Errorf("Error with ENABLE_CORS: %s", err.Error())
+		return fmt.Errorf("ENABLE_CORS error: %s", err.Error())
 	}
-	config.EnableCORS = enableCORS
+	accConfig.EnableCORS = enableCORS
 
-	_, err = url.ParseRequestURI(config.FhirURL)
+	_, err = url.ParseRequestURI(accConfig.FhirURL)
 	if err != nil {
-		return fmt.Errorf("Error with ACCESSOR_FHIR_URL: %s", err.Error())
-	}
-
-	err = InitialiseBlobStorage(config.BlobStorageName, config.BlobStorageKey)
-	if err != nil {
-		return fmt.Errorf("Error with BlobStorage Init: %s", err.Error())
+		return fmt.Errorf("ACCESSOR_FHIR_URL error: %s", err.Error())
 	}
 
 	return nil

@@ -2,6 +2,7 @@ package holostorageaccessor
 
 import (
 	"net/url"
+	"os"
 	"testing"
 	"time"
 
@@ -207,6 +208,113 @@ func TestParseHologramUploadPostInput(t *testing.T) {
 			} else if tc.want_err != "" {
 				t.Fatalf("Error wanted but not returned: " + tc.want_err)
 			}
+		})
+	}
+}
+
+func TestLoadConfiguration(t *testing.T) {
+	type test struct {
+		confFields map[string]string
+		want       AccessorConfig
+		want_err   string
+	}
+
+	tests := map[string]test{
+		"no_config": test{
+			want:     AccessorConfig{},
+			want_err: "Environment config field 'AZURE_STORAGE_ACCOUNT' is not set",
+		},
+		"bad_url": test{
+			want: AccessorConfig{},
+			confFields: map[string]string{
+				"AZURE_STORAGE_ACCOUNT":    "account_name",
+				"AZURE_STORAGE_ACCESS_KEY": "access_key",
+				"ACCESSOR_FHIR_URL":        "bad-url.com",
+				"ENABLE_CORS":              "false",
+			},
+			want_err: "ACCESSOR_FHIR_URL error: parse bad-url.com: invalid URI for request",
+		},
+		"bad_spaces_in_url": test{
+			want: AccessorConfig{},
+			confFields: map[string]string{
+				"AZURE_STORAGE_ACCOUNT":    "account_name",
+				"AZURE_STORAGE_ACCESS_KEY": "access_key",
+				"ACCESSOR_FHIR_URL":        "http://  bad-url.com",
+				"ENABLE_CORS":              "false",
+			},
+			want_err: `ACCESSOR_FHIR_URL error: parse http://  bad-url.com: invalid character " " in host name`,
+		},
+		"all_config": test{
+			confFields: map[string]string{
+				"AZURE_STORAGE_ACCOUNT":    "account_name",
+				"AZURE_STORAGE_ACCESS_KEY": "access_key",
+				"ACCESSOR_FHIR_URL":        "http://www.test.com",
+				"ENABLE_CORS":              "true",
+			},
+			want: AccessorConfig{
+				BlobStorageKey:  "access_key",
+				BlobStorageName: "account_name",
+				FhirURL:         "http://www.test.com",
+				EnableCORS:      true,
+			},
+		},
+		"bad_enable_cors": test{
+			confFields: map[string]string{
+				"AZURE_STORAGE_ACCOUNT":    "account_name",
+				"AZURE_STORAGE_ACCESS_KEY": "access_key",
+				"ACCESSOR_FHIR_URL":        "http://www.test.com",
+				"ENABLE_CORS":              "invalid-value",
+			},
+			want_err: `ENABLE_CORS error: strconv.ParseBool: parsing "invalid-value": invalid syntax`,
+		},
+		"all_config_with_spaces": test{
+			confFields: map[string]string{
+				"AZURE_STORAGE_ACCOUNT":    "  account_name ",
+				"AZURE_STORAGE_ACCESS_KEY": "  access_key  ",
+				"ACCESSOR_FHIR_URL":        "  http://www.test.com  ",
+				"ENABLE_CORS":              "  true  ",
+			},
+			want: AccessorConfig{
+				BlobStorageKey:  "access_key",
+				BlobStorageName: "account_name",
+				FhirURL:         "http://www.test.com",
+				EnableCORS:      true,
+			},
+		},
+	}
+
+	for name, tc := range tests {
+		confFields := []string{
+			"AZURE_STORAGE_ACCOUNT",
+			"AZURE_STORAGE_ACCESS_KEY",
+			"ACCESSOR_FHIR_URL",
+			"ENABLE_CORS",
+		}
+		for _, config := range confFields {
+			os.Setenv(config, "")
+		}
+		for key, value := range tc.confFields {
+			os.Setenv(key, value)
+		}
+		t.Run(name, func(t *testing.T) {
+			var config AccessorConfig
+			err := LoadConfiguration(&config)
+			diff := cmp.Diff(tc.want, config)
+			if err != nil && tc.want_err != "" {
+				err_diff := cmp.Diff(tc.want_err, err.Error())
+				if err_diff != "" {
+					t.Fatalf(err_diff)
+				}
+			} else if err != nil {
+				t.Fatalf("Error not wanted but returned: " + err.Error())
+			} else if tc.want_err != "" {
+				t.Fatalf("Error wanted but not returned: " + tc.want_err)
+			} else {
+				if diff != "" {
+					t.Fatalf(diff)
+				}
+			}
+
 		})
 	}
 }

@@ -53,6 +53,8 @@ func NewRouter() *gin.Engine {
 
 	router := gin.Default()
 
+	router.Use(cors.Default())
+
 	router.Static(uiPath, "./third_party/swaggerui")
 
 	for _, route := range routes {
@@ -67,8 +69,6 @@ func NewRouter() *gin.Engine {
 			router.DELETE(route.Pattern, route.HandlerFunc)
 		}
 	}
-
-	router.Use(cors.Default())
 
 	log.Printf("HoloStorageAccessor is running!")
 	return router

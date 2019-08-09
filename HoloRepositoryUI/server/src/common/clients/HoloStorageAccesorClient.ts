@@ -1,6 +1,6 @@
 const accessorBaseUrl = "http://localhost";
 const port = 3200;
-const apiPrefix = `api/1.0.0`;
+const apiPrefix = `api/v1`;
 const hologramsEndpoint = "holograms";
 const baseURL = `${accessorBaseUrl}:${port}/${apiPrefix}/${hologramsEndpoint}`;
 
@@ -15,7 +15,7 @@ const getEndpointURL = (hid: string): string => {
 };
 
 const getAllForPatientsURL = (pids: string): string => {
-  return `${baseURL}?pid=${pids}`;
+  return `${baseURL}?pids=${pids}`;
 };
 
 export default {

@@ -53,16 +53,12 @@ export class HoloRepositoryServerService {
 
   public async downloadHologramById(hid: string): Promise<boolean | null> {
     return serverAxios
-      .get<BinaryType>(
-        // Note: Mocked for now; change to `${routes.hologram}/${hid}/download`
-        "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Binary/Duck.glb",
-        {
-          responseType: "blob",
-          headers: {
-            Accept: "gltf-binary"
-          }
+      .get<BinaryType>(`${routes.holograms}/${hid}/download`, {
+        responseType: "blob",
+        headers: {
+          Accept: "gltf-binary"
         }
-      )
+      })
       .then(file => _forceDownload(file, `${hid}.glb`))
       .catch(handleError);
   }

@@ -12,7 +12,7 @@ def sendFilePostRequest(url, inputFile, outputFile):
             response = requests.post(url, files=file, timeout=10)
         except Exception:
             sys.exit(
-                "compHttpReuest: an error happened in a POST reuqest (might be due to timeout or bad request)"
+                "compHttpReuest: an error happened in a POST reuqest, this might be due to timeout or bad request. Or if this is a request to one of the segmentation model, then please make sure the container with the model is running."
             )
     with open(outputFile, "wb") as file:
         file.write(response.content)

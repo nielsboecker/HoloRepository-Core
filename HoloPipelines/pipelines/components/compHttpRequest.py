@@ -10,12 +10,9 @@ def sendFilePostRequest(url, inputFile, outputFile):
         file = {"file": inputFileData}
         try:
             response = requests.post(url, files=file, timeout=10)
-            returnCode = response.status_code
         except Exception:
             sys.exit(
-                "compHttpReuest: an error happened in a POST reuqest (might be due to timeout or bad request), response code{}".format(
-                    returnCode
-                )
+                "compHttpReuest: an error happened in a POST reuqest (might be due to timeout or bad request)"
             )
     with open(outputFile, "wb") as file:
         file.write(response.content)

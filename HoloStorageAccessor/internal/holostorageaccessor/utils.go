@@ -34,7 +34,7 @@ func ParseHologramUploadPostInput(formData url.Values) (HologramPostInput, error
 		case "patient":
 			err := json.Unmarshal([]byte(formData.Get(key)), &patientData)
 			if err != nil {
-				return HologramPostInput{}, errors.New("Unable to prase patient data")
+				return HologramPostInput{}, errors.New("Unable to parse patient data")
 			}
 			if patientData.Pid == "" {
 				return HologramPostInput{}, errors.New("Patient ID is required")
@@ -43,24 +43,30 @@ func ParseHologramUploadPostInput(formData url.Values) (HologramPostInput, error
 		case "author":
 			err := json.Unmarshal([]byte(formData.Get(key)), &authorData)
 			if err != nil {
-				return HologramPostInput{}, errors.New("Unable to prase author data")
+				return HologramPostInput{}, errors.New("Unable to parse author data")
 			}
 			if authorData.Aid == "" {
 				return HologramPostInput{}, errors.New("Author ID is required")
 			}
 			hologramData.Aid = authorData.Aid
 		case "creationDate":
-			creationDate, err := time.Parse(time.RFC3339, formData.Get(key))
-			if err != nil {
-				return HologramPostInput{}, fmt.Errorf("Key %s='%s' does not conform to RFC3339 standards", key, formData.Get(key))
+			dateString := formData.Get(key)
+			if dateString != "" {
+				creationDate, err := time.Parse(time.RFC3339, dateString)
+				if err != nil {
+					return HologramPostInput{}, fmt.Errorf("Key %s='%s' does not conform to RFC3339 standards", key, formData.Get(key))
+				}
+				hologramData.CreationDate = &creationDate
 			}
-			hologramData.CreationDate = &creationDate
 		case "dateOfImaging":
-			dateOfImaging, err := time.Parse(time.RFC3339, formData.Get(key))
-			if err != nil {
-				return HologramPostInput{}, fmt.Errorf("Key %s='%s' does not conform to RFC3339 standards", key, formData.Get(key))
+			dateString := formData.Get(key)
+			if dateString != "" {
+				dateOfImaging, err := time.Parse(time.RFC3339, dateString)
+				if err != nil {
+					return HologramPostInput{}, fmt.Errorf("Key %s='%s' does not conform to RFC3339 standards", key, formData.Get(key))
+				}
+				hologramData.DateOfImaging = &dateOfImaging
 			}
-			hologramData.DateOfImaging = &dateOfImaging
 		case "title":
 			hologramData.Title = formData.Get(key)
 		case "description":
@@ -90,6 +96,8 @@ func VerifyHologramQuery(hid, pid, creationMode string) (HologramQueryDetails, e
 	var details HologramQueryDetails
 	if hid != "" && pid != "" {
 		return HologramQueryDetails{}, errors.New("Use either pid or hid, not both")
+	} else if hid == "" && pid == "" {
+		return HologramQueryDetails{}, errors.New("No hids or pids were provided for this query")
 	} else if hid != "" {
 		details.IDs = ParseQueryIDs(hid)
 		details.Mode = "hologram"
@@ -104,7 +112,7 @@ func VerifyHologramQuery(hid, pid, creationMode string) (HologramQueryDetails, e
 	case "GENERATE_FROM_IMAGING_STUDY", "UPLOAD_EXISTING_MODEL", "FROM_DEPTHVISOR_RECORDING":
 		details.CreationMode = creationMode
 	default:
-		return HologramQueryDetails{}, errors.New("Invalid value used in creationmode")
+		return HologramQueryDetails{}, errors.New(`Invalid value used in creationmode. Expecting: GENERATE_FROM_IMAGING_STUDY, UPLOAD_EXISTING_MODEL, FROM_DEPTHVISOR_RECORDING`)
 	}
 
 	return details, nil
@@ -136,7 +144,7 @@ func ConstructURL(baseurl string, pathComponent string) (string, error) {
 }
 
 func LoadConfiguration(config *AccessorConfig) error {
-	for _, config := range []string{"AZURE_STORAGE_ACCOUNT", "AZURE_STORAGE_ACCESS_KEY", "ACCESSOR_FHIR_URL"} {
+	for _, config := range []string{"AZURE_STORAGE_ACCOUNT", "AZURE_STORAGE_ACCESS_KEY", "ACCESSOR_FHIR_URL", "ENABLE_CORS"} {
 		if os.Getenv(config) == "" {
 			return fmt.Errorf("Environment config field '%s' is not set", config)
 		}
@@ -146,7 +154,13 @@ func LoadConfiguration(config *AccessorConfig) error {
 	config.BlobStorageKey = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCESS_KEY"))
 	config.FhirURL = strings.TrimSpace(os.Getenv("ACCESSOR_FHIR_URL"))
 
-	_, err := url.ParseRequestURI(config.FhirURL)
+	enableCORS, err := strconv.ParseBool(strings.TrimSpace(os.Getenv("ENABLE_CORS")))
+	if err != nil {
+		return fmt.Errorf("Error with ENABLE_CORS: %s", err.Error())
+	}
+	config.EnableCORS = enableCORS
+
+	_, err = url.ParseRequestURI(config.FhirURL)
 	if err != nil {
 		return fmt.Errorf("Error with ACCESSOR_FHIR_URL: %s", err.Error())
 	}

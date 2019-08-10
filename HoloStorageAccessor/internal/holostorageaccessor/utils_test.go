@@ -69,14 +69,14 @@ func TestVerifyHologramQuery(t *testing.T) {
 	}
 
 	tests := map[string]test{
-		"no_input":                             {in_hid: "", in_pid: "", in_creationMode: "", want_details: HologramQueryDetails{}},
+		"no_input":                             {in_hid: "", in_pid: "", in_creationMode: "", want_details: HologramQueryDetails{}, want_err: "No hids or pids were provided for this query"},
 		"hid_only":                             {in_hid: "h1,h2", in_pid: "", in_creationMode: "", want_details: HologramQueryDetails{IDs: []string{"h1", "h2"}, Mode: "hologram"}},
 		"pid_only":                             {in_hid: "", in_pid: "p1,p2", in_creationMode: "", want_details: HologramQueryDetails{IDs: []string{"p1", "p2"}, Mode: "patient"}},
 		"both_hid_and_pid":                     {in_hid: "h1,h2", in_pid: "p1,p2", in_creationMode: "", want_details: HologramQueryDetails{}, want_err: "Use either pid or hid, not both"},
-		"creation_generate_from_imaging_study": {in_hid: "", in_pid: "", in_creationMode: "GENERATE_FROM_IMAGING_STUDY", want_details: HologramQueryDetails{CreationMode: "GENERATE_FROM_IMAGING_STUDY"}},
-		"creation_upload_existing_model":       {in_hid: "", in_pid: "", in_creationMode: "UPLOAD_EXISTING_MODEL", want_details: HologramQueryDetails{CreationMode: "UPLOAD_EXISTING_MODEL"}},
-		"creation_from_depthvisor_recording":   {in_hid: "", in_pid: "", in_creationMode: "FROM_DEPTHVISOR_RECORDING", want_details: HologramQueryDetails{CreationMode: "FROM_DEPTHVISOR_RECORDING"}},
-		"creation_invalid":                     {in_hid: "", in_pid: "", in_creationMode: "invalid", want_details: HologramQueryDetails{}, want_err: "Invalid value used in creationmode"},
+		"creation_generate_from_imaging_study": {in_hid: "", in_pid: "p1", in_creationMode: "GENERATE_FROM_IMAGING_STUDY", want_details: HologramQueryDetails{IDs: []string{"p1"}, Mode: "patient", CreationMode: "GENERATE_FROM_IMAGING_STUDY"}},
+		"creation_upload_existing_model":       {in_hid: "", in_pid: "p1", in_creationMode: "UPLOAD_EXISTING_MODEL", want_details: HologramQueryDetails{IDs: []string{"p1"}, Mode: "patient", CreationMode: "UPLOAD_EXISTING_MODEL"}},
+		"creation_from_depthvisor_recording":   {in_hid: "", in_pid: "p1", in_creationMode: "FROM_DEPTHVISOR_RECORDING", want_details: HologramQueryDetails{IDs: []string{"p1"}, Mode: "patient", CreationMode: "FROM_DEPTHVISOR_RECORDING"}},
+		"creation_invalid":                     {in_hid: "", in_pid: "p1", in_creationMode: "invalid", want_details: HologramQueryDetails{}, want_err: "Invalid value used in creationmode. Expecting: GENERATE_FROM_IMAGING_STUDY, UPLOAD_EXISTING_MODEL, FROM_DEPTHVISOR_RECORDING"},
 	}
 
 	for name, tc := range tests {

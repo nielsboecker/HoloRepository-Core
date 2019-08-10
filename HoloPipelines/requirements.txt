@@ -11,3 +11,4 @@ scikit-image==0.15.0
 scikit_learn==0.21.2
 numpy==1.16.4
 pathlib==1.0.1
+simpleitk==1.2.0

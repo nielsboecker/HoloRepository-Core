@@ -12,13 +12,14 @@ import NewHologramControlsAndProgress from "./shared/NewHologramControlsAndProgr
 import GenerationProcessingStep from "./generate/GenerationProcessingStep";
 import { HologramCreationMode } from "../../../types";
 import {
+  IAuthor,
   IHologramCreationRequest,
   IHologramCreationRequest_Generate,
   IHologramCreationRequest_Upload,
-  IPractitioner,
-  IAuthor
+  IPractitioner
 } from "../../../../../types";
 import { PropsWithContext, withAppContext } from "../../shared/AppState";
+import Formsy from "formsy-react";
 
 export interface IHologramCreationStep {
   title: string;
@@ -35,6 +36,7 @@ type INewHologramPageProps = RouteComponentProps & PropsWithContext;
 interface INewHologramPageInternalState {
   // Operation of the multi-step process
   currentStep: number;
+  currentStepIsValid: boolean;
   creationMode: HologramCreationMode;
 
   // User selections and actions in child components
@@ -49,6 +51,7 @@ type INewHologramPageState = INewHologramPageInternalState & Partial<IHologramCr
 class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageState> {
   state: INewHologramPageState = {
     currentStep: 0,
+    currentStepIsValid: true,
     creationMode:
       (this.props.location &&
         this.props.location.state &&
@@ -56,7 +59,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       HologramCreationMode.GENERATE_FROM_IMAGING_STUDY
   };
 
-  private _handleModeChange = (creationMode: HologramCreationMode) => {
+  private _handleCreationModeChange = (creationMode: HologramCreationMode) => {
     this.setState({ creationMode });
   };
 
@@ -73,7 +76,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
   };
 
   private _handleSubmit_Upload = () => {
-    const metaData = this._generatePostRequestMetaData_Upload();
+    const metaData = this._getPostRequestMetaData_Upload();
     if (!metaData) {
       return this._logErrorAndReturnNull();
     }
@@ -81,7 +84,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
   };
 
   private _handleSubmit_Generate = () => {
-    const metaData = this._generatePostRequestMetaData_Generate();
+    const metaData = this._getPostRequestMetaData_Generate();
     if (!metaData) {
       return this._logErrorAndReturnNull();
     }
@@ -107,7 +110,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     };
   };
 
-  private _generatePostRequestMetaData_Upload = (): IHologramCreationRequest_Upload | null => {
+  private _getPostRequestMetaData_Upload = (): IHologramCreationRequest_Upload | null => {
     const { hologramFile } = this.state;
     const sharedMetaData = this._generatePostRequestMetaData_Shared();
     if (!hologramFile || !sharedMetaData) {
@@ -130,7 +133,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     };
   };
 
-  private _generatePostRequestMetaData_Generate = (): IHologramCreationRequest_Generate | null => {
+  private _getPostRequestMetaData_Generate = (): IHologramCreationRequest_Generate | null => {
     const {
       selectedPipelineId: plid,
       selectedImagingStudyEndpoint: imagingStudyEndpoint
@@ -167,7 +170,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
         content: (
           <CreationModeSelectionStep
             selected={this.state.creationMode}
-            handleModeChange={this._handleModeChange}
+            handleModeChange={this._handleCreationModeChange}
           />
         )
       },
@@ -200,7 +203,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
         content: (
           <CreationModeSelectionStep
             selected={this.state.creationMode}
-            handleModeChange={this._handleModeChange}
+            handleModeChange={this._handleCreationModeChange}
           />
         )
       },
@@ -227,27 +230,38 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       <PlainContentContainer>
         <h1>Create new hologram</h1>
 
-        <div className="steps-content" style={{ minHeight: "500px" }}>
-          {steps[currentStep].content}
-        </div>
+        <Formsy onSubmit={this._handleCurrentStepSubmit} id="myForm">
+          <div className="steps-content" style={{ minHeight: "500px" }}>
+            {steps[currentStep].content}
+          </div>
 
-        <NewHologramControlsAndProgress
-          current={currentStep}
-          steps={steps}
-          handlePrevious={this._prev}
-          handleNext={this._next}
-        />
+          <NewHologramControlsAndProgress
+            current={currentStep}
+            currentStepIsValid={this.state.currentStepIsValid}
+            steps={steps}
+            onGoToPrevious={this._goToPreviousStep}
+          />
+        </Formsy>
       </PlainContentContainer>
     );
   }
 
-  private _next = () => {
+  private _handleCurrentStepSubmit = (formData: Record<string, any>) => {
+    console.log("Submitted data: ", formData);
+    // @ts-ignore and manually guarantee that the formData keys match this.state
+    this.setState({
+      ...formData
+    });
+    this._goToNextStep();
+  };
+
+  private _goToNextStep = () => {
     this.setState((state: Readonly<INewHologramPageState>) => ({
       currentStep: state.currentStep + 1
     }));
   };
 
-  private _prev = () => {
+  private _goToPreviousStep = () => {
     this.setState((state: Readonly<INewHologramPageState>) => ({
       currentStep: state.currentStep - 1
     }));

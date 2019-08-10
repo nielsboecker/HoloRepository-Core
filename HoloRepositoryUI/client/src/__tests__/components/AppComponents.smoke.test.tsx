@@ -115,8 +115,8 @@ it("renders ExtendedChoiceGroupLabel without crashing", () => {
 it("renders NewHologramControlsAndProgress without crashing", () => {
   shallow(
     <NewHologramControlsAndProgress
-      handlePrevious={jest.fn}
-      handleNext={jest.fn}
+      onGoToPrevious={jest.fn}
+      onGoToNext={jest.fn}
       steps={[]}
       current={0}
     />

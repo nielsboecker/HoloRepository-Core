@@ -38,7 +38,7 @@
 - [Development](#development)
   - [Get started](#get-started)
   - [Set up the environment](#set-up-the-environment)
-  - [Run system in docker-compose](#run-system-in-docker-compose)
+  - [System integration](#system-integration)
 - [Contributing](#contributing)
 - [Acknowledgements](#acknowledgements)
 - [License](#license)
@@ -137,7 +137,20 @@ CodeFactor is another tool we use to ensure high code quality. It will run autom
 
 _Note: The `tslint.json` config is solely for this purpose. The actual JavaScript / TypeScript code is linted with ESLint, given that TSLint will be deprecated. Use the TSLint config only when CodeFactor's default rules are unreasonable._
 
-### Run system in docker-compose
+### System integration
+
+#### Ports and interfaces
+
+The different components are meant to be deployed independently. They communicate via REST APIs, which are documented in the sub-directories' `README`s. For development, the system can be run on the same host, using these default ports:
+```c
+HoloRepositoryUI/client:  3000
+HoloRepositoryUI/server:  3001
+HoloPipelines/core:       3100
+HoloStorageAccessor:      3200
+HoloPipelines/models:     5000, 5001, 5002, ...
+```
+
+#### Run system in docker-compose
 
 As the system comprises multiple separate components, it can be helpful to use docker-compose to locally start all of them at once, for instance to perform integration tests or develop a new component.
 

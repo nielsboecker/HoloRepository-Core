@@ -83,6 +83,7 @@ If not, `export` the variables before running the program.
 | ACCESSOR_FHIR_URL        | URL to the FHIR server that accessor connects to |
 | AZURE_STORAGE_ACCOUNT    | Name of blob store for holograms                 |
 | AZURE_STORAGE_ACCESS_KEY | Access key to the blob store                     |
+| ENABLE_CORS              | Enable CORS support for accessor                 |
 
 
 ## Contact and support

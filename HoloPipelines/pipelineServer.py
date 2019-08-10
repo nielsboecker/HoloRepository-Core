@@ -3,6 +3,7 @@ from pipelineController import startPipeline, getPipelineList
 from flask_json import json_response
 from datetime import datetime
 from pathlib import Path
+from zipfile import ZipFile
 import uuid
 import json
 import threading
@@ -11,7 +12,6 @@ import logging
 import requests
 import os
 import pathlib
-from zipfile import ZipFile
 
 app = Flask(__name__)
 app.config["JSON_ADD_STATUS"] = False
@@ -146,6 +146,18 @@ def send_job_start_response():
     if not output_directory.is_dir():
         os.mkdir("output")
 
+    # create a list that fetch the response info that needs to post with hologram to the accessor (checking is missing)
+    info_for_accesor = {
+        "bodySite": job_request["bodySite"],
+        "dateOfImaging": datetime.strptime(
+            job_request["dateOfImaging"], "%Y-%m-%d %H:%M:%S"
+        ).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "description": job_request["description"],
+        "author": job_request["author"],
+        "patient": job_request["patient"],
+    }
+    logging.info("info_for_accesor: " + json.dumps(info_for_accesor))
+
     # create arglist pass to pipeline controller
     # (this part will change later, we should not check the pipeline arglist in this way)
     jobID = str(uuid.uuid1())
@@ -157,10 +169,11 @@ def send_job_start_response():
             unzip_file_dir,
             str(
                 this_cwd.joinpath(
-                    str(output_directorylsPipe unzip_file_dir.rsplit("/", 1)[1] + ".glb"
+                    str(output_directory), unzip_file_dir.rsplit("/", 1)[1] + ".glb"
                 )
             ),
             "300",
+            json.dumps(info_for_accesor),
         ]
     else:
         arglist = [
@@ -171,20 +184,12 @@ def send_job_start_response():
                     str(output_directory), unzip_file_dir.rsplit("/", 1)[1] + ".glb"
                 )
             ),
+            json.dumps(info_for_accesor),
         ]
     logging.info("arglist: " + str(arglist))
 
-    #create a list that fetch the response info that needs to post with hologram to the accessor (checking is missing)
-    info_for_accesor={
-        "bodySite":job_request["bodySite"],
-        "dateOfImaging":job_request["dateOfImaging"],
-        "description":job_request["description"],
-        "author":job_request["author"],
-        "patient":job_request["patient"]
-        }
-
     # pass to controller to start pipeline
-    startPipeline(jobID, request_plid, arglist,info_for_accesor)
+    startPipeline(jobID, request_plid, arglist)
     return json_response(jobID=jobID, status_code=202)
 
 

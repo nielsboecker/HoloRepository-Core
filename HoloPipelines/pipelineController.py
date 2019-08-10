@@ -95,13 +95,12 @@ def main():
     json_file.close()
 
 
-def startPipeline(jobID, plID, paramList=[],infoForAccessor=[]):
+def startPipeline(jobID, plID, paramList=[]):
     configFileName = "pipelineList.json"  # hard coded
     with open(str(pathlib.Path(newCwd).joinpath(str(configFileName)))) as json_file:
         lsPipe = json.load(json_file)
-        print(str(["python", lsPipe[plID]["src"]] + paramList+[infoForAccessor]))
-        subprocess.run(["python", lsPipe[plID]["src"]] + paramList+[str(infoForAccessor)], cwd=newCwd)
-        # currently pipelineNifti2glb pipelineDicom2glb are the only pipelines that can take jobID
+        print(str(["python", lsPipe[plID]["src"]] + paramList))
+        subprocess.run(["python", lsPipe[plID]["src"]] + paramList, cwd=newCwd)
 
     json_file.close()
 

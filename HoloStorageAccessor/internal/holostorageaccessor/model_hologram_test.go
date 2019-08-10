@@ -59,6 +59,38 @@ func TestHologramToHologramDocumentReferenceFHIR(t *testing.T) {
 				Author:  []ReferenceFHIR{ReferenceFHIR{Reference: "Practitioner/a123"}},
 			},
 		},
+		"with_some_missing_attachment_data": {
+			input: Hologram{
+				Hid:                 "123",
+				Aid:                 "a123",
+				Pid:                 "p123",
+				Title:               "",
+				Description:         "",
+				ContentType:         "application/test",
+				FileSizeInKb:        1000,
+				CreationDate:        &ts_creation,
+				CreationMode:        "GENERATE_FROM_IMAGING_STUDY",
+				CreationDescription: "test-pipe",
+				DateOfImaging:       &ts_imaging,
+				BodySite:            "hips",
+			},
+			url: "www.storage.com/download/12345",
+			want: HologramDocumentReferenceFHIR{
+				ResourceType: "DocumentReference",
+				Status:       "current",
+				Date:         &ts_creation,
+				ID:           "123",
+				Type:         CodeableConceptFHIR{Text: "GENERATE_FROM_IMAGING_STUDY"},
+				HologramMeta: `{"creationDescription":"test-pipe","bodySite":"hips","dateOfImaging":"2017-07-15T15:20:25Z"}`,
+				Content: []ContentFHIR{ContentFHIR{Attachment: AttachmentFHIR{
+					ContentType: "application/test",
+					Size:        1024000,
+					URL:         "www.storage.com/download/12345",
+				}}},
+				Subject: ReferenceFHIR{Reference: "Patient/p123"},
+				Author:  []ReferenceFHIR{ReferenceFHIR{Reference: "Practitioner/a123"}},
+			},
+		},
 	}
 
 	for name, tc := range tests {

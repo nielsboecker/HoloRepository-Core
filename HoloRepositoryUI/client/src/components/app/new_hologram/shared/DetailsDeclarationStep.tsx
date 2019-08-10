@@ -1,57 +1,40 @@
 import React, { Component } from "react";
-import {
-  DatePicker,
-  DayOfWeek,
-  Dropdown,
-  IStackProps,
-  Stack,
-  TextField
-} from "office-ui-fabric-react";
+import { IStackProps, Stack } from "office-ui-fabric-react";
 import { PidToPatientsMap, PropsWithContext, withAppContext } from "../../../shared/AppState";
+import PatientSelectionInput from "../inputs/PatientSelectionDropdown";
+import HologramTitleInput from "../inputs/TitleInput";
+import DescriptionInput from "../inputs/DescriptionInput";
+import BodySiteInput from "../inputs/BodySiteInput";
+import DateOfImagingInput from "../inputs/DateOfImagingInput";
 
 const columnProps: Partial<IStackProps> = {
   tokens: { childrenGap: 15 },
   styles: { root: { width: 300 } }
 };
 
-class DetailsDeclarationStep extends Component<PropsWithContext> {
+export interface IDetailsDeclarationStepProps extends PropsWithContext {}
+
+class DetailsDeclarationStep extends Component<IDetailsDeclarationStepProps> {
   render() {
     return (
       <div>
         <Stack horizontal tokens={{ childrenGap: 50 }} styles={{ root: { width: 650 } }}>
           <Stack {...columnProps}>
-            <Dropdown
-              label="Corresponding patient"
-              placeholder="Select a patient"
-              options={this._mapPatientsToDropdownOptions(this.props.context!.patients)}
-              required={true}
-              styles={{ dropdown: { width: 300 } }}
-            />
-
-            <TextField
-              label="Hologram title"
-              placeholder={`For example, "Renal tumour"`}
+            <PatientSelectionInput
+              name="patient"
+              patients={this._mapPatientsToDropdownOptions(this.props.context!.patients)}
               required
             />
 
-            <TextField
-              label="Description"
-              placeholder={"Add a short description"}
-              multiline
-              autoAdjustHeight
-            />
+            <HologramTitleInput name="title" required />
+
+            <DescriptionInput name="description" />
           </Stack>
 
           <Stack {...columnProps}>
-            <TextField label="Body site" placeholder={`For example, "Right kidney"`} />
+            <BodySiteInput name="bodySite" />
 
-            <DatePicker
-              label="Date of imaging"
-              ariaLabel="Date of imaging"
-              placeholder="Pick a date"
-              firstDayOfWeek={DayOfWeek.Monday}
-              maxDate={new Date()}
-            />
+            <DateOfImagingInput name="dateOfImaging" />
           </Stack>
         </Stack>
       </div>

@@ -156,7 +156,7 @@ As the system comprises multiple separate components, it can be helpful to use d
 
 Note: To successfully start the Accessor, you need to provide the relevant configuration in `./HoloStorageAccessor/config.env` (see the sub-component's `README` for more information).
 
-This will also reflect the current state of the sub-components' `Dockerfile`s. To build all images (if they haven't been build already), run:
+This will also reflect the current state of the sub-components' `Dockerfile`s. To build and start all images (if they haven't been build already), run:
 ```shell
 $ docker-compose --file docker-compose.dev.yml up
 Starting holorepository-core_holorepository-ui-client_1                      ... done
@@ -165,9 +165,11 @@ Starting holorepository-core_holorepository-ui-server_1                      ...
 Creating holorepository-core_holostorage-accessor_1                          ... done
 ```
 
-You can also just run a single component, but use the provided configurations, port mappings etc. for convenience:
+Force a rebuild by replacing `docker-compose up` with `docker-compose build`.
+
+You can also just run a single component or a selection of components, but still use the provided configurations, port mappings etc. from the `docker-compose` file for convenience:
 ```shell
-$ docker-compose --file docker-compose.dev.yml up holostorage-accessor
+$ docker-compose --file docker-compose.dev.yml up holostorage-accessor holorepository-ui-server
 ```
 
 Lastly, it is also possible to start the whole system except for one component, which will allow you to develop this component and, for instance, manually run it in dev mode.

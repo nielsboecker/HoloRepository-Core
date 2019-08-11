@@ -192,7 +192,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       },
       {
         title: "Enter details",
-        content: <DetailsDeclarationStep />
+        content: <DetailsDeclarationStep enablePatientSelection={false} />
       },
       {
         title: "Process",
@@ -210,7 +210,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       },
       {
         title: "Enter details",
-        content: <DetailsDeclarationStep />
+        content: <DetailsDeclarationStep enablePatientSelection={true} />
       },
       {
         title: "Process",

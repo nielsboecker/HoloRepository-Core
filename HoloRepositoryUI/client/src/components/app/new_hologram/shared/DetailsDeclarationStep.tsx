@@ -12,7 +12,11 @@ const columnProps: Partial<IStackProps> = {
   styles: { root: { width: 300 } }
 };
 
-class DetailsDeclarationStep extends Component<PropsWithContext> {
+export interface IDetailsDeclarationStepProps extends PropsWithContext {
+  enablePatientSelection: boolean;
+}
+
+class DetailsDeclarationStep extends Component<IDetailsDeclarationStepProps> {
   render() {
     return (
       <div>
@@ -21,6 +25,7 @@ class DetailsDeclarationStep extends Component<PropsWithContext> {
             <PatientSelectionInput
               name="patient"
               patients={this._mapPatientsToDropdownOptions(this.props.context!.patients)}
+              disabled={!this.props.enablePatientSelection}
               required
             />
 

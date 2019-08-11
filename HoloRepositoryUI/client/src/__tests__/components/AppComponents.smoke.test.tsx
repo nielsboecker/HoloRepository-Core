@@ -103,7 +103,9 @@ it("renders CreationModeSelectionStep without crashing", () => {
 });
 
 it("renders DetailsDeclarationStep without crashing", () => {
-  mountWithContextProvider(wrapWithFormsy(<DetailsDeclarationStep />));
+  mountWithContextProvider(
+    wrapWithFormsy(<DetailsDeclarationStep enablePatientSelection={false} />)
+  );
 });
 
 it("renders ExtendedChoiceGroupLabel without crashing", () => {

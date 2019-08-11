@@ -9,6 +9,7 @@ export interface PatientSelectionDropdownProps
     Partial<PassDownProps>,
     Partial<WrapperProps> {
   patients: IDropdownOption[];
+  disabled: boolean;
 }
 class PatientSelectionDropdown extends Component<PatientSelectionDropdownProps> {
   _handleChange = (pid: string): void => {
@@ -20,7 +21,7 @@ class PatientSelectionDropdown extends Component<PatientSelectionDropdownProps> 
   };
 
   render() {
-    const { patients, isRequired, isValid } = this.props;
+    const { disabled, patients, isRequired, isValid } = this.props;
     const { selectedPatientId } = this.props.context!;
 
     return (
@@ -29,6 +30,7 @@ class PatientSelectionDropdown extends Component<PatientSelectionDropdownProps> 
         label="Corresponding patient"
         placeholder="Select a patient"
         options={patients}
+        disabled={disabled}
         required={isRequired}
         defaultSelectedKey={selectedPatientId}
         errorMessage={isValid ? undefined : "Select a patient"}

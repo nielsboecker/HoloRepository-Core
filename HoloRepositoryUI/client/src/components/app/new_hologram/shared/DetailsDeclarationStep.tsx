@@ -1,20 +1,18 @@
 import React, { Component } from "react";
 import { IStackProps, Stack } from "office-ui-fabric-react";
 import { PidToPatientsMap, PropsWithContext, withAppContext } from "../../../shared/AppState";
-import PatientSelectionInput from "../inputs/PatientSelectionDropdown";
-import HologramTitleInput from "../inputs/TitleInput";
-import DescriptionInput from "../inputs/DescriptionInput";
-import BodySiteInput from "../inputs/BodySiteInput";
-import DateOfImagingInput from "../inputs/DateOfImagingInput";
+import PatientSelectionInput from "./inputs/PatientSelectionDropdown";
+import HologramTitleInput from "./inputs/TitleInput";
+import DescriptionInput from "./inputs/DescriptionInput";
+import BodySiteInput from "./inputs/BodySiteInput";
+import DateOfImagingInput from "./inputs/DateOfImagingInput";
 
 const columnProps: Partial<IStackProps> = {
   tokens: { childrenGap: 15 },
   styles: { root: { width: 300 } }
 };
 
-export interface IDetailsDeclarationStepProps extends PropsWithContext {}
-
-class DetailsDeclarationStep extends Component<IDetailsDeclarationStepProps> {
+class DetailsDeclarationStep extends Component<PropsWithContext> {
   render() {
     return (
       <div>

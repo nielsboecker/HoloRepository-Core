@@ -3,7 +3,7 @@ import "./App.scss";
 import MainContainer from "./MainContainer";
 import { initializeIcons } from "@uifabric/icons";
 import BackendService from "../../services/holoRepositoryServerService";
-import { IPatient, IPractitioner, IPipeline } from "../../../../types";
+import { IHologram, IPatient, IPractitioner, IPipeline } from "../../../../types";
 import { AppContext, IAppState, initialState } from "./AppState";
 
 // Note: See https://developer.microsoft.com/en-us/fabric/#/styles/web/icons#fabric-react
@@ -19,7 +19,8 @@ class App extends Component<any, IAppState> {
       handleSelectedPatientIdChange: this._handleSelectedPatientIdChange,
       handlePipelinesChange: this._handlePipelinesChange,
       handleDeleteHolograms: this._handleDeleteHolograms,
-      handleDownloadHolograms: this._handleDownloadHolograms
+      handleDownloadHolograms: this._handleDownloadHolograms,
+      handleHologramCreated: this._handleHologramCreated
     };
   }
 
@@ -134,6 +135,27 @@ class App extends Component<any, IAppState> {
   private _handleDownloadHolograms = (hids: string[]) => {
     hids.forEach(hid => {
       BackendService.downloadHologramById(hid).then(response => console.log("download", response));
+    });
+  };
+
+  private _handleHologramCreated = (hologram: IHologram) => {
+    const pid = hologram.pid;
+    const patient = this.state.patients[pid];
+
+    // Adding data because Accessor only sends aid and pid
+    hologram.patientName = patient.name.full;
+    hologram.authorName = this.state.practitioner!.name.full;
+
+    if (!patient.holograms) {
+      patient.holograms = [];
+    }
+    patient.holograms.push(hologram);
+
+    this.setState({
+      patients: {
+        ...this.state.patients,
+        [pid]: patient
+      }
     });
   };
 }

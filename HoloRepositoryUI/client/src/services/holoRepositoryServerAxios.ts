@@ -18,7 +18,7 @@ export const routes = {
 const holoRepositoryServerAxios = axios.create({
   baseURL: `http://localhost:3001${apiPrefix}`,
   // Note: High timeout value needed as app takes a long time to start in dev mode
-  timeout: 4000,
+  timeout: 15000,
   headers
 });
 

@@ -13,6 +13,7 @@ import GenerationProcessingStep from "./generate/GenerationProcessingStep";
 import { HologramCreationMode } from "../../../types";
 import {
   IAuthor,
+  IHologram,
   IHologramCreationRequest,
   IHologramCreationRequest_Generate,
   IHologramCreationRequest_Upload,
@@ -80,7 +81,21 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     if (!metaData) {
       return this._logErrorAndReturnNull();
     }
-    BackendService.uploadHologram(metaData).then(response => console.log(response)); // boolean
+    BackendService.uploadHologram(metaData).then(response => {
+      if (response) {
+        this._handleUploadHologram_Success(response);
+      } else {
+        this._handleUploadHologram_Failure();
+      }
+    });
+  };
+
+  private _handleUploadHologram_Success = (hologram: IHologram) => {
+    this.props.context!.handleHologramCreated(hologram);
+  };
+
+  private _handleUploadHologram_Failure = () => {
+    console.error("Something went wrong while creating the hologram, try refreshing the page.");
   };
 
   private _handleSubmit_Generate = () => {

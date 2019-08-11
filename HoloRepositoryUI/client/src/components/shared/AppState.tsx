@@ -16,6 +16,7 @@ export interface IAppState {
   handlePipelinesChange: Function;
   handleDeleteHolograms: Function;
   handleDownloadHolograms: Function;
+  handleHologramCreated: Function;
 }
 
 const initialState: IAppState = {
@@ -28,7 +29,8 @@ const initialState: IAppState = {
   handlePatientsChange: () => {},
   handlePipelinesChange: () => {},
   handleDeleteHolograms: () => {},
-  handleDownloadHolograms: () => {}
+  handleDownloadHolograms: () => {},
+  handleHologramCreated: () => {}
 };
 
 // using same interface for App state and context

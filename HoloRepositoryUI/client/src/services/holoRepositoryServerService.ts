@@ -70,7 +70,9 @@ export class HoloRepositoryServerService {
       .catch(handleError);
   }
 
-  public async uploadHologram(metaData: IHologramCreationRequest_Upload): Promise<boolean> {
+  public async uploadHologram(
+    metaData: IHologramCreationRequest_Upload
+  ): Promise<IHologram | null> {
     const formData = new FormData();
     for (let [key, value] of Object.entries(metaData)) {
       // Note: Manually serialise objects, but not "hologramFile"
@@ -81,10 +83,16 @@ export class HoloRepositoryServerService {
     }
 
     return serverAxios
-      .post(`${routes.holograms}/upload`, formData, {
+      .post<IHologram>(`${routes.holograms}/upload`, formData, {
         headers: { "content-type": "multipart/form-data" }
       })
-      .then(response => response.status === 200 || response.status === 201)
+      .then(response => {
+        if (response.status === 200 || response.status === 201) {
+          return response.data;
+        } else {
+          return handleError(new Error(`Got response code ${response.status}`));
+        }
+      })
       .catch(handleError);
   }
 

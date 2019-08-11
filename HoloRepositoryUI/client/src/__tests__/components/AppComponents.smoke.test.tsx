@@ -34,6 +34,8 @@ import { IPatient } from "../../../../types";
 import { mountWithContextProvider } from "../../__test_utils__/MockContextProvider";
 
 import samplePatients from "../samples/samplePatients.json";
+import Formsy from "formsy-react";
+import { wrapWithFormsy } from "../../__test_utils__/MockFormsy";
 
 it("renders AppContainer without crashing", () => {
   mountWithContextProvider(<AppContainer />);
@@ -105,7 +107,7 @@ it("renders CreationModeSelectionStep without crashing", () => {
 });
 
 it("renders DetailsDeclarationStep without crashing", () => {
-  mountWithContextProvider(<DetailsDeclarationStep />);
+  mountWithContextProvider(wrapWithFormsy(<DetailsDeclarationStep />));
 });
 
 it("renders ExtendedChoiceGroupLabel without crashing", () => {
@@ -116,7 +118,7 @@ it("renders NewHologramControlsAndProgress without crashing", () => {
   shallow(
     <NewHologramControlsAndProgress
       onGoToPrevious={jest.fn}
-      onGoToNext={jest.fn}
+      currentStepIsValid={true}
       steps={[]}
       current={0}
     />

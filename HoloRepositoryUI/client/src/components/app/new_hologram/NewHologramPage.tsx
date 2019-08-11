@@ -52,16 +52,12 @@ type INewHologramPageState = INewHologramPageInternalState & Partial<IHologramCr
 class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageState> {
   state: INewHologramPageState = {
     currentStep: 0,
-    currentStepIsValid: true,
+    currentStepIsValid: false,
     creationMode:
       (this.props.location &&
         this.props.location.state &&
         (this.props.location.state.mode as HologramCreationMode)) ||
       HologramCreationMode.GENERATE_FROM_IMAGING_STUDY
-  };
-
-  private _handleCreationModeChange = (creationMode: HologramCreationMode) => {
-    this.setState({ creationMode });
   };
 
   private _handleSelectedPipelineChange = (selectedPipelineId: string) => {
@@ -178,12 +174,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     [HologramCreationMode.GENERATE_FROM_IMAGING_STUDY]: [
       {
         title: "Select mode",
-        content: (
-          <CreationModeSelectionStep
-            selected={this.state.creationMode}
-            handleModeChange={this._handleCreationModeChange}
-          />
-        )
+        content: <CreationModeSelectionStep selected={this.state.creationMode} />
       },
       {
         title: "Select pipeline",
@@ -211,12 +202,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     [HologramCreationMode.UPLOAD_EXISTING_MODEL]: [
       {
         title: "Select mode",
-        content: (
-          <CreationModeSelectionStep
-            selected={this.state.creationMode}
-            handleModeChange={this._handleCreationModeChange}
-          />
-        )
+        content: <CreationModeSelectionStep selected={this.state.creationMode} />
       },
       {
         title: "Upload file",
@@ -243,8 +229,8 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
 
         <Formsy
           onSubmit={this._handleCurrentStepSubmit}
-          onValid={() => console.log("Form valid")}
-          onInvalid={() => console.log("Form invalid")}
+          onValid={() => this.setState({ currentStepIsValid: true })}
+          onInvalid={() => this.setState({ currentStepIsValid: false })}
         >
           <div className="steps-content" style={{ minHeight: "500px" }}>
             {steps[currentStep].content}

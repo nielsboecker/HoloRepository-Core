@@ -98,10 +98,7 @@ it("renders NewHologramPage without crashing", () => {
 
 it("renders CreationModeSelectionStep without crashing", () => {
   shallow(
-    <CreationModeSelectionStep
-      selected={jest.requireMock("../../../../types")}
-      handleModeChange={jest.fn}
-    />
+    wrapWithFormsy(<CreationModeSelectionStep selected={jest.requireMock("../../../../types")} />)
   );
 });
 

@@ -15,11 +15,11 @@ export const routes = {
   imagingStudies: "imagingStudies"
 };
 
-const holoRepositoryServerAxios = axios.create({
+const BackendServerAxios = axios.create({
   baseURL: `http://localhost:3001${apiPrefix}`,
   // Note: High timeout value needed as app takes a long time to start in dev mode
   timeout: 15000,
   headers
 });
 
-export default holoRepositoryServerAxios;
+export default BackendServerAxios;

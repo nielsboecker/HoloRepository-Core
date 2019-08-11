@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.scss";
 import MainContainer from "./MainContainer";
 import { initializeIcons } from "@uifabric/icons";
-import BackendService from "../../services/holoRepositoryServerService";
+import BackendServerService from "../../services/BackendServerService";
 import { IHologram, IPatient, IPractitioner, IPipeline } from "../../../../types";
 import { AppContext, IAppState, initialState } from "./AppState";
 
@@ -27,19 +27,19 @@ class App extends Component<any, IAppState> {
   componentDidMount(): void {
     // Note: SMART login is currently not implemented, so a hard-coded practitioner will be the user
     const practitionerId = "b0016666-1924-455d-8b16-92c631fa5207";
-    BackendService.getPractitioner(practitionerId).then(practitioner => {
+    BackendServerService.getPractitioner(practitionerId).then(practitioner => {
       console.log("Fetched data: practitioner", practitioner);
       this._handlePractitionerChange(practitioner!);
     });
 
     // Fetch all patients for which the current practitioner is responsible
-    BackendService.getAllPatientsForPractitioner(practitionerId).then(patients => {
+    BackendServerService.getAllPatientsForPractitioner(practitionerId).then(patients => {
       console.log("Fetched data: patients", patients);
       this._handlePatientsChange(patients!);
     });
 
     // Fetch information about available pipelines
-    BackendService.getAllPipelines().then(pipelines => {
+    BackendServerService.getAllPipelines().then(pipelines => {
       console.log("Fetched data: pipelines", pipelines);
       this._handlePipelinesChange(pipelines || []);
     });
@@ -64,7 +64,7 @@ class App extends Component<any, IAppState> {
     const { patients } = this.state;
     if (!patients) return;
 
-    BackendService.getImagingStudiesForAllPatients(patients).then(combinedResult => {
+    BackendServerService.getImagingStudiesForAllPatients(patients).then(combinedResult => {
       console.log("Fetched data: imaging studies", combinedResult);
       for (const pid in combinedResult) {
         const studies = combinedResult[pid];
@@ -85,7 +85,7 @@ class App extends Component<any, IAppState> {
     const { patients } = this.state;
     if (!patients) return;
 
-    BackendService.getHologramsForAllPatients(patients).then(combinedResult => {
+    BackendServerService.getHologramsForAllPatients(patients).then(combinedResult => {
       console.log("Fetched data: holograms", combinedResult);
       for (const pid in combinedResult) {
         const holograms = combinedResult[pid];
@@ -130,7 +130,7 @@ class App extends Component<any, IAppState> {
 
   private _handleDeleteHolograms = (hids: string[]) => {
     hids.forEach(hid =>
-      BackendService.deleteHologramById(hid).then(response => {
+      BackendServerService.deleteHologramById(hid).then(response => {
         if (response === true) {
           this._handleHologramDeleted(hid);
         }
@@ -140,7 +140,7 @@ class App extends Component<any, IAppState> {
 
   private _handleDownloadHolograms = (hids: string[]) => {
     hids.forEach(hid => {
-      BackendService.downloadHologramById(hid);
+      BackendServerService.downloadHologramById(hid);
     });
   };
 

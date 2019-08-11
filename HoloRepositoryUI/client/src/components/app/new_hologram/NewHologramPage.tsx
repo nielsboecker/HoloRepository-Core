@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from "react";
 import { RouteComponentProps } from "@reach/router";
 import PlainContentContainer from "../core/PlainContentContainer";
-import BackendService from "../../../services/holoRepositoryServerService";
+import BackendServerService from "../../../services/BackendServerService";
 import CreationModeSelectionStep from "./shared/CreationModeSelectionStep";
 import ImagingStudySelectionStep from "./generate/ImagingStudySelectionStep";
 import PipelineSelectionStep from "./generate/PipelineSelectionStep";
@@ -73,7 +73,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     if (!metaData) {
       return this._logErrorAndReturnNull();
     }
-    BackendService.uploadHologram(metaData).then(response => {
+    BackendServerService.uploadHologram(metaData).then(response => {
       if (response) {
         this._handleUploadHologram_Success(response);
       } else {
@@ -95,7 +95,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     if (!metaData) {
       return this._logErrorAndReturnNull();
     }
-    BackendService.generateHologram(metaData).then(response => console.log(response)); // boolean
+    BackendServerService.generateHologram(metaData).then(response => console.log(response)); // boolean
   };
 
   private _generatePostRequestMetaData_Shared = (): IHologramCreationRequest | null => {

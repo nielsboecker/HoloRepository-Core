@@ -1,5 +1,5 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
 import { Selection } from "office-ui-fabric-react";
 
 import AppContainer from "../../components/app/core/AppContainer";
@@ -21,7 +21,6 @@ import CreationModeSelectionStep from "../../components/app/new_hologram/shared/
 import DetailsDeclarationStep from "../../components/app/new_hologram/shared/DetailsDeclarationStep";
 import ExtendedChoiceGroupLabel from "../../components/app/new_hologram/shared/ExtendedChoiceGroupLabel";
 import NewHologramControlsAndProgress from "../../components/app/new_hologram/shared/NewHologramControlsAndProgress";
-import FileUploadStep from "../../components/app/new_hologram/upload/FileUploadStep";
 import UploadProcessingStep from "../../components/app/new_hologram/upload/UploadProcessingStep";
 import PatientBreadcrumb from "../../components/app/patient/PatientBreadcrumb";
 import PatientDetailPage from "../../components/app/patient/PatientDetailPage";
@@ -34,8 +33,8 @@ import { IPatient } from "../../../../types";
 import { mountWithContextProvider } from "../../__test_utils__/MockContextProvider";
 
 import samplePatients from "../samples/samplePatients.json";
-import Formsy from "formsy-react";
 import { wrapWithFormsy } from "../../__test_utils__/MockFormsy";
+import FileUploadStep from "../../components/app/new_hologram/upload/FileUploadStep";
 
 it("renders AppContainer without crashing", () => {
   mountWithContextProvider(<AppContainer />);
@@ -126,7 +125,7 @@ it("renders NewHologramControlsAndProgress without crashing", () => {
 });
 
 it("renders FileUploadStep without crashing", () => {
-  shallow(<FileUploadStep onHologramFileChange={jest.fn()} />);
+  mount(wrapWithFormsy(<FileUploadStep />));
 });
 
 it("renders UploadProcessingStep without crashing", () => {

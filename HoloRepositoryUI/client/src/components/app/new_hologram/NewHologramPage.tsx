@@ -64,10 +64,6 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     this.setState({ creationMode });
   };
 
-  private _handleHologramFileChange = (hologramFile: File) => {
-    this.setState({ hologramFile });
-  };
-
   private _handleSelectedPipelineChange = (selectedPipelineId: string) => {
     this.setState({ selectedPipelineId });
   };
@@ -224,7 +220,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       },
       {
         title: "Upload file",
-        content: <FileUploadStep onHologramFileChange={this._handleHologramFileChange} />
+        content: <FileUploadStep />
       },
       {
         title: "Enter details",
@@ -245,7 +241,11 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       <PlainContentContainer>
         <h1>Create new hologram</h1>
 
-        <Formsy onSubmit={this._handleCurrentStepSubmit} id="myForm">
+        <Formsy
+          onSubmit={this._handleCurrentStepSubmit}
+          onValid={() => console.log("Form valid")}
+          onInvalid={() => console.log("Form invalid")}
+        >
           <div className="steps-content" style={{ minHeight: "500px" }}>
             {steps[currentStep].content}
           </div>

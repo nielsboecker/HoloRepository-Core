@@ -7,11 +7,13 @@ import shutil
 import threading
 
 import urllib.request
+import requests
 from zipfile import ZipFile
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 thisCwd = pathlib.Path.cwd()
 zipFileName = "__temp__.zip"
+segmentedAbdomenFileName = "__segmentedAbdomen__.nii.gz"
 dicomPath = thisCwd.joinpath("medicalScans", "dicom")
 niftiPath = thisCwd.joinpath("medicalScans", "nifti")
 
@@ -33,7 +35,7 @@ class testServer(BaseHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
 
-        with open(str(niftiPath.joinpath("_segmentedAbdomen.nii.gz")), "rb") as toSend:
+        with open(str(niftiPath.joinpath(segmentedAbdomenFileName)), "rb") as toSend:
             self.wfile.write(toSend.read())  # Read the file and send the contents
 
 
@@ -92,8 +94,9 @@ def setupMockPOSTresponse():
     urlNiftyOut = (
         "https://dl.dropbox.com/s/x6b5cc34h4alya6/Owenpap___niftynet_out.nii.gz?dl=1"
     )
-    urllib.request.urlretrieve(
-        urlNiftyOut, str(niftiPath.joinpath("_segmentedAbdomen.nii.gz"))
+    response = requests.get(urlNiftyOut)
+    open(str(niftiPath.joinpath(segmentedAbdomenFileName)), "wb+").write(
+        response.content
     )
 
     logging.info("Starting NN model mock server...")
@@ -103,8 +106,8 @@ def setupMockPOSTresponse():
     yield
 
     # remove nii file
-    if os.path.exists(str(niftiPath.joinpath("_segmentedAbdomen.nii.gz"))):
-        os.remove(str(niftiPath.joinpath("_segmentedAbdomen.nii.gz")))
+    if os.path.exists(str(niftiPath.joinpath(segmentedAbdomenFileName))):
+        os.remove(str(niftiPath.joinpath(segmentedAbdomenFileName)))
 
     if os.path.exists(str(niftiPath.joinpath("dataFromPost.nii"))):
         os.remove(str(niftiPath.joinpath("dataFromPost.nii")))
@@ -174,32 +177,6 @@ def test_pipelines_dicom2glb(testSetup):
     assert os.path.isfile(glbPath.joinpath("testResult0.glb"))
 
 
-def test_pipelines_abdomenDicom2glb(setupMockPOSTresponse, testSetup):
-    output = subprocess.run(
-        [
-            "python",
-            "pipelineController.py",
-            "-c",
-            "test/pipelineListForTesting.json",
-            "abdomenDicom2glb",
-            "-p",
-            str(dicomPath.joinpath("abdomen")),
-            str(glbPath),
-            "http://localhost:4567",
-        ],
-        cwd=newCwd,
-    )
-    assert 0 == output.returncode
-    assert os.path.isfile(glbPath.joinpath("organNo1.glb"))
-    assert os.path.isfile(glbPath.joinpath("organNo2.glb"))
-    assert os.path.isfile(glbPath.joinpath("organNo3.glb"))
-    assert os.path.isfile(glbPath.joinpath("organNo4.glb"))
-    assert os.path.isfile(glbPath.joinpath("organNo5.glb"))
-    assert os.path.isfile(glbPath.joinpath("organNo6.glb"))
-    assert os.path.isfile(glbPath.joinpath("organNo7.glb"))
-    assert os.path.isfile(glbPath.joinpath("organNo8.glb"))
-
-
 def test_pipelines_lungDicom2glb(testSetup):
     output = subprocess.run(
         [
@@ -255,3 +232,29 @@ def test_pipelines_nifti2glb(testSetup):
     )
     assert 0 == output.returncode
     assert os.path.isfile(glbPath.joinpath("testResult3.glb"))
+
+
+def test_pipelines_abdomenDicom2glb(setupMockPOSTresponse, testSetup):
+    output = subprocess.run(
+        [
+            "python",
+            "pipelineController.py",
+            "-c",
+            "test/pipelineListForTesting.json",
+            "abdomenDicom2glb",
+            "-p",
+            str(dicomPath.joinpath("abdomen")),
+            str(glbPath),
+            "http://localhost:4567",
+        ],
+        cwd=newCwd,
+    )
+    assert 0 == output.returncode
+    assert os.path.isfile(glbPath.joinpath("organNo1.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo2.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo3.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo4.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo5.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo6.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo7.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo8.glb"))

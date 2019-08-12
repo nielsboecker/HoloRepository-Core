@@ -96,22 +96,18 @@ def main():
 
 
 def startPipeline(jobID, plID, paramList=[]):
-    configFileName = "pipelineList.json"  # hard coded
-    with open(str(pathlib.Path(newCwd).joinpath(str(configFileName)))) as json_file:
-        lsPipe = json.load(json_file)
-        print(str(["python", lsPipe[plID]["src"]] + paramList))
-        subprocess.run(["python", lsPipe[plID]["src"]] + paramList, cwd=newCwd)
-
-    json_file.close()
+    pipeline_list = getPipelineList()
+    print(str(["python", pipeline_list[plID]["src"]] + paramList))
+    subprocess.run(["python", pipeline_list[plID]["src"]] + paramList, cwd=newCwd)
 
 
 def getPipelineList():
-    configFileName = "pipelineList.json"  # hard coded
+    pipelinesConfig = "pipelineList.json"  # hard coded
 
-    with open(str(pathlib.Path(newCwd).joinpath(str(configFileName)))) as json_file:
-        lsPipe = json.load(json_file)
+    with open(str(pathlib.Path(newCwd).joinpath(str(pipelinesConfig)))) as json_file:
+        pipeline_list = json.load(json_file)
     json_file.close()
-    return lsPipe
+    return pipeline_list
 
 
 if __name__ == "__main__":

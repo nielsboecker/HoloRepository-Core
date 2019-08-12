@@ -5,7 +5,6 @@ const HologramsRouter = Router()
   .get("/", HologramsController.getAll)
   .get("/:hid/download", HologramsController.downloadById)
   .delete("/:hid", HologramsController.deleteById)
-  .post("/upload", HologramsController.upload)
-  .post("/generate", HologramsController.generate);
+  .post("/upload", HologramsController.upload);
 
 export default HologramsRouter;

@@ -5,11 +5,18 @@ import { Col, Row } from "antd";
 import PipelineSpecificationCard from "./PipelineSpecificationCard";
 import { PropsWithContext, withAppContext } from "../../../shared/AppState";
 
+export interface IPipelineSelectionStepProps extends PropsWithContext {
+  onPipelineSelectionChange: (selectedPipelineId: string) => void;
+}
+
 export interface IPipelineSelectionStepState {
   selectedPipeline?: IPipeline;
 }
 
-class PipelineSelectionStep extends Component<PropsWithContext, IPipelineSelectionStepState> {
+class PipelineSelectionStep extends Component<
+  IPipelineSelectionStepProps,
+  IPipelineSelectionStepState
+> {
   state = {
     selectedPipeline: undefined
   };
@@ -46,7 +53,11 @@ class PipelineSelectionStep extends Component<PropsWithContext, IPipelineSelecti
   private _handleChoiceGroupChange = (_: any, option?: IChoiceGroupOption): void => {
     const { pipelines } = this.props.context!;
     const selectedPipeline = pipelines.find(pipeline => pipeline.plid === option!.key);
+
     this.setState({ selectedPipeline });
+    if (selectedPipeline) {
+      this.props.onPipelineSelectionChange(selectedPipeline.plid);
+    }
   };
 }
 

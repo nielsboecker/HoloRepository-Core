@@ -2,7 +2,18 @@ import React, { Component } from "react";
 import { Icon, Spinner } from "office-ui-fabric-react";
 import { navigate } from "@reach/router";
 
-class UploadProcessingStep extends Component<any, { finished: boolean }> {
+export interface IUploadProcessingStepProps {
+  onComponentDidMount: () => void;
+}
+
+export interface IUploadProcessingStepState {
+  finished: boolean;
+}
+
+class UploadProcessingStep extends Component<
+  IUploadProcessingStepProps,
+  IUploadProcessingStepState
+> {
   state = {
     finished: false
   };
@@ -27,6 +38,7 @@ class UploadProcessingStep extends Component<any, { finished: boolean }> {
   }
 
   componentDidMount(): void {
+    this.props.onComponentDidMount();
     setTimeout(() => this.setState({ finished: true }), 2500);
   }
 

@@ -1,15 +1,17 @@
 import serverAxios, { routes } from "./holoRepositoryServerAxios";
 import {
-  IPatient,
-  IPractitioner,
   IHologram,
+  IHologramCreationRequest_Generate,
+  IHologramCreationRequest_Upload,
   IImagingStudy,
-  IPipeline
+  IPatient,
+  IPipeline,
+  IPractitioner
 } from "../../../types";
 import { PidToPatientsMap } from "../components/shared/AppState";
 import { AxiosResponse } from "axios";
 
-const handleError = (error: Error): null => {
+const handleError = (error: Error): any => {
   console.log("Encountered an error while fetching data from backend: ", error.message);
   return null;
 };
@@ -21,7 +23,7 @@ export class HoloRepositoryServerService {
   public async getPractitioner(pid: string): Promise<IPractitioner | null> {
     return serverAxios
       .get<IPractitioner>(`${routes.practitioners}/${pid}`)
-      .then(practitioner => practitioner.data)
+      .then(practitioner => practitioner.data as IPractitioner)
       .catch(handleError);
   }
 
@@ -32,7 +34,7 @@ export class HoloRepositoryServerService {
           practitioner: pid
         }
       })
-      .then(patients => patients.data)
+      .then(patients => patients.data as IPatient[])
       .catch(handleError);
   }
 
@@ -45,22 +47,18 @@ export class HoloRepositoryServerService {
           pids: _extractCombinedPidsString(patients)
         }
       })
-      .then(holograms => holograms.data)
+      .then(holograms => holograms.data as HologramsCombinedResult)
       .catch(handleError);
   }
 
   public async downloadHologramById(hid: string): Promise<boolean | null> {
     return serverAxios
-      .get<BinaryType>(
-        // Note: Mocked for now; change to `${routes.hologram}/${hid}/download`
-        "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Binary/Duck.glb",
-        {
-          responseType: "blob",
-          headers: {
-            Accept: "gltf-binary"
-          }
+      .get<BinaryType>(`${routes.holograms}/${hid}/download`, {
+        responseType: "blob",
+        headers: {
+          Accept: "gltf-binary"
         }
-      )
+      })
       .then(file => _forceDownload(file, `${hid}.glb`))
       .catch(handleError);
   }
@@ -72,16 +70,29 @@ export class HoloRepositoryServerService {
       .catch(handleError);
   }
 
-  public async uploadHologram(): Promise<boolean> {
-    // TODO: Implement
-    console.warn("Upload not implemented yet");
-    return Promise.resolve(true);
+  public async uploadHologram(metaData: IHologramCreationRequest_Upload): Promise<boolean> {
+    const formData = new FormData();
+    for (let [key, value] of Object.entries(metaData)) {
+      // Note: Manually serialise objects, but not "hologramFile"
+      if (key === "author" || key === "patient") {
+        value = JSON.stringify(value);
+      }
+      formData.set(key, value);
+    }
+
+    return serverAxios
+      .post(`${routes.holograms}/upload`, formData, {
+        headers: { "content-type": "multipart/form-data" }
+      })
+      .then(response => response.status === 200 || response.status === 201)
+      .catch(handleError);
   }
 
-  public async generateHologram(): Promise<boolean | null> {
-    // TODO: Implement
-    console.warn("Generate not implemented yet");
-    return Promise.resolve(true).catch(handleError);
+  public async generateHologram(metaData: IHologramCreationRequest_Generate): Promise<boolean> {
+    return serverAxios
+      .post(`${routes.pipelines}/generate`, metaData)
+      .then(response => response.status === 200 || response.status === 201)
+      .catch(handleError);
   }
 
   public async getImagingStudiesForAllPatients(
@@ -91,14 +102,14 @@ export class HoloRepositoryServerService {
       .get<ImagingStudiesCombinedResult>(`${routes.imagingStudies}`, {
         params: { pids: _extractCombinedPidsString(patients) }
       })
-      .then(iss => iss.data)
+      .then(iss => iss.data as ImagingStudiesCombinedResult)
       .catch(handleError);
   }
 
   public async getAllPipelines(): Promise<IPipeline[] | null> {
     return serverAxios
       .get<IPipeline[]>(routes.pipelines)
-      .then(pipeline => pipeline.data)
+      .then(pipeline => pipeline.data as IPipeline[])
       .catch(handleError);
   }
 }

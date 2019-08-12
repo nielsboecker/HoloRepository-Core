@@ -72,7 +72,7 @@ it("renders HologramsListPage without crashing", () => {
 });
 
 it("renders GenerationProcessingStep without crashing", () => {
-  shallow(<GenerationProcessingStep />);
+  shallow(<GenerationProcessingStep onComponentDidMount={jest.fn()} />);
 });
 
 it("renders ImagingStudyDetailsCard without crashing", () => {
@@ -80,11 +80,11 @@ it("renders ImagingStudyDetailsCard without crashing", () => {
 });
 
 it("renders ImagingStudySelectionStep without crashing", () => {
-  mountWithContextProvider(<ImagingStudySelectionStep />);
+  mountWithContextProvider(<ImagingStudySelectionStep onSelectedImagingStudyChange={jest.fn()} />);
 });
 
 it("renders PipelineSelectionStep without crashing", () => {
-  mountWithContextProvider(<PipelineSelectionStep />);
+  mountWithContextProvider(<PipelineSelectionStep onPipelineSelectionChange={jest.fn()} />);
 });
 
 it("renders PipelineSpecificationCard without crashing", () => {
@@ -92,7 +92,7 @@ it("renders PipelineSpecificationCard without crashing", () => {
 });
 
 it("renders NewHologramPage without crashing", () => {
-  shallow(<NewHologramPage />);
+  mountWithContextProvider(<NewHologramPage />);
 });
 
 it("renders CreationModeSelectionStep without crashing", () => {
@@ -124,11 +124,11 @@ it("renders NewHologramControlsAndProgress without crashing", () => {
 });
 
 it("renders FileUploadStep without crashing", () => {
-  shallow(<FileUploadStep />);
+  shallow(<FileUploadStep onHologramFileChange={jest.fn()} />);
 });
 
 it("renders UploadProcessingStep without crashing", () => {
-  shallow(<UploadProcessingStep />);
+  shallow(<UploadProcessingStep onComponentDidMount={jest.fn()} />);
 });
 
 it("renders PatientBreadcrumb without crashing", () => {

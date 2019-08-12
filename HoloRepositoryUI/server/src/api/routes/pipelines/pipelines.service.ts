@@ -1,15 +1,17 @@
-import logger from "../../../common/logger";
-import { IPipeline } from "../../../../../types";
-
-import samplePipelines from "../../../__tests__/samples/internal/samplePipelines.json";
+import PipelinesClient from "../../../common/clients/HoloPipelinesClient";
 
 export class PipelinesService {
-  public getAll(): Promise<IPipeline[]> {
-    logger.info("GET all Pipelines");
+  public getJobURL = (): string => {
+    return PipelinesClient.getJobURL();
+  };
 
-    // Note: This will have to remain mocked until HoloPipelines endpoint is ready
-    return Promise.resolve(samplePipelines as IPipeline[]);
-  }
+  public getJobStatusURL = (jid: string): string => {
+    return PipelinesClient.getJobStatusURL(jid);
+  };
+
+  public getPipelinesURL = (): string => {
+    return PipelinesClient.getPipelinesURL();
+  };
 }
 
 export default new PipelinesService();

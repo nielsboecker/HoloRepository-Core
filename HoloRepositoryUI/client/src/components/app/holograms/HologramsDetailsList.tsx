@@ -264,8 +264,7 @@ class HologramsDetailsList extends Component<
           const creationDate = new Date(hologram.creationDate);
 
           return {
-            // Note: appending random suffix because of duplicate IDs in mocked data, will be replaced
-            key: hologram.hid + Math.random(),
+            key: hologram.hid,
             titleDisplay: hologram.title,
             authorDisplay: this._getDisplayAuthorName(hologram),
             subjectDisplay: this._getDisplaySubjectName(hologram),

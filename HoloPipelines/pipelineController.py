@@ -50,14 +50,14 @@ def main():
 
     searchCounter = 0
     with open(str(pathlib.Path(newCwd).joinpath(str(args.config)))) as json_file:
-        lsPipe = json.load(json_file)
+        pipeline_list = json.load(json_file)
         # --ls flag
         if args.ls:
-            print(json.dumps(lsPipe, indent=4, sort_keys=False))
+            print(json.dumps(pipeline_list, indent=4, sort_keys=False))
             sys.exit()
         if args.info:
 
-            for key, value in lsPipe.items():
+            for key, value in pipeline_list.items():
                 data = value
                 if args.info in data["name"]:
                     print("**ID: " + key)
@@ -76,12 +76,12 @@ def main():
                 print("pipelineController: " + str(searchCounter) + " results")
             sys.exit()
         # check if pipeline exist
-        if args.pipelineID not in lsPipe:
+        if args.pipelineID not in pipeline_list:
             sys.exit("pipelineController: no pipeline with such ID")
-        if len(args.param) != int(lsPipe[args.pipelineID]["param"]):
+        if len(args.param) != int(pipeline_list[args.pipelineID]["param"]):
             sys.exit(
                 "pipelineController: invalid number of param [expected: "
-                + str(lsPipe[args.pipelineID]["param"])
+                + str(pipeline_list[args.pipelineID]["param"])
                 + ", got: "
                 + str(len(args.param))
                 + "]"
@@ -89,7 +89,7 @@ def main():
         # start pipeline
         print("starting pipeline " + args.pipelineID + "...")
         subprocess.run(
-            ["python", lsPipe[args.pipelineID]["src"]] + args.param, cwd=newCwd
+            ["python", pipeline_list[args.pipelineID]["src"]] + args.param, cwd=newCwd
         )
 
     json_file.close()

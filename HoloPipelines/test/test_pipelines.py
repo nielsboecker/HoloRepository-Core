@@ -5,12 +5,14 @@ import subprocess
 import logging
 import shutil
 import threading
+import sys
 
 import urllib.request
 import requests
 from zipfile import ZipFile
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
+pythonPath = sys.executable
 thisCwd = pathlib.Path.cwd()
 zipFileName = "__temp__.zip"
 segmentedAbdomenFileName = "__segmentedAbdomen__.nii.gz"
@@ -71,8 +73,11 @@ def testSetup():
         # download nifti sample
         logging.info("Beginning nifti sample download...")
 
-        url = "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip"
-        urllib.request.urlretrieve(url, str(thisCwd.joinpath(zipFileName)))
+        # url = "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip"
+        # urllib.request.urlretrieve(url, str(thisCwd.joinpath(zipFileName)))
+
+        response = requests.get(url)
+        open(str(thisCwd.joinpath(zipFileName)), "wb+").write(response.content)
 
         logging.info("Beginning nifti unzip...")
         with ZipFile(zipFileName, "r") as zipObj:  # unzip
@@ -161,7 +166,7 @@ def remove3Dmodels():
 def test_pipelines_dicom2glb(testSetup):
     output = subprocess.run(
         [
-            "python",
+            pythonPath,
             "pipelineController.py",
             "-c",
             "test/pipelineListForTesting.json",
@@ -180,7 +185,7 @@ def test_pipelines_dicom2glb(testSetup):
 def test_pipelines_lungDicom2glb(testSetup):
     output = subprocess.run(
         [
-            "python",
+            pythonPath,
             "pipelineController.py",
             "-c",
             "test/pipelineListForTesting.json",
@@ -198,7 +203,7 @@ def test_pipelines_lungDicom2glb(testSetup):
 def test_pipelines_nifti2obj(testSetup):
     output = subprocess.run(
         [
-            "python",
+            pythonPath,
             "pipelineController.py",
             "-c",
             "test/pipelineListForTesting.json",
@@ -218,7 +223,7 @@ def test_pipelines_nifti2obj(testSetup):
 def test_pipelines_nifti2glb(testSetup):
     output = subprocess.run(
         [
-            "python",
+            pythonPath,
             "pipelineController.py",
             "-c",
             "test/pipelineListForTesting.json",
@@ -237,7 +242,7 @@ def test_pipelines_nifti2glb(testSetup):
 def test_pipelines_abdomenDicom2glb(setupMockPOSTresponse, testSetup):
     output = subprocess.run(
         [
-            "python",
+            pythonPath,
             "pipelineController.py",
             "-c",
             "test/pipelineListForTesting.json",

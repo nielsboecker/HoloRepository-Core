@@ -6,13 +6,13 @@ import pathlib
 import sys
 
 
-def main(jobID, inputNiftiPath, outputObjPath, threshold, flipNpy=False):
-    compJobStatus.updateStatus(jobID, "Pre-processing")
-    generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(inputNiftiPath)))
+def main(job_id, input_nifti_path, output_obj_path, threshold, flip_npy=False):
+    compJobStatus.updateStatus(job_id, "Pre-processing")
+    generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(input_nifti_path)))
 
-    compJobStatus.updateStatus(jobID, "3D model generation")
+    compJobStatus.updateStatus(job_id, "3D model generation")
     generatedObjPath = compNumpy2obj.main(
-        generatedNumpyList, threshold, str(pathlib.Path(outputObjPath))
+        generatedNumpyList, threshold, str(pathlib.Path(output_obj_path))
     )
 
     print("nifti2obj: done, obj saved to {}".format(generatedObjPath))

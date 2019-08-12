@@ -101,16 +101,18 @@ def main():
     json_file.close()
 
 
-def startPipeline(jobID, plID, paramList=[]):
-    pipeline_list = getPipelineList()
-    logging.info(str(["python", pipeline_list[plID]["src"]] + paramList))
-    subprocess.run(["python", pipeline_list[plID]["src"]] + paramList, cwd=newCwd)
+def start_pipeline(pipeline_id, param_list=[]):
+    pipeline_list = get_pipeline_list()
+    logging.info(str(["python", pipeline_list[pipeline_id]["src"]] + param_list))
+    subprocess.run(
+        ["python", pipeline_list[pipeline_id]["src"]] + param_list, cwd=newCwd
+    )
 
 
-def getPipelineList():
-    pipelinesConfig = "pipelineList.json"  # hard coded
+def get_pipeline_list():
+    pipelines_config = "pipelineList.json"  # hard coded
 
-    with open(str(pathlib.Path(newCwd).joinpath(str(pipelinesConfig)))) as json_file:
+    with open(str(pathlib.Path(newCwd).joinpath(str(pipelines_config)))) as json_file:
         pipeline_list = json.load(json_file)
     json_file.close()
     return pipeline_list

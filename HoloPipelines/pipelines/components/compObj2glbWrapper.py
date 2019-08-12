@@ -9,18 +9,20 @@ newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 success = True
 
 
-def main(inputObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False):
-    success = subprocess.run(["obj2gltf", "-i", str(pathlib.Path(inputObjPath)), "-b"])
+def main(input_obj_path, output_glb_path, delete_original_obj=True, compress_glb=False):
+    success = subprocess.run(
+        ["obj2gltf", "-i", str(pathlib.Path(input_obj_path)), "-b"]
+    )
     if success.returncode == 0:
 
-        outputGlbPath = str(pathlib.Path(outputGlbPath))
-        move(str(pathlib.Path(inputObjPath)).replace(".obj", ".glb"), outputGlbPath)
-        if deleteOriginalObj:
-            os.remove(str(pathlib.Path(inputObjPath)))
+        outputGlbPath = str(pathlib.Path(output_glb_path))
+        move(str(pathlib.Path(input_obj_path)).replace(".obj", ".glb"), outputGlbPath)
+        if delete_original_obj:
+            os.remove(str(pathlib.Path(input_obj_path)))
         print("obj2glb: conversion complete")
 
         # Draco compression. note that draco compresssion in viewers may not be common
-        if compressGlb:
+        if compress_glb:
             success = subprocess.run(
                 "gltf-pipeline",
                 "-i",

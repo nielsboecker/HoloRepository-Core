@@ -10,33 +10,33 @@ import json
 import sys
 
 
-def main(jobID, dicomFolderPath, outputGlbPath, threshold, infoForAccessor):
-    compJobStatus.updateStatus(jobID, "Pre-processing")
-    generatedNumpyList = compDicom2numpy.main(str(pathlib.Path(dicomFolderPath)))
+def main(job_id, dicom_folder_path, output_glb_path, threshold, info_for_accessor):
+    compJobStatus.updateStatus(job_id, "Pre-processing")
+    generatedNumpyList = compDicom2numpy.main(str(pathlib.Path(dicom_folder_path)))
 
-    compJobStatus.updateStatus(jobID, "3D model generation")
+    compJobStatus.updateStatus(job_id, "3D model generation")
     generatedObjPath = compNumpy2obj.main(
         generatedNumpyList,
         threshold,
         str(
             compCommonPath.obj.joinpath(
-                str(pathlib.PurePath(dicomFolderPath).parts[-1])
+                str(pathlib.PurePath(dicom_folder_path).parts[-1])
             )
         )
         + ".obj",
     )
-    compJobStatus.updateStatus(jobID, "3D format conversion")
+    compJobStatus.updateStatus(job_id, "3D format conversion")
     generatedGlbPath = compObj2glbWrapper.main(
-        generatedObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False
+        generatedObjPath, output_glb_path, delete_original_obj=True, compress_glb=False
     )
     print("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
-    compJobStatus.updateStatus(jobID, "Finished")
-    infoForAccessor = json.loads(infoForAccessor)
+    compJobStatus.updateStatus(job_id, "Finished")
+    infoForAccessor = json.loads(info_for_accessor)
     print("Patient: " + json.dumps(infoForAccessor["patient"]))
 
     compPostToAccesor.sendFilePostRequestToAccessor(
         infoForAccessor["bodySite"] + "apply on generic bone segmentation",
-        outputGlbPath,
+        output_glb_path,
         infoForAccessor["description"],
         infoForAccessor["bodySite"],
         infoForAccessor["dateOfImaging"],

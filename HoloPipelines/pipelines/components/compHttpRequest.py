@@ -2,9 +2,9 @@ import requests
 import pathlib
 
 
-def sendFilePostRequest(url, inputFile, outputFile):
-    inputFile = str(pathlib.Path(inputFile))
-    outputFile = str(pathlib.Path(outputFile))
+def send_file_post_request(url, input_file, output_file):
+    inputFile = str(pathlib.Path(input_file))
+    outputFile = str(pathlib.Path(output_file))
     file = {"file": open(inputFile, "rb")}
     response = requests.post(url, files=file)
     file = open(outputFile, "wb")

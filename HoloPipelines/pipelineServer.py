@@ -1,5 +1,5 @@
 from flask import Flask, request
-from pipelineController import startPipeline, getPipelineList
+from pipelineController import start_pipeline, get_pipeline_list
 from flask_json import json_response
 from datetime import datetime
 from pathlib import Path
@@ -20,7 +20,7 @@ app.config["JSON_ADD_STATUS"] = False
 this_cwd = pathlib.Path.cwd()
 save_directory = Path("input")
 output_directory = Path("output")
-pipeline_list = getPipelineList()
+pipeline_list = get_pipeline_list()
 status = {
     "j0": {"status": "segment", "stamp": "2019-08-05 14:09:19"},
     "j1": {"status": "segment", "stamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")},
@@ -189,7 +189,7 @@ def send_job_start_response():
     logging.info("arglist: " + str(arglist))
 
     # pass to controller to start pipeline
-    startPipeline(jobID, request_plid, arglist)
+    start_pipeline(request_plid, arglist)
     return json_response(jobID=jobID, status_code=202)
 
 

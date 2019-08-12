@@ -4,7 +4,7 @@ import pathlib
 import json
 
 
-def sendFilePostRequestToAccessor(
+def send_file_post_request_to_accessor(
     title,
     outputFileDir,
     description,

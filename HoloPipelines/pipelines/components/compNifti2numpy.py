@@ -1,5 +1,6 @@
 import numpy as np
 import nibabel as nib
+import logging
 
 
 def resample(image_data, new_spacing=[1, 1, 1]):
@@ -22,8 +23,8 @@ def resample(image_data, new_spacing=[1, 1, 1]):
     real_resize_factor = new_shape / image.shape[:3]
     new_spacing = spacing / real_resize_factor
 
-    print("Shape before resampling\t", originalShape)
-    print("Shape after resampling\t", image.shape[:3])
+    logging.info("Shape before resampling\t", originalShape)
+    logging.info("Shape after resampling\t", image.shape[:3])
 
     return image, new_spacing
 
@@ -40,4 +41,5 @@ def main(input_nifti_path):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
     print("component can't run on its own")

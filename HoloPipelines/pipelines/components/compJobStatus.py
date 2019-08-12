@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 import pathlib
+import logging
 
 
 def update_status(
@@ -11,7 +12,7 @@ def update_status(
     # data = {"jobID": "j0", "status": "hey", "stamp": "2020"}
     response = requests.post(url=pipelineServerURL, json=data)
     returnCode = response.status_code
-    print(returnCode)
+    logging.info(returnCode)
 
 
 def send_file_post_request(url, input_file, output_file):
@@ -23,17 +24,18 @@ def send_file_post_request(url, input_file, output_file):
     file.write(response.content)
     file.close()
     returnCode = response.status_code
-    print(returnCode)
+    logging.info(returnCode)
 
 
 def send_get_request(url, request_body):
     response = requests.post(url=url, json=request_body)
     returnCode = response.status_code
-    print(returnCode)
+    logging.info(returnCode)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
     update_status("j0", "hello")  # TODO remove once done testing
-    print(
+    logging.info(
         "You shouldn't be able to run this component directly after we're done testing"
     )  # TODO look at this too pls

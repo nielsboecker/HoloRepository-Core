@@ -8,6 +8,9 @@ import dupeNumpy2obj as makeObj
 import dupeObj2gltfWrapper as makeGlb
 import numpy as np
 import sys
+import logging
+
+logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
 
 # load numpy
 originalNumpy = getNp.main(str(pathlib.Path(sys.argv[1])))
@@ -15,9 +18,9 @@ originalNumpy = getNp.main(str(pathlib.Path(sys.argv[1])))
 # get frequency. Maybe can add clustering later?
 unique, counts = np.unique(originalNumpy, return_counts=True)
 
-print(np.asarray(unique))
-print("")
-print(np.asarray((unique, counts)).T)
+logging.info(np.asarray(unique))
+logging.info("")
+logging.info(np.asarray((unique, counts)).T)
 
 for integer in unique:
     if integer != 0:

@@ -6,6 +6,7 @@ from components import compObj2glbWrapper
 from components import compHttpRequest
 import pathlib
 import sys
+import logging
 from datetime import datetime
 
 
@@ -27,7 +28,7 @@ def main(job_id, input_nifti_path, output_glb_path, threshold, info_for_accessor
         delete_original_obj=True,
         compress_glb=False,
     )
-    print("nifti2glb: done, glb saved to {}".format(generatedGlbPath))
+    logging.info("nifti2glb: done, glb saved to {}".format(generatedGlbPath))
     compJobStatus.updateStatus(job_id, "Finished")
     compHttpRequest.sendFilePostRequestToAccessor(
         info_for_accessor["bodySite"] + "apply on generic bone segmentation",
@@ -44,4 +45,5 @@ def main(job_id, input_nifti_path, output_glb_path, threshold, info_for_accessor
 
 
 if __name__ == "__main__":
+    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
     main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])

@@ -48,7 +48,7 @@ def load_pixel_array(input_path):
 def resample(data_path, new_spacing=[1, 1, 1]):
     scan = load_scan(data_path)
     image = load_pixel_array(data_path)
-    print("Shape before resampling\t", image.shape)
+    logging.info("Shape before resampling\t", image.shape)
     # Determine current pixel spacing
     try:
         spacing = map(
@@ -61,8 +61,8 @@ def resample(data_path, new_spacing=[1, 1, 1]):
         spacing = np.array(list(spacing))
     except Exception as e:
         logging.warn("error in resample data: " + e.message)
-        print(len(scan[0].PixelSpacing))
-        print(
+        logging.info(len(scan[0].PixelSpacing))
+        logging.info(
             "Pixel Spacing (row, col): (%f, %f) "
             % (scan[0].PixelSpacing[0], scan[0].PixelSpacing[1])
         )
@@ -76,17 +76,18 @@ def resample(data_path, new_spacing=[1, 1, 1]):
     new_spacing = spacing / real_resize_factor
 
     image = scipy.ndimage.interpolation.zoom(image, real_resize_factor)
-    print("Shape after resampling\t", image.shape)
+    logging.info("Shape after resampling\t", image.shape)
 
     return image, new_spacing
 
 
 def main(dicom_path):
-    print("dicom2numpy: resampling dicom...")
+    logging.info("dicom2numpy: resampling dicom...")
     imgs_after_resamp, spacing = resample(dicom_path)
-    print("dicom2numpy: resampling done")
+    logging.info("dicom2numpy: resampling done")
     return imgs_after_resamp
 
 
 if __name__ == "__main__":
-    print("component can't run on its own")
+    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
+    logging.info("component can't run on its own")

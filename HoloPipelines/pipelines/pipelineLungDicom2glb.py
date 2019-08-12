@@ -9,6 +9,7 @@ from components import compHttpRequest
 from datetime import datetime
 import pathlib
 import sys
+import logging
 
 
 def main(job_id, dicom_path, output_glb_path, info_for_accessor):
@@ -38,7 +39,7 @@ def main(job_id, dicom_path, output_glb_path, info_for_accessor):
         delete_original_obj=True,
         compress_glb=False,
     )
-    print("lungDicom2glb: done, glb saved to {}".format(generatedGlbPath))
+    logging.info("lungDicom2glb: done, glb saved to {}".format(generatedGlbPath))
     compJobStatus.updateStatus(job_id, "Finished")
     compHttpRequest.sendFilePostRequestToAccessor(
         info_for_accessor["bodySite"] + "apply on lung segmentation",
@@ -55,4 +56,5 @@ def main(job_id, dicom_path, output_glb_path, info_for_accessor):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
     main(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3], str(sys.argv[4])))

@@ -2,6 +2,7 @@ from os import path
 import requests
 import pathlib
 import json
+import logging
 
 
 def send_file_post_request_to_accessor(
@@ -40,15 +41,15 @@ def send_file_post_request_to_accessor(
         "patient": json.dumps(patientForAccessor),
     }
     files = {"hologramFile": open(outputFileDir, "rb")}
-    print(requestBody)
+    logging.info(requestBody)
     response = requests.post(
         "http://localhost:3200/api/v1/holograms", data=requestBody, files=files
     )
-    print(response.content)
-    returnCode = response.status_code
-    print(returnCode)
+    logging.info(response.content)
+    logging.info(response.status_code)
     return requestBody
 
 
 if __name__ == "__main__":
-    print("component can't run on its own")
+    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
+    logging.info("component can't run on its own")

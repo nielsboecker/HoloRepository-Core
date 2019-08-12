@@ -41,8 +41,7 @@ args = parser.parse_args()
 
 
 # logging formatting
-FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
-logging.basicConfig(level=logging.INFO, format=FORMAT)
+logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
 
 
 def main():

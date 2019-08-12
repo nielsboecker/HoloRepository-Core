@@ -3,6 +3,7 @@ import pathlib
 from shutil import move
 import os
 import sys
+import logging
 
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
@@ -19,7 +20,7 @@ def main(input_obj_path, output_glb_path, delete_original_obj=True, compress_glb
         move(str(pathlib.Path(input_obj_path)).replace(".obj", ".glb"), outputGlbPath)
         if delete_original_obj:
             os.remove(str(pathlib.Path(input_obj_path)))
-        print("obj2glb: conversion complete")
+        logging.info("obj2glb: conversion complete")
 
         # Draco compression. note that draco compresssion in viewers may not be common
         if compress_glb:
@@ -33,14 +34,15 @@ def main(input_obj_path, output_glb_path, delete_original_obj=True, compress_glb
                 cwd=newCwd,
             )
             if success.returncode == 0:
-                print("obj2glb: Draco compression finished")
+                logging.info("obj2glb: Draco compression finished")
             else:
                 sys.exit("obj2glb: Draco compression failed")
     else:
         sys.exit("obj2glb: conversion failed")
-    print("obj2glb: done")
+    logging.info("obj2glb: done")
     return outputGlbPath
 
 
 if __name__ == "__main__":
-    print("component can't run on its own")
+    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
+    logging.info("component can't run on its own")

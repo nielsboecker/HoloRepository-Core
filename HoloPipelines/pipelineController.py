@@ -5,6 +5,7 @@ import argparse
 import subprocess
 import pathlib
 import pipelines.components.compCommonPath as plCommonPath
+import logging
 
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
@@ -39,6 +40,11 @@ parser.add_argument(
 args = parser.parse_args()
 
 
+# logging formatting
+FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
+logging.basicConfig(level=logging.INFO, format=FORMAT)
+
+
 def main():
     # check common dir
 
@@ -53,27 +59,27 @@ def main():
         pipeline_list = json.load(json_file)
         # --ls flag
         if args.ls:
-            print(json.dumps(pipeline_list, indent=4, sort_keys=False))
+            logging.info(json.dumps(pipeline_list, indent=4, sort_keys=False))
             sys.exit()
         if args.info:
 
             for key, value in pipeline_list.items():
                 data = value
                 if args.info in data["name"]:
-                    print("**ID: " + key)
-                    print("name: " + data["name"])
-                    print("source: " + data["src"])
-                    print("param req: " + data["param"])
-                    print("description: " + data["info"])
-                    print("date added: " + data["addDate"])
-                    print("date last modified: " + data["modDate"])
-                    print("")
+                    logging.info("**ID: " + key)
+                    logging.info("name: " + data["name"])
+                    logging.info("source: " + data["src"])
+                    logging.info("param req: " + data["param"])
+                    logging.info("description: " + data["info"])
+                    logging.info("date added: " + data["addDate"])
+                    logging.info("date last modified: " + data["modDate"])
+                    logging.info("")
                     searchCounter += 1
             if searchCounter == 0:
                 sys.exit("pipelineController: no pipeline with such name")
 
             else:
-                print("pipelineController: " + str(searchCounter) + " results")
+                logging.info("pipelineController: " + str(searchCounter) + " results")
             sys.exit()
         # check if pipeline exist
         if args.pipelineID not in pipeline_list:
@@ -87,7 +93,7 @@ def main():
                 + "]"
             )
         # start pipeline
-        print("starting pipeline " + args.pipelineID + "...")
+        logging.info("starting pipeline " + args.pipelineID + "...")
         subprocess.run(
             ["python", pipeline_list[args.pipelineID]["src"]] + args.param, cwd=newCwd
         )
@@ -97,7 +103,7 @@ def main():
 
 def startPipeline(jobID, plID, paramList=[]):
     pipeline_list = getPipelineList()
-    print(str(["python", pipeline_list[plID]["src"]] + paramList))
+    logging.info(str(["python", pipeline_list[plID]["src"]] + paramList))
     subprocess.run(["python", pipeline_list[plID]["src"]] + paramList, cwd=newCwd)
 
 

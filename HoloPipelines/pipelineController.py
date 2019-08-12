@@ -5,6 +5,7 @@ import argparse
 import subprocess
 import pathlib
 import pipelines.components.compCommonPath as plCommonPath
+import logging
 
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
@@ -83,7 +84,7 @@ def main():
                 + "]"
             )
         # start pipeline
-        print("starting pipeline " + args.pipelineID + "...")
+        logging.info("starting pipeline " + args.pipelineID + "...")
         subprocess.run(
             ["python", lsPipe[args.pipelineID]["src"]] + args.param, cwd=newCwd
         )

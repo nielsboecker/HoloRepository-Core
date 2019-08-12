@@ -1,8 +1,9 @@
 import scipy.ndimage
 import sys
+import logging
 
 
-def res(img, newX, newY, newZ):
+def centerCrop(img, newX, newY, newZ):
     x, y, z = img.shape
 
     startX = x // 2 - (newX // 2)
@@ -35,15 +36,15 @@ def sizeLimit(img, limit):
         z = img.shape[2]
         highest = max(x, y, z)
         if highest > limit:
-            img = res(img, limit, limit, limit)
+            img = centerCrop(img, limit, limit, limit)
 
-        print("compNumpyTransformation: array resize done")
+        logging.info("compNumpyTransformation: array resize done")
     else:
-        print(
+        logging.info(
             "compNumpyTransformation: array smaller than limit given, no resize has been done"
         )
     return img
 
 
 if __name__ == "__main__":
-    print("component can't run on its own")
+    logging.warning("component can't run on its own")

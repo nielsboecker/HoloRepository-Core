@@ -39,4 +39,4 @@ def main(originalNumpy, outputPath):
 
 
 if __name__ == "__main__":
-    print("component can't run on its own")
+    logging.warning("component can't run on its own")

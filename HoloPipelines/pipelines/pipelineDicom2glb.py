@@ -4,6 +4,7 @@ from components import compNumpy2obj
 from components import compObj2glbWrapper
 import pathlib
 import sys
+import logging
 
 
 def main(dicomFolderPath, outputGlbPath, threshold):
@@ -21,7 +22,7 @@ def main(dicomFolderPath, outputGlbPath, threshold):
     generatedGlbPath = compObj2glbWrapper.main(
         generatedObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False
     )
-    print("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
+    logging.info("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
 
 
 if __name__ == "__main__":

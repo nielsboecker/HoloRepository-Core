@@ -1,6 +1,7 @@
 from components import compDicom2numpy
 import nibabel as nib
 import numpy as np
+import logging
 
 
 def main(dicomInputPath, niftiOutputPath):
@@ -15,4 +16,4 @@ def main(dicomInputPath, niftiOutputPath):
 
 
 if __name__ == "__main__":
-    print("component can't run on its own")
+    logging.warning("component can't run on its own")

@@ -3,6 +3,7 @@ from components import compNifti2numpy
 from components import compNumpy2obj
 import pathlib
 import sys
+import logging
 
 
 def main(inputNiftiPath, outputObjPath, threshold, flipNpy=False):
@@ -10,7 +11,7 @@ def main(inputNiftiPath, outputObjPath, threshold, flipNpy=False):
     generatedObjPath = compNumpy2obj.main(
         generatedNumpyList, threshold, str(pathlib.Path(outputObjPath))
     )
-    print("nifti2obj: done, obj saved to {}".format(generatedObjPath))
+    logging.info("nifti2obj: done, obj saved to {}".format(generatedObjPath))
 
 
 if __name__ == "__main__":

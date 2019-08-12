@@ -6,6 +6,7 @@ from components import compObj2glbWrapper
 import components.lungSegment.main as compLungSegment
 import pathlib
 import sys
+import logging
 
 
 def main(dicomPath, outputGlbPath):
@@ -30,7 +31,7 @@ def main(dicomPath, outputGlbPath):
         deleteOriginalObj=True,
         compressGlb=False,
     )
-    print("lungDicom2glb: done, glb saved to {}".format(generatedGlbPath))
+    logging.info("lungDicom2glb: done, glb saved to {}".format(generatedGlbPath))
 
 
 if __name__ == "__main__":

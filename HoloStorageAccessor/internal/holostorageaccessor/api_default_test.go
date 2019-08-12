@@ -3,6 +3,7 @@ package holostorageaccessor
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -45,7 +46,7 @@ func setupTestServer() *httptest.Server {
 				statusCode = http.StatusOK
 				response = `{
 					"resourceType": "Patient",
-					"id": "p102",
+					"id": "p2000",
 					"meta": {
 						"versionId": "1",
 						"lastUpdated": "2019-08-08T21:57:58.323+00:00"
@@ -58,7 +59,7 @@ func setupTestServer() *httptest.Server {
 								"Britney"
 							],
 							"prefix": [
-								"Mr"
+								"Ms"
 							]
 						}
 					],
@@ -135,7 +136,9 @@ func setupTestServer() *httptest.Server {
 						}
 					]
 				}`
+
 			default:
+				statusCode = http.StatusInternalServerError
 				fmt.Println("I received this:", rcvURL)
 			}
 		}
@@ -145,6 +148,119 @@ func setupTestServer() *httptest.Server {
 	}))
 
 	return ts
+}
+
+func TestMultipleAuthorsGet(t *testing.T) {
+	type test struct {
+		wantStatus int
+		wantBody   map[string]Author
+		wantErr    Error
+		inUrl      string
+		inMethod   string
+	}
+
+	tests := map[string]test{
+		"no_aids_query": {
+			inUrl:      "/api/v1/authors",
+			inMethod:   http.MethodGet,
+			wantStatus: 400,
+		},
+		"wrong_query_field": {
+			inUrl:      "/api/v1/authors?aid=a1000",
+			inMethod:   http.MethodGet,
+			wantStatus: 400,
+		},
+		"single_found_author": {
+			inUrl:      "/api/v1/authors?aids=a1000",
+			inMethod:   http.MethodGet,
+			wantStatus: 200,
+			wantBody: map[string]Author{
+				"a1000": Author{
+					Aid: "a1000",
+					Name: &PersonName{
+						Family: "Campbell",
+						Full:   "Roy Campbell",
+						Given:  "Roy",
+						Title:  "Mr",
+					},
+				},
+			},
+		},
+		"single_missing_author": {
+			inUrl:      "/api/v1/authors?aids=a3000",
+			inMethod:   http.MethodGet,
+			wantStatus: 200,
+			wantBody: map[string]Author{
+				"a3000": Author{},
+			},
+		},
+		"found_author": {
+			inUrl:      "/api/v1/authors?aids=a1000,a2000,a3000",
+			inMethod:   http.MethodGet,
+			wantStatus: 200,
+			wantBody: map[string]Author{
+				"a1000": Author{
+					Aid: "a1000",
+					Name: &PersonName{
+						Family: "Campbell",
+						Full:   "Roy Campbell",
+						Given:  "Roy",
+						Title:  "Mr",
+					},
+				},
+				"a2000": Author{
+					Aid: "a2000",
+					Name: &PersonName{
+						Family: "Sawyer",
+						Full:   "Tom Sawyer",
+						Given:  "Tom",
+						Title:  "Mr",
+					},
+				},
+				"a3000": Author{},
+			},
+		},
+	}
+
+	// Start a local HTTP server and Router
+	ts := setupTestServer()
+	defer ts.Close()
+	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			diff := ""
+			req, _ := http.NewRequest(tc.inMethod, tc.inUrl, nil)
+			w := httptest.NewRecorder()
+			router.ServeHTTP(w, req)
+
+			if tc.wantStatus != w.Code {
+				t.Fatalf("Error return code: Want %d, got %d", tc.wantStatus, w.Code)
+			}
+
+			if tc.wantBody != nil {
+				var authorData map[string]Author
+				err := json.Unmarshal(w.Body.Bytes(), &authorData)
+				if err != nil {
+					t.Fatalf("Unmarshal Author error: %s", err.Error())
+				}
+				diff = cmp.Diff(tc.wantBody, authorData)
+			} else if (tc.wantErr != Error{}) {
+				var errorData Error
+				err := json.Unmarshal(w.Body.Bytes(), &errorData)
+				if err != nil {
+					t.Logf(string(w.Body.Bytes()))
+					t.Fatalf("Unmarshal Error error: %s", err.Error())
+				}
+				diff = cmp.Diff(tc.wantErr, errorData)
+			}
+
+			if diff != "" {
+				t.Fatalf(diff)
+			}
+		})
+	}
+
 }
 
 func TestAuthorsAidGet(t *testing.T) {
@@ -202,14 +318,131 @@ func TestAuthorsAidGet(t *testing.T) {
 				var authorData Author
 				err := json.Unmarshal(w.Body.Bytes(), &authorData)
 				if err != nil {
-					t.Fatalf(err.Error())
+					t.Fatalf("Unmarshal Author error: %s", err.Error())
 				}
 				diff = cmp.Diff(tc.wantBody, authorData)
 			} else if (tc.wantErr != Error{}) {
 				var errorData Error
 				err := json.Unmarshal(w.Body.Bytes(), &errorData)
 				if err != nil {
-					t.Fatalf(err.Error())
+					t.Fatalf("Unmarshal Error error: %s", err.Error())
+				}
+				diff = cmp.Diff(tc.wantErr, errorData)
+			}
+
+			if diff != "" {
+				t.Fatalf(diff)
+			}
+		})
+	}
+}
+
+func TestMultiplePatientsGet(t *testing.T) {
+	type test struct {
+		wantStatus int
+		wantBody   map[string]Patient
+		wantErr    Error
+		inUrl      string
+		inMethod   string
+	}
+
+	tests := map[string]test{
+		"no_aids_query": {
+			inUrl:      "/api/v1/patients",
+			inMethod:   http.MethodGet,
+			wantStatus: 400,
+		},
+		"wrong_query_field": {
+			inUrl:      "/api/v1/patients?pid=p1000",
+			inMethod:   http.MethodGet,
+			wantStatus: 400,
+		},
+		"single_found_patient": {
+			inUrl:      "/api/v1/patients?pids=p1000",
+			inMethod:   http.MethodGet,
+			wantStatus: 200,
+			wantBody: map[string]Patient{
+				"p1000": Patient{
+					Pid:       "p1000",
+					Gender:    "male",
+					BirthDate: "1990-10-10",
+					Name: &PersonName{
+						Family: "Jones",
+						Full:   "Timothy Jones",
+						Given:  "Timothy",
+						Title:  "Mr",
+					},
+				},
+			},
+		},
+		"single_missing_patient": {
+			inUrl:      "/api/v1/patients?pids=p3000",
+			inMethod:   http.MethodGet,
+			wantStatus: 200,
+			wantBody: map[string]Patient{
+				"p3000": Patient{},
+			},
+		},
+		"found_patient": {
+			inUrl:      "/api/v1/patients?pids=p1000,p2000,p3000",
+			inMethod:   http.MethodGet,
+			wantStatus: 200,
+			wantBody: map[string]Patient{
+				"p1000": Patient{
+					Pid:       "p1000",
+					Gender:    "male",
+					BirthDate: "1990-10-10",
+					Name: &PersonName{
+						Family: "Jones",
+						Full:   "Timothy Jones",
+						Given:  "Timothy",
+						Title:  "Mr",
+					},
+				},
+				"p2000": Patient{
+					Pid:       "p2000",
+					Gender:    "female",
+					BirthDate: "1960-01-02",
+					Name: &PersonName{
+						Family: "Spears",
+						Given:  "Britney",
+						Title:  "Ms",
+					},
+				},
+				"p3000": Patient{},
+			},
+		},
+	}
+
+	// Start a local HTTP server and Router
+	ts := setupTestServer()
+	defer ts.Close()
+	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			diff := ""
+			req, _ := http.NewRequest(tc.inMethod, tc.inUrl, nil)
+			w := httptest.NewRecorder()
+			router.ServeHTTP(w, req)
+
+			if tc.wantStatus != w.Code {
+				t.Fatalf("Error return code: Want %d, got %d", tc.wantStatus, w.Code)
+			}
+
+			if tc.wantBody != nil {
+				var patientData map[string]Patient
+				err := json.Unmarshal(w.Body.Bytes(), &patientData)
+				if err != nil {
+					t.Fatalf("Unmarshal Patient error: %s", err.Error())
+				}
+				diff = cmp.Diff(tc.wantBody, patientData)
+			} else if (tc.wantErr != Error{}) {
+				var errorData Error
+				err := json.Unmarshal(w.Body.Bytes(), &errorData)
+				if err != nil {
+					t.Logf(string(w.Body.Bytes()))
+					t.Fatalf("Unmarshal Error error: %s", err.Error())
 				}
 				diff = cmp.Diff(tc.wantErr, errorData)
 			}
@@ -220,4 +453,81 @@ func TestAuthorsAidGet(t *testing.T) {
 		})
 	}
 
+}
+
+func TestPatientsPidGet(t *testing.T) {
+	type test struct {
+		wantStatus int
+		wantBody   Patient
+		wantErr    Error
+		inUrl      string
+		inMethod   string
+	}
+
+	tests := map[string]test{
+		"found_patient": {
+			inUrl:      "/api/v1/patients/p1000",
+			inMethod:   http.MethodGet,
+			wantStatus: 200,
+			wantBody: Patient{
+				Pid:       "p1000",
+				Gender:    "male",
+				BirthDate: "1990-10-10",
+				Name: &PersonName{
+					Family: "Jones",
+					Full:   "Timothy Jones",
+					Given:  "Timothy",
+					Title:  "Mr",
+				},
+			},
+		},
+		"missing_patient": {
+			inUrl:      "/api/v1/patients/p3000",
+			inMethod:   http.MethodGet,
+			wantStatus: 404,
+			wantErr: Error{
+				ErrorCode:    "404",
+				ErrorMessage: `id 'p3000' cannot be found`,
+			},
+		},
+	}
+
+	// Start a local HTTP server and Router
+	ts := setupTestServer()
+	defer ts.Close()
+	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			diff := ""
+			req, _ := http.NewRequest(tc.inMethod, tc.inUrl, nil)
+			w := httptest.NewRecorder()
+			router.ServeHTTP(w, req)
+
+			if tc.wantStatus != w.Code {
+				t.Fatalf("Error return code: Want %d, got %d", tc.wantStatus, w.Code)
+			}
+
+			if (tc.wantBody != Patient{}) {
+				var patientData Patient
+				err := json.Unmarshal(w.Body.Bytes(), &patientData)
+				if err != nil {
+					t.Fatalf("Unmarshal Patient error: %s", err.Error())
+				}
+				diff = cmp.Diff(tc.wantBody, patientData)
+			} else if (tc.wantErr != Error{}) {
+				var errorData Error
+				err := json.Unmarshal(w.Body.Bytes(), &errorData)
+				if err != nil {
+					t.Logf(string(w.Body.Bytes()))
+					t.Fatalf("Unmarshal Error error: %s", err.Error())
+				}
+				diff = cmp.Diff(tc.wantErr, errorData)
+			}
+
+			if diff != "" {
+				t.Fatalf(diff)
+			}
+		})
+	}
 }

@@ -43,16 +43,8 @@ var uiPath = basePathComponent + "ui/"
 var accessorConfig AccessorConfig
 
 // NewRouter returns a new router.
-func NewRouter() *gin.Engine {
-	err := LoadConfiguration(&accessorConfig)
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
-
-	err = InitialiseBlobStorage(accessorConfig.BlobStorageName, accessorConfig.BlobStorageKey)
-	if err != nil {
-		log.Fatalf("Error with BlobStorage Init: %s\n", err.Error())
-	}
+func NewRouter(config AccessorConfig) *gin.Engine {
+	accessorConfig = config
 
 	log.Printf("FHIR Backend URL: %q", accessorConfig.FhirURL)
 	log.Printf("Blob Store: %q", accessorConfig.BlobStorageName)

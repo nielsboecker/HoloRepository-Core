@@ -143,10 +143,11 @@ func ConstructURL(baseurl string, pathComponent string) (string, error) {
 	return fhirURL.String(), nil
 }
 
-func LoadConfiguration(accConfig *AccessorConfig) error {
+func LoadConfiguration() (AccessorConfig, error) {
+	var accConfig AccessorConfig
 	for _, config := range []string{"AZURE_STORAGE_ACCOUNT", "AZURE_STORAGE_ACCESS_KEY", "ACCESSOR_FHIR_URL", "ENABLE_CORS"} {
 		if os.Getenv(config) == "" {
-			return fmt.Errorf("Environment config field '%s' is not set", config)
+			return AccessorConfig{}, fmt.Errorf("Environment config field '%s' is not set", config)
 		}
 	}
 
@@ -156,14 +157,14 @@ func LoadConfiguration(accConfig *AccessorConfig) error {
 
 	enableCORS, err := strconv.ParseBool(strings.TrimSpace(os.Getenv("ENABLE_CORS")))
 	if err != nil {
-		return fmt.Errorf("ENABLE_CORS error: %s", err.Error())
+		return AccessorConfig{}, fmt.Errorf("ENABLE_CORS error: %s", err.Error())
 	}
 	accConfig.EnableCORS = enableCORS
 
 	_, err = url.ParseRequestURI(accConfig.FhirURL)
 	if err != nil {
-		return fmt.Errorf("ACCESSOR_FHIR_URL error: %s", err.Error())
+		return AccessorConfig{}, fmt.Errorf("ACCESSOR_FHIR_URL error: %s", err.Error())
 	}
 
-	return nil
+	return accConfig, nil
 }

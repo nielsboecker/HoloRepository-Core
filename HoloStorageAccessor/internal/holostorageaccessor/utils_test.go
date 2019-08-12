@@ -116,35 +116,51 @@ func TestParseHologramUploadPostInput(t *testing.T) {
 		want_err string
 	}
 
-	inputs := make(map[string]url.Values)
+	input_data := map[string]map[string]string{
+		"empty": make(map[string]string),
+		"full_data": map[string]string{
+			"title":               "test title",
+			"description":         "test desc",
+			"contentType":         "test/type",
+			"fileSizeInKb":        "5000",
+			"bodySite":            "test bodysite",
+			"dateOfImaging":       "2017-11-11T11:11:11Z",
+			"creationDate":        "2017-12-12T12:12:12Z",
+			"creationMode":        "GENERATE_FROM_IMAGING_STUDY",
+			"creationDescription": "test creation desc",
+			"patient":             `{"pid":"p2000","name":{"full":"Marvin Portebello","title":"Mr","given":"Marvin","family":"Portebello"},"gender":"male","birthDate":"2019-07-16"}`,
+			"author":              `{"aid":"a2000","name":{"full":"Tom Sawyer","title":"Mr","given":"Tom","family":"Sawyer"}}`,
+		},
+		"bad_creationDate": map[string]string{
+			"creationDate": "2017-12-12T1:1:1Z",
+		},
+		"bad_dateOfImaging": map[string]string{
+			"dateOfImaging": "2017-12-12T1:1:1Z",
+		},
+		"bad_filesize": map[string]string{
+			"fileSizeInKb": "invalid-filesize",
+		},
+		"no_pid": map[string]string{
+			"patient": `{"name":{"full":"Marvin Portebello","title":"Mr","given":"Marvin","family":"Portebello"},"gender":"male","birthDate":"2019-07-16"}`,
+		},
+		"bad_patient_data": map[string]string{
+			"patient": `invalid-json-content`,
+		},
+		"no_aid": map[string]string{
+			"author": `{"aid":"","name":{"full":"Tom Sawyer","title":"Mr","given":"Tom","family":"Sawyer"}}`,
+		},
+		"bad_author_data": map[string]string{
+			"author": `invalid-json-content`,
+		},
+	}
 
-	inputs["empty"] = url.Values{}
-	inputs["full_data"] = url.Values{}
-	inputs["full_data"].Set("title", "test title")
-	inputs["full_data"].Set("description", "test desc")
-	inputs["full_data"].Set("contentType", "test/type")
-	inputs["full_data"].Set("fileSizeInKb", "5000")
-	inputs["full_data"].Set("bodySite", "test bodysite")
-	inputs["full_data"].Set("dateOfImaging", "2017-11-11T11:11:11Z")
-	inputs["full_data"].Set("creationDate", "2017-12-12T12:12:12Z")
-	inputs["full_data"].Set("creationMode", "GENERATE_FROM_IMAGING_STUDY")
-	inputs["full_data"].Set("creationDescription", "test creation desc")
-	inputs["full_data"].Set("patient", `{"pid":"p2000","name":{"full":"Marvin Portebello","title":"Mr","given":"Marvin","family":"Portebello"},"gender":"male","birthDate":"2019-07-16"}`)
-	inputs["full_data"].Set("author", `{"aid":"a2000","name":{"full":"Tom Sawyer","title":"Mr","given":"Tom","family":"Sawyer"}}`)
-	inputs["bad_creationDate"] = url.Values{}
-	inputs["bad_creationDate"].Set("creationDate", "2017-12-12T1:1:1Z")
-	inputs["bad_dateOfImaging"] = url.Values{}
-	inputs["bad_dateOfImaging"].Set("dateOfImaging", "2017-12-12T1:1:1Z")
-	inputs["bad_filesize"] = url.Values{}
-	inputs["bad_filesize"].Set("fileSizeInKb", "invalid-filesize")
-	inputs["no_pid"] = url.Values{}
-	inputs["no_pid"].Set("patient", `{"name":{"full":"Marvin Portebello","title":"Mr","given":"Marvin","family":"Portebello"},"gender":"male","birthDate":"2019-07-16"}`)
-	inputs["bad_patient_data"] = url.Values{}
-	inputs["bad_patient_data"].Set("patient", `invalid-json-content`)
-	inputs["no_aid"] = url.Values{}
-	inputs["no_aid"].Set("author", `{"aid":"","name":{"full":"Tom Sawyer","title":"Mr","given":"Tom","family":"Sawyer"}}`)
-	inputs["bad_author_data"] = url.Values{}
-	inputs["bad_author_data"].Set("author", `invalid-json-content`)
+	inputs := make(map[string]url.Values)
+	for in_name, in_map := range input_data {
+		inputs[in_name] = url.Values{}
+		for key, value := range in_map {
+			inputs[in_name].Set(key, value)
+		}
+	}
 
 	tests := map[string]test{
 		"empty":             {input: inputs, want: HologramPostInput{}},

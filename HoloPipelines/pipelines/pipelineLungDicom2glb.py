@@ -12,7 +12,11 @@ import logging
 def main(dicomPath, outputGlbPath):
     generatedNiftiPath = compDicom2nifti.main(
         str(dicomPath),
-        str(compCommonPath.nifti.joinpath(str(pathlib.PurePath(dicomPath).parts[-1]))),
+        str(
+            compCommonPath.nifti.joinpath(
+                str(pathlib.PurePath(dicomPath).parts[-1]) + ".nii"
+            )
+        ),
     )  # convert dcm and move to temp path inside nifti folder. nifti will be in a sub folder named after the input dicom folder
     generatedSegmentedLungsNiftiPath = compLungSegment.main(
         generatedNiftiPath, str(compCommonPath.nifti.joinpath("segmentedLungs"))

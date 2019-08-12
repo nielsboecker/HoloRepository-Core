@@ -24,7 +24,7 @@ def main(originalNumpy, outputPath):
             singleHUnumpy = singleHUnumpy.astype(int)
             makeObj.main(
                 singleHUnumpy,
-                threshold=0,
+                mainThreshold=0,
                 outputPath=pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),
             )
             makeGlb.main(

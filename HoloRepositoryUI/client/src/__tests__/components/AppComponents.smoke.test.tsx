@@ -85,7 +85,7 @@ it("renders ImagingStudySelectionStep without crashing", () => {
 });
 
 it("renders PipelineSelectionStep without crashing", () => {
-  mountWithContextProvider(<PipelineSelectionStep onPipelineSelectionChange={jest.fn()} />);
+  mountWithContextProvider(wrapWithFormsy(<PipelineSelectionStep />));
 });
 
 it("renders PipelineSpecificationCard without crashing", () => {

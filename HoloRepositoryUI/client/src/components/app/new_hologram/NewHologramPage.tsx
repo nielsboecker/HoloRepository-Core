@@ -35,19 +35,25 @@ export interface IHologramCreationSteps {
 type INewHologramPageProps = RouteComponentProps & PropsWithContext;
 
 interface INewHologramPageInternalState {
-  // Operation of the multi-step process
   currentStep: number;
   currentStepIsValid: boolean;
   creationMode: HologramCreationMode;
-
-  // User selections and actions in child components
-  hologramFile?: File;
-  selectedPipelineId?: string;
-  selectedImagingStudyEndpoint?: string;
 }
 
-// Union with Partial<IHologramCreationRequest> to allow subsequent filling of the respective fields
-type INewHologramPageState = INewHologramPageInternalState & Partial<IHologramCreationRequest>;
+interface IHologramCreationData_Upload {
+  hologramFile: File;
+}
+
+interface IHologramCreationData_Generate {
+  plid: string;
+  selectedImagingStudyEndpoint: string;
+}
+
+// Union with relecant partial interfaces to allow subsequent filling of the respective fields
+type INewHologramPageState = INewHologramPageInternalState &
+  Partial<IHologramCreationData_Upload> &
+  Partial<IHologramCreationData_Generate> &
+  Partial<IHologramCreationRequest>;
 
 class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageState> {
   state: INewHologramPageState = {
@@ -58,10 +64,6 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
         this.props.location.state &&
         (this.props.location.state.mode as HologramCreationMode)) ||
       HologramCreationMode.GENERATE_FROM_IMAGING_STUDY
-  };
-
-  private _handleSelectedPipelineChange = (selectedPipelineId: string) => {
-    this.setState({ selectedPipelineId });
   };
 
   private _handleSelectedImagingStudyChange = (selectedImagingStudyEndpoint: string) => {
@@ -141,10 +143,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
   };
 
   private _getPostRequestMetaData_Generate = (): IHologramCreationRequest_Generate | null => {
-    const {
-      selectedPipelineId: plid,
-      selectedImagingStudyEndpoint: imagingStudyEndpoint
-    } = this.state;
+    const { plid, selectedImagingStudyEndpoint: imagingStudyEndpoint } = this.state;
     const sharedMetaData = this._generatePostRequestMetaData_Shared();
     if (!plid || !imagingStudyEndpoint || !sharedMetaData) {
       return this._logErrorAndReturnNull();
@@ -178,9 +177,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       },
       {
         title: "Select pipeline",
-        content: (
-          <PipelineSelectionStep onPipelineSelectionChange={this._handleSelectedPipelineChange} />
-        )
+        content: <PipelineSelectionStep />
       },
       {
         title: "Select input data",

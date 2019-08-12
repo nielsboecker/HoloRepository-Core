@@ -46,7 +46,12 @@ var accessorConfig AccessorConfig
 func NewRouter() *gin.Engine {
 	err := LoadConfiguration(&accessorConfig)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln(err.Error())
+	}
+
+	err = InitialiseBlobStorage(accessorConfig.BlobStorageName, accessorConfig.BlobStorageKey)
+	if err != nil {
+		log.Fatalf("Error with BlobStorage Init: %s\n", err.Error())
 	}
 
 	log.Printf("FHIR Backend URL: %q", accessorConfig.FhirURL)

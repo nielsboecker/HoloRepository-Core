@@ -73,8 +73,7 @@ def testSetup():
         # download nifti sample
         logging.info("Beginning nifti sample download...")
 
-        # url = "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip"
-        # urllib.request.urlretrieve(url, str(thisCwd.joinpath(zipFileName)))
+        url = "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip"
 
         response = requests.get(url)
         open(str(thisCwd.joinpath(zipFileName)), "wb+").write(response.content)

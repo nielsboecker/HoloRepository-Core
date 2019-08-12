@@ -61,7 +61,7 @@ def testSetup():
         # download dicom sample
         logging.info("Beginning dicom (2/2) sample download...")
 
-        url = "https://dl.dropbox.com/s/tuxko4lycrz790b/abdomen.zip?dl=1"
+        url = "https://holoblob.blob.core.windows.net/mock-pacs/abdomen.zip"
         urllib.request.urlretrieve(url, str(thisCwd.joinpath(zipFileName)))
 
         logging.info("Beginning dicom unzip...")
@@ -97,7 +97,7 @@ def testSetup():
 def setupMockPOSTresponse():
     logging.info("Downloading mock output...")
     urlNiftyOut = (
-        "https://dl.dropbox.com/s/x6b5cc34h4alya6/Owenpap___niftynet_out.nii.gz?dl=1"
+        "https://holoblob.blob.core.windows.net/mock-pacs/Owenpap___niftynet_out.nii.gz"
     )
     response = requests.get(urlNiftyOut)
     open(str(niftiPath.joinpath(segmentedAbdomenFileName)), "wb+").write(

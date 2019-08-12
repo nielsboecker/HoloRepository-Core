@@ -154,7 +154,7 @@ func TestHologramDocumentReferenceFHIRToHologram(t *testing.T) {
 				BodySite:            "hips",
 			},
 		},
-		"with_data_missing_prefix:": {
+		"missing_resource_prefix_in_author_and_subject:": {
 			input: HologramDocumentReferenceFHIR{
 				ResourceType: "DocumentReference",
 				Status:       "current",

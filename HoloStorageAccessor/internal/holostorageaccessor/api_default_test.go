@@ -1,6 +1,7 @@
 package holostorageaccessor
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -408,6 +409,73 @@ func setupTestServer() *httptest.Server {
 					]
 				}`
 				response = strings.ReplaceAll(response, "{baseurl}", baseurl)
+
+			default:
+				log.Fatalln("Url not handled:", rcvURL)
+			}
+		} else if r.Method == "PUT" {
+			switch rcvURL, _ := url.QueryUnescape(r.URL.String()); rcvURL {
+			case "/Patient/assume-bad-id":
+				statusCode = http.StatusBadRequest
+				response = `{
+					"resourceType": "OperationOutcome",
+					"id": "f351b0a7-d236-4df5-a907-415d184b3539",
+					"issue": [
+						{
+							"severity": "error",
+							"code": "invalid",
+							"diagnostics": "Id in the URL must match id in the resource."
+						}
+					]
+				}`
+			case "/Patient/assume-new-id":
+				statusCode = http.StatusCreated
+				response = `{
+					"resourceType": "Patient",
+					"id": "p1",
+					"meta": {
+						"versionId": "1",
+						"lastUpdated": "2019-08-12T16:45:22.836+00:00"
+					},
+					"name": [
+						{
+							"text": "New Guy",
+							"family": "Guy",
+							"given": [
+								"New"
+							],
+							"prefix": [
+								"Mr"
+							]
+						}
+					],
+					"gender": "male",
+					"birthDate": "1990-10-10"
+				}`
+			case "/Patient/assume-update-id":
+				statusCode = http.StatusOK
+				response = `{
+					"resourceType": "Patient",
+					"id": "p1",
+					"meta": {
+						"versionId": "2",
+						"lastUpdated": "2019-08-12T16:45:22.836+00:00"
+					},
+					"name": [
+						{
+							"text": "New Guy",
+							"family": "Guy",
+							"given": [
+								"New"
+							],
+							"prefix": [
+								"Mr"
+							]
+						}
+					],
+					"gender": "male",
+					"birthDate": "1990-10-10"
+				}`
 
 			default:
 				log.Fatalln("Url not handled:", rcvURL)
@@ -1044,6 +1112,132 @@ func TestMultipleHologramsGet(t *testing.T) {
 				err := json.Unmarshal(w.Body.Bytes(), &errorData)
 				if err != nil {
 					t.Logf(string(w.Body.Bytes()))
+					t.Fatalf("Unmarshal Error error: %s", err.Error())
+				}
+				diff = cmp.Diff(tc.wantErr, errorData)
+			}
+
+			if diff != "" {
+				t.Fatalf(diff)
+			}
+		})
+	}
+}
+
+func TestPatientsPut(t *testing.T) {
+	type test struct {
+		wantStatus int
+		wantBody   Patient
+		wantErr    Error
+		inUrl      string
+		inMethod   string
+		inHeader   map[string]string
+		inBody     string
+	}
+
+	tests := map[string]test{
+		"no_content_type_header": {
+			inUrl:      "/api/v1/patients/assume-new-id",
+			inMethod:   http.MethodPut,
+			wantStatus: 400,
+			wantErr: Error{
+				ErrorCode:    "400",
+				ErrorMessage: "Expected Content-Type: 'application/json', got ''",
+			},
+		},
+		"put_patient_new": {
+			inUrl:    "/api/v1/patients/assume-new-id",
+			inMethod: http.MethodPut,
+			inHeader: map[string]string{
+				"Content-Type": "application/json",
+			},
+			inBody: `{
+				"pid": "assume-new-id",
+				"name": {
+					"title": "Mr.",
+					"given": "Timothy",
+					"family": "Jones",
+					"full": "Timothy Jones"
+				},
+				"gender": "male",
+				"birthDate": "1990-10-10"
+			}`,
+			wantStatus: 201,
+		},
+		"put_patient_update": {
+			inUrl:    "/api/v1/patients/assume-update-id",
+			inMethod: http.MethodPut,
+			inHeader: map[string]string{
+				"Content-Type": "application/json",
+			},
+			inBody: `{
+				"pid": "assume-update-id",
+				"name": {
+					"title": "Mr.",
+					"given": "Timothy",
+					"family": "Jones",
+					"full": "Timothy Jones"
+				},
+				"gender": "male",
+				"birthDate": "1990-10-10"
+			}`,
+			wantStatus: 200,
+		},
+		"put_patient_bad": {
+			inUrl:    "/api/v1/patients/assume-bad-id",
+			inMethod: http.MethodPut,
+			inHeader: map[string]string{
+				"Content-Type": "application/json",
+			},
+			inBody: `{
+				"pid": "assume-update-id",
+				"name": {
+					"title": "Mr.",
+					"given": "Timothy",
+					"family": "Jones",
+					"full": "Timothy Jones"
+				},
+				"gender": "male",
+				"birthDate": "1990-10-10"
+			}`,
+			wantStatus: 400,
+			wantErr: Error{
+				ErrorCode:    "400",
+				ErrorMessage: `pid in param and body do not match`,
+			},
+		},
+	}
+
+	// Start a local HTTP server and Router
+	ts := setupTestServer()
+	defer ts.Close()
+	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			diff := ""
+			req, _ := http.NewRequest(tc.inMethod, tc.inUrl, bytes.NewBufferString(tc.inBody))
+			for header, value := range tc.inHeader {
+				req.Header.Set(header, value)
+			}
+			w := httptest.NewRecorder()
+			router.ServeHTTP(w, req)
+
+			if tc.wantStatus != w.Code {
+				t.Fatalf("Error return code: Want %d, got %d. Body: %s", tc.wantStatus, w.Code, w.Body.String())
+			}
+
+			if (tc.wantBody != Patient{}) {
+				var hologramData Hologram
+				err := json.Unmarshal(w.Body.Bytes(), &hologramData)
+				if err != nil {
+					t.Fatalf("Unmarshal Hologram error: %s", err.Error())
+				}
+				diff = cmp.Diff(tc.wantBody, hologramData)
+			} else if (tc.wantErr != Error{}) {
+				var errorData Error
+				err := json.Unmarshal(w.Body.Bytes(), &errorData)
+				if err != nil {
 					t.Fatalf("Unmarshal Error error: %s", err.Error())
 				}
 				diff = cmp.Diff(tc.wantErr, errorData)

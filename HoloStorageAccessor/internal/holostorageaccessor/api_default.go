@@ -422,7 +422,7 @@ func PatientsPidPut(c *gin.Context) {
 	decoder := json.NewDecoder(c.Request.Body)
 	err := decoder.Decode(&data)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: err.Error()})
+		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: "Decode Error: " + err.Error()})
 		return
 	}
 

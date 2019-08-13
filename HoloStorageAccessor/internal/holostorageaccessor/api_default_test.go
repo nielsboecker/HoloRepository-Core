@@ -15,6 +15,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
+// This creates a test server that mocks the FHIR server responses
 func setupTestServer() *httptest.Server {
 	baseurl := "127.0.0.1:2500"
 	ts := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

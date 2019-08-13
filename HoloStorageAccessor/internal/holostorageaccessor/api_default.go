@@ -29,7 +29,6 @@ func AuthorsAidGet(c *gin.Context) {
 			c.JSON(http.StatusNotFound, Error{ErrorCode: errCode, ErrorMessage: errMsg})
 		} else {
 			c.JSON(http.StatusInternalServerError, Error{ErrorCode: errCode, ErrorMessage: errMsg})
-
 		}
 		return
 	}

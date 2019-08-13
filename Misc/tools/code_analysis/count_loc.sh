@@ -8,8 +8,8 @@
 echo "Counting project related LOC in directories: ${@}"
 
 SHARED_EXCLUDES="(json$|yaml$|yml$|ini$|xml$|md$|txt$)"
-CORE_EXCLUDES="./node_modules/.|HoloStorageAccessor/third_party|HoloStorageAccessor/src"
-LENS_EXCLUDES="(./Assets/MixedRealityToolkit.|./HoloRepositoryDemoApplication/Library/.|./HoloStorageConnector/Plugins/.)"
+CORE_EXCLUDES="node_modules|HoloStorageAccessor/third_party|HoloStorageAccessor/src"
+LENS_EXCLUDES="(Assets/MixedRealityToolkit|HoloRepositoryDemoApplication/Library|HoloStorageConnector/Plugins)"
 
 loc "${@}" \
     --exclude ${SHARED_EXCLUDES} \

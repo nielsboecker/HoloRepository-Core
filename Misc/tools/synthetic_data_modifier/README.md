@@ -1,5 +1,5 @@
 # Synthetic Data Modifier
-A tool for modifying synthetic patient data generated as FHIR resources with [Synthea](https://github.com/synthetichealth/synthea). Certain project-specific filterings and modifications are being applied.
+A tool for modifying synthetic patient data generated as FHIR resources with [Synthea](https://github.com/synthetichealth/synthea). Certain project-specific filtering and modifications are being applied.
 
 In particular, it does the following:
 - Point selected files with imaging studies to hosted imaging studies endpoints and adjust metadata accordingly (`numberOfInstances` etc.)

@@ -2,7 +2,7 @@
 
 Script that setups an Azure blob storage instance.
 
-## Prerequsites
+## Prerequisites
 
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 

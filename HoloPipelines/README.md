@@ -18,14 +18,14 @@ Upon receiving a DICOM image series, a job will be started and passed through th
 Majority of the code is written in Python 3.7.3
 
 - Web application framework to handle requests [Flask](https://github.com/pallets/flask)
-- [Node.js](https://nodejs.org/en/) to utilise the package available for glTF coversion and transformation
+- [Node.js](https://nodejs.org/en/) to utilise the package available for glTF conversion and transformation
 - An open source convolutional neural networks platform [NiftyNet](https://niftynet.io)
 - Pipelines containerized using [Docker](https://www.docker.com)
 - Testing is done through [Pytest](https://github.com/pytest-dev/pytest)
 
 ## Architecture
 
-The HoloPipeines themself are a cloud-based application developed with Python. The code implements a Pipes-and-Filters pattern and is kept modular. Different modules can be pieced together to reflect different workflows, and thereby provide different pipelines.
+The HoloPipelines themselves are a cloud-based application developed with Python. The code implements a Pipes-and-Filters pattern and is kept modular. Different modules can be pieced together to reflect different workflows, and thereby provide different pipelines.
 
 The modules that form a pipeline can perform different tasks:
 
@@ -77,7 +77,7 @@ usage: pipelineController.py [-h] [-c CONFIG] [-l] [-i NAME]
                              [-p [PARAM [PARAM ...]]]
                              [pipelineID]
 
-Selct pipeline to process
+Select pipeline to process
 
 positional arguments:
   pipelineID            ID of pipeline
@@ -87,7 +87,7 @@ optional arguments:
   -c CONFIG, --config CONFIG
                         path to pipeline config file relative to
                         pipelineController
-  -l, --ls              list all the available piplines
+  -l, --ls              list all the available pipelines
   -i NAME, --info NAME  get info from pipeline's name
   -p [PARAM [PARAM ...]], --param [PARAM [PARAM ...]]
                         parameters for pipeline e.g. dicom folder name or HU

@@ -5,7 +5,7 @@ Script that setups a FHIR service on Azure using Microsoft's deployment template
 Reference:
 https://azure.microsoft.com/en-in/blog/microsoft-fhir-server-for-azure-extends-to-sql/
 
-## Prerequsites
+## Prerequisites
 
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 

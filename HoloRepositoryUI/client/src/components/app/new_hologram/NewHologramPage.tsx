@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { navigate, RouteComponentProps } from "@reach/router";
 import PlainContentContainer from "../core/PlainContentContainer";
 import BackendServerService from "../../../services/BackendServerService";
 import CreationModeSelectionStep from "./shared/CreationModeSelectionStep";
@@ -81,11 +81,18 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
   };
 
   private _handleUploadHologram_Success = (hologram: IHologram) => {
+    // Update global state
     this.props.context!.handleHologramCreated(hologram);
+
+    console.log("Upload successful");
+    navigate("/app/holograms");
   };
 
   private _handleUploadHologram_Failure = () => {
     console.error("Something went wrong while creating the hologram, try refreshing the page.");
+
+    // Note: Should have better error handling
+    navigate("/app/holograms");
   };
 
   private _handleSubmit_Generate = () => {

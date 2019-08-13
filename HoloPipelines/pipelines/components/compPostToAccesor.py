@@ -4,38 +4,35 @@ import pathlib
 import json
 
 
-def sendFilePostRequestToAccessor(
-    title,
-    outputFileDir,
-    description,
-    bodySite,
-    dateOfImaging,
-    creationDate,
-    creationDescription,
-    author,
-    patient,
-):
-    outputFileDir = str(pathlib.Path(outputFileDir))
+def sendFilePostRequestToAccessor(infoForAccesor):
+    outputFileDir = str(pathlib.Path(infoForAccesor["outputFileDir"]))
     sizeOfOutputFile = str(path.getsize(outputFileDir) / 1000)
     # print("file: "+str(file)
     # get the pipelinelist json file
+    print(infoForAccesor["author"]["aid"])
 
     # manipulate author data
-    authorForAccessor = {"aid": author["aid"], "name": author["name"]}
+    authorForAccessor = {
+        "aid": infoForAccesor["author"]["aid"],
+        "name": infoForAccesor["author"]["name"],
+    }
 
     # manipulate patient data
-    patientForAccessor = {"pid": patient["pid"], "name": patient["name"]}
+    patientForAccessor = {
+        "pid": infoForAccesor["patient"]["pid"],
+        "name": infoForAccesor["patient"]["name"],
+    }
 
     requestBody = {
-        "title": title,
-        "description": description,
+        "title": infoForAccesor["title"],
+        "description": infoForAccesor["description"],
         "contentType": "model/gltf-binary",
         "fileSizeInKb": sizeOfOutputFile,
-        "bodySite": bodySite,
-        "dateOfImaging": dateOfImaging,
-        "creationDate": creationDate,
+        "bodySite": infoForAccesor["bodySite"],
+        "dateOfImaging": infoForAccesor["dateOfImaging"],
+        "creationDate": infoForAccesor["creationDate"],
         "creationMode": "GENERATE_FROM_IMAGING_STUDY",
-        "creationDescription": creationDescription,
+        "creationDescription": infoForAccesor["creationDescription"],
         "author": json.dumps(authorForAccessor),
         "patient": json.dumps(patientForAccessor),
     }

@@ -22,8 +22,11 @@ save_directory = Path("input")
 output_directory = Path("output")
 pipeline_list = getPipelineList()
 status = {
-    "j0": {"status": "segment", "stamp": "2019-08-05 14:09:19"},
-    "j1": {"status": "segment", "stamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")},
+    "j0": {"status": "segment", "timestamp": "2019-08-05 14:09:19"},
+    "j1": {
+        "status": "segment",
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    },
 }
 jobid2plid = {"j0": "nifti2glb", "j1": "dicom2glb"}
 job2inputURL = {"j0": "url"}
@@ -71,7 +74,7 @@ def activate_status_cleaning_job():
 
             for job in status.copy():
 
-                job_time_string = status[job]["stamp"]
+                job_time_string = status[job]["timestamp"]
                 # logging.info("job-time: "+job_time_string)
 
                 job_time_obj = datetime.strptime(job_time_string, "%Y-%m-%d %H:%M:%S")
@@ -146,8 +149,8 @@ def send_job_start_response():
     if not output_directory.is_dir():
         os.mkdir("output")
 
-    # create a list that fetch the response info that needs to post with hologram to the accessor (checking is missing)
-    info_for_accesor = {
+    # create a dict that fetch the info from the front end request that needs to post with hologram to the accessor (checking is missing)
+    info_for_accessor = {
         "bodySite": job_request["bodySite"],
         "dateOfImaging": datetime.strptime(
             job_request["dateOfImaging"], "%Y-%m-%d %H:%M:%S"
@@ -156,40 +159,28 @@ def send_job_start_response():
         "author": job_request["author"],
         "patient": job_request["patient"],
     }
-    logging.info("info_for_accesor: " + json.dumps(info_for_accesor))
+
+    logging.info("info_for_accessor: " + json.dumps(info_for_accessor))
 
     # create arglist pass to pipeline controller
     # (this part will change later, we should not check the pipeline arglist in this way)
     jobID = str(uuid.uuid1())
     global jobid2plid
     jobid2plid.update({jobID: request_plid})
-    if request_plid != "lungDicom2glb":
-        arglist = [
-            jobID,
-            unzip_file_dir,
-            str(
-                this_cwd.joinpath(
-                    str(output_directory), unzip_file_dir.rsplit("/", 1)[1] + ".glb"
-                )
-            ),
-            "300",
-            json.dumps(info_for_accesor),
-        ]
-    else:
-        arglist = [
-            jobID,
-            unzip_file_dir,
-            str(
-                this_cwd.joinpath(
-                    str(output_directory), unzip_file_dir.rsplit("/", 1)[1] + ".glb"
-                )
-            ),
-            json.dumps(info_for_accesor),
-        ]
+    arglist = [
+        jobID,
+        unzip_file_dir,
+        str(
+            this_cwd.joinpath(
+                str(output_directory), unzip_file_dir.rsplit("/", 1)[1] + ".glb"
+            )
+        ),
+        info_for_accessor,
+    ]
     logging.info("arglist: " + str(arglist))
 
     # pass to controller to start pipeline
-    startPipeline(jobID, request_plid, arglist)
+    startPipeline(request_plid, arglist)
     return json_response(jobID=jobID, status_code=202)
 
 

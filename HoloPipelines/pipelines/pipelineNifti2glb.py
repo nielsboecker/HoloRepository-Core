@@ -3,16 +3,17 @@ from components import compJobStatus
 from components import compNifti2numpy
 from components import compNumpy2obj
 from components import compObj2glbWrapper
-from components import compHttpRequest
+from components import compPostToAccesor
 import pathlib
 import sys
 from datetime import datetime
+import json
 
 
-def main(jobID, inputNiftiPath, outputGlbPath, threshold,infoForAccessor):
+def main(jobID, inputNiftiPath, outputGlbPath, threshold, infoForAccessor):
     compJobStatus.updateStatus(jobID, "Pre-processing")
     generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(inputNiftiPath)))
-    
+
     compJobStatus.updateStatus(jobID, "3D model generation")
     generatedObjPath = compNumpy2obj.main(
         generatedNumpyList,
@@ -29,18 +30,19 @@ def main(jobID, inputNiftiPath, outputGlbPath, threshold,infoForAccessor):
     )
     print("nifti2glb: done, glb saved to {}".format(generatedGlbPath))
     compJobStatus.updateStatus(jobID, "Finished")
-    compHttpRequest.sendFilePostRequestToAccessor(
-        infoForAccessor["bodySite"]+"apply on generic bone segmentation",
-        "http://localhost:3200/api/v1/holograms"
+    infoForAccessor = json.loads(infoForAccessor)
+    compPostToAccesor.sendFilePostRequestToAccessor(
+        infoForAccessor["bodySite"] + "apply on generic bone segmentation",
+        outputGlbPath,
         infoForAccessor["description"],
-        outputGlbPath,infoForAccessor["bodySite"],
+        infoForAccessor["bodySite"],
         infoForAccessor["dateOfImaging"],
-        datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "Generate glb mesh from nifti",
         infoForAccessor["author"],
-        infoForAccessor["patient"]
-        )
+        infoForAccessor["patient"],
+    )
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3],sys.argv[4],sys.argv[5])
+    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])

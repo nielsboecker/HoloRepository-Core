@@ -5,13 +5,14 @@ from components.lungSegment.main import main as lungSegment
 from components import compNifti2numpy
 from components import compNumpy2obj
 from components import compObj2glbWrapper
-from components import compHttpRequest
+from components import compPostToAccesor
 from datetime import datetime
 import pathlib
 import sys
+import json
 
 
-def main(jobID, dicomPath, outputGlbPath,infoForAccessor):
+def main(jobID, dicomPath, outputGlbPath, infoForAccessor):
     compJobStatus.updateStatus(jobID, "Pre-processing")
     generatedNiftiPath = compDcm2nifti.main(
         str(dicomPath),
@@ -40,18 +41,19 @@ def main(jobID, dicomPath, outputGlbPath,infoForAccessor):
     )
     print("lungDicom2glb: done, glb saved to {}".format(generatedGlbPath))
     compJobStatus.updateStatus(jobID, "Finished")
-    compHttpRequest.sendFilePostRequestToAccessor(
-        infoForAccessor["bodySite"]+"apply on lung segmentation",
-        "http://localhost:3200/api/v1/holograms",
+    infoForAccessor = json.loads(infoForAccessor)
+    compPostToAccesor.sendFilePostRequestToAccessor(
+        infoForAccessor["bodySite"] + "apply on generic bone segmentation",
+        outputGlbPath,
         infoForAccessor["description"],
-        outputGlbPath,infoForAccessor["bodySite"],
+        infoForAccessor["bodySite"],
         infoForAccessor["dateOfImaging"],
-        datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "Generate glb mesh from dicom",
         infoForAccessor["author"],
-        infoForAccessor["patient"]
-        )
+        infoForAccessor["patient"],
+    )
 
 
 if __name__ == "__main__":
-    main(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3],str(sys.argv[4])))
+    main(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3], str(sys.argv[4])))

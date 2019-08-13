@@ -6,7 +6,7 @@ import pathlib
 def updateStatus(
     jobID, jobStatus
 ):  # TODO rename this comp to just http request? and rename this function to updateJobStatus
-    pipelineServerURL = "http://localhost:5000/status"
+    pipelineServerURL = "http://localhost:5000/api/v1/status"
     data = {jobID: {"status": jobStatus, "timestamp": str(datetime.now())}}
     # data = {"jobID": "j0", "status": "hey", "stamp": "2020"}
     response = requests.post(url=pipelineServerURL, json=data)

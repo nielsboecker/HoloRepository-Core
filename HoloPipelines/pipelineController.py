@@ -4,6 +4,9 @@ import sys
 import argparse
 import subprocess
 import pathlib
+import importlib
+
+# from multiprocessing import Process
 import pipelines.components.compCommonPath as plCommonPath
 
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
@@ -95,14 +98,11 @@ def main():
     json_file.close()
 
 
-def startPipeline(jobID, plID, paramList=[]):
-    configFileName = "pipelineList.json"  # hard coded
-    with open(str(pathlib.Path(newCwd).joinpath(str(configFileName)))) as json_file:
-        lsPipe = json.load(json_file)
-        print(str(["python", lsPipe[plID]["src"]] + paramList))
-        subprocess.run(["python", lsPipe[plID]["src"]] + paramList, cwd=newCwd)
-
-    json_file.close()
+def startPipeline(plID, paramList=[]):
+    # process =Process(target=dynamicLoadingPipeline, args=(plID, paramList))
+    # process.start
+    # process.join
+    dynamicLoadingPipeline(plID, paramList)
 
 
 def getPipelineList():
@@ -112,6 +112,14 @@ def getPipelineList():
         lsPipe = json.load(json_file)
     json_file.close()
     return lsPipe
+
+
+def dynamicLoadingPipeline(plID, paramList=[]):
+    lsPipe = getPipelineList()
+    lsPipe[plID]["src"].split(".py")[0].replace("/", ".")
+    pl_package_name = lsPipe[plID]["src"].split(".py")[0].replace("/", ".")
+    pl_package = importlib.import_module(pl_package_name)
+    pl_package.main(*paramList)
 
 
 if __name__ == "__main__":

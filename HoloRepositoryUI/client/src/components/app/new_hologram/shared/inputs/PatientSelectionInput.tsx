@@ -11,9 +11,13 @@ export interface PatientSelectionDropdownProps
   patients: IDropdownOption[];
   disabled: boolean;
 }
-class PatientSelectionDropdown extends Component<PatientSelectionDropdownProps> {
+class PatientSelectionInput extends Component<PatientSelectionDropdownProps> {
   _handleChange = (pid: string): void => {
+    // Notify Formsy about new value
     this.props.setValue!(pid);
+
+    // Adjust global app state
+    this.props.context!.handleSelectedPatientIdChange(pid);
   };
 
   _handleOptionChange = (_: any, option?: IDropdownOption): void => {
@@ -48,4 +52,4 @@ class PatientSelectionDropdown extends Component<PatientSelectionDropdownProps> 
   }
 }
 
-export default withAppContext(withFormsy(PatientSelectionDropdown));
+export default withAppContext(withFormsy(PatientSelectionInput));

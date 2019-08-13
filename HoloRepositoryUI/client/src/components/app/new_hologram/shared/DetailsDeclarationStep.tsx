@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { IStackProps, Stack } from "office-ui-fabric-react";
 import { PidToPatientsMap, PropsWithContext, withAppContext } from "../../../shared/AppState";
-import PatientSelectionInput from "./inputs/PatientSelectionDropdown";
+import PatientSelectionInput from "./inputs/PatientSelectionInput";
 import HologramTitleInput from "./inputs/TitleInput";
 import DescriptionInput from "./inputs/DescriptionInput";
 import BodySiteInput from "./inputs/BodySiteInput";

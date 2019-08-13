@@ -20,21 +20,17 @@ import (
 // AuthorsAidGet - Get a single author metadata in HoloStorage
 func AuthorsAidGet(c *gin.Context) {
 	id := c.Param("aid")
-	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+id)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL})
-
-	if result.err != nil {
-		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
-		return
-	} else if result.statusCode == 404 || result.statusCode == 410 {
-		errMsg := "id '" + id + "' cannot be found"
-		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
-		return
-	}
 	var data PractitionerFHIR
-	err := json.Unmarshal(result.response, &data)
+	err := GetSingleFHIRMetadata(accessorConfig.FhirURL, id, &data)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		errArray := strings.SplitN(err.Error(), ":", 2)
+		errCode, errMsg := errArray[0], errArray[1]
+		if errCode == "404" {
+			c.JSON(http.StatusNotFound, Error{ErrorCode: errCode, ErrorMessage: errMsg})
+		} else {
+			c.JSON(http.StatusInternalServerError, Error{ErrorCode: errCode, ErrorMessage: errMsg})
+
+		}
 		return
 	}
 	c.JSON(http.StatusOK, data.ToAPISpec())
@@ -86,20 +82,18 @@ func AuthorsGet(c *gin.Context) {
 
 	fhirRequests := make(map[string]FHIRRequest)
 	ids := ParseQueryIDs(aids)
+	dataMap := make(map[string]Author)
 
 	for _, id := range ids {
+		dataMap[id] = Author{}
 		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+id)
 		fhirRequests[id] = FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL}
 	}
 
 	results := BatchFHIRQuery(fhirRequests)
 
-	dataMap := make(map[string]Author)
-	var emptyData Author
 	for id, result := range results {
-		if result.statusCode >= 400 {
-			dataMap[id] = emptyData
-		} else {
+		if result.statusCode == 200 {
 			var tempData PractitionerFHIR
 			err := json.Unmarshal(result.response, &tempData)
 			if err != nil {
@@ -157,7 +151,7 @@ func HologramsGet(c *gin.Context) {
 	switch details.Mode {
 	case "hologram":
 		for id, result := range results {
-			if result.statusCode != 404 && result.statusCode != 410 {
+			if result.statusCode == 200 {
 				var tempData HologramDocumentReferenceFHIR
 				err := json.Unmarshal(result.response, &tempData)
 				if err != nil {
@@ -357,20 +351,18 @@ func PatientsGet(c *gin.Context) {
 
 	fhirRequests := make(map[string]FHIRRequest)
 	ids := ParseQueryIDs(pids)
+	dataMap := make(map[string]Patient)
 
 	for _, id := range ids {
+		dataMap[id] = Patient{}
 		fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Patient/"+id)
 		fhirRequests[id] = FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL}
 	}
 
 	results := BatchFHIRQuery(fhirRequests)
 
-	dataMap := make(map[string]Patient)
-	var emptyData Patient
 	for id, result := range results {
-		if result.statusCode == 404 || result.statusCode == 410 {
-			dataMap[id] = emptyData
-		} else {
+		if result.statusCode == 200 {
 			var tempData PatientFHIR
 			err := json.Unmarshal(result.response, &tempData)
 			if err != nil {
@@ -387,24 +379,19 @@ func PatientsGet(c *gin.Context) {
 // PatientsPidGet - Get a single patient metadata in HoloStorage
 func PatientsPidGet(c *gin.Context) {
 	id := c.Param("pid")
-	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Patient/"+id)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: "GET", qid: id, url: fhirURL})
-
-	if result.err != nil {
-		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
-		return
-	} else if result.statusCode == 404 || result.statusCode == 410 {
-		errMsg := "id '" + id + "' cannot be found"
-		c.JSON(http.StatusNotFound, Error{ErrorCode: "404", ErrorMessage: errMsg})
-		return
-	}
-
 	var data PatientFHIR
-	err := json.Unmarshal(result.response, &data)
+	err := GetSingleFHIRMetadata(accessorConfig.FhirURL, id, &data)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		errArray := strings.SplitN(err.Error(), ":", 2)
+		errCode, errMsg := errArray[0], errArray[1]
+		if errCode == "404" {
+			c.JSON(http.StatusNotFound, Error{ErrorCode: errCode, ErrorMessage: errMsg})
+		} else {
+			c.JSON(http.StatusInternalServerError, Error{ErrorCode: errCode, ErrorMessage: errMsg})
+		}
 		return
 	}
+
 	c.JSON(http.StatusOK, data.ToAPISpec())
 }
 

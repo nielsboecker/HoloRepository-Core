@@ -1,17 +1,20 @@
 import React, { Component } from "react";
 import { IImagingStudy, IPatient } from "../../../../../../types";
-import { ChoiceGroup, Dropdown, IChoiceGroupOption, IDropdownOption } from "office-ui-fabric-react";
+import { Dropdown, IChoiceGroupOption, IDropdownOption } from "office-ui-fabric-react";
 import { Col, Divider, Row } from "antd";
 import ImagingStudyDetailsCard from "./ImagingStudyDetailsCard";
 import { PropsWithContext, withAppContext } from "../../../shared/AppState";
+import ImagingStudySelectionInput from "./inputs/ImagingStudySelectionInput";
 
-export interface IImagingStudySelectionStepProps extends PropsWithContext {
-  onSelectedImagingStudyChange: (selectedImagingStudyEndpoint: string) => void;
-}
+export interface IImagingStudySelectionStepProps extends PropsWithContext {}
 
 export interface IImagingStudySelectionStepState {
   selectedPatient?: IPatient;
   selectedStudy?: IImagingStudy;
+}
+
+export interface IExtendedChoiceGroupOption extends IChoiceGroupOption {
+  endpoint: string;
 }
 
 class ImagingStudySelectionStep extends Component<
@@ -37,11 +40,11 @@ class ImagingStudySelectionStep extends Component<
           {this.state.selectedPatient &&
           this.state.selectedPatient.imagingStudies &&
           this.state.selectedPatient.imagingStudies.length >= 1 ? (
-            <ChoiceGroup
-              label="Select an imaging study"
+            <ImagingStudySelectionInput
+              imagingStudyOptions={this._getImagingStudyOptions()}
+              onImagingStudyChange={this._handleImagingStudyChange}
+              name="imagingStudyEndpoint"
               required
-              options={this._getImagingStudyOptions()}
-              onChange={this._handleImagingStudyChange}
             />
           ) : (
             <p>Select a patient with existing imaging studies.</p>
@@ -74,27 +77,25 @@ class ImagingStudySelectionStep extends Component<
     this.setState({ selectedPatient: patients[selectedPatientId], selectedStudy: undefined });
   };
 
-  private _handleImagingStudyChange = (_: any, option?: IChoiceGroupOption) => {
+  // Note: Not ideal. Should be refactored.
+  private _handleImagingStudyChange = (isid: string) => {
     if (!this.state.selectedPatient || !this.state.selectedPatient.imagingStudies) {
       return;
     }
-    const selectedStudyId = option!.key;
-    const selectedStudy = this.state.selectedPatient.imagingStudies.find(
-      is => is.isid === selectedStudyId
-    );
+    const selectedStudy = this.state.selectedPatient.imagingStudies.find(is => is.isid === isid);
     if (selectedStudy) {
       this.setState({ selectedStudy });
-      this.props.onSelectedImagingStudyChange(selectedStudy.endpoint);
     }
   };
 
-  private _getImagingStudyOptions = (): IChoiceGroupOption[] => {
+  private _getImagingStudyOptions = (): IExtendedChoiceGroupOption[] => {
     if (!this.state.selectedPatient || !this.state.selectedPatient.imagingStudies) {
       return [];
     }
     return this.state.selectedPatient.imagingStudies.map((is, index) => ({
       key: is.isid,
-      text: `Imaging study ${index + 1} (${is.numberOfInstances} instances)`
+      text: `Imaging study ${index + 1} (${is.numberOfInstances} instances)`,
+      endpoint: is.endpoint
     }));
   };
 

@@ -46,7 +46,7 @@ interface IHologramCreationData_Upload {
 
 interface IHologramCreationData_Generate {
   plid: string;
-  selectedImagingStudyEndpoint: string;
+  imagingStudyEndpoint: string;
 }
 
 // Union with relecant partial interfaces to allow subsequent filling of the respective fields
@@ -64,10 +64,6 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
         this.props.location.state &&
         (this.props.location.state.mode as HologramCreationMode)) ||
       HologramCreationMode.GENERATE_FROM_IMAGING_STUDY
-  };
-
-  private _handleSelectedImagingStudyChange = (selectedImagingStudyEndpoint: string) => {
-    this.setState({ selectedImagingStudyEndpoint });
   };
 
   private _handleSubmit_Upload = () => {
@@ -143,7 +139,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
   };
 
   private _getPostRequestMetaData_Generate = (): IHologramCreationRequest_Generate | null => {
-    const { plid, selectedImagingStudyEndpoint: imagingStudyEndpoint } = this.state;
+    const { plid, imagingStudyEndpoint } = this.state;
     const sharedMetaData = this._generatePostRequestMetaData_Shared();
     if (!plid || !imagingStudyEndpoint || !sharedMetaData) {
       return this._logErrorAndReturnNull();
@@ -181,11 +177,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       },
       {
         title: "Select input data",
-        content: (
-          <ImagingStudySelectionStep
-            onSelectedImagingStudyChange={this._handleSelectedImagingStudyChange}
-          />
-        )
+        content: <ImagingStudySelectionStep />
       },
       {
         title: "Enter details",

@@ -145,16 +145,12 @@ class App extends Component<any, IAppState> {
   };
 
   private _handleHologramDeleted = (hid: string) => {
-    console.log("deleted", hid);
-
     const pid = this._getPidForHid(hid);
     const patient = pid && this.state.patients[pid];
     if (!pid || !patient || !patient.holograms) {
       return;
     }
-    console.log(pid, patient);
     patient.holograms = patient.holograms.filter(hologram => hologram.hid !== hid);
-    console.log(pid, patient);
 
     // Note: Duplicate code, should be refactored
     this.setState({

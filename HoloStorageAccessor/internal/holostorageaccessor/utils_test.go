@@ -314,7 +314,7 @@ func TestLoadConfiguration(t *testing.T) {
 		}
 		t.Run(name, func(t *testing.T) {
 			var config AccessorConfig
-			err := LoadConfiguration(&config)
+			config, err := LoadConfiguration()
 			diff := cmp.Diff(tc.want, config)
 			if err != nil && tc.want_err != "" {
 				err_diff := cmp.Diff(tc.want_err, err.Error())

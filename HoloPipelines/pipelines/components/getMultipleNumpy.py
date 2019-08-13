@@ -10,8 +10,6 @@ import numpy as np
 import sys
 import logging
 
-logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
-
 # load numpy
 originalNumpy = getNp.main(str(pathlib.Path(sys.argv[1])))
 

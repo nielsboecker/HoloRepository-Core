@@ -34,7 +34,6 @@ def send_get_request(url, request_body):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
     update_status("j0", "hello")  # TODO remove once done testing
     logging.info(
         "You shouldn't be able to run this component directly after we're done testing"

@@ -45,5 +45,4 @@ def main(job_id, input_nifti_path, output_glb_path, threshold, info_for_accessor
 
 
 if __name__ == "__main__":
-    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
     main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])

@@ -56,5 +56,4 @@ def main(job_id, dicom_path, output_glb_path, info_for_accessor):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
     main(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3], str(sys.argv[4])))

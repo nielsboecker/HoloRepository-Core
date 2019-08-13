@@ -14,5 +14,4 @@ def main(dicom_input_path, output_nifti_folder_path):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
     logging.info("component can't run on its own")

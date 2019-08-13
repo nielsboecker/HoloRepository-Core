@@ -40,10 +40,6 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-# logging formatting
-logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
-
-
 def main():
     # check common dir
 
@@ -118,4 +114,5 @@ def get_pipeline_list():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
     main()

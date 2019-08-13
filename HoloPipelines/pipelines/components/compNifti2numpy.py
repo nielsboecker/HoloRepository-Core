@@ -41,5 +41,4 @@ def main(input_nifti_path):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
     print("component can't run on its own")

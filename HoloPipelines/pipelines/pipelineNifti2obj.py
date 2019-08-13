@@ -4,6 +4,7 @@ from components import compJobStatus
 from components import compNumpy2obj
 import pathlib
 import sys
+import logging
 
 
 def main(job_id, input_nifti_path, output_obj_path, threshold, flip_npy=False):
@@ -15,7 +16,7 @@ def main(job_id, input_nifti_path, output_obj_path, threshold, flip_npy=False):
         generatedNumpyList, threshold, str(pathlib.Path(output_obj_path))
     )
 
-    print("nifti2obj: done, obj saved to {}".format(generatedObjPath))
+    logging.info("nifti2obj: done, obj saved to {}".format(generatedObjPath))
 
 
 if __name__ == "__main__":

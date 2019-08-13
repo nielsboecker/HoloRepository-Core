@@ -44,5 +44,4 @@ def main(input_obj_path, output_glb_path, delete_original_obj=True, compress_glb
 
 
 if __name__ == "__main__":
-    logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
     logging.info("component can't run on its own")

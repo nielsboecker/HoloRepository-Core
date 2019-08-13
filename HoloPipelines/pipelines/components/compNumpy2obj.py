@@ -5,6 +5,7 @@ import pathlib
 import sys
 import logging
 
+logging.basicConfig(level=logging.INFO)
 nib.Nifti1Header.quaternion_threshold = -1e-06
 
 
@@ -62,4 +63,4 @@ def main(inputData, mainThreshold, outputPath):
 
 
 if __name__ == "__main__":
-    logging.warning("component can't run on its own")
+    logging.error("component can't run on its own")

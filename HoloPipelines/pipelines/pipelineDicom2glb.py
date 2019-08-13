@@ -6,6 +6,8 @@ import pathlib
 import sys
 import logging
 
+logging.basicConfig(level=logging.INFO)
+
 
 def main(dicomFolderPath, outputGlbPath, threshold):
     generatedNumpyList = compDicom2numpy.main(str(pathlib.Path(dicomFolderPath)))

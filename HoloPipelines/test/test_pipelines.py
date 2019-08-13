@@ -7,10 +7,11 @@ import shutil
 import threading
 import sys
 
-import urllib.request
 import requests
 from zipfile import ZipFile
 from http.server import BaseHTTPRequestHandler, HTTPServer
+
+logging.basicConfig(level=logging.INFO)
 
 pythonPath = sys.executable
 thisCwd = pathlib.Path.cwd()
@@ -44,44 +45,44 @@ class testServer(BaseHTTPRequestHandler):
 @pytest.fixture
 def testSetup():
     logging.info("Checking for sample files...")
+    sampleFileDict = {
+        str(dicomPath.joinpath("3_Axial_CE")): [
+            "https://holoblob.blob.core.windows.net/test/3_Axial_CE.zip",
+            str(dicomPath),
+        ],
+        str(dicomPath.joinpath("abdomen")): [
+            "https://holoblob.blob.core.windows.net/mock-pacs/abdomen.zip",
+            str(dicomPath),
+        ],
+        str(niftiPath.joinpath("1103_3_glm.nii")): [
+            "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip",
+            str(niftiPath),
+        ],
+    }
 
-    if not os.path.exists(str(dicomPath.joinpath("3_Axial_CE"))):
-        # download dicom sample
-        logging.info("Beginning dicom (1/2) sample download...")
+    for filePath, fileData in sampleFileDict.items():
+        if not os.path.exists(filePath):
+            # download dicom sample
+            logging.info("Downloading sample file [{}]...".format(fileData[0]))
 
-        url = "https://holoblob.blob.core.windows.net/test/3_Axial_CE.zip"
-        urllib.request.urlretrieve(url, str(thisCwd.joinpath(zipFileName)))
+            url = fileData[0]
+            saveTo = fileData[1]
 
-        logging.info("Beginning dicom unzip...")
-        with ZipFile(zipFileName, "r") as zipObj:  # unzip
-            zipObj.extractall(str(dicomPath))
-        os.remove(zipFileName)
+            response = requests.get(url)
+            open(str(thisCwd.joinpath(zipFileName)), "wb+").write(response.content)
 
-    if not os.path.exists(str(dicomPath.joinpath("abdomen"))):
-        # download dicom sample
-        logging.info("Beginning dicom (2/2) sample download...")
+            logging.info("Decompressing...")
+            with ZipFile(zipFileName, "r") as zipObj:  # unzip
+                zipObj.extractall(saveTo)
+            os.remove(zipFileName)
 
-        url = "https://holoblob.blob.core.windows.net/mock-pacs/abdomen.zip"
-        urllib.request.urlretrieve(url, str(thisCwd.joinpath(zipFileName)))
-
-        logging.info("Beginning dicom unzip...")
-        with ZipFile(zipFileName, "r") as zipObj:  # unzip
-            zipObj.extractall(str(dicomPath))
-        os.remove(zipFileName)
-
-    if not os.path.exists(str(niftiPath.joinpath("1103_3_glm.nii"))):
-        # download nifti sample
-        logging.info("Beginning nifti sample download...")
-
-        url = "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip"
-
-        response = requests.get(url)
-        open(str(thisCwd.joinpath(zipFileName)), "wb+").write(response.content)
-
-        logging.info("Beginning nifti unzip...")
-        with ZipFile(zipFileName, "r") as zipObj:  # unzip
-            zipObj.extractall(str(niftiPath))
-        os.remove(zipFileName)
+    # download data for mock server (not in loop above as this one does not come in zip)
+    if not os.path.exists(str(niftiPath.joinpath(segmentedAbdomenFileName))):
+        urlNiftyOut = "https://holoblob.blob.core.windows.net/mock-pacs/Owenpap___niftynet_out.nii.gz"
+        response = requests.get(urlNiftyOut)
+        open(str(niftiPath.joinpath(segmentedAbdomenFileName)), "wb+").write(
+            response.content
+        )
 
     logging.info("setup: done")
 
@@ -94,72 +95,46 @@ def testSetup():
 
 @pytest.fixture
 def setupMockPOSTresponse():
-    logging.info("Downloading mock output...")
-    urlNiftyOut = (
-        "https://holoblob.blob.core.windows.net/mock-pacs/Owenpap___niftynet_out.nii.gz"
-    )
-    response = requests.get(urlNiftyOut)
-    open(str(niftiPath.joinpath(segmentedAbdomenFileName)), "wb+").write(
-        response.content
-    )
-
     logging.info("Starting NN model mock server...")
     myServer = HTTPServer(("localhost", 4567), testServer)
     threading.Thread(target=myServer.serve_forever, daemon=True).start()
 
     yield
 
-    # remove nii file
-    if os.path.exists(str(niftiPath.joinpath(segmentedAbdomenFileName))):
-        os.remove(str(niftiPath.joinpath(segmentedAbdomenFileName)))
+    # remove files
+    downloadedSampleFileList = [
+        str(niftiPath.joinpath(segmentedAbdomenFileName)),
+        str(niftiPath.joinpath("dataFromPost.nii")),
+    ]
 
-    if os.path.exists(str(niftiPath.joinpath("dataFromPost.nii"))):
-        os.remove(str(niftiPath.joinpath("dataFromPost.nii")))
+    for fileToDelete in downloadedSampleFileList:
+        if os.path.exists(fileToDelete):
+            os.remove(fileToDelete)
 
-    # remove abdomen CT Dicom files
     if os.path.exists(str(dicomPath.joinpath("abdomen"))):
         shutil.rmtree(str(dicomPath.joinpath("abdomen")))
 
 
 def remove3Dmodels():
-    if os.path.exists(str(glbPath.joinpath("testResult0.glb"))):
-        os.remove(str(glbPath.joinpath("testResult0.glb")))
+    generatedMeshList = [
+        str(glbPath.joinpath("testResult0.glb")),
+        str(glbPath.joinpath("testResult1.glb")),
+        str(objPath.joinpath("testResult2.obj")),
+        str(glbPath.joinpath("testResult3.glb")),
+        str(glbPath.joinpath("testResult4.glb")),
+        str(glbPath.joinpath("organNo1.glb")),
+        str(glbPath.joinpath("organNo2.glb")),
+        str(glbPath.joinpath("organNo3.glb")),
+        str(glbPath.joinpath("organNo4.glb")),
+        str(glbPath.joinpath("organNo5.glb")),
+        str(glbPath.joinpath("organNo6.glb")),
+        str(glbPath.joinpath("organNo7.glb")),
+        str(glbPath.joinpath("organNo8.glb")),
+    ]
 
-    if os.path.exists(str(glbPath.joinpath("testResult1.glb"))):
-        os.remove(str(glbPath.joinpath("testResult1.glb")))
-
-    if os.path.exists(str(objPath.joinpath("testResult2.obj"))):
-        os.remove(str(objPath.joinpath("testResult2.obj")))
-
-    if os.path.exists(str(glbPath.joinpath("testResult3.glb"))):
-        os.remove(str(glbPath.joinpath("testResult3.glb")))
-
-    if os.path.exists(str(glbPath.joinpath("testResult4.glb"))):
-        os.remove(str(glbPath.joinpath("testResult4.glb")))
-
-    if os.path.exists(str(glbPath.joinpath("organNo1.glb"))):
-        os.remove(str(glbPath.joinpath("organNo1.glb")))
-
-    if os.path.exists(str(glbPath.joinpath("organNo2.glb"))):
-        os.remove(str(glbPath.joinpath("organNo2.glb")))
-
-    if os.path.exists(str(glbPath.joinpath("organNo3.glb"))):
-        os.remove(str(glbPath.joinpath("organNo3.glb")))
-
-    if os.path.exists(str(glbPath.joinpath("organNo4.glb"))):
-        os.remove(str(glbPath.joinpath("organNo4.glb")))
-
-    if os.path.exists(str(glbPath.joinpath("organNo5.glb"))):
-        os.remove(str(glbPath.joinpath("organNo5.glb")))
-
-    if os.path.exists(str(glbPath.joinpath("organNo6.glb"))):
-        os.remove(str(glbPath.joinpath("organNo6.glb")))
-
-    if os.path.exists(str(glbPath.joinpath("organNo7.glb"))):
-        os.remove(str(glbPath.joinpath("organNo7.glb")))
-
-    if os.path.exists(str(glbPath.joinpath("organNo8.glb"))):
-        os.remove(str(glbPath.joinpath("organNo8.glb")))
+    for meshFileName in generatedMeshList:
+        if os.path.exists(meshFileName):
+            os.remove(meshFileName)
 
 
 def test_pipelines_dicom2glb(testSetup):
@@ -250,6 +225,7 @@ def test_pipelines_abdomenDicom2glb(setupMockPOSTresponse, testSetup):
             str(dicomPath.joinpath("abdomen")),
             str(glbPath),
             "http://localhost:4567",
+            "300",
         ],
         cwd=newCwd,
     )

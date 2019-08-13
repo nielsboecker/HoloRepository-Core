@@ -2,6 +2,8 @@ import scipy.ndimage
 import sys
 import logging
 
+logging.basicConfig(level=logging.INFO)
+
 
 def centerCrop(img, newX, newY, newZ):
     x, y, z = img.shape
@@ -47,4 +49,4 @@ def sizeLimit(img, limit):
 
 
 if __name__ == "__main__":
-    logging.warning("component can't run on its own")
+    logging.error("component can't run on its own")

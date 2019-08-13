@@ -3,6 +3,8 @@ import nibabel as nib
 import os
 import logging
 
+logging.basicConfig(level=logging.INFO)
+
 
 def resample(imageData, new_spacing=[1, 1, 1]):
     image = imageData
@@ -45,4 +47,4 @@ def main(inputNiftiPath, deleteNiftiWhenDone=False):
 
 
 if __name__ == "__main__":
-    logging.warning("component can't run on its own")
+    logging.error("component can't run on its own")

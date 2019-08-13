@@ -6,6 +6,8 @@ from components import compObj2glbWrapper as makeGlb
 import numpy as np
 import logging
 
+logging.basicConfig(level=logging.INFO)
+
 
 def main(originalNumpy, outputPath):
     outputPath = pathlib.Path(outputPath)
@@ -39,4 +41,4 @@ def main(originalNumpy, outputPath):
 
 
 if __name__ == "__main__":
-    logging.warning("component can't run on its own")
+    logging.error("component can't run on its own")

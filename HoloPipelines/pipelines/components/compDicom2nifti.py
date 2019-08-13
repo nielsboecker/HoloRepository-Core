@@ -16,4 +16,4 @@ def main(dicomInputPath, niftiOutputPath):
 
 
 if __name__ == "__main__":
-    logging.warning("component can't run on its own")
+    logging.error("component can't run on its own")

@@ -8,6 +8,8 @@ import pathlib
 import sys
 import logging
 
+logging.basicConfig(level=logging.INFO)
+
 
 def main(dicomPath, outputGlbPath):
     generatedNiftiPath = compDicom2nifti.main(

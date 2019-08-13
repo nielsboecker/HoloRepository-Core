@@ -3,16 +3,23 @@ from components import compHttpRequest
 from components import compNifti2numpy
 from components import compSeparateNumpy
 from components import compNumpyTransformation
+from components import compCommonPath
 import sys
 import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 def main(
     inputDicomPath, outputGlbFolderPath, segmentationModelUrl, resolutionLimit=300
 ):
-    generatedNiftiPath = compDicom2nifti.main(inputDicomPath, "_temp.nii")
+    generatedNiftiPath = compDicom2nifti.main(
+        inputDicomPath, str(compCommonPath.nifti.joinpath("_temp.nii"))
+    )
     segmentedNiftiPath = compHttpRequest.sendFilePostRequest(
-        segmentationModelUrl, generatedNiftiPath, "_tempAbdomenSegmented.nii.gz"
+        segmentationModelUrl,
+        generatedNiftiPath,
+        str(compCommonPath.nifti.joinpath("_tempAbdomenSegmented.nii.gz")),
     )
     generatedNumpyList = compNifti2numpy.main(
         segmentedNiftiPath, deleteNiftiWhenDone=True
@@ -28,4 +35,4 @@ def main(
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3])
+    main(sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4]))

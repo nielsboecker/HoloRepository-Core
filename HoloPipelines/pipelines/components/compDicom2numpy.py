@@ -7,6 +7,8 @@ import pathlib
 import sys
 import logging
 
+logging.basicConfig(level=logging.INFO)
+
 
 def loadScan(scanPath):
     slices = [
@@ -59,8 +61,11 @@ def resample(dataPath, new_spacing=[1, 1, 1]):
         )
         spacing = np.array(list(spacing))
     except Exception as e:
-        logging.info(len(scan[0].PixelSpacing))
-        logging.info(
+        logging.warning(
+            "Unable to load elements of PixelSpacing from dicom, please make sure header data exist. scan[0].PixelSpacing: "
+            + len(scan[0].PixelSpacing)
+        )
+        logging.warning(
             "Pixel Spacing (row, col): (%f, %f) "
             % (scan[0].PixelSpacing[0], scan[0].PixelSpacing[1])
         )
@@ -96,4 +101,4 @@ def main(dicomPath):
 
 
 if __name__ == "__main__":
-    logging.warning("component can't run on its own")
+    logging.error("component can't run on its own")

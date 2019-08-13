@@ -7,6 +7,7 @@ import pathlib
 import pipelines.components.compCommonPath as plCommonPath
 import logging
 
+logging.basicConfig(level=logging.INFO)
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
 parser = argparse.ArgumentParser(description="Select pipeline to process")

@@ -5,6 +5,7 @@ import os
 import sys
 import logging
 
+logging.basicConfig(level=logging.INFO)
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
 success = True
@@ -41,4 +42,4 @@ def main(inputObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False)
 
 
 if __name__ == "__main__":
-    logging.info("component can't run on its own")
+    logging.error("component can't run on its own")

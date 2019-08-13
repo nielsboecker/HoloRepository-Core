@@ -6,6 +6,8 @@ import pathlib
 import sys
 import logging
 
+logging.basicConfig(level=logging.INFO)
+
 
 def main(inputNiftiPath, outputGlbPath, threshold):
     generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(inputNiftiPath)))

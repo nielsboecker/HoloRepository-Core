@@ -9,9 +9,11 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"strings"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	"github.com/google/go-cmp/cmp"
 )
 
@@ -551,6 +553,17 @@ func setupTestServer() *httptest.Server {
 	return ts
 }
 
+var router *gin.Engine
+
+// TestMain() used to setup a mock fhir server which will be used by all tests
+// ref: https://golang.org/pkg/testing/#hdr-Main
+func TestMain(m *testing.M) {
+	ts := setupTestServer()
+	defer ts.Close()
+	router = NewRouter(AccessorConfig{FhirURL: ts.URL})
+	os.Exit(m.Run())
+}
+
 func TestMultipleAuthorsGet(t *testing.T) {
 	type test struct {
 		wantStatus int
@@ -623,11 +636,6 @@ func TestMultipleAuthorsGet(t *testing.T) {
 		},
 	}
 
-	// Start a local HTTP server and Router
-	ts := setupTestServer()
-	defer ts.Close()
-	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
-
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
 			diff := ""
@@ -698,11 +706,6 @@ func TestAuthorsAidGet(t *testing.T) {
 			},
 		},
 	}
-
-	// Start a local HTTP server and Router
-	ts := setupTestServer()
-	defer ts.Close()
-	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
@@ -816,11 +819,6 @@ func TestMultiplePatientsGet(t *testing.T) {
 		},
 	}
 
-	// Start a local HTTP server and Router
-	ts := setupTestServer()
-	defer ts.Close()
-	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
-
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
 			diff := ""
@@ -893,11 +891,6 @@ func TestPatientsPidGet(t *testing.T) {
 			},
 		},
 	}
-
-	// Start a local HTTP server and Router
-	ts := setupTestServer()
-	defer ts.Close()
-	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
@@ -973,11 +966,6 @@ func TestHologramHidGet(t *testing.T) {
 			},
 		},
 	}
-
-	// Start a local HTTP server and Router
-	ts := setupTestServer()
-	defer ts.Close()
-	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
@@ -1142,11 +1130,6 @@ func TestMultipleHologramsGet(t *testing.T) {
 		},
 	}
 
-	// Start a local HTTP server and Router
-	ts := setupTestServer()
-	defer ts.Close()
-	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
-
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
 			diff := ""
@@ -1288,11 +1271,6 @@ func TestPatientsPut(t *testing.T) {
 		},
 	}
 
-	// Start a local HTTP server and Router
-	ts := setupTestServer()
-	defer ts.Close()
-	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
-
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
 			diff := ""
@@ -1426,11 +1404,6 @@ func TestAuthorsPut(t *testing.T) {
 			},
 		},
 	}
-
-	// Start a local HTTP server and Router
-	ts := setupTestServer()
-	defer ts.Close()
-	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {

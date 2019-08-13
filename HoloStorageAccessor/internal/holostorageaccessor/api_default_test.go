@@ -1211,15 +1211,26 @@ func TestPatientsPut(t *testing.T) {
 			inBody: `{
 				"pid": "assume-new-id",
 				"name": {
-					"title": "Mr.",
-					"given": "Timothy",
-					"family": "Jones",
-					"full": "Timothy Jones"
+					"title": "Mr",
+					"given": "New",
+					"family": "Guy",
+					"full": "New Guy"
 				},
 				"gender": "male",
 				"birthDate": "1990-10-10"
 			}`,
 			wantStatus: 201,
+			wantBody: Patient{
+				Pid: "assume-new-id",
+				Name: &PersonName{
+					Title:  "Mr",
+					Given:  "New",
+					Family: "Guy",
+					Full:   "New Guy",
+				},
+				Gender:    "male",
+				BirthDate: "1990-10-10",
+			},
 		},
 		"put_patient_update": {
 			inUrl:    "/api/v1/patients/assume-update-id",
@@ -1230,15 +1241,26 @@ func TestPatientsPut(t *testing.T) {
 			inBody: `{
 				"pid": "assume-update-id",
 				"name": {
-					"title": "Mr.",
-					"given": "Timothy",
-					"family": "Jones",
-					"full": "Timothy Jones"
+					"title": "Mr",
+					"given": "New",
+					"family": "Guy",
+					"full": "New Guy"
 				},
 				"gender": "male",
 				"birthDate": "1990-10-10"
 			}`,
 			wantStatus: 200,
+			wantBody: Patient{
+				Pid: "assume-update-id",
+				Name: &PersonName{
+					Title:  "Mr",
+					Given:  "New",
+					Family: "Guy",
+					Full:   "New Guy",
+				},
+				Gender:    "male",
+				BirthDate: "1990-10-10",
+			},
 		},
 		"put_patient_bad": {
 			inUrl:    "/api/v1/patients/assume-bad-id",
@@ -1247,12 +1269,12 @@ func TestPatientsPut(t *testing.T) {
 				"Content-Type": "application/json",
 			},
 			inBody: `{
-				"pid": "assume-update-id",
+				"pid": "assume-mismatch-id",
 				"name": {
-					"title": "Mr.",
-					"given": "Timothy",
-					"family": "Jones",
-					"full": "Timothy Jones"
+					"title": "Mr",
+					"given": "New",
+					"family": "Guy",
+					"full": "New Guy"
 				},
 				"gender": "male",
 				"birthDate": "1990-10-10"
@@ -1288,6 +1310,7 @@ func TestPatientsPut(t *testing.T) {
 				var patientData Patient
 				err := json.Unmarshal(w.Body.Bytes(), &patientData)
 				if err != nil {
+					fmt.Println(w.Body.String())
 					t.Fatalf("Unmarshal Patient error: %s", err.Error())
 				}
 				diff = cmp.Diff(tc.wantBody, patientData)
@@ -1337,13 +1360,22 @@ func TestAuthorsPut(t *testing.T) {
 			inBody: `{
 				"aid": "assume-new-id",
 				"name": {
-					"title": "Mr.",
-					"given": "Timothy",
-					"family": "Jones",
-					"full": "Timothy Jones"
+					"title": "Mr",
+					"given": "New",
+					"family": "Guy",
+					"full": "New Guy"
 				}
 			}`,
 			wantStatus: 201,
+			wantBody: Author{
+				Aid: "assume-new-id",
+				Name: &PersonName{
+					Title:  "Mr",
+					Given:  "New",
+					Family: "Guy",
+					Full:   "New Guy",
+				},
+			},
 		},
 		"put_author_update": {
 			inUrl:    "/api/v1/authors/assume-update-id",
@@ -1354,13 +1386,22 @@ func TestAuthorsPut(t *testing.T) {
 			inBody: `{
 				"aid": "assume-update-id",
 				"name": {
-					"title": "Mr.",
-					"given": "Timothy",
-					"family": "Jones",
-					"full": "Timothy Jones"
+					"title": "Mr",
+					"given": "New",
+					"family": "Guy",
+					"full": "New Guy"
 				}
 			}`,
 			wantStatus: 200,
+			wantBody: Author{
+				Aid: "assume-update-id",
+				Name: &PersonName{
+					Title:  "Mr",
+					Given:  "New",
+					Family: "Guy",
+					Full:   "New Guy",
+				},
+			},
 		},
 		"put_author_bad": {
 			inUrl:    "/api/v1/authors/assume-bad-id",
@@ -1369,12 +1410,12 @@ func TestAuthorsPut(t *testing.T) {
 				"Content-Type": "application/json",
 			},
 			inBody: `{
-				"aid": "assume-update-id",
+				"aid": "assume-mismatch-id",
 				"name": {
-					"title": "Mr.",
-					"given": "Timothy",
-					"family": "Jones",
-					"full": "Timothy Jones"
+					"title": "Mr",
+					"given": "New",
+					"family": "Guy",
+					"full": "New Guy"
 				}
 			}`,
 			wantStatus: 400,

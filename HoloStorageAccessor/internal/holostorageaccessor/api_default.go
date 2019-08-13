@@ -58,10 +58,8 @@ func AuthorsAidPut(c *gin.Context) {
 		return
 	}
 
-	dataFhir := data.ToFHIR()
-	jsonData, _ := json.Marshal(dataFhir)
-	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Practitioner/"+id)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: "PUT", qid: id, url: fhirURL, body: string(jsonData)})
+	result := PutDataIntoFHIR(accessorConfig.FhirURL, data)
+
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return
@@ -69,7 +67,7 @@ func AuthorsAidPut(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: string(result.response)})
 		return
 	}
-	c.JSON(result.statusCode, dataFhir)
+	c.JSON(result.statusCode, data)
 }
 
 // AuthorsGet - Mass query for author metadata in HoloStorage
@@ -418,10 +416,7 @@ func PatientsPidPut(c *gin.Context) {
 		return
 	}
 
-	dataFhir := data.ToFHIR()
-	jsonData, _ := json.Marshal(dataFhir)
-	fhirURL, _ := ConstructURL(accessorConfig.FhirURL, "Patient/"+id)
-	result := SingleFHIRQuery(FHIRRequest{httpMethod: "PUT", qid: id, url: fhirURL, body: string(jsonData)})
+	result := PutDataIntoFHIR(accessorConfig.FhirURL, data)
 	if result.err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: result.err.Error()})
 		return
@@ -429,5 +424,5 @@ func PatientsPidPut(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, Error{ErrorCode: "400", ErrorMessage: string(result.response)})
 		return
 	}
-	c.JSON(result.statusCode, dataFhir)
+	c.JSON(result.statusCode, data)
 }

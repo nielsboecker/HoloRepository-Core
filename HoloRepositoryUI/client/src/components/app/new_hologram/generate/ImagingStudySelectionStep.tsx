@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { IImagingStudy, IPatient } from "../../../../../../types";
-import { Dropdown, IChoiceGroupOption, IDropdownOption } from "office-ui-fabric-react";
+import { IChoiceGroupOption, IDropdownOption } from "office-ui-fabric-react";
 import { Col, Divider, Row } from "antd";
 import ImagingStudyDetailsCard from "./ImagingStudyDetailsCard";
 import { PropsWithContext, withAppContext } from "../../../shared/AppState";
 import ImagingStudySelectionInput from "./inputs/ImagingStudySelectionInput";
+import PatientForImagingStudySelectionInput from "./inputs/PatientForImagingStudySelectionInput";
 
 export interface IImagingStudySelectionStepProps extends PropsWithContext {}
 
@@ -27,12 +28,11 @@ class ImagingStudySelectionStep extends Component<
     return (
       <Row>
         <Col span={8}>
-          <Dropdown
-            label="Patient"
-            placeholder="Select a patient"
-            options={this._mapPatientsToDropdownOptions()}
-            onChange={this._handlePatientDropdownChange}
-            required={true}
+          <PatientForImagingStudySelectionInput
+            patientOptions={this._mapPatientsToDropdownOptions()}
+            onPatientChange={this._handlePatientChange}
+            name="pid"
+            required
           />
 
           <Divider />
@@ -70,11 +70,9 @@ class ImagingStudySelectionStep extends Component<
     }));
   };
 
-  private _handlePatientDropdownChange = (_: any, option?: IDropdownOption) => {
+  private _handlePatientChange = (pid: string) => {
     const { patients } = this.props.context!;
-
-    const selectedPatientId = option!.key;
-    this.setState({ selectedPatient: patients[selectedPatientId], selectedStudy: undefined });
+    this.setState({ selectedPatient: patients[pid], selectedStudy: undefined });
   };
 
   // Note: Not ideal. Should be refactored.

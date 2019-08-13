@@ -476,6 +476,63 @@ func setupTestServer() *httptest.Server {
 					"gender": "male",
 					"birthDate": "1990-10-10"
 				}`
+			case "/Practitioner/assume-bad-id":
+				statusCode = http.StatusBadRequest
+				response = `{
+					"resourceType": "OperationOutcome",
+					"id": "f351b0a7-d236-4df5-a907-415d184b3539",
+					"issue": [
+						{
+							"severity": "error",
+							"code": "invalid",
+							"diagnostics": "Id in the URL must match id in the resource."
+						}
+					]
+				}`
+			case "/Practitioner/assume-new-id":
+				statusCode = http.StatusCreated
+				response = `{
+					"resourceType": "Practitioner",
+					"id": "p1",
+					"meta": {
+						"versionId": "1",
+						"lastUpdated": "2019-08-12T16:45:22.836+00:00"
+					},
+					"name": [
+						{
+							"text": "New Guy",
+							"family": "Guy",
+							"given": [
+								"New"
+							],
+							"prefix": [
+								"Mr"
+							]
+						}
+					]
+				}`
+			case "/Practitioner/assume-update-id":
+				statusCode = http.StatusOK
+				response = `{
+					"resourceType": "Practitioner",
+					"id": "p1",
+					"meta": {
+						"versionId": "2",
+						"lastUpdated": "2019-08-12T16:45:22.836+00:00"
+					},
+					"name": [
+						{
+							"text": "New Guy",
+							"family": "Guy",
+							"given": [
+								"New"
+							],
+							"prefix": [
+								"Mr"
+							]
+						}
+					]
+				}`
 
 			default:
 				log.Fatalln("Url not handled:", rcvURL)
@@ -1228,12 +1285,132 @@ func TestPatientsPut(t *testing.T) {
 			}
 
 			if (tc.wantBody != Patient{}) {
-				var hologramData Hologram
-				err := json.Unmarshal(w.Body.Bytes(), &hologramData)
+				var patientData Patient
+				err := json.Unmarshal(w.Body.Bytes(), &patientData)
 				if err != nil {
-					t.Fatalf("Unmarshal Hologram error: %s", err.Error())
+					t.Fatalf("Unmarshal Patient error: %s", err.Error())
 				}
-				diff = cmp.Diff(tc.wantBody, hologramData)
+				diff = cmp.Diff(tc.wantBody, patientData)
+			} else if (tc.wantErr != Error{}) {
+				var errorData Error
+				err := json.Unmarshal(w.Body.Bytes(), &errorData)
+				if err != nil {
+					t.Fatalf("Unmarshal Error error: %s", err.Error())
+				}
+				diff = cmp.Diff(tc.wantErr, errorData)
+			}
+
+			if diff != "" {
+				t.Fatalf(diff)
+			}
+		})
+	}
+}
+
+func TestAuthorsPut(t *testing.T) {
+	type test struct {
+		wantStatus int
+		wantBody   Author
+		wantErr    Error
+		inUrl      string
+		inMethod   string
+		inHeader   map[string]string
+		inBody     string
+	}
+
+	tests := map[string]test{
+		"no_content_type_header": {
+			inUrl:      "/api/v1/authors/assume-new-id",
+			inMethod:   http.MethodPut,
+			wantStatus: 400,
+			wantErr: Error{
+				ErrorCode:    "400",
+				ErrorMessage: "Expected Content-Type: 'application/json', got ''",
+			},
+		},
+		"put_author_new": {
+			inUrl:    "/api/v1/authors/assume-new-id",
+			inMethod: http.MethodPut,
+			inHeader: map[string]string{
+				"Content-Type": "application/json",
+			},
+			inBody: `{
+				"aid": "assume-new-id",
+				"name": {
+					"title": "Mr.",
+					"given": "Timothy",
+					"family": "Jones",
+					"full": "Timothy Jones"
+				}
+			}`,
+			wantStatus: 201,
+		},
+		"put_author_update": {
+			inUrl:    "/api/v1/authors/assume-update-id",
+			inMethod: http.MethodPut,
+			inHeader: map[string]string{
+				"Content-Type": "application/json",
+			},
+			inBody: `{
+				"aid": "assume-update-id",
+				"name": {
+					"title": "Mr.",
+					"given": "Timothy",
+					"family": "Jones",
+					"full": "Timothy Jones"
+				}
+			}`,
+			wantStatus: 200,
+		},
+		"put_author_bad": {
+			inUrl:    "/api/v1/authors/assume-bad-id",
+			inMethod: http.MethodPut,
+			inHeader: map[string]string{
+				"Content-Type": "application/json",
+			},
+			inBody: `{
+				"aid": "assume-update-id",
+				"name": {
+					"title": "Mr.",
+					"given": "Timothy",
+					"family": "Jones",
+					"full": "Timothy Jones"
+				}
+			}`,
+			wantStatus: 400,
+			wantErr: Error{
+				ErrorCode:    "400",
+				ErrorMessage: `aid in param and body do not match`,
+			},
+		},
+	}
+
+	// Start a local HTTP server and Router
+	ts := setupTestServer()
+	defer ts.Close()
+	router := NewRouter(AccessorConfig{FhirURL: ts.URL})
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			diff := ""
+			req, _ := http.NewRequest(tc.inMethod, tc.inUrl, bytes.NewBufferString(tc.inBody))
+			for header, value := range tc.inHeader {
+				req.Header.Set(header, value)
+			}
+			w := httptest.NewRecorder()
+			router.ServeHTTP(w, req)
+
+			if tc.wantStatus != w.Code {
+				t.Fatalf("Error return code: Want %d, got %d. Body: %s", tc.wantStatus, w.Code, w.Body.String())
+			}
+
+			if (tc.wantBody != Author{}) {
+				var authorData Author
+				err := json.Unmarshal(w.Body.Bytes(), &authorData)
+				if err != nil {
+					t.Fatalf("Unmarshal Author error: %s", err.Error())
+				}
+				diff = cmp.Diff(tc.wantBody, authorData)
 			} else if (tc.wantErr != Error{}) {
 				var errorData Error
 				err := json.Unmarshal(w.Body.Bytes(), &errorData)

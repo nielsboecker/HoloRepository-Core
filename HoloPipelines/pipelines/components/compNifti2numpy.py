@@ -26,7 +26,7 @@ def resample(imageData, new_spacing=[1, 1, 1]):
     new_spacing = spacing / real_resize_factor
 
     logging.info("Shape before resampling\t", originalShape)
-    logging.info("Shape after resampling\t", repr(image.shape[:3]))
+    logging.info("Shape after resampling\t" + repr(image.shape[:3]))
 
     return image, new_spacing
 

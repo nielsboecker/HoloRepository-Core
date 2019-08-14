@@ -20,9 +20,10 @@ The client application is written in React 16.8, using TypeScript and built on t
 
 - Routing: [reach-router](https://github.com/reach/router)
 - HTTP client: [axios](https://github.com/axios/axios)
+- Form validation: [formsy-react](https://github.com/formsy/formsy-react)
 - Linting and formatting: [ESLint](https://github.com/eslint/eslint) and [Prettier](https://github.com/prettier/prettier)
 - Styling: [office-ui-fabric-react](https://github.com/OfficeDev/office-ui-fabric-react) and [ant-design](https://github.com/ant-design/ant-design)
-- Testing: [Jest](https://github.com/facebook/jest) and [Enzyme](https://github.com/airbnb/enzyme)
+- Testing: [Jest](https://github.com/facebook/jest), [Enzyme](https://github.com/airbnb/enzyme) and [axios-mock-adapter](https://github.com/ctimmerm/axios-mock-adapter)
 
 The back-end is written in Node / Express 4.16 and TypeScript.
 

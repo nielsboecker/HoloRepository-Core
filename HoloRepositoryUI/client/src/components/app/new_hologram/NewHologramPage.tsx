@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { navigate, RouteComponentProps } from "@reach/router";
 import PlainContentContainer from "../core/PlainContentContainer";
-import BackendService from "../../../services/holoRepositoryServerService";
+import BackendServerService from "../../../services/BackendServerService";
 import CreationModeSelectionStep from "./shared/CreationModeSelectionStep";
 import ImagingStudySelectionStep from "./generate/ImagingStudySelectionStep";
 import PipelineSelectionStep from "./generate/PipelineSelectionStep";
@@ -12,13 +12,15 @@ import NewHologramControlsAndProgress from "./shared/NewHologramControlsAndProgr
 import GenerationProcessingStep from "./generate/GenerationProcessingStep";
 import { HologramCreationMode } from "../../../types";
 import {
+  IAuthor,
+  IHologram,
   IHologramCreationRequest,
   IHologramCreationRequest_Generate,
   IHologramCreationRequest_Upload,
-  IPractitioner,
-  IAuthor
+  IPractitioner
 } from "../../../../../types";
 import { PropsWithContext, withAppContext } from "../../shared/AppState";
+import Formsy from "formsy-react";
 
 export interface IHologramCreationStep {
   title: string;
@@ -33,22 +35,30 @@ export interface IHologramCreationSteps {
 type INewHologramPageProps = RouteComponentProps & PropsWithContext;
 
 interface INewHologramPageInternalState {
-  // Operation of the multi-step process
   currentStep: number;
+  currentStepIsValid: boolean;
   creationMode: HologramCreationMode;
-
-  // User selections and actions in child components
-  hologramFile?: File;
-  selectedPipelineId?: string;
-  selectedImagingStudyEndpoint?: string;
 }
 
-// Union with Partial<IHologramCreationRequest> to allow subsequent filling of the respective fields
-type INewHologramPageState = INewHologramPageInternalState & Partial<IHologramCreationRequest>;
+interface IHologramCreationData_Upload {
+  hologramFile: File;
+}
+
+interface IHologramCreationData_Generate {
+  plid: string;
+  imagingStudyEndpoint: string;
+}
+
+// Union with relecant partial interfaces to allow subsequent filling of the respective fields
+type INewHologramPageState = INewHologramPageInternalState &
+  Partial<IHologramCreationData_Upload> &
+  Partial<IHologramCreationData_Generate> &
+  Partial<IHologramCreationRequest>;
 
 class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageState> {
   state: INewHologramPageState = {
     currentStep: 0,
+    currentStepIsValid: false,
     creationMode:
       (this.props.location &&
         this.props.location.state &&
@@ -56,36 +66,41 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       HologramCreationMode.GENERATE_FROM_IMAGING_STUDY
   };
 
-  private _handleModeChange = (creationMode: HologramCreationMode) => {
-    this.setState({ creationMode });
-  };
-
-  private _handleHologramFileChange = (hologramFile: File) => {
-    this.setState({ hologramFile });
-  };
-
-  private _handleSelectedPipelineChange = (selectedPipelineId: string) => {
-    this.setState({ selectedPipelineId });
-  };
-
-  private _handleSelectedImagingStudyChange = (selectedImagingStudyEndpoint: string) => {
-    this.setState({ selectedImagingStudyEndpoint });
-  };
-
   private _handleSubmit_Upload = () => {
-    const metaData = this._generatePostRequestMetaData_Upload();
+    const metaData = this._getPostRequestMetaData_Upload();
     if (!metaData) {
       return this._logErrorAndReturnNull();
     }
-    BackendService.uploadHologram(metaData).then(response => console.log(response)); // boolean
+    BackendServerService.uploadHologram(metaData).then(response => {
+      if (response) {
+        this._handleUploadHologram_Success(response);
+      } else {
+        this._handleUploadHologram_Failure();
+      }
+    });
+  };
+
+  private _handleUploadHologram_Success = (hologram: IHologram) => {
+    // Update global state
+    this.props.context!.handleHologramCreated(hologram);
+
+    console.log("Upload successful");
+    navigate("/app/holograms");
+  };
+
+  private _handleUploadHologram_Failure = () => {
+    console.error("Something went wrong while creating the hologram, try refreshing the page.");
+
+    // Note: Should have better error handling
+    navigate("/app/holograms");
   };
 
   private _handleSubmit_Generate = () => {
-    const metaData = this._generatePostRequestMetaData_Generate();
+    const metaData = this._getPostRequestMetaData_Generate();
     if (!metaData) {
       return this._logErrorAndReturnNull();
     }
-    BackendService.generateHologram(metaData).then(response => console.log(response)); // boolean
+    BackendServerService.generateHologram(metaData).then(response => console.log(response)); // boolean
   };
 
   private _generatePostRequestMetaData_Shared = (): IHologramCreationRequest | null => {
@@ -107,7 +122,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     };
   };
 
-  private _generatePostRequestMetaData_Upload = (): IHologramCreationRequest_Upload | null => {
+  private _getPostRequestMetaData_Upload = (): IHologramCreationRequest_Upload | null => {
     const { hologramFile } = this.state;
     const sharedMetaData = this._generatePostRequestMetaData_Shared();
     if (!hologramFile || !sharedMetaData) {
@@ -130,11 +145,8 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     };
   };
 
-  private _generatePostRequestMetaData_Generate = (): IHologramCreationRequest_Generate | null => {
-    const {
-      selectedPipelineId: plid,
-      selectedImagingStudyEndpoint: imagingStudyEndpoint
-    } = this.state;
+  private _getPostRequestMetaData_Generate = (): IHologramCreationRequest_Generate | null => {
+    const { plid, imagingStudyEndpoint } = this.state;
     const sharedMetaData = this._generatePostRequestMetaData_Shared();
     if (!plid || !imagingStudyEndpoint || !sharedMetaData) {
       return this._logErrorAndReturnNull();
@@ -164,30 +176,19 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     [HologramCreationMode.GENERATE_FROM_IMAGING_STUDY]: [
       {
         title: "Select mode",
-        content: (
-          <CreationModeSelectionStep
-            selected={this.state.creationMode}
-            handleModeChange={this._handleModeChange}
-          />
-        )
+        content: <CreationModeSelectionStep selected={this.state.creationMode} />
       },
       {
         title: "Select pipeline",
-        content: (
-          <PipelineSelectionStep onPipelineSelectionChange={this._handleSelectedPipelineChange} />
-        )
+        content: <PipelineSelectionStep />
       },
       {
         title: "Select input data",
-        content: (
-          <ImagingStudySelectionStep
-            onSelectedImagingStudyChange={this._handleSelectedImagingStudyChange}
-          />
-        )
+        content: <ImagingStudySelectionStep />
       },
       {
         title: "Enter details",
-        content: <DetailsDeclarationStep />
+        content: <DetailsDeclarationStep enablePatientSelection={false} />
       },
       {
         title: "Process",
@@ -197,20 +198,15 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     [HologramCreationMode.UPLOAD_EXISTING_MODEL]: [
       {
         title: "Select mode",
-        content: (
-          <CreationModeSelectionStep
-            selected={this.state.creationMode}
-            handleModeChange={this._handleModeChange}
-          />
-        )
+        content: <CreationModeSelectionStep selected={this.state.creationMode} />
       },
       {
         title: "Upload file",
-        content: <FileUploadStep onHologramFileChange={this._handleHologramFileChange} />
+        content: <FileUploadStep />
       },
       {
         title: "Enter details",
-        content: <DetailsDeclarationStep />
+        content: <DetailsDeclarationStep enablePatientSelection={true} />
       },
       {
         title: "Process",
@@ -227,27 +223,42 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       <PlainContentContainer>
         <h1>Create new hologram</h1>
 
-        <div className="steps-content" style={{ minHeight: "500px" }}>
-          {steps[currentStep].content}
-        </div>
+        <Formsy
+          onSubmit={this._handleCurrentStepSubmit}
+          onValid={() => this.setState({ currentStepIsValid: true })}
+          onInvalid={() => this.setState({ currentStepIsValid: false })}
+        >
+          <div className="steps-content" style={{ minHeight: "500px" }}>
+            {steps[currentStep].content}
+          </div>
 
-        <NewHologramControlsAndProgress
-          current={currentStep}
-          steps={steps}
-          handlePrevious={this._prev}
-          handleNext={this._next}
-        />
+          <NewHologramControlsAndProgress
+            current={currentStep}
+            currentStepIsValid={this.state.currentStepIsValid}
+            steps={steps}
+            onGoToPrevious={this._goToPreviousStep}
+          />
+        </Formsy>
       </PlainContentContainer>
     );
   }
 
-  private _next = () => {
+  private _handleCurrentStepSubmit = (formData: Record<string, any>) => {
+    console.log("Submitted data: ", formData);
+    // @ts-ignore and manually guarantee that the formData keys match this.state
+    this.setState({
+      ...formData
+    });
+    this._goToNextStep();
+  };
+
+  private _goToNextStep = () => {
     this.setState((state: Readonly<INewHologramPageState>) => ({
       currentStep: state.currentStep + 1
     }));
   };
 
-  private _prev = () => {
+  private _goToPreviousStep = () => {
     this.setState((state: Readonly<INewHologramPageState>) => ({
       currentStep: state.currentStep - 1
     }));

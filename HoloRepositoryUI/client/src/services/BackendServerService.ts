@@ -1,4 +1,4 @@
-import serverAxios, { routes } from "./holoRepositoryServerAxios";
+import BackendServerAxios, { routes } from "./BackendServerAxios";
 import {
   IHologram,
   IHologramCreationRequest_Generate,
@@ -19,21 +19,19 @@ const handleError = (error: Error): any => {
 export type HologramsCombinedResult = Record<string, IHologram[]>;
 export type ImagingStudiesCombinedResult = Record<string, IImagingStudy[]>;
 
-export class HoloRepositoryServerService {
+export class BackendServerService {
   public async getPractitioner(pid: string): Promise<IPractitioner | null> {
-    return serverAxios
-      .get<IPractitioner>(`${routes.practitioners}/${pid}`)
+    return BackendServerAxios.get<IPractitioner>(`${routes.practitioners}/${pid}`)
       .then(practitioner => practitioner.data as IPractitioner)
       .catch(handleError);
   }
 
   public async getAllPatientsForPractitioner(pid: string): Promise<IPatient[] | null> {
-    return serverAxios
-      .get<IPatient[]>(routes.patients, {
-        params: {
-          practitioner: pid
-        }
-      })
+    return BackendServerAxios.get<IPatient[]>(routes.patients, {
+      params: {
+        practitioner: pid
+      }
+    })
       .then(patients => patients.data as IPatient[])
       .catch(handleError);
   }
@@ -41,36 +39,35 @@ export class HoloRepositoryServerService {
   public async getHologramsForAllPatients(
     patients: PidToPatientsMap
   ): Promise<HologramsCombinedResult | null> {
-    return serverAxios
-      .get<HologramsCombinedResult>(`${routes.holograms}`, {
-        params: {
-          pids: _extractCombinedPidsString(patients)
-        }
-      })
+    return BackendServerAxios.get<HologramsCombinedResult>(`${routes.holograms}`, {
+      params: {
+        pids: _extractCombinedPidsString(patients)
+      }
+    })
       .then(holograms => holograms.data as HologramsCombinedResult)
       .catch(handleError);
   }
 
   public async downloadHologramById(hid: string): Promise<boolean | null> {
-    return serverAxios
-      .get<BinaryType>(`${routes.holograms}/${hid}/download`, {
-        responseType: "blob",
-        headers: {
-          Accept: "gltf-binary"
-        }
-      })
+    return BackendServerAxios.get<BinaryType>(`${routes.holograms}/${hid}/download`, {
+      responseType: "blob",
+      headers: {
+        Accept: "gltf-binary"
+      }
+    })
       .then(file => _forceDownload(file, `${hid}.glb`))
       .catch(handleError);
   }
 
   public async deleteHologramById(hid: string): Promise<boolean | null> {
-    return serverAxios
-      .delete(`${routes.holograms}/${hid}`)
+    return BackendServerAxios.delete(`${routes.holograms}/${hid}`)
       .then(response => response.status === 200 || response.status === 204)
       .catch(handleError);
   }
 
-  public async uploadHologram(metaData: IHologramCreationRequest_Upload): Promise<boolean> {
+  public async uploadHologram(
+    metaData: IHologramCreationRequest_Upload
+  ): Promise<IHologram | null> {
     const formData = new FormData();
     for (let [key, value] of Object.entries(metaData)) {
       // Note: Manually serialise objects, but not "hologramFile"
@@ -80,17 +77,21 @@ export class HoloRepositoryServerService {
       formData.set(key, value);
     }
 
-    return serverAxios
-      .post(`${routes.holograms}/upload`, formData, {
-        headers: { "content-type": "multipart/form-data" }
+    return BackendServerAxios.post<IHologram>(`${routes.holograms}/upload`, formData, {
+      headers: { "content-type": "multipart/form-data" }
+    })
+      .then(response => {
+        if (response.status === 200 || response.status === 201) {
+          return response.data;
+        } else {
+          return handleError(new Error(`Got response code ${response.status}`));
+        }
       })
-      .then(response => response.status === 200 || response.status === 201)
       .catch(handleError);
   }
 
   public async generateHologram(metaData: IHologramCreationRequest_Generate): Promise<boolean> {
-    return serverAxios
-      .post(`${routes.pipelines}/generate`, metaData)
+    return BackendServerAxios.post(`${routes.pipelines}/generate`, metaData)
       .then(response => response.status === 200 || response.status === 201)
       .catch(handleError);
   }
@@ -98,17 +99,15 @@ export class HoloRepositoryServerService {
   public async getImagingStudiesForAllPatients(
     patients: PidToPatientsMap
   ): Promise<ImagingStudiesCombinedResult | null> {
-    return serverAxios
-      .get<ImagingStudiesCombinedResult>(`${routes.imagingStudies}`, {
-        params: { pids: _extractCombinedPidsString(patients) }
-      })
+    return BackendServerAxios.get<ImagingStudiesCombinedResult>(`${routes.imagingStudies}`, {
+      params: { pids: _extractCombinedPidsString(patients) }
+    })
       .then(iss => iss.data as ImagingStudiesCombinedResult)
       .catch(handleError);
   }
 
   public async getAllPipelines(): Promise<IPipeline[] | null> {
-    return serverAxios
-      .get<IPipeline[]>(routes.pipelines)
+    return BackendServerAxios.get<IPipeline[]>(routes.pipelines)
       .then(pipeline => pipeline.data as IPipeline[])
       .catch(handleError);
   }
@@ -129,4 +128,4 @@ const _forceDownload = (response: AxiosResponse, fileName: string = "hologram.gl
   return true;
 };
 
-export default new HoloRepositoryServerService();
+export default new BackendServerService();

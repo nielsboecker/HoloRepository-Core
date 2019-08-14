@@ -47,6 +47,7 @@ class GenerationProcessingStep extends Component<
   }
 
   componentDidMount(): void {
+    // Note: This is not ideal; using callback upon component render to start the upload
     this.props.onComponentDidMount();
 
     // Mock progress status for now

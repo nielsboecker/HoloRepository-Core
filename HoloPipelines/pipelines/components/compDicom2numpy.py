@@ -49,7 +49,7 @@ def loadPixelArray(inputPath):
 def resample(dataPath, new_spacing=[1, 1, 1]):
     scan = loadScan(dataPath)
     image = loadPixelArray(dataPath)
-    logging.info("Shape before resampling\t", image.shape)
+    logging.info("Shape before resampling\t", repr(image.shape))
     # Determine current pixel spacing
     try:
         spacing = map(
@@ -79,7 +79,7 @@ def resample(dataPath, new_spacing=[1, 1, 1]):
     new_spacing = spacing / real_resize_factor
 
     image = scipy.ndimage.interpolation.zoom(image, real_resize_factor)
-    logging.info("Shape after resampling\t", image.shape)
+    logging.info("Shape after resampling\t", repr(image.shape))
 
     return image, new_spacing
 

@@ -16,7 +16,6 @@ def generateMesh(image, threshold=300, step_size=1):
     ):  # for nifti with 5D shape (time etc.), most nifti comes in 3D
         image = image[:, :, :, 0, 0]
     p = image.transpose(2, 1, 0)
-    logging.info(image.shape)
 
     logging.info("Calculating surface...")
     verts, faces, norm, val = measure.marching_cubes_lewiner(

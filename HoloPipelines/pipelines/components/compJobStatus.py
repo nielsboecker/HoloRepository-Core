@@ -3,7 +3,7 @@ from datetime import datetime
 import pathlib
 
 
-def updateStatus(
+def update_status(
     jobID, jobStatus
 ):  # TODO rename this comp to just http request? and rename this function to updateJobStatus
     pipelineServerURL = "http://localhost:5000/api/v1/status"
@@ -14,7 +14,7 @@ def updateStatus(
     print(returnCode)
 
 
-def sendFilePostRequest(url, inputFile, outputFile):
+def send_file_post_request(url, inputFile, outputFile):
     inputFile = str(pathlib.Path(inputFile))
     outputFile = str(pathlib.Path(outputFile))
     with open(inputFile, "rb") as f:
@@ -26,14 +26,8 @@ def sendFilePostRequest(url, inputFile, outputFile):
     print(returnCode)
 
 
-def sendGetRequest(url, requestBody):
-    response = requests.post(url=url, json=requestBody)
-    returnCode = response.status_code
-    print(returnCode)
-
-
 if __name__ == "__main__":
-    updateStatus("j0", "hello")  # TODO remove once done testing
+    update_status("j0", "hello")  # TODO remove once done testing
     print(
         "You shouldn't be able to run this component directly after we're done testing"
     )  # TODO look at this too pls

@@ -4,9 +4,10 @@ import sys
 import argparse
 import subprocess
 import pathlib
+import logging
 import importlib
 
-# from multiprocessing import Process
+from multiprocessing import Process
 import pipelines.components.compCommonPath as plCommonPath
 
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
@@ -99,10 +100,11 @@ def main():
 
 
 def startPipeline(plID, paramList=[]):
-    # process =Process(target=dynamicLoadingPipeline, args=(plID, paramList))
-    # process.start
-    # process.join
-    dynamicLoadingPipeline(plID, paramList)
+    logging.error("============================ outside")
+    process = Process(target=dynamicLoadingPipeline, args=(plID, paramList))
+    process.start
+    process.join
+    # dynamicLoadingPipeline(plID, paramList)
 
 
 def getPipelineList():
@@ -115,6 +117,7 @@ def getPipelineList():
 
 
 def dynamicLoadingPipeline(plID, paramList=[]):
+    logging.error("============================= inside")
     lsPipe = getPipelineList()
     lsPipe[plID]["src"].split(".py")[0].replace("/", ".")
     pl_package_name = lsPipe[plID]["src"].split(".py")[0].replace("/", ".")

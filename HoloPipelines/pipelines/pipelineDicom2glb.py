@@ -12,11 +12,11 @@ import sys
 
 
 def main(jobID, dicomFolderPath, outputGlbPath, infoForAccessor):
-    compJobStatus.updateStatus(jobID, "Pre-processing")
+    compJobStatus.update_status(jobID, "Pre-processing")
     generatedNumpyList = compDicom2numpy.main(str(pathlib.Path(dicomFolderPath)))
     threshold = 300
 
-    compJobStatus.updateStatus(jobID, "3D model generation")
+    compJobStatus.update_status(jobID, "3D model generation")
     generatedObjPath = compNumpy2obj.main(
         generatedNumpyList,
         threshold,
@@ -27,14 +27,14 @@ def main(jobID, dicomFolderPath, outputGlbPath, infoForAccessor):
         )
         + ".obj",
     )
-    compJobStatus.updateStatus(jobID, "3D format conversion")
+    compJobStatus.update_status(jobID, "3D format conversion")
     generatedGlbPath = compObj2glbWrapper.main(
         generatedObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False
     )
     print("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
-    compJobStatus.updateStatus(jobID, "Finished")
+    compJobStatus.update_status(jobID, "Finished")
 
-    infoForAccessor = compCombineInfoForAccesor.combineInfoForAccesor(
+    infoForAccessor = compCombineInfoForAccesor.add_info_for_accesor(
         infoForAccessor,
         "apply on generic bone segmentation",
         datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -42,7 +42,9 @@ def main(jobID, dicomFolderPath, outputGlbPath, infoForAccessor):
         outputGlbPath,
     )
     print(json.dumps(infoForAccessor))
+    print(datetime.now())
     compPostToAccesor.sendFilePostRequestToAccessor(infoForAccessor)
+    print(datetime.now())
 
 
 if __name__ == "__main__":

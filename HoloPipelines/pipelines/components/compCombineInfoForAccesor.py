@@ -1,7 +1,7 @@
 import json
 
 
-def combineInfoForAccesor(infoForAccessor, title, creationDate, creationDes, outputDir):
+def add_info_for_accesor(infoForAccessor, title, creationDate, creationDes, outputDir):
 
     infoForAccessor.update(
         {

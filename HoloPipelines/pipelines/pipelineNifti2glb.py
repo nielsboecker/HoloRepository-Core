@@ -11,17 +11,17 @@ import json
 
 
 def main(jobID, inputNiftiPath, outputGlbPath, threshold, infoForAccessor):
-    compJobStatus.updateStatus(jobID, "Pre-processing")
+    compJobStatus.update_status(jobID, "Pre-processing")
     generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(inputNiftiPath)))
 
-    compJobStatus.updateStatus(jobID, "3D model generation")
+    compJobStatus.update_status(jobID, "3D model generation")
     generatedObjPath = compNumpy2obj.main(
         generatedNumpyList,
         threshold,
         str(compCommonPath.obj.joinpath("nifti2glb_tempObj.obj")),
     )
 
-    compJobStatus.updateStatus(jobID, "3D format conversion")
+    compJobStatus.update_status(jobID, "3D format conversion")
     generatedGlbPath = compObj2glbWrapper.main(
         generatedObjPath,
         str(pathlib.Path(outputGlbPath)),
@@ -29,7 +29,7 @@ def main(jobID, inputNiftiPath, outputGlbPath, threshold, infoForAccessor):
         compressGlb=False,
     )
     print("nifti2glb: done, glb saved to {}".format(generatedGlbPath))
-    compJobStatus.updateStatus(jobID, "Finished")
+    compJobStatus.update_status(jobID, "Finished")
     infoForAccessor = json.loads(infoForAccessor)
     compPostToAccesor.sendFilePostRequestToAccessor(
         infoForAccessor["bodySite"] + "apply on generic bone segmentation",

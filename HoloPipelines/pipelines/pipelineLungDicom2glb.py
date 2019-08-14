@@ -13,7 +13,7 @@ import json
 
 
 def main(jobID, dicomPath, outputGlbPath, infoForAccessor):
-    compJobStatus.updateStatus(jobID, "Pre-processing")
+    compJobStatus.update_status(jobID, "Pre-processing")
     generatedNiftiPath = compDcm2nifti.main(
         str(dicomPath),
         str(compCommonPath.nifti.joinpath(str(pathlib.PurePath(dicomPath).parts[-1]))),
@@ -25,14 +25,14 @@ def main(jobID, dicomPath, outputGlbPath, infoForAccessor):
         str(pathlib.Path(generatedSegmentedLungsNiftiPath).joinpath("lung.nii.gz"))
     )
 
-    compJobStatus.updateStatus(jobID, "3D model generation")
+    compJobStatus.update_status(jobID, "3D model generation")
     generatedObjPath = compNumpy2obj.main(
         generatedNumpyList,
         0.5,
         str(compCommonPath.obj.joinpath("nifti2glb_tempObj.obj")),
     )
 
-    compJobStatus.updateStatus(jobID, "3D format conversion")
+    compJobStatus.update_status(jobID, "3D format conversion")
     generatedGlbPath = compObj2glbWrapper.main(
         generatedObjPath,
         str(pathlib.Path(outputGlbPath)),
@@ -40,7 +40,7 @@ def main(jobID, dicomPath, outputGlbPath, infoForAccessor):
         compressGlb=False,
     )
     print("lungDicom2glb: done, glb saved to {}".format(generatedGlbPath))
-    compJobStatus.updateStatus(jobID, "Finished")
+    compJobStatus.update_status(jobID, "Finished")
     infoForAccessor = json.loads(infoForAccessor)
     compPostToAccesor.sendFilePostRequestToAccessor(
         infoForAccessor["bodySite"] + "apply on generic bone segmentation",

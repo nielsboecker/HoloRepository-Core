@@ -7,10 +7,10 @@ import sys
 
 
 def main(jobID, inputNiftiPath, outputObjPath, threshold, flipNpy=False):
-    compJobStatus.updateStatus(jobID, "Pre-processing")
+    compJobStatus.update_status(jobID, "Pre-processing")
     generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(inputNiftiPath)))
 
-    compJobStatus.updateStatus(jobID, "3D model generation")
+    compJobStatus.update_status(jobID, "3D model generation")
     generatedObjPath = compNumpy2obj.main(
         generatedNumpyList, threshold, str(pathlib.Path(outputObjPath))
     )

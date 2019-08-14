@@ -12,6 +12,7 @@ import logging
 import requests
 import os
 import pathlib
+import shutil
 
 app = Flask(__name__)
 app.config["JSON_ADD_STATUS"] = False
@@ -86,6 +87,12 @@ def activate_status_cleaning_job():
                 # if job exists more than 30 mins delete it from dictionary
                 if delta_time >= 1800.0:
                     status.pop(job)
+                    if not os.path.exists(
+                        str(pathlib.Path.cwd().joinpath("jobs", str(job)))
+                    ):
+                        shutil.rmtree(
+                            str(pathlib.Path.cwd().joinpath("jobs", str(job)))
+                        )
 
             time.sleep(30)
 

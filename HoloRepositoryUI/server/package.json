@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@ahryman40k/ts-fhir-types": "^4.0.23",
-    "@types/node": "^12.6.8",
+    "@types/node": "^12.7.2",
     "body-parser": "^1.18.3",
     "cors": "latest",
     "dotenv": "^6.2.0",

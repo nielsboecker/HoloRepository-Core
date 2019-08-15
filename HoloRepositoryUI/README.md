@@ -141,7 +141,7 @@ docker run -d -p 80:3000 --name holorepository-ui-client holorepository-ui-clien
 
 # server
 docker build -t holorepository-ui-server -f ./server/Dockerfile .
-docker run -d -p 80:3001 --name holorepository-ui-server holorepository-ui-server:latest
+docker run -d -p 3000:3001 --name holorepository-ui-server --env-file ./server/.env holorepository-ui-server:latest
 
 # test connections
 curl http://localhost/api/v1/patients

@@ -13,47 +13,48 @@ import json
 import sys
 
 
-def main(jobID, dicomDownloadUrl, infoForAccessor):
-    compJobStatus.update_status(jobID, "Fetching data")
-    dicomFolderPath = compFetchResource.main(jobID, dicomDownloadUrl)
-    compJobStatus.update_status(jobID, "Pre-processing")
-    generatedNumpyList = compDicom2numpy.main(str(pathlib.Path(dicomFolderPath)))
+def main(job_ID, dicomDownloadUrl, info_for_accessor):
+    compJobStatus.update_status(job_ID, "Fetching data")
+    dicom_folder_path = compFetchResource.main(job_ID, dicomDownloadUrl)
+    compJobStatus.update_status(job_ID, "Pre-processing")
+    info_for_accessor = json.loads(info_for_accessor)
+    generated_numpy_list = compDicom2numpy.main(str(pathlib.Path(dicom_folder_path)))
     threshold = 300
 
-    compJobStatus.update_status(jobID, "3D model generation")
-    generatedObjPath = compNumpy2obj.main(
-        generatedNumpyList,
+    compJobStatus.update_status(job_ID, "3D model generation")
+    generated_obj_path = compNumpy2obj.main(
+        generated_numpy_list,
         threshold,
         str(
             compCommonPath.obj.joinpath(
-                str(pathlib.PurePath(dicomFolderPath).parts[-1])
+                str(pathlib.PurePath(dicom_folder_path).parts[-1])
             )
         )
         + ".obj",
     )
-    compJobStatus.update_status(jobID, "3D format conversion")
-    generatedGlbPath = compObj2glbWrapper.main(
-        generatedObjPath,
-        str(pathlib.Path(dicomFolderPath).parent.joinpath(str(jobID) + ".glb")),
-        deleteOriginalObj=True,
-        compressGlb=False,
+    compJobStatus.update_status(job_ID, "3D format conversion")
+    generated_glb_path = compObj2glbWrapper.main(
+        generated_obj_path,
+        str(pathlib.Path(dicom_folder_path).parent.joinpath(str(job_ID) + ".glb")),
+        delete_original_obj=True,
+        compress_glb=False,
     )
-    print("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
-    compJobStatus.update_status(jobID, "Posting data")
+    print("dicom2glb: done, glb saved to {}".format(generated_glb_path))
+    compJobStatus.update_status(job_ID, "Posting data")
 
-    infoForAccessor = compCombineInfoForAccesor.add_info_for_accesor(
-        infoForAccessor,
+    info_for_accessor = compCombineInfoForAccesor.add_info_for_accesor(
+        info_for_accessor,
         "apply on generic bone segmentation",
         datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "Generate glb mesh from dicom",
-        generatedGlbPath,
+        generated_glb_path,
     )
-    print(json.dumps(infoForAccessor))
+    print(json.dumps(info_for_accessor))
     print(datetime.now())
-    compPostToAccesor.sendFilePostRequestToAccessor(infoForAccessor)
-    compJobStatus.update_status(jobID, "Finished")
+    compPostToAccesor.send_file_request_to_accessor(info_for_accessor)
+    compJobStatus.update_status(job_ID, "Finished")
     print(datetime.now())
-    compJobCleanup.main(jobID)
+    compJobCleanup.main(job_ID)
 
 
 if __name__ == "__main__":

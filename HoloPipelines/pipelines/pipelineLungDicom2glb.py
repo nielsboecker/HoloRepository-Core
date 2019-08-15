@@ -12,48 +12,48 @@ import sys
 import json
 
 
-def main(jobID, dicomPath, outputGlbPath, infoForAccessor):
-    compJobStatus.update_status(jobID, "Pre-processing")
-    generatedNiftiPath = compDcm2nifti.main(
-        str(dicomPath),
-        str(compCommonPath.nifti.joinpath(str(pathlib.PurePath(dicomPath).parts[-1]))),
+def main(job_ID, dicom_path, output_glb_path, info_for_accessor):
+    compJobStatus.update_status(job_ID, "Pre-processing")
+    generated_nifti_path = compDcm2nifti.main(
+        str(dicom_path),
+        str(compCommonPath.nifti.joinpath(str(pathlib.PurePath(dicom_path).parts[-1]))),
     )  # convert dcm and move to temp path inside nifti folder. nifti will be in a sub folder named after the input dicom folder
-    generatedSegmentedLungsNiftiPath = lungSegment(
-        generatedNiftiPath, str(compCommonPath.nifti.joinpath("segmentedLungs"))
+    generated_segmented_lung_nifti_path = lungSegment(
+        generated_nifti_path, str(compCommonPath.nifti.joinpath("segmentedLungs"))
     )
-    generatedNumpyList = compNifti2numpy.main(
-        str(pathlib.Path(generatedSegmentedLungsNiftiPath).joinpath("lung.nii.gz"))
+    generated_numpy_list = compNifti2numpy.main(
+        str(pathlib.Path(generated_segmented_lung_nifti_path).joinpath("lung.nii.gz"))
     )
 
-    compJobStatus.update_status(jobID, "3D model generation")
-    generatedObjPath = compNumpy2obj.main(
-        generatedNumpyList,
+    compJobStatus.update_status(job_ID, "3D model generation")
+    generated_obj_path = compNumpy2obj.main(
+        generated_numpy_list,
         0.5,
         str(compCommonPath.obj.joinpath("nifti2glb_tempObj.obj")),
     )
 
-    compJobStatus.update_status(jobID, "3D format conversion")
-    generatedGlbPath = compObj2glbWrapper.main(
-        generatedObjPath,
-        str(pathlib.Path(outputGlbPath)),
-        deleteOriginalObj=True,
-        compressGlb=False,
+    compJobStatus.update_status(job_ID, "3D format conversion")
+    generated_glb_path = compObj2glbWrapper.main(
+        generated_obj_path,
+        str(pathlib.Path(output_glb_path)),
+        delete_original_obj=True,
+        compress_glb=False,
     )
-    print("lungDicom2glb: done, glb saved to {}".format(generatedGlbPath))
-    compJobStatus.update_status(jobID, "Finished")
-    infoForAccessor = json.loads(infoForAccessor)
-    compPostToAccesor.sendFilePostRequestToAccessor(
-        infoForAccessor["bodySite"] + "apply on generic bone segmentation",
-        outputGlbPath,
-        infoForAccessor["description"],
-        infoForAccessor["bodySite"],
-        infoForAccessor["dateOfImaging"],
+    print("lungDicom2glb: done, glb saved to {}".format(generated_glb_path))
+    compJobStatus.update_status(job_ID, "Finished")
+    info_for_accessor = json.loads(info_for_accessor)
+    compPostToAccesor.send_file_request_to_accessor(
+        info_for_accessor["bodySite"] + "apply on generic bone segmentation",
+        output_glb_path,
+        info_for_accessor["description"],
+        info_for_accessor["bodySite"],
+        info_for_accessor["dateOfImaging"],
         datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "Generate glb mesh from dicom",
-        infoForAccessor["author"],
-        infoForAccessor["patient"],
+        info_for_accessor["author"],
+        info_for_accessor["patient"],
     )
 
 
 if __name__ == "__main__":
-    main(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3], str(sys.argv[4])))
+    main(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3]), str(sys.argv[4]))

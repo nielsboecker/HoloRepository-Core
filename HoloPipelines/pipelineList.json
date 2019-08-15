@@ -1,8 +1,8 @@
 {
    "nifti2glb":
       {
-         "name":"Nifti to GLB generation",
-         "title": "Generic bone segmentation",
+         "title":"Nifti to GLB generation",
+         "plid": "nifti2glb",
          "src":"pipelines/pipelineNifti2glb.py",
          "info":"Generate glb mesh from nifti",
          "addDate":"28/06/2019",
@@ -20,8 +20,8 @@
       },
    "dicom2glb":
       {
-         "name":"DICOM to glb generation",
-         "title": "Generic bone segmentation",
+         "title":"DICOM to glb generation",
+         "name": "Generic bone segmentation",
          "src":"pipelines/pipelineDicom2glb.py",
          "info":"Generate glb mesh from dicom",
          "addDate":"01/07/2019",
@@ -39,8 +39,8 @@
       },
    "lungDicom2glb":
       {
-         "name":"DICOM to segmented lung GLB generation",
-         "title": "Lungs segmentation",
+         "title":"DICOM to segmented lung GLB generation",
+         "name": "Lungs segmentation",
          "src":"pipelines/pipelineLungDicom2glb.py",
          "info":"Generate segmented lungs (without air way) glb mesh from dicom",
          "addDate":"01/07/2019",

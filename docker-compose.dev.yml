@@ -14,7 +14,7 @@ services:
     build:
       context: ./HoloRepositoryUI
       dockerfile: ./server/Dockerfile
-    env_file: ./server/.env
+    env_file: ./HoloRepositoryUI/server/.env
     ports:
       - "3001:3001"
 #  TODO: Uncomment when HoloPipelines are ready

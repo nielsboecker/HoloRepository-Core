@@ -2,10 +2,16 @@
 # Front-end build based on Node.js
 FROM node:11.12.0-alpine as build-stage
 
+# Static variables
 ARG SRC_APP_DIR=./client
 ARG SRC_TYPES_DIR=./types
 ARG TARGET_APP_DIR=/usr/src/app
 ARG TARGET_TYPES_DIR=/usr/src/types
+
+# Config to be passed at build-time
+ARG REACT_APP_BACKEND_HOST
+ARG REACT_APP_BACKEND_PORT
+ARG REACT_APP_BACKEND_TIMEOUT
 
 # Prepare directories
 RUN mkdir -p ${TARGET_APP_DIR}

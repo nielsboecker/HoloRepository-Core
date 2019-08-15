@@ -25,7 +25,7 @@ def resample(image_data, new_spacing=[1, 1, 1]):
     print("Shape before resampling\t", original_shape)
     print("Shape after resampling\t", image.shape[:3])
 
-    return image, new_spacing
+    return image
 
 
 def main(input_nifti_path):
@@ -33,7 +33,7 @@ def main(input_nifti_path):
     nib.Nifti1Header.quaternion_threshold = -1e-06
     img = nib.load(input_nifti_path)
 
-    img, newSpacing = resample(img)
+    img = resample(img)
 
     numpyList = np.array(img.dataobj)
     return numpyList

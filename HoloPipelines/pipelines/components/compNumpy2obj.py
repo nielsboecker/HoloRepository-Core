@@ -7,7 +7,7 @@ import sys
 nib.Nifti1Header.quaternion_threshold = -1e-06
 
 
-def generateMesh(image, threshold=300, step_size=1):
+def generate_mesh(image, threshold=300, step_size=1):
     print("Transposing surface...")
     if (
         len(image.shape) == 5
@@ -23,25 +23,25 @@ def generateMesh(image, threshold=300, step_size=1):
     return verts, faces, norm
 
 
-def generateObj(inputNumpy, thisThreshold, outputObjPath):
-    if isinstance(inputNumpy, np.ndarray):
-        numpyData = inputNumpy
+def generate_obj(input_numpy, this_threshold, output_obj_path):
+    if isinstance(input_numpy, np.ndarray):
+        numpy_data = input_numpy
     else:
         try:
-            numpyData = np.load(str(pathlib.Path(inputNumpy)))
+            numpy_data = np.load(str(pathlib.Path(input_numpy)))
 
         except Exception:
             sys.exit(
                 "numpy2obj: error occured while loading numpy. Please make sure the path to numpy is correct."
             )
 
-    verts, faces, norm = generateMesh(numpyData, float(thisThreshold), 1)
+    verts, faces, norm = generate_mesh(numpy_data, float(this_threshold), 1)
 
     faces = (
         faces + 1
     )  # https://stackoverflow.com/questions/48844778/create-a-obj-file-from-3d-array-in-python      18/06/19
 
-    newObj = open(str(pathlib.Path(outputObjPath)), "w")
+    newObj = open(str(pathlib.Path(output_obj_path)), "w")
     for item in verts:
         newObj.write("v {0} {1} {2}\n".format(item[0], item[1], item[2]))
 
@@ -53,10 +53,10 @@ def generateObj(inputNumpy, thisThreshold, outputObjPath):
     newObj.close()
 
 
-def main(inputData, mainThreshold, outputPath):
-    generateObj(inputData, mainThreshold, outputPath)
+def main(input_data, main_threshold, output_path):
+    generate_obj(input_data, main_threshold, output_path)
     print("numpy2obj: done")
-    return outputPath
+    return output_path
 
 
 if __name__ == "__main__":

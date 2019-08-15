@@ -8,9 +8,14 @@ import logging
 import importlib
 
 from multiprocessing import Process
-import pipelines.components.compCommonPath as plCommonPath
+from multiprocessing import Manager
+import pipelines.components.compCommonPath as pl_common_path
 
-newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
+FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
+logging.basicConfig(level=logging.INFO, format=FORMAT)
+
+
+new_cwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
 
 parser = argparse.ArgumentParser(description="Select pipeline to process")
@@ -46,83 +51,95 @@ args = parser.parse_args()
 def main():
     # check common dir
 
-    plCommonPath.main()
+    pl_common_path.main()
 
     # check for pipeline config file
-    if not os.path.exists(str(pathlib.Path(newCwd).joinpath(str(args.config)))):
+    if not os.path.exists(str(pathlib.Path(new_cwd).joinpath(str(args.config)))):
         sys.exit("error: config file not found")
 
-    searchCounter = 0
-    with open(str(pathlib.Path(newCwd).joinpath(str(args.config)))) as json_file:
-        lsPipe = json.load(json_file)
+    search_counter = 0
+    with open(str(pathlib.Path(new_cwd).joinpath(str(args.config)))) as json_file:
+        list_of_pipeline = json.load(json_file)
         # --ls flag
         if args.ls:
-            print(json.dumps(lsPipe, indent=4, sort_keys=False))
+            logging.info(json.dumps(list_of_pipeline, indent=4, sort_keys=False))
             sys.exit()
         if args.info:
 
-            for key, value in lsPipe.items():
+            for key, value in list_of_pipeline.items():
                 data = value
                 if args.info in data["name"]:
-                    print("**ID: " + key)
-                    print("name: " + data["name"])
-                    print("source: " + data["src"])
-                    print("param req: " + data["param"])
-                    print("description: " + data["info"])
-                    print("date added: " + data["addDate"])
-                    print("date last modified: " + data["modDate"])
-                    print("")
-                    searchCounter += 1
-            if searchCounter == 0:
+                    logging.info("**ID: " + key)
+                    logging.info("name: " + data["name"])
+                    logging.info("source: " + data["src"])
+                    logging.info("param req: " + data["param"])
+                    logging.info("description: " + data["info"])
+                    logging.info("date added: " + data["addDate"])
+                    logging.info("date last modified: " + data["modDate"])
+                    logging.info("")
+                    search_counter += 1
+            if search_counter == 0:
                 sys.exit("pipelineController: no pipeline with such name")
 
             else:
-                print("pipelineController: " + str(searchCounter) + " results")
+                logging.info("pipelineController: " + str(search_counter) + " results")
             sys.exit()
         # check if pipeline exist
-        if args.pipelineID not in lsPipe:
+        if args.pipelineID not in list_of_pipeline:
             sys.exit("pipelineController: no pipeline with such ID")
-        if len(args.param) != int(lsPipe[args.pipelineID]["param"]):
+        if len(args.param) != int(list_of_pipeline[args.pipelineID]["param"]):
             sys.exit(
                 "pipelineController: invalid number of param [expected: "
-                + str(lsPipe[args.pipelineID]["param"])
+                + str(list_of_pipeline[args.pipelineID]["param"])
                 + ", got: "
                 + str(len(args.param))
                 + "]"
             )
         # start pipeline
-        print("starting pipeline " + args.pipelineID + "...")
+        logging.info("starting pipeline " + args.pipelineID + "...")
         subprocess.run(
-            ["python", lsPipe[args.pipelineID]["src"]] + args.param, cwd=newCwd
+            ["python", list_of_pipeline[args.pipelineID]["src"]] + args.param,
+            cwd=new_cwd,
         )
 
     json_file.close()
 
 
-def startPipeline(plID, paramList=[]):
-    logging.error("============================ outside")
-    process = Process(target=dynamicLoadingPipeline, args=(plID, paramList))
+def startPipeline(pipeline_ID, parameter_dict):
+    list_of_pipeline = getPipelineList()
+    list_of_pipeline[pipeline_ID]["src"].split(".py")[0].replace("/", ".")
+    pl_package_name = (
+        list_of_pipeline[pipeline_ID]["src"].split(".py")[0].replace("/", ".")
+    )
+    pl_package = importlib.import_module(pl_package_name)
+
+    # logging.error("============================ outside")
+    manager = Manager()
+    dictionary = manager.dict()
+    dictionary.update(parameter_dict)
+    process = Process(target=pl_package.main, args=(dictionary,))
     process.start
     process.join
-    # dynamicLoadingPipeline(plID, paramList)
+    # dynamicLoadingPipeline(pipeline_ID, dictionary)
 
 
 def getPipelineList():
     configFileName = "pipelineList.json"  # hard coded
 
-    with open(str(pathlib.Path(newCwd).joinpath(str(configFileName)))) as json_file:
-        lsPipe = json.load(json_file)
+    with open(str(pathlib.Path(new_cwd).joinpath(str(configFileName)))) as json_file:
+        list_of_pipeline = json.load(json_file)
     json_file.close()
-    return lsPipe
+    return list_of_pipeline
 
 
-def dynamicLoadingPipeline(plID, paramList=[]):
+def dynamicLoadingPipeline(plID, parameter_dict):
     logging.error("============================= inside")
-    lsPipe = getPipelineList()
-    lsPipe[plID]["src"].split(".py")[0].replace("/", ".")
-    pl_package_name = lsPipe[plID]["src"].split(".py")[0].replace("/", ".")
+    list_of_pipeline = getPipelineList()
+    list_of_pipeline[plID]["src"].split(".py")[0].replace("/", ".")
+    pl_package_name = list_of_pipeline[plID]["src"].split(".py")[0].replace("/", ".")
     pl_package = importlib.import_module(pl_package_name)
-    pl_package.main(*paramList)
+    pl_package.main(**parameter_dict)
+    # pl_package.main(job_ID=parameter_dict["job_ID"], dicom_folder_path=parameter_dict["dicom_folder_path"],output_glb_path=parameter_dict["output_glb_path"], info_for_accesor=parameter_dict["info_for_accessor"])
 
 
 if __name__ == "__main__":

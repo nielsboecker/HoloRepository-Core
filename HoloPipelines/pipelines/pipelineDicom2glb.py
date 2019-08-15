@@ -11,39 +11,44 @@ import json
 import sys
 
 
-def main(jobID, dicomFolderPath, outputGlbPath, infoForAccessor):
-    compJobStatus.update_status(jobID, "Pre-processing")
-    generatedNumpyList = compDicom2numpy.main(str(pathlib.Path(dicomFolderPath)))
+def main(job_ID, dicom_folder_path, output_glb_path, info_for_accessor):
+    compJobStatus.update_status(job_ID, "Pre-processing")
+    print(output_glb_path)
+    info_for_accessor = json.loads(info_for_accessor)
+    generated_numpy_list = compDicom2numpy.main(str(pathlib.Path(dicom_folder_path)))
     threshold = 300
 
-    compJobStatus.update_status(jobID, "3D model generation")
-    generatedObjPath = compNumpy2obj.main(
-        generatedNumpyList,
+    compJobStatus.update_status(job_ID, "3D model generation")
+    generated_obj_path = compNumpy2obj.main(
+        generated_numpy_list,
         threshold,
         str(
             compCommonPath.obj.joinpath(
-                str(pathlib.PurePath(dicomFolderPath).parts[-1])
+                str(pathlib.PurePath(dicom_folder_path).parts[-1])
             )
         )
         + ".obj",
     )
-    compJobStatus.update_status(jobID, "3D format conversion")
+    compJobStatus.update_status(job_ID, "3D format conversion")
     generatedGlbPath = compObj2glbWrapper.main(
-        generatedObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False
+        generated_obj_path,
+        output_glb_path,
+        delete_original_obj=True,
+        compress_glb=False,
     )
     print("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
-    compJobStatus.update_status(jobID, "Finished")
+    compJobStatus.update_status(job_ID, "Finished")
 
-    infoForAccessor = compCombineInfoForAccesor.add_info_for_accesor(
-        infoForAccessor,
+    info_for_accessor = compCombineInfoForAccesor.add_info_for_accesor(
+        info_for_accessor,
         "apply on generic bone segmentation",
         datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "Generate glb mesh from dicom",
-        outputGlbPath,
+        output_glb_path,
     )
-    print(json.dumps(infoForAccessor))
+    print(json.dumps(info_for_accessor))
     print(datetime.now())
-    compPostToAccesor.sendFilePostRequestToAccessor(infoForAccessor)
+    compPostToAccesor.send_file_request_to_accessor(info_for_accessor)
     print(datetime.now())
 
 

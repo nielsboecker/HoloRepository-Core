@@ -1,12 +1,11 @@
 from pipelines.components import compJobStatus
-from pipelines.components import compCommonPath
 from pipelines.components import compDicom2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.components import compObj2glbWrapper
 from pipelines.components import compPostToAccesor
 from pipelines.components import compCombineInfoForAccesor
 from pipelines.components import compFetchResource
-from pipelines.components import compJobCleanup
+from pipelines.components import compJobPath
 from datetime import datetime
 import pathlib
 import json
@@ -25,17 +24,12 @@ def main(job_ID, dicom_download_url, info_for_accessor):
     generated_obj_path = compNumpy2obj.main(
         generated_numpy_list,
         threshold,
-        str(
-            compCommonPath.obj.joinpath(
-                str(pathlib.PurePath(dicom_folder_path).parts[-1])
-            )
-        )
-        + ".obj",
+        compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
     )
     compJobStatus.update_status(job_ID, "3D format conversion")
     generated_glb_path = compObj2glbWrapper.main(
         generated_obj_path,
-        str(pathlib.Path(dicom_folder_path).parent.joinpath(str(job_ID) + ".glb")),
+        compJobPath.make_str_job_path(job_ID, ["out", str(job_ID) + ".glb"]),
         delete_original_obj=True,
         compress_glb=False,
     )
@@ -52,9 +46,10 @@ def main(job_ID, dicom_download_url, info_for_accessor):
     print(json.dumps(info_for_accessor))
     print(datetime.now())
     compPostToAccesor.send_file_request_to_accessor(info_for_accessor)
-    compJobStatus.update_status(job_ID, "Finished")
+    compJobStatus.update_status(job_ID, "Cleaning up")
     print(datetime.now())
-    compJobCleanup.main(job_ID)
+    compJobPath.clean_up(job_ID)
+    compJobStatus.update_status(job_ID, "Finished")
 
 
 if __name__ == "__main__":

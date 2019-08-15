@@ -45,7 +45,7 @@ def main(inputNiftiPath, outputNiftiFolderPath):
 
     Mlung, Maw = segment_airway(params, image, I_affine, Mlung, outputNiftiFolderPath)
 
-    return str(outputNiftiFolderPath)
+    return str(pathlib.Path(outputNiftiFolderPath).joinpath("lung.nii.gz"))
 
 
 if __name__ == "__main__":

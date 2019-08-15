@@ -1,9 +1,11 @@
-from components import compCommonPath
-from components import compJobStatus
-from components import compNifti2numpy
-from components import compNumpy2obj
-from components import compObj2glbWrapper
-from components import compPostToAccesor
+# pipeline left in current state (work with local files) as unsure if there's a use case where user can download nii from PACS
+# could be left as is for internal use?
+from pipelines.components import compCommonPath
+from pipelines.components import compJobStatus
+from pipelines.components import compNifti2numpy
+from pipelines.components import compNumpy2obj
+from pipelines.components import compObj2glbWrapper
+from pipelines.components import compPostToAccesor
 import pathlib
 import sys
 from datetime import datetime

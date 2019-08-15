@@ -46,7 +46,7 @@
          "addDate":"01/07/2019",
          "modDate":"01/07/2019",
          "description": "This pipeline segments the lungs and the airway from a series of CT scans.",
-         "param":"2",
+         "param":"3",
          "inputConstraints": [
             ["Body site", "Chest region"],
             ["Imaging study type", "CT scan"],

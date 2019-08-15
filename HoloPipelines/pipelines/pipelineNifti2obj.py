@@ -1,7 +1,7 @@
 # this pipeline may be removed in the future as obj is not used to display 3D model on hololens
-from components import compNifti2numpy
-from components import compJobStatus
-from components import compNumpy2obj
+from pipelines.components import compNifti2numpy
+from pipelines.components import compJobStatus
+from pipelines.components import compNumpy2obj
 import pathlib
 import sys
 

@@ -2,12 +2,21 @@ import os
 import pytest
 import pathlib
 import subprocess
+import logging
+import shutil
+import threading
+import sys
 
-import urllib.request
+import requests
 from zipfile import ZipFile
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
+logging.basicConfig(level=logging.INFO)
+
+pythonPath = sys.executable
 thisCwd = pathlib.Path.cwd()
 zipFileName = "__temp__.zip"
+segmentedAbdomenFileName = "__segmentedAbdomen__.nii.gz"
 dicomPath = thisCwd.joinpath("medicalScans", "dicom")
 niftiPath = thisCwd.joinpath("medicalScans", "nifti")
 
@@ -18,35 +27,64 @@ glbPath = outputPath.joinpath("glb")
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))).parent)
 
 
+class testServer(BaseHTTPRequestHandler):
+    def do_POST(self):
+        length = self.headers["content-length"]
+        data = self.rfile.read(int(length))
+
+        if not data:
+            logging.warning("error in testServer")
+
+        self.send_response(200)
+        self.end_headers()
+
+        with open(str(niftiPath.joinpath(segmentedAbdomenFileName)), "rb") as toSend:
+            self.wfile.write(toSend.read())  # Read the file and send the contents
+
+
 @pytest.fixture
 def testSetup():
-    print("Beginning dicom sample download...")
+    logging.info("Checking for sample files...")
+    sampleFileDict = {
+        str(dicomPath.joinpath("3_Axial_CE")): [
+            "https://holoblob.blob.core.windows.net/test/3_Axial_CE.zip",
+            str(dicomPath),
+        ],
+        str(dicomPath.joinpath("abdomen")): [
+            "https://holoblob.blob.core.windows.net/mock-pacs/abdomen.zip",
+            str(dicomPath),
+        ],
+        str(niftiPath.joinpath("1103_3_glm.nii")): [
+            "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip",
+            str(niftiPath),
+        ],
+    }
 
-    if not os.path.exists(str(dicomPath.joinpath("3_Axial_CE"))):
-        # download dicom sample
-        print("Beginning dicom sample download...")
+    for filePath, fileData in sampleFileDict.items():
+        if not os.path.exists(filePath):
+            # download dicom sample
+            logging.info("Downloading sample file [{}]...".format(fileData[0]))
 
-        url = "https://holoblob.blob.core.windows.net/test/3_Axial_CE.zip"
-        urllib.request.urlretrieve(url, str(thisCwd.joinpath(zipFileName)))
+            url = fileData[0]
+            saveTo = fileData[1]
 
-        print("Beginning dicom unzip...")
-        with ZipFile(zipFileName, "r") as zipObj:  # unzip
-            zipObj.extractall(str(dicomPath))
-        os.remove(zipFileName)
+            response = requests.get(url)
+            open(str(thisCwd.joinpath(zipFileName)), "wb+").write(response.content)
 
-    if not os.path.exists(str(niftiPath.joinpath("1103_3_glm.nii"))):
-        # download nifti sample
-        print("Beginning nifti sample download...")
+            logging.info("Decompressing...")
+            with ZipFile(zipFileName, "r") as zipObj:  # unzip
+                zipObj.extractall(saveTo)
+            os.remove(zipFileName)
 
-        url = "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip"
-        urllib.request.urlretrieve(url, str(thisCwd.joinpath(zipFileName)))
+    # download data for mock server (not in loop above as this one does not come in zip)
+    if not os.path.exists(str(niftiPath.joinpath(segmentedAbdomenFileName))):
+        urlNiftyOut = "https://holoblob.blob.core.windows.net/mock-pacs/Owenpap___niftynet_out.nii.gz"
+        response = requests.get(urlNiftyOut)
+        open(str(niftiPath.joinpath(segmentedAbdomenFileName)), "wb+").write(
+            response.content
+        )
 
-        print("Beginning nifti unzip...")
-        with ZipFile(zipFileName, "r") as zipObj:  # unzip
-            zipObj.extractall(str(niftiPath))
-        os.remove(zipFileName)
-
-        print("setup: done")
+    logging.info("setup: done")
 
     remove3Dmodels()
 
@@ -55,24 +93,54 @@ def testSetup():
     remove3Dmodels()
 
 
+@pytest.fixture
+def setupMockPOSTresponse():
+    logging.info("Starting NN model mock server...")
+    myServer = HTTPServer(("localhost", 4567), testServer)
+    threading.Thread(target=myServer.serve_forever, daemon=True).start()
+
+    yield
+
+    # remove files
+    downloadedSampleFileList = [
+        str(niftiPath.joinpath(segmentedAbdomenFileName)),
+        str(niftiPath.joinpath("dataFromPost.nii")),
+    ]
+
+    for fileToDelete in downloadedSampleFileList:
+        if os.path.exists(fileToDelete):
+            os.remove(fileToDelete)
+
+    if os.path.exists(str(dicomPath.joinpath("abdomen"))):
+        shutil.rmtree(str(dicomPath.joinpath("abdomen")))
+
+
 def remove3Dmodels():
-    if os.path.exists(str(glbPath.joinpath("testResult0.glb"))):
-        os.remove(str(glbPath.joinpath("testResult0.glb")))
+    generatedMeshList = [
+        str(glbPath.joinpath("testResult0.glb")),
+        str(glbPath.joinpath("testResult1.glb")),
+        str(objPath.joinpath("testResult2.obj")),
+        str(glbPath.joinpath("testResult3.glb")),
+        str(glbPath.joinpath("testResult4.glb")),
+        str(glbPath.joinpath("organNo1.glb")),
+        str(glbPath.joinpath("organNo2.glb")),
+        str(glbPath.joinpath("organNo3.glb")),
+        str(glbPath.joinpath("organNo4.glb")),
+        str(glbPath.joinpath("organNo5.glb")),
+        str(glbPath.joinpath("organNo6.glb")),
+        str(glbPath.joinpath("organNo7.glb")),
+        str(glbPath.joinpath("organNo8.glb")),
+    ]
 
-    if os.path.exists(str(glbPath.joinpath("testResult1.glb"))):
-        os.remove(str(glbPath.joinpath("testResult1.glb")))
-
-    if os.path.exists(str(objPath.joinpath("testResult2.obj"))):
-        os.remove(str(objPath.joinpath("testResult2.obj")))
-
-    if os.path.exists(str(glbPath.joinpath("testResult3.glb"))):
-        os.remove(str(glbPath.joinpath("testResult3.glb")))
+    for meshFileName in generatedMeshList:
+        if os.path.exists(meshFileName):
+            os.remove(meshFileName)
 
 
 def test_pipelines_dicom2glb(testSetup):
     output = subprocess.run(
         [
-            "python",
+            pythonPath,
             "pipelineController.py",
             "-c",
             "test/pipelineListForTesting.json",
@@ -91,7 +159,7 @@ def test_pipelines_dicom2glb(testSetup):
 def test_pipelines_lungDicom2glb(testSetup):
     output = subprocess.run(
         [
-            "python",
+            pythonPath,
             "pipelineController.py",
             "-c",
             "test/pipelineListForTesting.json",
@@ -109,7 +177,7 @@ def test_pipelines_lungDicom2glb(testSetup):
 def test_pipelines_nifti2obj(testSetup):
     output = subprocess.run(
         [
-            "python",
+            pythonPath,
             "pipelineController.py",
             "-c",
             "test/pipelineListForTesting.json",
@@ -129,7 +197,7 @@ def test_pipelines_nifti2obj(testSetup):
 def test_pipelines_nifti2glb(testSetup):
     output = subprocess.run(
         [
-            "python",
+            pythonPath,
             "pipelineController.py",
             "-c",
             "test/pipelineListForTesting.json",
@@ -143,3 +211,30 @@ def test_pipelines_nifti2glb(testSetup):
     )
     assert 0 == output.returncode
     assert os.path.isfile(glbPath.joinpath("testResult3.glb"))
+
+
+def test_pipelines_abdomenDicom2glb(setupMockPOSTresponse, testSetup):
+    output = subprocess.run(
+        [
+            pythonPath,
+            "pipelineController.py",
+            "-c",
+            "test/pipelineListForTesting.json",
+            "abdomenDicom2glb",
+            "-p",
+            str(dicomPath.joinpath("abdomen")),
+            str(glbPath),
+            "http://localhost:4567",
+            "300",
+        ],
+        cwd=newCwd,
+    )
+    assert 0 == output.returncode
+    assert os.path.isfile(glbPath.joinpath("organNo1.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo2.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo3.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo4.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo5.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo6.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo7.glb"))
+    assert os.path.isfile(glbPath.joinpath("organNo8.glb"))

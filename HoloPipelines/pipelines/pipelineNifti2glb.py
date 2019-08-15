@@ -4,6 +4,9 @@ from components import compNumpy2obj
 from components import compObj2glbWrapper
 import pathlib
 import sys
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 def main(inputNiftiPath, outputGlbPath, threshold):
@@ -19,7 +22,7 @@ def main(inputNiftiPath, outputGlbPath, threshold):
         deleteOriginalObj=True,
         compressGlb=False,
     )
-    print("nifti2glb: done, glb saved to {}".format(generatedGlbPath))
+    logging.info("nifti2glb: done, glb saved to {}".format(generatedGlbPath))
 
 
 if __name__ == "__main__":

@@ -1,5 +1,9 @@
 import numpy as np
 import nibabel as nib
+import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 def resample(imageData, new_spacing=[1, 1, 1]):
@@ -21,13 +25,13 @@ def resample(imageData, new_spacing=[1, 1, 1]):
     real_resize_factor = new_shape / image.shape[:3]
     new_spacing = spacing / real_resize_factor
 
-    print("Shape before resampling\t", originalShape)
-    print("Shape after resampling\t", image.shape[:3])
+    logging.info("Shape before resampling\t" + repr(originalShape))
+    logging.info("Shape after resampling\t" + repr(image.shape[:3]))
 
     return image, new_spacing
 
 
-def main(inputNiftiPath):
+def main(inputNiftiPath, deleteNiftiWhenDone=False):
     # https://github.com/nipy/nibabel/issues/626
     nib.Nifti1Header.quaternion_threshold = -1e-06
     img = nib.load(inputNiftiPath)
@@ -35,8 +39,12 @@ def main(inputNiftiPath):
     img, newSpacing = resample(img)
 
     numpyList = np.array(img.dataobj)
+
+    if deleteNiftiWhenDone:
+        os.remove(inputNiftiPath)
+
     return numpyList
 
 
 if __name__ == "__main__":
-    print("component can't run on its own")
+    logging.error("component can't run on its own")

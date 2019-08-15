@@ -13,9 +13,9 @@ import json
 import sys
 
 
-def main(job_ID, dicomDownloadUrl, info_for_accessor):
+def main(job_ID, dicom_download_url, info_for_accessor):
     compJobStatus.update_status(job_ID, "Fetching data")
-    dicom_folder_path = compFetchResource.main(job_ID, dicomDownloadUrl)
+    dicom_folder_path = compFetchResource.main(job_ID, dicom_download_url)
     compJobStatus.update_status(job_ID, "Pre-processing")
     info_for_accessor = json.loads(info_for_accessor)
     generated_numpy_list = compDicom2numpy.main(str(pathlib.Path(dicom_folder_path)))

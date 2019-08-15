@@ -5,7 +5,6 @@ from datetime import datetime
 from pathlib import Path
 from pipelines.components.compStatus import status
 from threading import Thread
-from pipelines.components import compGetInput
 from pipelines.components import compJobClean
 from pipelines.components import compMapPipelineInfo
 import uuid
@@ -70,10 +69,6 @@ def start_job():
         filename = request_input_data_URL.rsplit("/", 1)[1]
         logging.info("filename: " + filename)
 
-    unzip_file_dir = compGetInput.fetch_request_input_file(
-        filename, request_input_data_URL
-    )
-
     # create output dir
     global output_directory
     if not output_directory.is_dir():
@@ -96,12 +91,7 @@ def start_job():
     jobID = str(uuid.uuid1())
     arg_dict = {
         "job_ID": jobID,
-        "dicom_folder_path": unzip_file_dir,
-        "output_glb_path": str(
-            this_cwd.joinpath(
-                str(output_directory), unzip_file_dir.rsplit("/", 1)[1] + ".glb"
-            )
-        ),
+        "dicom_download_url": request_input_data_URL,
         "info_for_accessor": json.dumps(info_for_accessor),
     }
     logging.info("arg_dict: " + str(arg_dict))
@@ -122,4 +112,4 @@ def get_job_status(jobid):
 
 if __name__ == "__main__":
     Thread(target=compJobClean.activate_status_cleaning_job).start()
-    Thread(target=app.run).start()
+    Thread(target=app.run, kwargs={"debug": False, "port": 3100}).start()

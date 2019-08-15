@@ -6,9 +6,7 @@ import subprocess
 import pathlib
 import logging
 import importlib
-
 from multiprocessing import Process
-from multiprocessing import Manager
 import pipelines.components.compCommonPath as pl_common_path
 
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
@@ -114,12 +112,8 @@ def startPipeline(pipeline_ID, parameter_dict):
     pl_package = importlib.import_module(pl_package_name)
 
     # logging.error("============================ outside")
-    manager = Manager()
-    dictionary = manager.dict()
-    dictionary.update(parameter_dict)
-    process = Process(target=pl_package.main, args=(dictionary,))
-    process.start
-    process.join
+    process = Process(target=pl_package.main, kwargs=parameter_dict)
+    process.start()
     # dynamicLoadingPipeline(pipeline_ID, dictionary)
 
 

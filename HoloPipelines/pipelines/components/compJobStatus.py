@@ -8,7 +8,6 @@ logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 def update_status(job_ID, job_status):
     data = {job_ID: {"status": job_status, "timestamp": str(datetime.now())}}
-    print("++++++++++++++++___" + str(data))
     response = send_post_to_status(data)
     return_code = response.status_code
     logging.debug("return code: " + str(return_code))

@@ -29,7 +29,7 @@
          "addDate":"01/07/2019",
          "modDate":"01/07/2019",
          "description": "This pipeline utilises a marching cube algorithm to generate a 3D model from a series of CT scans. As it performs the segmentation based on Hounsfield units, it is agnostic to the specific body site.",
-         "param":"4",
+         "param":"3",
          "inputConstraints": [
             ["Body site", "Any"],
             ["Imaging study type", "CT scan, Micro CT scan"],

@@ -7,3 +7,4 @@ class JobStatus(Enum):
     MODELGENERATION = 3
     MODELCONVERSION = 4
     FINISHED = 5
+    FETCHINGDATA = 6

@@ -9,13 +9,20 @@ def map_pipelines_info():
         pipeline_list = json.load(json_file)
     json_file.close()
 
-    for (plid, pipeline) in pipeline_list.items():
-        pipeline_dict[plid] = {
-            "plid": plid,
-            "title": pipeline["title"],
-            "description": pipeline["description"],
-            "inputConstraints": pipeline["inputConstraints"],
-            "inputExampleImageUrl": pipeline["inputExampleImageUrl"],
-            "outputExampleImageUrl": pipeline["outputExampleImageUrl"],
+    components_list = [
+        "plid",
+        "title",
+        "description",
+        "inputConstraints",
+        "inputExampleImageUrl",
+        "outputExampleImageUrl",
+    ]
+    pipeline_list_keys = list(pipeline_list.keys())
+    pipeline_dict = {
+        plid: {
+            component: pipeline_list[plid][component] for component in components_list
         }
+        for plid in pipeline_list_keys
+    }
+
     return pipeline_dict

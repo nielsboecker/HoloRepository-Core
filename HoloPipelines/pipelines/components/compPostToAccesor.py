@@ -4,35 +4,35 @@ import pathlib
 import json
 
 
-def send_file_request_to_accessor(info_for_accessor):
-    output_file_dir = str(pathlib.Path(info_for_accessor["outputFileDir"]))
-    size_of_output_file = str(path.getsize(output_file_dir) / 1000)
+def send_file_request_to_accessor(meta_data):
+    output_file_dir = str(pathlib.Path(meta_data["outputFileDir"]))
+    size_of_output_file = str(path.getsize(output_file_dir) / 1024)
     # print("file: "+str(file)
     # get the pipelinelist json file
-    print(info_for_accessor["author"]["aid"])
+    print(meta_data["author"]["aid"])
 
     # manipulate author data
     author_for_accessor = {
-        "aid": info_for_accessor["author"]["aid"],
-        "name": info_for_accessor["author"]["name"],
+        "aid": meta_data["author"]["aid"],
+        "name": meta_data["author"]["name"],
     }
 
     # manipulate patient data
     patient_for_accessor = {
-        "pid": info_for_accessor["patient"]["pid"],
-        "name": info_for_accessor["patient"]["name"],
+        "pid": meta_data["patient"]["pid"],
+        "name": meta_data["patient"]["name"],
     }
 
     request_body = {
-        "title": info_for_accessor["title"],
-        "description": info_for_accessor["description"],
+        "title": meta_data["title"],
+        "description": meta_data["description"],
         "contentType": "model/gltf-binary",
         "fileSizeInKb": size_of_output_file,
-        "bodySite": info_for_accessor["bodySite"],
-        "dateOfImaging": info_for_accessor["dateOfImaging"],
-        "creationDate": info_for_accessor["creationDate"],
+        "bodySite": meta_data["bodySite"],
+        "dateOfImaging": meta_data["dateOfImaging"],
+        "creationDate": meta_data["creationDate"],
         "creationMode": "GENERATE_FROM_IMAGING_STUDY",
-        "creationDescription": info_for_accessor["creationDescription"],
+        "creationDescription": meta_data["creationDescription"],
         "author": json.dumps(author_for_accessor),
         "patient": json.dumps(patient_for_accessor),
     }

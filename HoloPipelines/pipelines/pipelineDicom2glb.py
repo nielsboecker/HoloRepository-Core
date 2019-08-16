@@ -1,24 +1,32 @@
-from pipelines.components import compJobStatus
 from pipelines.components import compCommonPath
 from pipelines.components import compDicom2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.components import compObj2glbWrapper
 from pipelines.components import compPostToAccesor
+from pipelines.components.compJobStatusEnum import JobStatus
 from pipelines.components import compCombineInfoForAccesor
-from datetime import datetime
+from pipelines.components.compGetPipelineListInfo import get_pipeline_list
+from pipelines.components.compJobStatus import update_status
 import pathlib
 import json
 import sys
+import logging
 
 
-def main(job_ID, dicom_folder_path, output_glb_path, info_for_accessor):
-    compJobStatus.update_status(job_ID, "Pre-processing")
-    print(output_glb_path)
-    info_for_accessor = json.loads(info_for_accessor)
+FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
+logging.basicConfig(level=logging.DEBUG, format=FORMAT)
+
+
+def main(job_ID, dicom_folder_path, output_glb_path, meta_data):
+    update_status(job_ID, JobStatus.PPREPROCESSING.name)
+
+    logging.debug("job start: " + json.dumps(meta_data))
+
+    meta_data = json.loads(meta_data)
     generated_numpy_list = compDicom2numpy.main(str(pathlib.Path(dicom_folder_path)))
     threshold = 300
 
-    compJobStatus.update_status(job_ID, "3D model generation")
+    update_status(job_ID, JobStatus.MODELGENERATION.name)
     generated_obj_path = compNumpy2obj.main(
         generated_numpy_list,
         threshold,
@@ -29,27 +37,24 @@ def main(job_ID, dicom_folder_path, output_glb_path, info_for_accessor):
         )
         + ".obj",
     )
-    compJobStatus.update_status(job_ID, "3D format conversion")
+    update_status(job_ID, JobStatus.MODELCONVERSION.name)
     generatedGlbPath = compObj2glbWrapper.main(
         generated_obj_path,
         output_glb_path,
         delete_original_obj=True,
         compress_glb=False,
     )
-    print("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
-    compJobStatus.update_status(job_ID, "Finished")
-
-    info_for_accessor = compCombineInfoForAccesor.add_info_for_accesor(
-        info_for_accessor,
+    list_of_pipeline = get_pipeline_list()
+    logging.debug("dicom2glb: done, glb saved to {}".format(generatedGlbPath))
+    meta_data = compCombineInfoForAccesor.add_info_for_accesor(
+        meta_data,
         "apply on generic bone segmentation",
-        datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "Generate glb mesh from dicom",
+        "Generate with " + list(list_of_pipeline.keys())[1] + " pipeline",
         output_glb_path,
     )
-    print(json.dumps(info_for_accessor))
-    print(datetime.now())
-    compPostToAccesor.send_file_request_to_accessor(info_for_accessor)
-    print(datetime.now())
+    logging.debug("meta_data: " + json.dumps(meta_data))
+    compPostToAccesor.send_file_request_to_accessor(meta_data)
+    update_status(job_ID, JobStatus.FINISHED.name)
 
 
 if __name__ == "__main__":

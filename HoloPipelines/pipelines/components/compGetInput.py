@@ -1,3 +1,4 @@
+import io
 import requests
 from pathlib import Path
 from flask_json import json_response
@@ -25,6 +26,6 @@ def fetch_request_input_file(filename, request_input_data_URL):
     # unzip the input file
     file_dir = this_cwd.joinpath(str(input_directory), filename)
     path_to_store_unzip_file = this_cwd.joinpath(str(input_directory), filename_unzip)
-    with ZipFile(str(file_dir), "r") as zipObj:
+    with ZipFile(io.BytesIO(response.content), "r") as zipObj:
         zipObj.extractall(str(path_to_store_unzip_file))
     return str(path_to_store_unzip_file)

@@ -1,13 +1,14 @@
 from flask import Flask, request
-from pipelineController import startPipeline, getPipelineList
+from pipelineConfig import startPipeline
 from flask_json import json_response
 from datetime import datetime
 from pathlib import Path
-from pipelines.components.compStatus import status
 from threading import Thread
 from pipelines.components import compGetInput
 from pipelines.components import compJobClean
 from pipelines.components import compMapPipelineInfo
+from pipelines.components.compGetPipelineListInfo import get_pipeline_list
+from pipelines.components.compStatus import status
 import uuid
 import json
 import logging
@@ -16,16 +17,13 @@ import pathlib
 
 app = Flask(__name__)
 app.config["JSON_ADD_STATUS"] = False
+PREFIX = "/api/v1"
 
 # global variables
 this_cwd = pathlib.Path.cwd()
 
 output_directory = Path("output")
-pipeline_list = getPipelineList()
-
-jobid2plid = {"j0": "nifti2glb", "j1": "dicom2glb"}
-job2inputURL = {"j0": "url"}
-job2outputURL = {}
+pipeline_list = get_pipeline_list()
 
 
 # logging formatting
@@ -34,10 +32,10 @@ logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 
 # update the status from pipeline
-@app.route("/api/v1/status", methods=["POST"])
+@app.route(PREFIX + "/status", methods=["POST"])
 def update_job_status():
-    global status
     current_job_status = request.get_json()
+    print("+++++++++++++++++++++++++" + str(current_job_status))
     current_jobID = list(current_job_status.keys())[0]
     status.update(current_job_status)
     logging.debug(
@@ -48,7 +46,7 @@ def update_job_status():
 
 
 # get pipeline info
-@app.route("/api/v1/pipelines", methods=["GET"])
+@app.route(PREFIX + "/pipelines", methods=["GET"])
 def send_list_of_pipelines():
     global pipeline_list
     pipeline_dict = compMapPipelineInfo.map_pipelines_info()
@@ -57,7 +55,7 @@ def send_list_of_pipelines():
 
 
 # use to start the pipeline
-@app.route("/api/v1/job", methods=["POST"])
+@app.route(PREFIX + "/job", methods=["POST"])
 def start_job():
 
     # get the info from request
@@ -79,17 +77,12 @@ def start_job():
     if not output_directory.is_dir():
         os.mkdir(output_directory)
 
-    info_for_accessor = {
-        "bodySite": job_request["bodySite"],
-        "dateOfImaging": datetime.strptime(
-            job_request["dateOfImaging"], "%Y-%m-%d %H:%M:%S"
-        ).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "description": job_request["description"],
-        "author": job_request["author"],
-        "patient": job_request["patient"],
-    }
-
-    logging.info("info_for_accessor: " + json.dumps(info_for_accessor))
+    meta_data_keys = ["bodySite", "description", "author", "patient"]
+    meta_data = {key: job_request[key] for key in meta_data_keys}
+    meta_data["dateOfImaging"] = datetime.strptime(
+        job_request["dateOfImaging"], "%Y-%m-%d %H:%M:%S"
+    ).strftime("%Y-%m-%dT%H:%M:%SZ")
+    logging.info("meta_data: " + json.dumps(meta_data))
 
     # create arglist pass to pipeline controller
     # (this part will change later, we should not check the pipeline arglist in this way)
@@ -102,7 +95,7 @@ def start_job():
                 str(output_directory), unzip_file_dir.rsplit("/", 1)[1] + ".glb"
             )
         ),
-        "info_for_accessor": json.dumps(info_for_accessor),
+        "meta_data": json.dumps(meta_data),
     }
     logging.info("arg_dict: " + str(arg_dict))
 
@@ -111,7 +104,7 @@ def start_job():
     return json_response(jobID=jobID, status_code=202)
 
 
-@app.route("/api/v1/job/<jobid>/status", methods=["GET"])
+@app.route(PREFIX + "/job/<jobid>/status", methods=["GET"])
 def get_job_status(jobid):
     if jobid in status:
         current_status = status[jobid]["status"]
@@ -123,3 +116,4 @@ def get_job_status(jobid):
 if __name__ == "__main__":
     Thread(target=compJobClean.activate_status_cleaning_job).start()
     Thread(target=app.run).start()
+    # app.run(debug=True, port=3100)

@@ -1,12 +1,13 @@
 import json
+from datetime import datetime
 
 
-def add_info_for_accesor(infoForAccessor, title, creationDate, creationDes, outputDir):
+def add_info_for_accesor(infoForAccessor, title, creationDes, outputDir):
 
     infoForAccessor.update(
         {
             "title": title,
-            "creationDate": creationDate,
+            "creationDate": datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
             "creationDescription": creationDes,
             "outputFileDir": outputDir,
         }

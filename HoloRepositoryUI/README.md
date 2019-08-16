@@ -136,16 +136,21 @@ Note that the actual deployment leverages Docker. A `Dockerfile` is provided for
 
 ```shell
 # client
-docker build -t holorepository-ui-client -f ./client/Dockerfile .
-docker run -d -p 80:3000 --name holorepository-ui-client holorepository-ui-client:latest
+docker build \
+    --build-arg REACT_APP_BACKEND_HOST=http://localhost \
+    --build-arg REACT_APP_BACKEND_PORT=3001 \
+    --build-arg REACT_APP_BACKEND_TIMEOUT=15000 \
+    --tag holorepository-ui-client \
+    --file ./client/Dockerfile .
+docker run -d -p 3000:3000 --name holorepository-ui-client holorepository-ui-client:latest
 
 # server
 docker build -t holorepository-ui-server -f ./server/Dockerfile .
-docker run -d -p 80:3001 --name holorepository-ui-server holorepository-ui-server:latest
+docker run -d -p 3001:3001 --name holorepository-ui-server --env-file ./server/.env holorepository-ui-server:latest
 
 # test connections
-curl http://localhost/api/v1/patients
-curl http://localhost/app/
+echo "Testing client" && curl http://localhost:3000/app/
+echo "Testing server" && curl http://localhost:3001/api/v1/patients
 ```
 
 Note that the `Dockerfile`s are specified independently of the build context through the `-f` flag. This is necessary in order to copy `./types`, which would otherwise cause an error as it is outside the default build context. The build context therefore needs to be this parent directory.

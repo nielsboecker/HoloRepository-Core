@@ -4,6 +4,7 @@ import json
 import sys
 import glob
 import os
+import logging
 from urllib.parse import urljoin
 
 import fire
@@ -25,7 +26,7 @@ class FHIRInteraction:
         elif action == "GET":
             r = requests.get(url)
 
-        print(f"{r.status_code} - {action} to {url}")
+        logging.info(f"{r.status_code} - {action} to {url}")
 
         if not r.ok:
             sys.exit(r.json())
@@ -33,7 +34,7 @@ class FHIRInteraction:
         return r
 
     def upload_bundle(self, fhir_json: str):
-        print(f"Processing file: {fhir_json}")
+        logging.info(f"Processing file: {fhir_json}")
         content = None
         with open(fhir_json, "r") as fhir_f:
             content = json.load(fhir_f)
@@ -52,6 +53,30 @@ class FHIRInteraction:
                 url = urljoin(self._base_url, entry["request"]["url"])
                 self._request(url, "POST", entry["resource"])
 
+    def upload_single_resource(self, fhir_json: str):
+        logging.info(f"Processing file: {fhir_json}")
+        content = None
+        with open(fhir_json, "r") as fhir_f:
+            content = json.load(fhir_f)
+
+        if "type" in content and (
+            content["resourceType"] == "Bundle" and content["type"] == "transaction"
+        ):
+            sys.exit(
+                "Selected file is not a basic FHIR resource, try upload_bundle instead"
+            )
+
+        if "id" not in content or "resourceType" not in content:
+            sys.exit("Singular FHIR resource does not contain Id or resourceType")
+
+        uid = content["id"]
+        resource = content["resourceType"]
+
+        logging.info(f"Detected resource type: {resource}")
+
+        url = urljoin(self._base_url, "/".join([resource, uid]))
+        self._request(url, "PUT", content)
+
     def delete_all(self, resource: str = ""):
         next_url = urljoin(self._base_url, resource)
         while next_url:
@@ -67,10 +92,11 @@ class FHIRInteraction:
                 self._request(entry["fullUrl"], "DELETE")
 
     def upload_folder(self, src_dir: str, ext: str = "json"):
-        print(f"Processing folder: {src_dir}")
+        logging.info(f"Processing folder: {src_dir}")
         for file in glob.glob(os.path.join(src_dir, "*." + ext)):
             self.upload_bundle(file)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     fire.Fire(FHIRInteraction)

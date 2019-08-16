@@ -4,6 +4,7 @@ import os
 import sys
 import json
 import uuid
+import glob
 import fire
 from azure.storage.blob import BlockBlobService, PublicAccess
 
@@ -36,8 +37,8 @@ class Holoblob:
         except Exception as e:
             print(e)
 
-    def upload(self, container_name: str, file_path: str, add_uuid: bool = False):
-        """Upload the created file, use local_file_name for the blob name"""
+    def upload_file(self, container_name: str, file_path: str, add_uuid: bool = False):
+        """Upload a single file, use local_file_name for the blob name"""
         try:
             name, ext = os.path.splitext(os.path.basename(file_path))
             if add_uuid:
@@ -54,6 +55,18 @@ class Holoblob:
 
         except Exception as e:
             print(e)
+
+    def upload_folder(
+        self, container_name: str, src_dir: str, ext: str = "", add_uuid: bool = False
+    ):
+        """Upload all contents in a folder to a blob container"""
+
+        print(f"Uploading all files in '{src_dir}' to '{container_name}'")
+        search_path = os.path.join(src_dir, "*")
+        if ext:
+            search_path = os.path.join(src_dir, "*." + ext)
+        for blob in glob.glob(search_path):
+            self.upload_file(container_name, blob, add_uuid)
 
     def list_blobs(self, container_name: str):
         """List all files within a container"""

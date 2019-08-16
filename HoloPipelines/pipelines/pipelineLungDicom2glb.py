@@ -27,7 +27,7 @@ def main(dicomPath, outputGlbPath):
     generatedNumpyList = compNifti2numpy.main(
         str(pathlib.Path(generatedSegmentedLungsNiftiPath).joinpath("lung.nii.gz"))
     )
-    resizedNumpyList = compNumpyTransformation.sizeLimit(generatedNumpyList, limit=256)
+    resizedNumpyList = compNumpyTransformation.sizeLimit(generatedNumpyList)
     generatedObjPath = compNumpy2obj.main(
         resizedNumpyList, 0.5, str(compCommonPath.obj.joinpath("nifti2glb_tempObj.obj"))
     )

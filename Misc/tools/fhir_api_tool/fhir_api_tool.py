@@ -53,7 +53,7 @@ class FHIRInteraction:
                 url = urljoin(self._base_url, entry["request"]["url"])
                 self._request(url, "POST", entry["resource"])
 
-    def upload_single_resource(self, fhir_json: str):
+    def upload_resource(self, fhir_json: str):
         logging.info(f"Processing file: {fhir_json}")
         content = None
         with open(fhir_json, "r") as fhir_f:
@@ -91,10 +91,15 @@ class FHIRInteraction:
             for entry in data.get("entry", []):
                 self._request(entry["fullUrl"], "DELETE")
 
-    def upload_folder(self, src_dir: str, ext: str = "json"):
-        logging.info(f"Processing folder: {src_dir}")
-        for file in glob.glob(os.path.join(src_dir, "*." + ext)):
-            self.upload_bundle(file)
+    def upload_resource_folder(self, src_dir: str, ext: str = "json"):
+        logging.info(f"Processing folder for fhir singular resources: {src_dir}")
+        for json_file in glob.glob(os.path.join(src_dir, "*." + ext)):
+            self.upload_resource(json_file)
+
+    def upload_bundle_folder(self, src_dir: str, ext: str = "json"):
+        logging.info(f"Processing folder for fhir bundles: {src_dir}")
+        for json_file in glob.glob(os.path.join(src_dir, "*." + ext)):
+            self.upload_bundle(json_file)
 
 
 if __name__ == "__main__":

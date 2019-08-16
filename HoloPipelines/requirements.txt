@@ -12,3 +12,5 @@ scikit_learn==0.21.2
 numpy==1.16.4
 pathlib==1.0.1
 simpleitk==1.2.0
+Flask==1.0.2      
+Flask-JSON==0.3.3

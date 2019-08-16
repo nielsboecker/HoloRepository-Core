@@ -1,11 +1,13 @@
 # pipeline left in current state (work with local files) as unsure if there's a use case where user can download nii from PACS
-# could be left as is for internal use?
-from pipelines.components import compCommonPath
+# could be left as is for internal use? Keep this file but delete index from pipelineList.json?
+
+# do i need status update on this 'internal' pipeline?
 from pipelines.components import compJobStatus
 from pipelines.components import compNifti2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.components import compObj2glbWrapper
 from pipelines.components import compPostToAccesor
+from pipelines.components import compJobPath
 import pathlib
 import sys
 from datetime import datetime
@@ -20,7 +22,7 @@ def main(job_ID, input_nifti_path, output_glb_path, threshold, info_for_accessor
     generated_obj_path = compNumpy2obj.main(
         generated_numpy_list,
         threshold,
-        str(compCommonPath.obj.joinpath("nifti2glb_tempObj.obj")),
+        compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
     )
 
     compJobStatus.update_status(job_ID, "3D format conversion")
@@ -31,7 +33,7 @@ def main(job_ID, input_nifti_path, output_glb_path, threshold, info_for_accessor
         compress_glb=False,
     )
     print("nifti2glb: done, glb saved to {}".format(generated_glb_path))
-    compJobStatus.update_status(job_ID, "Finished")
+    compJobStatus.update_status(job_ID, "Posting data")
     info_for_accessor = json.loads(info_for_accessor)
     compPostToAccesor.send_file_request_to_accessor(
         info_for_accessor["bodySite"] + "apply on generic bone segmentation",
@@ -44,6 +46,9 @@ def main(job_ID, input_nifti_path, output_glb_path, threshold, info_for_accessor
         info_for_accessor["author"],
         info_for_accessor["patient"],
     )
+    compJobStatus.update_status(job_ID, "Cleaning up")
+    compJobPath.clean_up(job_ID)
+    compJobStatus.update_status(job_ID, "Finished")
 
 
 if __name__ == "__main__":

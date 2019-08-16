@@ -6,9 +6,9 @@ import logging
 this_comp_path = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
 
-def pathlib_job_path(job_ID):
+def pathlib_job_path(job_ID, create_dir=True):
     job_path = pathlib.Path(this_comp_path).parents[1].joinpath("jobs", str(job_ID))
-    if not os.path.exists(str(job_path)):
+    if not os.path.exists(str(job_path)) and create_dir:
         os.mkdir(str(job_path))
     return job_path
 

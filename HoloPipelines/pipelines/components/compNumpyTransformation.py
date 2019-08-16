@@ -1,6 +1,20 @@
 import scipy.ndimage
 import sys
 import logging
+import configparser
+import pathlib
+import os
+
+config = configparser.ConfigParser()
+config.sections()
+config.read(
+    str(
+        pathlib.Path(str(os.path.dirname(os.path.realpath(__file__))))
+        .parents[1]
+        .joinpath("config.ini")
+    )
+)
+default_resolution_limit = config["DEFAULT"]["Marching_cube_resolution_limit"]
 
 logging.basicConfig(level=logging.INFO)
 
@@ -19,7 +33,7 @@ def centerCrop(img, newX, newY, newZ):
     return img[startX:endX, startY:endY, startZ:endZ]
 
 
-def sizeLimit(img, limit):
+def sizeLimit(img, limit=default_resolution_limit):
     if len(img.shape) >= 3:
         x = img.shape[0]
         y = img.shape[1]

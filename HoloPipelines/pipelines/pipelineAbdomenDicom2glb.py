@@ -10,9 +10,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-def main(
-    inputDicomPath, outputGlbFolderPath, segmentationModelUrl, resolutionLimit=300
-):
+def main(inputDicomPath, outputGlbFolderPath, segmentationModelUrl):
     generatedNiftiPath = compDicom2nifti.main(
         inputDicomPath, str(compCommonPath.nifti.joinpath("_temp.nii"))
     )
@@ -24,9 +22,7 @@ def main(
     generatedNumpyList = compNifti2numpy.main(
         segmentedNiftiPath, deleteNiftiWhenDone=True
     )
-    resizedNumpyList = compNumpyTransformation.sizeLimit(
-        generatedNumpyList, resolutionLimit
-    )
+    resizedNumpyList = compNumpyTransformation.sizeLimit(generatedNumpyList)
     generatedGlbPathList = compSeparateNumpy.main(resizedNumpyList, outputGlbFolderPath)
     logging.info(
         "abdomenDicom2glb: done, glb models generated at "
@@ -35,4 +31,4 @@ def main(
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4]))
+    main(sys.argv[1], sys.argv[2], sys.argv[3])

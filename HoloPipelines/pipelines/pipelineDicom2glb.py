@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 
 def main(dicomFolderPath, outputGlbPath, threshold):
     generatedNumpyList = compDicom2numpy.main(str(pathlib.Path(dicomFolderPath)))
-    resizedNumpyList = compNumpyTransformation.sizeLimit(generatedNumpyList, limit=256)
+    resizedNumpyList = compNumpyTransformation.sizeLimit(generatedNumpyList)
     start = datetime.datetime.now()
     generatedObjPath = compNumpy2obj.main(
         resizedNumpyList,

@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 
 def main(inputNiftiPath, outputObjPath, threshold, flipNpy=False):
     generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(inputNiftiPath)))
-    resizedNumpyList = compNumpyTransformation.sizeLimit(generatedNumpyList, limit=256)
+    resizedNumpyList = compNumpyTransformation.sizeLimit(generatedNumpyList)
     generatedObjPath = compNumpy2obj.main(
         resizedNumpyList, threshold, str(pathlib.Path(outputObjPath))
     )

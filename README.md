@@ -36,7 +36,9 @@
   - [Integration with other projects](#integration-with-other-projects)
 - [Code organisation](#code-organisation)
 - [Development](#development)
-  - [Getting started](#getting-started)
+  - [Get started](#get-started)
+  - [Set up the environment](#set-up-the-environment)
+  - [System integration](#system-integration)
 - [Contributing](#contributing)
 - [Acknowledgements](#acknowledgements)
 - [License](#license)
@@ -106,21 +108,21 @@ Most of the components are kept here in the [HoloRepository-Core](https://github
 
 ## Development
 
-### Getting started
+### Get started
 
-#### Clone the repositories
-
+To get started, you should clone both relevant git repositories:
 ```shell
-git clone git@github.com:nbckr/HoloRepository-Core.git
-git clone git@github.com:nbckr/HoloRepository-HoloLens.git
-
+$ git clone git@github.com:nbckr/HoloRepository-Core.git
+$ git clone git@github.com:nbckr/HoloRepository-HoloLens.git
 ```
 
-#### Set up the environment
+Next, it is highly recommended to expolore the `README`s that are provided for each component.
+
+### Set up the environment
 
 The different components are developed in different languages and making use of different tools, so your next step should be inspecting the `README` in the respective directory.
 
-##### Pre-commit hooks
+#### Pre-commit hooks
 
 As some languages, like Python, are used for multiple components, we use a common tool to enforce coherent coding style. The code formatter [black](https://github.com/psf/black) is checking new commits via a pre-commit hook. Steps to set it up:
 
@@ -129,11 +131,51 @@ As some languages, like Python, are used for multiple components, we use a commo
 
 For the TypeScript portions, similar tooling is used. To set it up, follow the instructions in the respective sub-directories.
 
-##### CodeFactor
+#### CodeFactor
 
 CodeFactor is another tool we use to ensure high code quality. It will run automatically on GitHub for any activated branches, as well as for all pull requests. If the service finds any issues, please fix them before we will continue to consider the pull request.
 
 _Note: The `tslint.json` config is solely for this purpose. The actual JavaScript / TypeScript code is linted with ESLint, given that TSLint will be deprecated. Use the TSLint config only when CodeFactor's default rules are unreasonable._
+
+### System integration
+
+#### Ports and interfaces
+
+The different components are meant to be deployed independently. They communicate via REST APIs, which are documented in the sub-directories' `README`s. For development, the system can be run on the same host, using these default ports:
+```c
+HoloRepositoryUI/client:  3000
+HoloRepositoryUI/server:  3001
+HoloPipelines/core:       3100
+HoloStorageAccessor:      3200
+HoloPipelines/models:     5000, 5001, 5002, ...
+```
+
+#### Run system in docker-compose
+
+As the system comprises multiple separate components, it can be helpful to use docker-compose to locally start all of them at once, for instance to perform integration tests or develop a new component.
+
+Note: To successfully start the Accessor, you need to provide the relevant configuration in `./HoloStorageAccessor/config.env` (see the sub-component's `README` for more information).
+
+This will also reflect the current state of the sub-components' `Dockerfile`s. To build and start all images (if they haven't been build already), run:
+```shell
+$ docker-compose --file docker-compose.dev.yml up
+Starting holorepository-core_holorepository-ui-client_1                      ... done
+Starting holorepository-core_holopipelines-models__dense_vnet_abdominal_ct_1 ... done
+Starting holorepository-core_holorepository-ui-server_1                      ... done
+Creating holorepository-core_holostorage-accessor_1                          ... done
+```
+
+Force a rebuild by replacing `docker-compose up` with `docker-compose build`.
+
+You can also just run a single component or a selection of components, but still use the provided configurations, port mappings etc. from the `docker-compose` file for convenience:
+```shell
+$ docker-compose --file docker-compose.dev.yml up holostorage-accessor holorepository-ui-server
+```
+
+Lastly, it is also possible to start the whole system except for one component, which will allow you to develop this component and, for instance, manually run it in dev mode.
+```shell
+$ docker-compose --file docker-compose.dev.yml up --scale holostorage-accessor=0
+```
 
 ## Contributing
 

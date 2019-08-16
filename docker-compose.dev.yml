@@ -1,0 +1,33 @@
+version: '3'
+services:
+  holorepository-ui-client:
+    build:
+      context: ./HoloRepositoryUI
+      dockerfile: ./client/Dockerfile
+      args:
+        - REACT_APP_BACKEND_HOST=http://localhost
+        - REACT_APP_BACKEND_PORT=3001
+        - REACT_APP_BACKEND_TIMEOUT=15000
+    ports:
+      - "3000:3000"
+  holorepository-ui-server:
+    build:
+      context: ./HoloRepositoryUI
+      dockerfile: ./server/Dockerfile
+    env_file: ./HoloRepositoryUI/server/.env
+    ports:
+      - "3001:3001"
+#  TODO: Uncomment when HoloPipelines are ready
+#  holopipelines-core:
+#    build: ./HoloPipelines
+#    ports:
+#      - "3100:3100"
+  holostorage-accessor:
+    build: ./HoloStorageAccessor
+    env_file: ./HoloStorageAccessor/config.env
+    ports:
+      - "3200:3200"
+  holopipelines-models__dense_vnet_abdominal_ct:
+    build: ./HoloPipelines/models/dense_vnet_abdominal_ct
+    ports:
+      - "5000:5000"

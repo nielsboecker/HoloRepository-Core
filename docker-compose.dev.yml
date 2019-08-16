@@ -31,4 +31,3 @@ services:
     build: ./HoloPipelines/models/dense_vnet_abdominal_ct
     ports:
       - "5000:5000"
-      

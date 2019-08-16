@@ -14,7 +14,7 @@ config.read(
         .joinpath("config.ini")
     )
 )
-default_resolution_limit = config["DEFAULT"]["Marching_cube_resolution_limit"]
+default_resolution_limit = int(config["DEFAULT"]["Marching_cube_resolution_limit"])
 
 logging.basicConfig(level=logging.INFO)
 

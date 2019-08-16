@@ -40,7 +40,9 @@ def sizeLimit(img, limit):
         if highest > limit:
             img = centerCrop(img, limit, limit, limit)
 
-        logging.info("compNumpyTransformation: array resize done")
+        logging.info(
+            "compNumpyTransformation: array resize done. new shape: " + repr(img.shape)
+        )
     else:
         logging.info(
             "compNumpyTransformation: array smaller than limit given, no resize has been done"

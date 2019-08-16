@@ -2,6 +2,7 @@ from components import compCommonPath
 from components import compNifti2numpy
 from components import compNumpy2obj
 from components import compObj2glbWrapper
+from components import compNumpyTransformation
 import pathlib
 import sys
 import logging
@@ -11,8 +12,9 @@ logging.basicConfig(level=logging.INFO)
 
 def main(inputNiftiPath, outputGlbPath, threshold):
     generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(inputNiftiPath)))
+    resizedNumpyList = compNumpyTransformation.sizeLimit(generatedNumpyList, limit=256)
     generatedObjPath = compNumpy2obj.main(
-        generatedNumpyList,
+        resizedNumpyList,
         threshold,
         str(compCommonPath.obj.joinpath("nifti2glb_tempObj.obj")),
     )

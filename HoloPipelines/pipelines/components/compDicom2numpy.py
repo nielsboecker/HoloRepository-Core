@@ -88,7 +88,7 @@ def reorientateNumpyList(numpyList):
     # transpose numpy i.e. (z, y, x) ---> (x, y, z)
     numpyList = numpyList.transpose(2, 1, 0)
     numpyList = np.flip(numpyList, 0)
-    numpyList = np.flip(numpyList, 1)
+    # numpyList = np.flip(numpyList, 1) # need to confirm this
     return numpyList
 
 

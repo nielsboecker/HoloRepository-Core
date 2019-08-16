@@ -3,6 +3,7 @@ from components import compDicom2nifti
 from components import compNifti2numpy
 from components import compNumpy2obj
 from components import compObj2glbWrapper
+from components import compNumpyTransformation
 import components.lungSegment.main as compLungSegment
 import pathlib
 import sys
@@ -26,10 +27,9 @@ def main(dicomPath, outputGlbPath):
     generatedNumpyList = compNifti2numpy.main(
         str(pathlib.Path(generatedSegmentedLungsNiftiPath).joinpath("lung.nii.gz"))
     )
+    resizedNumpyList = compNumpyTransformation.sizeLimit(generatedNumpyList, limit=256)
     generatedObjPath = compNumpy2obj.main(
-        generatedNumpyList,
-        0.5,
-        str(compCommonPath.obj.joinpath("nifti2glb_tempObj.obj")),
+        resizedNumpyList, 0.5, str(compCommonPath.obj.joinpath("nifti2glb_tempObj.obj"))
     )
     generatedGlbPath = compObj2glbWrapper.main(
         generatedObjPath,

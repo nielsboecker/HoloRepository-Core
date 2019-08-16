@@ -38,6 +38,7 @@ def generateObj(inputNumpy, thisThreshold, outputObjPath):
             )
 
     verts, faces, norm = generateMesh(numpyData, float(thisThreshold), 1)
+    logging.info("number of faces generated: " + str(len(faces)))
 
     faces = (
         faces + 1

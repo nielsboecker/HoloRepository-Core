@@ -6,7 +6,7 @@
 import pipelines.adapters.holostorage_accessor
 import pipelines.state.job_status
 from pipelines.config.io_paths import nifti_path
-from pipelines.components import compDicom2nifti
+from pipelines.services import format_conversion
 import pipelines.components.lungSegment.main as comp_lung_segment
 from pipelines.components import compNifti2numpy
 from pipelines.components import compNumpy2obj
@@ -28,7 +28,7 @@ def main(job_ID, dicom_download_url, meta_data):
     pipelines.state.job_status.post_status_update(job_ID, "Fetching data")
     dicom_path = receive_input.fetch_and_unzip(job_ID, dicom_download_url)
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.PREPROCESSING.name)
-    generated_nifti_path = compDicom2nifti.main(  # compDcm2nifti here is outdated (still has GDCM dependency, will need to be merged with dev). comp should also be updated to return the full path to nii file, not its folder
+    generated_nifti_path = format_conversion.convert_dicom_to_nifty(  # compDcm2nifti here is outdated (still has GDCM dependency, will need to be merged with dev). comp should also be updated to return the full path to nii file, not its folder
         str(dicom_path),
         str(
             nifti_path.joinpath(str(pathlib.PurePath(dicom_path).parts[-1]))

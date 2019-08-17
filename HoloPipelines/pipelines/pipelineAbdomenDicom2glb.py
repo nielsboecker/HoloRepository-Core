@@ -1,4 +1,4 @@
-from pipelines.components import compDicom2nifti
+from pipelines.services import format_conversion
 from pipelines.clients import http
 from pipelines.components import compNifti2numpy
 from pipelines.components import compSeparateNumpy
@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 def main(
     inputDicomPath, outputGlbFolderPath, segmentationModelUrl, resolutionLimit=300
 ):
-    generatedNiftiPath = compDicom2nifti.main(
+    generatedNiftiPath = format_conversion.convert_dicom_to_nifty(
         inputDicomPath, str(nifti_path.joinpath("_temp.nii"))
     )
     segmentedNiftiPath = http.send_file_post_request(

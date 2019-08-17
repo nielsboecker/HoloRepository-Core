@@ -1,10 +1,9 @@
 from components import compDicom2numpy
 import nibabel as nib
 import numpy as np
-import logging
 
 
-def main(dicomInputPath, niftiOutputPath):
+def convert_dicom_to_nifty(dicomInputPath, niftiOutputPath):
     # convert series of dicom to numpy
     dicomNumpyList = compDicom2numpy.main(dicomInputPath)
 
@@ -13,7 +12,3 @@ def main(dicomInputPath, niftiOutputPath):
     nib.save(niftiImage, niftiOutputPath)
 
     return niftiOutputPath
-
-
-if __name__ == "__main__":
-    logging.error("component can't run on its own")

@@ -6,9 +6,9 @@ from pipelines.wrappers.obj2gltf import convert_obj_to_glb
 from pipelines.utils.job_status import JobStatus
 from pipelines.utils.pipelines_info import get_pipeline_list
 from pipelines.state.job_status import post_status_update
-from pipelines.tasks import receive_input
+from pipelines.tasks.shared import receive_input
 from pipelines.components import compJobPath
-from pipelines.tasks.dispatch_output import dispatch_output
+from pipelines.tasks.shared.dispatch_output import dispatch_output
 import pathlib
 import json
 import sys

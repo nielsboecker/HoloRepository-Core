@@ -11,8 +11,8 @@ import pipelines.components.lungSegment.main as comp_lung_segment
 from pipelines.components import compNifti2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.wrappers.obj2gltf import convert_obj_to_glb
-from pipelines.tasks.dispatch_output import dispatch_output
-from pipelines.tasks import receive_input
+from pipelines.tasks.shared.dispatch_output import dispatch_output
+from pipelines.tasks.shared import receive_input
 from pipelines.components import compJobPath
 from pipelines.utils.job_status import JobStatus
 from pipelines.utils.pipelines_info import get_pipeline_list

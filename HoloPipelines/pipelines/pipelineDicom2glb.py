@@ -1,14 +1,14 @@
-from pipelines.components import compDicom2numpy
-from pipelines.components import compNumpy2obj
-from pipelines.components import compObj2glbWrapper
-from pipelines.components import compPostToAccesor
-from pipelines.components.compJobStatusEnum import JobStatus
-from pipelines.components import compCombineInfoForAccesor
-from pipelines.components.compGetPipelineListInfo import get_pipeline_list
-from pipelines.components.compJobStatus import update_status
-from pipelines.components import compFetchResource
-from pipelines.components import compJobPath
-from pipelines.components import compJobStatus
+from components import compDicom2numpy
+from components import compNumpy2obj
+from components import compObj2glbWrapper
+from components import compPostToAccesor
+from components.compJobStatusEnum import JobStatus
+from components import compCombineInfoForAccesor
+from components.compGetPipelineListInfo import get_pipeline_list
+from components.compJobStatus import update_status
+from components import compFetchResource
+from components import compJobPath
+from components import compJobStatus
 import pathlib
 import json
 import sys

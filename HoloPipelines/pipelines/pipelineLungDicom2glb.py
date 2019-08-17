@@ -1,18 +1,18 @@
-from pipelines.components import (
+from components import (
     compCommonPath,
 )  # needs to be removed when compDcm2nifti is replaced (please see other comments below)
-from pipelines.components import compJobStatus
-from pipelines.components import compDicom2nifti
-import pipelines.components.lungSegment.main as comp_lung_segment
-from pipelines.components import compNifti2numpy
-from pipelines.components import compNumpy2obj
-from pipelines.components import compObj2glbWrapper
-from pipelines.components import compPostToAccesor
-from pipelines.components import compFetchResource
-from pipelines.components import compJobPath
-from pipelines.components.compJobStatusEnum import JobStatus
-from pipelines.components import compCombineInfoForAccesor
-from pipelines.components.compGetPipelineListInfo import get_pipeline_list
+from components import compJobStatus
+from components import compDicom2nifti
+import components.lungSegment.main as comp_lung_segment
+from components import compNifti2numpy
+from components import compNumpy2obj
+from components import compObj2glbWrapper
+from components import compPostToAccesor
+from components import compFetchResource
+from components import compJobPath
+from components.compJobStatusEnum import JobStatus
+from components import compCombineInfoForAccesor
+from components.compGetPipelineListInfo import get_pipeline_list
 
 import pathlib
 import sys

@@ -8,18 +8,21 @@ import cors from "cors";
 
 const app = express();
 
+const { PORT: port, REQUEST_LIMIT: limit } = process.env;
+const rootPath = path.normalize(__dirname + "/../..");
+const staticFilesPath = `${rootPath}/public`;
+
 export default class ExpressServer {
   public constructor() {
     // Set root app path
-    const root = path.normalize(__dirname + "/../..");
-    app.set("appPath", root + "client");
+    app.set("appPath", rootPath);
 
     // Set configuration
-    app.use(bodyParser.json({ limit: process.env.REQUEST_LIMIT || "100kb" }));
-    app.use(bodyParser.urlencoded({ extended: true, limit: process.env.REQUEST_LIMIT || "100kb" }));
+    app.use(bodyParser.json({ limit }));
+    app.use(bodyParser.urlencoded({ extended: true, limit }));
 
     // Serve static assets
-    app.use(express.static(`${root}/public`));
+    app.use(express.static(staticFilesPath));
   }
 
   public router(routes: (app: Application) => void): ExpressServer {
@@ -29,19 +32,18 @@ export default class ExpressServer {
     routes(app);
 
     // Middleware after routes
-    // Note: using default Express error handler for now, may change soon
+    // Note: using default Express error handler for now
     // app.use(errorHandler);
 
     return this;
   }
 
-  public listen(port: string | number = process.env.PORT): Application {
-    const welcome = port => () =>
+  public listen(): Application {
+    const welcomeMessage = () =>
       logger.info(
-        `up and running in ${process.env.NODE_ENV ||
-          "development"} @: ${os.hostname()} on port: ${port}}`
+        `Up and running in ${process.env.NODE_ENV} @: ${os.hostname()} on port: ${port}}`
       );
-    http.createServer(app).listen(port, welcome(port));
+    http.createServer(app).listen(port, welcomeMessage);
     return app;
   }
 }

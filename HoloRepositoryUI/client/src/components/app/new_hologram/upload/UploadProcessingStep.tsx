@@ -1,45 +1,22 @@
 import React, { Component } from "react";
-import { Icon, Spinner } from "office-ui-fabric-react";
-import { navigate } from "@reach/router";
+import { Spinner } from "office-ui-fabric-react";
 
-class UploadProcessingStep extends Component<any, { finished: boolean }> {
-  state = {
-    finished: false
-  };
+export interface IUploadProcessingStepProps {
+  onComponentDidMount: () => void;
+}
 
+class UploadProcessingStep extends Component<IUploadProcessingStepProps> {
   render() {
-    //<ProgressIndicator label="Example title" description="Example description" />
-    if (!this.state.finished) {
-      return (
-        <div>
-          <Spinner label="Sending data to HoloRepository..." />
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <Icon iconName="Accept" />
-          <strong>All done!</strong>
-          <p>Your hologram is now stored in the HoloRepository.</p>
-        </div>
-      );
-    }
+    return (
+      <div>
+        <Spinner label="Sending data to HoloRepository..." />
+      </div>
+    );
   }
 
   componentDidMount(): void {
-    setTimeout(() => this.setState({ finished: true }), 2500);
-  }
-
-  componentDidUpdate(
-    prevProps: Readonly<any>,
-    prevState: Readonly<{ finished: boolean }>,
-    snapshot?: any
-  ): void {
-    if (!prevState.finished && this.state.finished) {
-      setTimeout(() => {
-        navigate("/app/holograms");
-      }, 2500);
-    }
+    // Note: This is not ideal; using callback upon component render to start the upload
+    this.props.onComponentDidMount();
   }
 }
 

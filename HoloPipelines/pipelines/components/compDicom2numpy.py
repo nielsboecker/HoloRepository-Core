@@ -7,6 +7,8 @@ import pathlib
 import sys
 import logging
 
+logging.basicConfig(level=logging.INFO)
+
 
 def load_scan(scan_path):
     slices = [
@@ -21,7 +23,7 @@ def load_scan(scan_path):
 
     except Exception as e:
         logging.warning(
-            "Unable to load sclice's image positon, using slice location instead: {}".format(
+            "Unable to load slice's image positon, using slice location instead: {}".format(
                 str(e)
             )
         )
@@ -48,7 +50,7 @@ def load_pixel_array(input_path):
 def resample(data_path, new_spacing=[1, 1, 1]):
     scan = load_scan(data_path)
     image = load_pixel_array(data_path)
-    print("Shape before resampling\t", image.shape)
+    logging.info("Shape before resampling\t" + repr(image.shape))
     # Determine current pixel spacing
     try:
         spacing = map(
@@ -60,9 +62,11 @@ def resample(data_path, new_spacing=[1, 1, 1]):
         )
         spacing = np.array(list(spacing))
     except Exception as e:
-        logging.warn("error in resample data: " + e.message)
-        print(len(scan[0].PixelSpacing))
-        print(
+        logging.warning(
+            "Unable to load elements of PixelSpacing from dicom, please make sure header data exist. scan[0].PixelSpacing: "
+            + len(scan[0].PixelSpacing)
+        )
+        logging.warning(
             "Pixel Spacing (row, col): (%f, %f) "
             % (scan[0].PixelSpacing[0], scan[0].PixelSpacing[1])
         )
@@ -76,17 +80,26 @@ def resample(data_path, new_spacing=[1, 1, 1]):
     new_spacing = spacing / real_resize_factor
 
     image = scipy.ndimage.interpolation.zoom(image, real_resize_factor)
-    print("Shape after resampling\t", image.shape)
+    logging.info("Shape after resampling\t" + repr(image.shape))
 
     return image, new_spacing
 
 
+def reorientateNumpyList(numpyList):
+    # transpose numpy i.e. (z, y, x) ---> (x, y, z)
+    numpyList = numpyList.transpose(2, 1, 0)
+    numpyList = np.flip(numpyList, 0)
+    numpyList = np.flip(numpyList, 1)
+    return numpyList
+
+
 def main(dicom_path):
-    print("dicom2numpy: resampling dicom...")
+    logging.info("dicom2numpy: resampling dicom...")
     imgs_after_resamp, spacing = resample(dicom_path)
-    print("dicom2numpy: resampling done")
+    logging.info("dicom2numpy: resampling done")
+    imgs_after_resamp = reorientateNumpyList(imgs_after_resamp)
     return imgs_after_resamp
 
 
 if __name__ == "__main__":
-    print("component can't run on its own")
+    logging.error("component can't run on its own")

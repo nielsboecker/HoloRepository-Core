@@ -1,26 +1,33 @@
 import requests
 import pathlib
+import sys
 import logging
-import os
-import json
-
 
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
 logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 
-def send_file_post_request(url, input_file, output_file):
-    input_file = str(pathlib.Path(input_file))
-    output_file = str(pathlib.Path(output_file))
-    with open(input_file, "rb") as input_file:
-        in_file = {"file": input_file}
-    input_file.close()
-    response = requests.post(url, files=in_file)
-    with open(output_file, "wb") as output_file:
-        output_file.write(response.content)
-    output_file.close()
-    logging.debug("return code: " + response.status_code)
-    return output_file
+def send_file_post_request(url, inputFile, outputFile):
+    inputFile = str(pathlib.Path(inputFile))
+    outputFile = str(pathlib.Path(outputFile))
+    with open(inputFile, "rb") as inputFileData:
+        fileToSend = {"file": inputFileData}
+        try:
+            response = requests.post(url, files=fileToSend, timeout=10)
+            if response.status_code != 200:
+                # status 400 with "No file in the request" or "No selected file"
+                sys.exit(
+                    "compHttpRequest: error, bad status code (got {}: {})".format(
+                        response.status_code, response.content
+                    )
+                )
+        except Exception:
+            sys.exit(
+                "compHttpRequest: an error happened in a POST request, this might be due to timeout or bad request. Or if this is a request to one of the segmentation model, then please make sure the container with the model is running."
+            )
+    with open(outputFile, "wb") as fileToWrite:
+        fileToWrite.write(response.content)
+    return outputFile
 
 
 def send_post_to_status(json_data):
@@ -35,4 +42,4 @@ def send_post_to_status(json_data):
 
 
 if __name__ == "__main__":
-    print("component can't run on its own")
+    logging.error("component can't run on its own")

@@ -3,20 +3,21 @@ import nibabel as nib
 from skimage import measure
 import pathlib
 import sys
+import logging
 
+logging.basicConfig(level=logging.INFO)
 nib.Nifti1Header.quaternion_threshold = -1e-06
 
 
 def generate_mesh(image, threshold=300, step_size=1):
-    print("Transposing surface...")
+    logging.info("Transposing surface...")
     if (
         len(image.shape) == 5
     ):  # for nifti with 5D shape (time etc.), most nifti comes in 3D
         image = image[:, :, :, 0, 0]
     p = image.transpose(2, 1, 0)
-    print(image.shape)
 
-    print("Calculating surface...")
+    logging.info("Calculating surface...")
     verts, faces, norm, val = measure.marching_cubes_lewiner(
         p, threshold, step_size=step_size, allow_degenerate=True
     )
@@ -32,7 +33,9 @@ def generate_obj(input_numpy, this_threshold, output_obj_path):
 
         except Exception:
             sys.exit(
-                "numpy2obj: error occured while loading numpy. Please make sure the path to numpy is correct."
+                "numpy2obj: error occured while loading numpy. Please make sure the path to numpy is correct. {}".format(
+                    e
+                )
             )
 
     verts, faces, norm = generate_mesh(numpy_data, float(this_threshold), 1)
@@ -55,9 +58,9 @@ def generate_obj(input_numpy, this_threshold, output_obj_path):
 
 def main(input_data, main_threshold, output_path):
     generate_obj(input_data, main_threshold, output_path)
-    print("numpy2obj: done")
+    logging.info("numpy2obj: done")
     return output_path
 
 
 if __name__ == "__main__":
-    print("component can't run on its own")
+    logging.error("component can't run on its own")

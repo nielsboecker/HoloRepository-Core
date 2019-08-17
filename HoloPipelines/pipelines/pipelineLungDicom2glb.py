@@ -13,10 +13,13 @@ from pipelines.components import compJobPath
 from pipelines.components.compJobStatusEnum import JobStatus
 from pipelines.components import compCombineInfoForAccesor
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list
+from components import compDicom2nifti
 
 import pathlib
 import sys
 import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 def main(job_ID, dicom_download_url, meta_data):

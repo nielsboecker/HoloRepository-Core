@@ -15,7 +15,17 @@ import (
 )
 
 func main() {
-	router := apiserver.NewRouter()
+	config, err := apiserver.LoadConfiguration()
+	if err != nil {
+		log.Fatalf("Load config error: %s\n", err.Error())
+	}
+
+	err = apiserver.InitialiseBlobStorage(config.BlobStorageName, config.BlobStorageKey)
+	if err != nil {
+		log.Fatalf("BlobStorage init error: %s\n", err.Error())
+	}
+
+	router := apiserver.NewRouter(config)
 
 	log.Fatal(router.Run(":3200"))
 }

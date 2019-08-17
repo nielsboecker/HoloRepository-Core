@@ -1,6 +1,6 @@
 {
   "name": "holorepository-ui-types",
-  "version": "0.1.0",
+  "version": "0.3.2",
   "description": "The TypeScript definitions that are used by the HoloRepository sub-projects",
   "scripts": {
     "build": "tsc --build",

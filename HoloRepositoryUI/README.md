@@ -1,6 +1,6 @@
 # HoloRepositoryUI <a href="https://dev.azure.com/MSGOSHHOLO/HoloRepository/_build/latest?definitionId=1&branchName=dev"><img src="https://dev.azure.com/MSGOSHHOLO/HoloRepository/_apis/build/status/HoloRepository-Core?branchName=dev&jobName=HoloRepositoryUI%20-%20Client" alt="Client build status" align="right" /></a> <a href="https://dev.azure.com/MSGOSHHOLO/HoloRepository/_build/latest?definitionId=1&branchName=dev"><img src="https://dev.azure.com/MSGOSHHOLO/HoloRepository/_apis/build/status/HoloRepository-Core?branchName=dev&jobName=HoloRepositoryUI%20-%20Server" alt="Server build status" align="right" /></a>
 
-A web-based application that allows practitioners to browse their patients and manage the generation of 3D models sourced from imaging studies like CT or MRI scans. The client-side application is accompanied by an API server that is responsible for commicating with the other components.
+A web-based application that allows practitioners to browse their patients and manage the generation of 3D models sourced from imaging studies like CT or MRI scans. The client-side application is accompanied by an API server that is responsible for communicating with the other components.
 
 ## Description
 
@@ -20,9 +20,10 @@ The client application is written in React 16.8, using TypeScript and built on t
 
 - Routing: [reach-router](https://github.com/reach/router)
 - HTTP client: [axios](https://github.com/axios/axios)
+- Form validation: [formsy-react](https://github.com/formsy/formsy-react)
 - Linting and formatting: [ESLint](https://github.com/eslint/eslint) and [Prettier](https://github.com/prettier/prettier)
 - Styling: [office-ui-fabric-react](https://github.com/OfficeDev/office-ui-fabric-react) and [ant-design](https://github.com/ant-design/ant-design)
-- Testing: [Jest](https://github.com/facebook/jest) and [Enzyme](https://github.com/airbnb/enzyme)
+- Testing: [Jest](https://github.com/facebook/jest), [Enzyme](https://github.com/airbnb/enzyme) and [axios-mock-adapter](https://github.com/ctimmerm/axios-mock-adapter)
 
 The back-end is written in Node / Express 4.16 and TypeScript.
 
@@ -135,16 +136,21 @@ Note that the actual deployment leverages Docker. A `Dockerfile` is provided for
 
 ```shell
 # client
-docker build -t holorepository-ui-client -f ./client/Dockerfile .
-docker run -d -p 80:3000 --name holorepository-ui-client holorepository-ui-client:latest
+docker build \
+    --build-arg REACT_APP_BACKEND_HOST=http://localhost \
+    --build-arg REACT_APP_BACKEND_PORT=3001 \
+    --build-arg REACT_APP_BACKEND_TIMEOUT=15000 \
+    --tag holorepository-ui-client \
+    --file ./client/Dockerfile .
+docker run -d -p 3000:3000 --name holorepository-ui-client holorepository-ui-client:latest
 
 # server
 docker build -t holorepository-ui-server -f ./server/Dockerfile .
-docker run -d -p 80:3001 --name holorepository-ui-server holorepository-ui-server:latest
+docker run -d -p 3001:3001 --name holorepository-ui-server --env-file ./server/.env holorepository-ui-server:latest
 
 # test connections
-curl http://localhost/api/v1/patients
-curl http://localhost/app/
+echo "Testing client" && curl http://localhost:3000/app/
+echo "Testing server" && curl http://localhost:3001/api/v1/patients
 ```
 
 Note that the `Dockerfile`s are specified independently of the build context through the `-f` flag. This is necessary in order to copy `./types`, which would otherwise cause an error as it is outside the default build context. The build context therefore needs to be this parent directory.
@@ -152,6 +158,8 @@ Note that the `Dockerfile`s are specified independently of the build context thr
 ### Using docker-compose
 
 Alternatively, you can start both client and server with one command: `docker-compose up`. Note that this will use port 3000 for the client and 3001 for the server, in contrast to a production deployment where the ports would usually be mapped to port 80 on the host.
+
+**Deprecated**: While this will still work, there is now a comprehensive docker-compose file at the project root directory. As the UI depends on other components to run properly, it is highly recommended to use that one instead.
 
 ## Integration
 

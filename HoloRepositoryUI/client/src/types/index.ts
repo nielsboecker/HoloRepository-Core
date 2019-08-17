@@ -6,10 +6,13 @@
  *
  * Therefore, enums  that are accessed programmatically are duplicated in
  * this file.
+ *
+ * Note that you may have to silence TypeScript errors with @ts-ignore if
+ * you use the identical types from different directories.
  */
 
 // Holograms.ts
 export enum HologramCreationMode {
-  generateFromImagingStudy = "GENERATE_FROM_IMAGING_STUDY",
-  uploadExistingModel = "UPLOAD_EXISTING_MODEL"
+  GENERATE_FROM_IMAGING_STUDY = "GENERATE_FROM_IMAGING_STUDY",
+  UPLOAD_EXISTING_MODEL = "UPLOAD_EXISTING_MODEL"
 }

@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import "./App.scss";
 import MainContainer from "./MainContainer";
 import { initializeIcons } from "@uifabric/icons";
-import BackendService from "../../services/holoRepositoryServerService";
-import { IPatient, IPractitioner, IPipeline } from "../../../../types";
+import BackendServerService from "../../services/BackendServerService";
+import { IHologram, IPatient, IPractitioner, IPipeline } from "../../../../types";
 import { AppContext, IAppState, initialState } from "./AppState";
 
 // Note: See https://developer.microsoft.com/en-us/fabric/#/styles/web/icons#fabric-react
@@ -19,26 +19,27 @@ class App extends Component<any, IAppState> {
       handleSelectedPatientIdChange: this._handleSelectedPatientIdChange,
       handlePipelinesChange: this._handlePipelinesChange,
       handleDeleteHolograms: this._handleDeleteHolograms,
-      handleDownloadHolograms: this._handleDownloadHolograms
+      handleDownloadHolograms: this._handleDownloadHolograms,
+      handleHologramCreated: this._handleHologramCreated
     };
   }
 
   componentDidMount(): void {
     // Note: SMART login is currently not implemented, so a hard-coded practitioner will be the user
     const practitionerId = "b0016666-1924-455d-8b16-92c631fa5207";
-    BackendService.getPractitioner(practitionerId).then(practitioner => {
+    BackendServerService.getPractitioner(practitionerId).then(practitioner => {
       console.log("Fetched data: practitioner", practitioner);
       this._handlePractitionerChange(practitioner!);
     });
 
     // Fetch all patients for which the current practitioner is responsible
-    BackendService.getAllPatientsForPractitioner(practitionerId).then(patients => {
+    BackendServerService.getAllPatientsForPractitioner(practitionerId).then(patients => {
       console.log("Fetched data: patients", patients);
       this._handlePatientsChange(patients!);
     });
 
     // Fetch information about available pipelines
-    BackendService.getAllPipelines().then(pipelines => {
+    BackendServerService.getAllPipelines().then(pipelines => {
       console.log("Fetched data: pipelines", pipelines);
       this._handlePipelinesChange(pipelines || []);
     });
@@ -63,7 +64,7 @@ class App extends Component<any, IAppState> {
     const { patients } = this.state;
     if (!patients) return;
 
-    BackendService.getImagingStudiesForAllPatients(patients).then(combinedResult => {
+    BackendServerService.getImagingStudiesForAllPatients(patients).then(combinedResult => {
       console.log("Fetched data: imaging studies", combinedResult);
       for (const pid in combinedResult) {
         const studies = combinedResult[pid];
@@ -84,7 +85,7 @@ class App extends Component<any, IAppState> {
     const { patients } = this.state;
     if (!patients) return;
 
-    BackendService.getHologramsForAllPatients(patients).then(combinedResult => {
+    BackendServerService.getHologramsForAllPatients(patients).then(combinedResult => {
       console.log("Fetched data: holograms", combinedResult);
       for (const pid in combinedResult) {
         const holograms = combinedResult[pid];
@@ -128,13 +129,65 @@ class App extends Component<any, IAppState> {
   };
 
   private _handleDeleteHolograms = (hids: string[]) => {
-    hids.forEach(hid => BackendService.deleteHologramById(hid).then(res => console.log(res)));
+    hids.forEach(hid =>
+      BackendServerService.deleteHologramById(hid).then(response => {
+        if (response === true) {
+          this._handleHologramDeleted(hid);
+        }
+      })
+    );
   };
 
   private _handleDownloadHolograms = (hids: string[]) => {
     hids.forEach(hid => {
-      BackendService.downloadHologramById(hid).then(response => console.log("download", response));
+      BackendServerService.downloadHologramById(hid);
     });
+  };
+
+  private _handleHologramDeleted = (hid: string) => {
+    const pid = this._getPidForHid(hid);
+    const patient = pid && this.state.patients[pid];
+    if (!pid || !patient || !patient.holograms) {
+      return;
+    }
+    patient.holograms = patient.holograms.filter(hologram => hologram.hid !== hid);
+
+    // Note: Duplicate code, should be refactored
+    this.setState({
+      patients: {
+        ...this.state.patients,
+        [pid]: patient
+      }
+    });
+  };
+
+  private _handleHologramCreated = (hologram: IHologram) => {
+    const pid = hologram.pid;
+    const patient = this.state.patients[pid];
+
+    // Adding data because Accessor only sends aid and pid
+    hologram.patientName = patient.name.full;
+    hologram.authorName = this.state.practitioner!.name.full;
+
+    if (!patient.holograms) {
+      patient.holograms = [];
+    }
+    patient.holograms.push(hologram);
+
+    this.setState({
+      patients: {
+        ...this.state.patients,
+        [pid]: patient
+      }
+    });
+  };
+
+  private _getPidForHid = (hid: string): string | null => {
+    const patient = Object.values(this.state.patients).find(
+      patient => patient.holograms && patient.holograms.find(hologram => hologram.hid === hid)
+    );
+
+    return patient ? patient.pid : null;
   };
 }
 

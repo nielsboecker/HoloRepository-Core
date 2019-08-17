@@ -40,6 +40,7 @@ def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
         delete_original_obj=True,
         compress_glb=False,
     )
+    logging.info("nifti2glb: done, glb saved to {}".format(generated_glb_path))
     print("nifti2glb: done, glb saved to {}".format(generated_glb_path))
 
     list_of_pipeline = get_pipeline_list()

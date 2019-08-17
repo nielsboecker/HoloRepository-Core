@@ -2,11 +2,18 @@ import React, { Component } from "react";
 import { Icon, MessageBar, Spinner } from "office-ui-fabric-react";
 import { navigate } from "@reach/router";
 
+export interface IGenerationProcessingStepProps {
+  onComponentDidMount: () => void;
+}
+
 export interface IGenerationProcessingStepState {
   finished: boolean;
   message: string;
 }
-class GenerationProcessingStep extends Component<any, IGenerationProcessingStepState> {
+class GenerationProcessingStep extends Component<
+  IGenerationProcessingStepProps,
+  IGenerationProcessingStepState
+> {
   state = {
     finished: false,
     message: "Preprocessing image data..."
@@ -40,6 +47,9 @@ class GenerationProcessingStep extends Component<any, IGenerationProcessingStepS
   }
 
   componentDidMount(): void {
+    // Note: This is not ideal; using callback upon component render to start the upload
+    this.props.onComponentDidMount();
+
     // Mock progress status for now
     setTimeout(() => this.setState({ message: "Generating hologram from imaging study..." }), 2500);
     setTimeout(() => this.setState({ message: "Sending data to HoloRepository..." }), 5000);

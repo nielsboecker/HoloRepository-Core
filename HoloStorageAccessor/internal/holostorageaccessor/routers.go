@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,6 +35,7 @@ type AccessorConfig struct {
 	FhirURL         string
 	BlobStorageName string
 	BlobStorageKey  string
+	EnableCORS      bool
 }
 
 var basePathComponent = "/api/v1/"
@@ -41,16 +43,18 @@ var uiPath = basePathComponent + "ui/"
 var accessorConfig AccessorConfig
 
 // NewRouter returns a new router.
-func NewRouter() *gin.Engine {
-	err := LoadConfiguration(&accessorConfig)
-	if err != nil {
-		log.Fatalln(err)
-	}
+func NewRouter(config AccessorConfig) *gin.Engine {
+	accessorConfig = config
 
 	log.Printf("FHIR Backend URL: %q", accessorConfig.FhirURL)
 	log.Printf("Blob Store: %q", accessorConfig.BlobStorageName)
+	log.Printf("CORS Enabled: %t", accessorConfig.EnableCORS)
 
 	router := gin.Default()
+
+	if accessorConfig.EnableCORS {
+		router.Use(cors.Default())
+	}
 
 	router.Static(uiPath, "./third_party/swaggerui")
 

@@ -34,7 +34,7 @@ func ParseHologramUploadPostInput(formData url.Values) (HologramPostInput, error
 		case "patient":
 			err := json.Unmarshal([]byte(formData.Get(key)), &patientData)
 			if err != nil {
-				return HologramPostInput{}, errors.New("Unable to parse patient data")
+				return HologramPostInput{}, fmt.Errorf("Unable to parse patient data: %s", err.Error())
 			}
 			if patientData.Pid == "" {
 				return HologramPostInput{}, errors.New("Patient ID is required")
@@ -43,7 +43,7 @@ func ParseHologramUploadPostInput(formData url.Values) (HologramPostInput, error
 		case "author":
 			err := json.Unmarshal([]byte(formData.Get(key)), &authorData)
 			if err != nil {
-				return HologramPostInput{}, errors.New("Unable to parse author data")
+				return HologramPostInput{}, fmt.Errorf("Unable to parse author data: %s", err.Error())
 			}
 			if authorData.Aid == "" {
 				return HologramPostInput{}, errors.New("Author ID is required")
@@ -73,10 +73,10 @@ func ParseHologramUploadPostInput(formData url.Values) (HologramPostInput, error
 			hologramData.Description = formData.Get(key)
 		case "contentType":
 			hologramData.ContentType = formData.Get(key)
-		case "fileSizeInKB":
+		case "fileSizeInKb":
 			fileSize, err := strconv.ParseUint(formData.Get(key), 10, 32)
 			if err != nil {
-				return HologramPostInput{}, errors.New(key + " is not a valid filesize")
+				return HologramPostInput{}, fmt.Errorf("Key %s='%s' is not a valid filesize value", key, formData.Get(key))
 			}
 			hologramData.FileSizeInKb = uint32(fileSize)
 		case "bodySite":
@@ -143,26 +143,28 @@ func ConstructURL(baseurl string, pathComponent string) (string, error) {
 	return fhirURL.String(), nil
 }
 
-func LoadConfiguration(config *AccessorConfig) error {
-	for _, config := range []string{"AZURE_STORAGE_ACCOUNT", "AZURE_STORAGE_ACCESS_KEY", "ACCESSOR_FHIR_URL"} {
+func LoadConfiguration() (AccessorConfig, error) {
+	var accConfig AccessorConfig
+	for _, config := range []string{"AZURE_STORAGE_ACCOUNT", "AZURE_STORAGE_ACCESS_KEY", "ACCESSOR_FHIR_URL", "ENABLE_CORS"} {
 		if os.Getenv(config) == "" {
-			return fmt.Errorf("Environment config field '%s' is not set", config)
+			return AccessorConfig{}, fmt.Errorf("Environment config field '%s' is not set", config)
 		}
 	}
 
-	config.BlobStorageName = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCOUNT"))
-	config.BlobStorageKey = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCESS_KEY"))
-	config.FhirURL = strings.TrimSpace(os.Getenv("ACCESSOR_FHIR_URL"))
+	accConfig.BlobStorageName = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCOUNT"))
+	accConfig.BlobStorageKey = strings.TrimSpace(os.Getenv("AZURE_STORAGE_ACCESS_KEY"))
+	accConfig.FhirURL = strings.TrimSpace(os.Getenv("ACCESSOR_FHIR_URL"))
 
-	_, err := url.ParseRequestURI(config.FhirURL)
+	enableCORS, err := strconv.ParseBool(strings.TrimSpace(os.Getenv("ENABLE_CORS")))
 	if err != nil {
-		return fmt.Errorf("Error with ACCESSOR_FHIR_URL: %s", err.Error())
+		return AccessorConfig{}, fmt.Errorf("ENABLE_CORS error: %s", err.Error())
+	}
+	accConfig.EnableCORS = enableCORS
+
+	_, err = url.ParseRequestURI(accConfig.FhirURL)
+	if err != nil {
+		return AccessorConfig{}, fmt.Errorf("ACCESSOR_FHIR_URL error: %s", err.Error())
 	}
 
-	err = InitialiseBlobStorage(config.BlobStorageName, config.BlobStorageKey)
-	if err != nil {
-		return fmt.Errorf("Error with BlobStorage Init: %s", err.Error())
-	}
-
-	return nil
+	return accConfig, nil
 }

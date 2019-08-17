@@ -66,7 +66,7 @@ class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
               },
               onClick: () =>
                 navigate("/app/holograms/new", {
-                  state: { mode: HologramCreationMode.generateFromImagingStudy }
+                  state: { mode: HologramCreationMode.GENERATE_FROM_IMAGING_STUDY }
                 })
             },
             {
@@ -77,7 +77,7 @@ class HologramsCommandBar extends Component<IHologramsCommandBarProps> {
               },
               onClick: () =>
                 navigate("/app/holograms/new", {
-                  state: { mode: HologramCreationMode.uploadExistingModel }
+                  state: { mode: HologramCreationMode.UPLOAD_EXISTING_MODEL }
                 })
             }
           ]

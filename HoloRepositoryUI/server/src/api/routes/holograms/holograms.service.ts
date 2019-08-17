@@ -20,12 +20,6 @@ export class HologramsService {
   public getBaseURL = (): string => {
     return AccessorClient.getBaseURL();
   };
-
-  public generate(): Promise<boolean> {
-    // TODO: Generate
-    logger.warn("Generate not implemented yet");
-    return Promise.resolve(true);
-  }
 }
 
 export default new HologramsService();

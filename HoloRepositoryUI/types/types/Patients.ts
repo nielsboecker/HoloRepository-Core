@@ -50,6 +50,8 @@ export interface IPerson {
  */
 export interface IPractitioner extends IPerson {}
 
+export type IAuthor = Omit<IPractitioner, "pid"> & { aid: string };
+
 /**
  * Interface representing the subjects of the system.
  * Semantics is similar to the corresponding FHIR resource.

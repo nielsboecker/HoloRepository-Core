@@ -46,7 +46,6 @@ def update_job_status():
 # get pipeline info
 @app.route(PREFIX + "/pipelines", methods=["GET"])
 def send_list_of_pipelines():
-    global pipeline_list
     pipeline_dict = compMapPipelineInfo.map_pipelines_info()
 
     return json.dumps(pipeline_dict)
@@ -67,7 +66,6 @@ def start_job():
         logging.info("filename: " + filename)
 
     # create output dir
-    global output_directory
     if not output_directory.is_dir():
         os.mkdir(output_directory)
 

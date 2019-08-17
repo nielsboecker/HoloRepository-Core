@@ -7,7 +7,7 @@ import pathlib
 import logging
 import importlib
 from multiprocessing import Process
-import pipelines.components.compCommonPath as pl_common_path
+import pipelines.config.io_paths as io_paths
 
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
 logging.basicConfig(level=logging.INFO, format=FORMAT)
@@ -49,7 +49,7 @@ args = parser.parse_args()
 def main():
     # check common dir
 
-    pl_common_path.main()
+    io_paths.main()
 
     # check for pipeline config file
     if not os.path.exists(str(pathlib.Path(new_cwd).joinpath(str(args.config)))):

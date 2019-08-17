@@ -2,15 +2,15 @@
 # could be left as is for internal use? Keep this file but delete index from pipelineList.json?
 
 # do i need status update on this 'internal' pipeline?
-from components import compJobStatus
-from components import compNifti2numpy
-from components import compNumpy2obj
+from pipelines.components import compJobStatus
+from pipelines.components import compNifti2numpy
+from pipelines.components import compNumpy2obj
 from pipelines.wrappers import obj2gltf
-from components import compPostToAccesor
-from components import compJobPath
-from components.compJobStatusEnum import JobStatus
-from components import compCombineInfoForAccesor
-from components.compGetPipelineListInfo import get_pipeline_list
+from pipelines.components import compPostToAccesor
+from pipelines.components import compJobPath
+from pipelines.components.compJobStatusEnum import JobStatus
+from pipelines.components import compCombineInfoForAccesor
+from pipelines.components.compGetPipelineListInfo import get_pipeline_list
 import pathlib
 import json
 import sys

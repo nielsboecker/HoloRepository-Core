@@ -1,18 +1,21 @@
-from components import (
-    compCommonPath,
-)  # needs to be removed when compDcm2nifti is replaced (please see other comments below)
-from components import compJobStatus
-from components import compDicom2nifti
-import components.lungSegment.main as comp_lung_segment
-from components import compNifti2numpy
-from components import compNumpy2obj
+# TODO: Don't understand Pap's comments here. Dev is already merged back into this?!
+
+# from pipelines.components import (
+#     compCommonPath,
+# )  # needs to be removed when compDcm2nifti is replaced (please see other comments below)
+from pipelines.config.io_paths import nifti
+from pipelines.components import compJobStatus
+from pipelines.components import compDicom2nifti
+import pipelines.components.lungSegment.main as comp_lung_segment
+from pipelines.components import compNifti2numpy
+from pipelines.components import compNumpy2obj
 from pipelines.wrappers import obj2gltf
-from components import compPostToAccesor
-from components import compFetchResource
-from components import compJobPath
-from components.compJobStatusEnum import JobStatus
-from components import compCombineInfoForAccesor
-from components.compGetPipelineListInfo import get_pipeline_list
+from pipelines.components import compPostToAccesor
+from pipelines.components import compFetchResource
+from pipelines.components import compJobPath
+from pipelines.components.compJobStatusEnum import JobStatus
+from pipelines.components import compCombineInfoForAccesor
+from pipelines.components.compGetPipelineListInfo import get_pipeline_list
 
 import pathlib
 import sys
@@ -28,7 +31,7 @@ def main(job_ID, dicom_download_url, meta_data):
     generated_nifti_path = compDicom2nifti.main(  # compDcm2nifti here is outdated (still has GDCM dependency, will need to be merged with dev). comp should also be updated to return the full path to nii file, not its folder
         str(dicom_path),
         str(
-            compCommonPath.nifti.joinpath(str(pathlib.PurePath(dicom_path).parts[-1]))
+            nifti.joinpath(str(pathlib.PurePath(dicom_path).parts[-1]))
         ),  # this will need to be updated once compDcm2nifti is replaced
     )  # this comment will be outdated when changes from lines above happens >>> convert dcm and move to temp path inside nifti folder. nifti will be in a sub folder named after the input dicom folder
     generated_segmented_lung_nifti_path = comp_lung_segment(

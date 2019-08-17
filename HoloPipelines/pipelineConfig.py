@@ -9,7 +9,7 @@ import importlib
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list
 
 from multiprocessing import Process
-import pipelines.config.io_paths as io_paths
+from pipelines.config.io_paths import create_common_dirs
 
 
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
@@ -50,9 +50,7 @@ args = parser.parse_args()
 
 
 def main():
-    # check common dir
-
-    io_paths.main()
+    create_common_dirs()
 
     # check for pipeline config file
     if not os.path.exists(str(pathlib.Path(new_cwd).joinpath(str(args.config)))):

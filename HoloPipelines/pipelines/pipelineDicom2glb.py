@@ -1,4 +1,4 @@
-import pipelines.adapters.accessor
+import pipelines.adapters.holostorage_accessor
 from pipelines.components import compDicom2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.wrappers import obj2gltf
@@ -42,7 +42,7 @@ def main(job_ID, dicom_download_url, meta_data):
 
     list_of_pipeline = get_pipeline_list()
     logging.debug("dicom2glb: done, glb saved to {}".format(generated_glb_path))
-    meta_data = pipelines.adapters.accessor.add_info_for_accesor(
+    meta_data = pipelines.adapters.holostorage_accessor.add_info_for_accesor(
         meta_data,
         "apply on generic bone segmentation",
         "Generate with " + list(list_of_pipeline.keys())[1] + " pipeline",

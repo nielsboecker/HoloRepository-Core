@@ -2,7 +2,7 @@
 # could be left as is for internal use? Keep this file but delete index from pipelineList.json?
 
 # do i need status update on this 'internal' pipeline?
-import pipelines.adapters.accessor
+import pipelines.adapters.holostorage_accessor
 from pipelines.components import compJobStatus
 from pipelines.components import compNifti2numpy
 from pipelines.components import compNumpy2obj
@@ -44,7 +44,7 @@ def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
     print("nifti2glb: done, glb saved to {}".format(generated_glb_path))
 
     list_of_pipeline = get_pipeline_list()
-    meta_data = pipelines.adapters.accessor.add_info_for_accesor(
+    meta_data = pipelines.adapters.holostorage_accessor.add_info_for_accesor(
         meta_data,
         "apply on generic bone segmentation",
         "Generate with " + list(list_of_pipeline.keys())[1] + " pipeline",

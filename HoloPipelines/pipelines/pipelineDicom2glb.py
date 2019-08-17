@@ -1,6 +1,6 @@
 from components import compDicom2numpy
 from components import compNumpy2obj
-from components import compObj2glbWrapper
+from pipelines.wrappers import obj2gltf
 from components import compPostToAccesor
 from components.compJobStatusEnum import JobStatus
 from components import compCombineInfoForAccesor
@@ -33,7 +33,7 @@ def main(job_ID, dicom_download_url, meta_data):
         compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
     )
     update_status(job_ID, JobStatus.MODELCONVERSION.name)
-    generated_glb_path = compObj2glbWrapper.main(
+    generated_glb_path = obj2gltf.main(
         generated_obj_path,
         compJobPath.make_str_job_path(job_ID, ["out", str(job_ID) + ".glb"]),
         delete_original_obj=True,

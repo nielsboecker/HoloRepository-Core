@@ -5,7 +5,7 @@
 from components import compJobStatus
 from components import compNifti2numpy
 from components import compNumpy2obj
-from components import compObj2glbWrapper
+from pipelines.wrappers import obj2gltf
 from components import compPostToAccesor
 from components import compJobPath
 from components.compJobStatusEnum import JobStatus
@@ -34,7 +34,7 @@ def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
     )
 
     compJobStatus.update_status(job_ID, JobStatus.MODELCONVERSION.name)
-    generated_glb_path = compObj2glbWrapper.main(
+    generated_glb_path = obj2gltf.main(
         generated_obj_path,
         str(pathlib.Path(output_glb_path)),
         delete_original_obj=True,

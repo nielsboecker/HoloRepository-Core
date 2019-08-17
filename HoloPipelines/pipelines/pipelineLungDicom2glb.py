@@ -15,7 +15,7 @@ from pipelines.tasks.dispatch_output import dispatch_output
 from pipelines.tasks import receive_input
 from pipelines.components import compJobPath
 from pipelines.utils.job_status import JobStatus
-from pipelines.components.compGetPipelineListInfo import get_pipeline_list
+from pipelines.utils.pipelines_info import get_pipeline_list
 
 import pathlib
 import sys

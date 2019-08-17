@@ -3,7 +3,7 @@ from pipelines.components import compDicom2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.wrappers import obj2gltf
 from pipelines.utils.job_status import JobStatus
-from pipelines.components.compGetPipelineListInfo import get_pipeline_list
+from pipelines.utils.pipelines_info import get_pipeline_list
 from pipelines.components.compJobStatus import update_status
 from pipelines.tasks import receive_input
 from pipelines.components import compJobPath

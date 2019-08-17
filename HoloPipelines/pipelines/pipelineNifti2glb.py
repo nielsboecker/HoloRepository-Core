@@ -9,7 +9,7 @@ from pipelines.components import compNumpy2obj
 from pipelines.wrappers import obj2gltf
 from pipelines.tasks.dispatch_output import dispatch_output
 from pipelines.components import compJobPath
-from pipelines.components.compJobStatusEnum import JobStatus
+from pipelines.utils.job_status import JobStatus
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list
 import pathlib
 import json
@@ -21,19 +21,19 @@ logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 
 def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
-    compJobStatus.update_status(job_ID, JobStatus.PPREPROCESSING.name)
+    compJobStatus.update_status(job_ID, JobStatus.PREPROCESSING.name)
     generated_numpy_list = compNifti2numpy.main(str(pathlib.Path(input_nifti_path)))
 
     logging.debug("job start: " + json.dumps(meta_data))
 
-    compJobStatus.update_status(job_ID, JobStatus.MODELGENERATION.name)
+    compJobStatus.update_status(job_ID, JobStatus.GENERATING_MODEL.name)
     generated_obj_path = compNumpy2obj.main(
         generated_numpy_list,
         threshold,
         compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
     )
 
-    compJobStatus.update_status(job_ID, JobStatus.MODELCONVERSION.name)
+    compJobStatus.update_status(job_ID, JobStatus.CONVERTING_MODEL.name)
     generated_glb_path = obj2gltf.main(
         generated_obj_path,
         str(pathlib.Path(output_glb_path)),

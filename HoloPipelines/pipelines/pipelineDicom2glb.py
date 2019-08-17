@@ -2,7 +2,7 @@ import pipelines.adapters.accessor
 from pipelines.components import compDicom2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.wrappers import obj2gltf
-from pipelines.components.compJobStatusEnum import JobStatus
+from pipelines.utils.job_status import JobStatus
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list
 from pipelines.components.compJobStatus import update_status
 from pipelines.tasks import receive_input
@@ -19,20 +19,20 @@ logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 
 def main(job_ID, dicom_download_url, meta_data):
-    update_status(job_ID, JobStatus.FETCHINGDATA.name)
+    update_status(job_ID, JobStatus.FETCHING_DATA.name)
     dicom_folder_path = receive_input.fetch_and_unzip(job_ID, dicom_download_url)
-    update_status(job_ID, JobStatus.PPREPROCESSING.name)
+    update_status(job_ID, JobStatus.PREPROCESSING.name)
     meta_data = json.loads(meta_data)
     generated_numpy_list = compDicom2numpy.main(str(pathlib.Path(dicom_folder_path)))
     threshold = 300
 
-    update_status(job_ID, JobStatus.MODELGENERATION.name)
+    update_status(job_ID, JobStatus.GENERATING_MODEL.name)
     generated_obj_path = compNumpy2obj.main(
         generated_numpy_list,
         threshold,
         compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
     )
-    update_status(job_ID, JobStatus.MODELCONVERSION.name)
+    update_status(job_ID, JobStatus.CONVERTING_MODEL.name)
     generated_glb_path = obj2gltf.main(
         generated_obj_path,
         compJobPath.make_str_job_path(job_ID, ["out", str(job_ID) + ".glb"]),

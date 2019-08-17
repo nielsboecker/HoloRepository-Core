@@ -14,7 +14,7 @@ from pipelines.wrappers import obj2gltf
 from pipelines.tasks.dispatch_output import dispatch_output
 from pipelines.tasks import receive_input
 from pipelines.components import compJobPath
-from pipelines.components.compJobStatusEnum import JobStatus
+from pipelines.utils.job_status import JobStatus
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list
 
 import pathlib
@@ -27,7 +27,7 @@ logging.basicConfig(level=logging.INFO)
 def main(job_ID, dicom_download_url, meta_data):
     compJobStatus.update_status(job_ID, "Fetching data")
     dicom_path = receive_input.fetch_and_unzip(job_ID, dicom_download_url)
-    compJobStatus.update_status(job_ID, JobStatus.PPREPROCESSING.name)
+    compJobStatus.update_status(job_ID, JobStatus.PREPROCESSING.name)
     generated_nifti_path = compDicom2nifti.main(  # compDcm2nifti here is outdated (still has GDCM dependency, will need to be merged with dev). comp should also be updated to return the full path to nii file, not its folder
         str(dicom_path),
         str(
@@ -40,7 +40,7 @@ def main(job_ID, dicom_download_url, meta_data):
     )
     generated_numpy_list = compNifti2numpy.main(generated_segmented_lung_nifti_path)
 
-    compJobStatus.update_status(job_ID, JobStatus.MODELGENERATION.name)
+    compJobStatus.update_status(job_ID, JobStatus.GENERATING_MODEL.name)
 
     generated_obj_path = compNumpy2obj.main(
         generated_numpy_list,
@@ -48,7 +48,7 @@ def main(job_ID, dicom_download_url, meta_data):
         compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
     )
 
-    compJobStatus.update_status(job_ID, JobStatus.MODELCONVERSION.name)
+    compJobStatus.update_status(job_ID, JobStatus.CONVERTING_MODEL.name)
 
     generated_glb_path = obj2gltf.main(
         generated_obj_path,

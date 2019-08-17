@@ -6,7 +6,7 @@ import pipelines.adapters.holostorage_accessor
 from pipelines.components import compJobStatus
 from pipelines.components import compNifti2numpy
 from pipelines.components import compNumpy2obj
-from pipelines.wrappers import obj2gltf
+from pipelines.wrappers.obj2gltf import convert_obj_to_glb
 from pipelines.tasks.dispatch_output import dispatch_output
 from pipelines.components import compJobPath
 from pipelines.utils.job_status import JobStatus
@@ -34,7 +34,7 @@ def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
     )
 
     compJobStatus.update_status(job_ID, JobStatus.CONVERTING_MODEL.name)
-    generated_glb_path = obj2gltf.main(
+    generated_glb_path = convert_obj_to_glb(
         generated_obj_path,
         str(pathlib.Path(output_glb_path)),
         delete_original_obj=True,

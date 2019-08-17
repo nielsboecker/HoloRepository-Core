@@ -2,7 +2,7 @@ from pipelines.components import compDicom2nifti
 from pipelines.clients import http
 from pipelines.components import compNifti2numpy
 from pipelines.components import compSeparateNumpy
-from pipelines.components import compNumpyTransformation
+from pipelines.services.numpy_transformation import downscale_and_conditionally_crop
 from pipelines.config.io_paths import nifti_path
 
 import sys
@@ -25,7 +25,7 @@ def main(
     generatedNumpyList = compNifti2numpy.main(
         segmentedNiftiPath, deleteNiftiWhenDone=True
     )
-    resizedNumpyList = compNumpyTransformation.sizeLimit(
+    resizedNumpyList = downscale_and_conditionally_crop(
         generatedNumpyList, resolutionLimit
     )
     generatedGlbPathList = compSeparateNumpy.main(resizedNumpyList, outputGlbFolderPath)

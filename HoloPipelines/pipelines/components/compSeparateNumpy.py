@@ -1,8 +1,8 @@
 # this comp generate numpy lists list from unique value from the numpy list input (comp exclusive for abdomen model at the moment)
 
 import pathlib
-from components import compNumpy2obj as makeObj
-from components import compObj2glbWrapper as makeGlb
+from . import compNumpy2obj as makeObj
+from pipelines.wrappers.obj2gltf import convert_obj_to_glb
 import numpy as np
 import logging
 
@@ -29,7 +29,7 @@ def main(originalNumpy, outputPath):
                 threshold=0,
                 outputPath=pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),
             )
-            makeGlb.main(
+            convert_obj_to_glb(
                 pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),
                 outputPath.joinpath("organNo" + str(integer) + ".glb"),
                 deleteOriginalObj=True,

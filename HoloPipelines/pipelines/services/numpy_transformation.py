@@ -5,7 +5,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-def centerCrop(img, newX, newY, newZ):
+def crop_around_centre(img, newX, newY, newZ):
     x, y, z = img.shape
 
     startX = x // 2 - (newX // 2)
@@ -19,12 +19,15 @@ def centerCrop(img, newX, newY, newZ):
     return img[startX:endX, startY:endY, startZ:endZ]
 
 
-def sizeLimit(img, limit):
+# TODO: Does it make sense? When I already did a downscale such that the longest size
+#  is <= the given limit, why would I ever need to then crop it?
+def downscale_and_conditionally_crop(img, limit):
     if len(img.shape) >= 3:
         x = img.shape[0]
         y = img.shape[1]
         z = img.shape[2]
     else:
+        # TODO: Exit, really???
         sys.exit("compNumpyTransformation: invalid array dimension (at least x, y, z)")
     highest = max(x, y, z)
     if highest > limit:
@@ -38,7 +41,7 @@ def sizeLimit(img, limit):
         z = img.shape[2]
         highest = max(x, y, z)
         if highest > limit:
-            img = centerCrop(img, limit, limit, limit)
+            img = crop_around_centre(img, limit, limit, limit)
 
         logging.info("compNumpyTransformation: array resize done")
     else:

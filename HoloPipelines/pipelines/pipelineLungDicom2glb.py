@@ -10,7 +10,7 @@ from pipelines.components import compDicom2nifti
 import pipelines.components.lungSegment.main as comp_lung_segment
 from pipelines.components import compNifti2numpy
 from pipelines.components import compNumpy2obj
-from pipelines.wrappers import obj2gltf
+from pipelines.wrappers.obj2gltf import convert_obj_to_glb
 from pipelines.tasks.dispatch_output import dispatch_output
 from pipelines.tasks import receive_input
 from pipelines.components import compJobPath
@@ -50,7 +50,7 @@ def main(job_ID, dicom_download_url, meta_data):
 
     compJobStatus.update_status(job_ID, JobStatus.CONVERTING_MODEL.name)
 
-    generated_glb_path = obj2gltf.main(
+    generated_glb_path = convert_obj_to_glb(
         generated_obj_path,
         compJobPath.make_str_job_path(job_ID, ["out", str(job_ID) + ".glb"]),
         delete_original_obj=True,

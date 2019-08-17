@@ -11,7 +11,7 @@ new_cwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 success = True
 
 
-def main(input_obj_path, output_glb_path, delete_original_obj=True, compress_glb=False):
+def convert_obj_to_glb(input_obj_path, output_glb_path, delete_original_obj=True, compress_glb=False):
     success = subprocess.run(
         ["obj2gltf", "-i", str(pathlib.Path(input_obj_path)), "-b"]
     )

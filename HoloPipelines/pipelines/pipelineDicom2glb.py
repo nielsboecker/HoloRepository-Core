@@ -1,7 +1,7 @@
 import pipelines.adapters.holostorage_accessor
 from pipelines.components import compDicom2numpy
 from pipelines.components import compNumpy2obj
-from pipelines.wrappers import obj2gltf
+from pipelines.wrappers.obj2gltf import convert_obj_to_glb
 from pipelines.utils.job_status import JobStatus
 from pipelines.utils.pipelines_info import get_pipeline_list
 from pipelines.components.compJobStatus import update_status
@@ -33,7 +33,7 @@ def main(job_ID, dicom_download_url, meta_data):
         compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
     )
     update_status(job_ID, JobStatus.CONVERTING_MODEL.name)
-    generated_glb_path = obj2gltf.main(
+    generated_glb_path = convert_obj_to_glb(
         generated_obj_path,
         compJobPath.make_str_job_path(job_ID, ["out", str(job_ID) + ".glb"]),
         delete_original_obj=True,

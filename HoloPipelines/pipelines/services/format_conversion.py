@@ -1,10 +1,12 @@
 import logging
+import os
 
 from components import compDicom2numpy
 import nibabel as nib
 import numpy as np
 
 from pipelines.services.marching_cubes import generate_obj
+from pipelines.services.numpy_transformation import resample_from_nifty2numpy
 from pipelines.wrappers.obj2gltf import call_obj2gltf
 
 
@@ -28,3 +30,18 @@ def convert_numpy_to_obj(input_data, main_threshold, output_path):
 def convert_obj_to_glb(input_obj_path: str, output_glb_path: str, delete_original_obj: bool = True,
                        compress_glb: bool = False):
     return call_obj2gltf(input_obj_path, output_glb_path, delete_original_obj, compress_glb)
+
+
+def convert_nifty_to_numpy(input_nifti_path, deleteNiftiWhenDone=False):
+    # https://github.com/nipy/nibabel/issues/626
+    nib.Nifti1Header.quaternion_threshold = -1e-06
+    img = nib.load(input_nifti_path)
+
+    img = resample_from_nifty2numpy(img)
+
+    numpyList = np.array(img.dataobj)
+
+    if deleteNiftiWhenDone:
+        os.remove(input_nifti_path)
+
+    return numpyList

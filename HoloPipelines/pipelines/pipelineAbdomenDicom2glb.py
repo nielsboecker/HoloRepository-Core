@@ -1,8 +1,9 @@
+import pipelines.services.format_conversion
 from pipelines.services import format_conversion
 from pipelines.clients import http
-from pipelines.components import compNifti2numpy
 from pipelines.tasks.abdominal_organs_segmentation import split_to_separate_organs
 from pipelines.services.numpy_transformation import downscale_and_conditionally_crop
+from pipelines.services.format_conversion import convert_nifty_to_numpy
 from pipelines.config.io_paths import nifti_path
 
 import sys
@@ -22,7 +23,7 @@ def main(
         generatedNiftiPath,
         str(nifti_path.joinpath("_tempAbdomenSegmented.nii.gz")),
     )
-    generatedNumpyList = compNifti2numpy.main(
+    generatedNumpyList = convert_nifty_to_numpy(
         segmentedNiftiPath, deleteNiftiWhenDone=True
     )
     resizedNumpyList = downscale_and_conditionally_crop(

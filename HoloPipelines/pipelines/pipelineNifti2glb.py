@@ -5,8 +5,7 @@
 import pipelines.adapters.holostorage_accessor
 import pipelines.services.format_conversion
 import pipelines.state.job_status
-from pipelines.components import compNifti2numpy
-from pipelines.services.format_conversion import convert_numpy_to_obj, convert_obj_to_glb
+from pipelines.services.format_conversion import convert_numpy_to_obj, convert_obj_to_glb, convert_nifty_to_numpy
 from pipelines.tasks.shared.dispatch_output import dispatch_output
 from pipelines.components import compJobPath
 from pipelines.utils.job_status import JobStatus
@@ -22,7 +21,7 @@ logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.PREPROCESSING.name)
-    generated_numpy_list = compNifti2numpy.main(str(pathlib.Path(input_nifti_path)))
+    generated_numpy_list = convert_nifty_to_numpy(str(pathlib.Path(input_nifti_path)))
 
     logging.debug("job start: " + json.dumps(meta_data))
 

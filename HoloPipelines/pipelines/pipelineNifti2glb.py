@@ -3,9 +3,10 @@
 
 # do i need status update on this 'internal' pipeline?
 import pipelines.adapters.holostorage_accessor
+import pipelines.services.format_conversion
 import pipelines.state.job_status
 from pipelines.components import compNifti2numpy
-from pipelines.components import compNumpy2obj
+from pipelines.services.format_conversion import convert_numpy_to_obj
 from pipelines.wrappers.obj2gltf import convert_obj_to_glb
 from pipelines.tasks.shared.dispatch_output import dispatch_output
 from pipelines.components import compJobPath
@@ -27,7 +28,7 @@ def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
     logging.debug("job start: " + json.dumps(meta_data))
 
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.GENERATING_MODEL.name)
-    generated_obj_path = compNumpy2obj.main(
+    generated_obj_path = convert_numpy_to_obj(
         generated_numpy_list,
         threshold,
         compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),

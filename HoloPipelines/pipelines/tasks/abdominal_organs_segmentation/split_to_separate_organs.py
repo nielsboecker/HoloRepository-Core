@@ -4,7 +4,9 @@
 # Otherwise, separate organs need to be merged again!
 
 import pathlib
-from pipelines.components import compNumpy2obj as makeObj
+
+import pipelines.services.format_conversion
+from pipelines.services.format_conversion import convert_numpy_to_obj
 from pipelines.wrappers.obj2gltf import convert_obj_to_glb
 import numpy as np
 import logging
@@ -27,7 +29,7 @@ def split_to_separate_organs(originalNumpy, outputPath):
         if integer != 0:
             singleHUnumpy = originalNumpy == integer
             singleHUnumpy = singleHUnumpy.astype(int)
-            makeObj.main(
+            convert_numpy_to_obj(
                 singleHUnumpy,
                 threshold=0,
                 outputPath=pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),

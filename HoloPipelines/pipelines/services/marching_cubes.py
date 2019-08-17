@@ -31,7 +31,7 @@ def generate_obj(input_numpy, this_threshold, output_obj_path):
         try:
             numpy_data = np.load(str(pathlib.Path(input_numpy)))
 
-        except Exception:
+        except Exception as e:
             sys.exit(
                 "numpy2obj: error occured while loading numpy. Please make sure the path to numpy is correct. {}".format(
                     e
@@ -54,12 +54,6 @@ def generate_obj(input_numpy, this_threshold, output_obj_path):
     for item in faces:
         newObj.write("f {0}//{0} {1}//{1} {2}//{2}\n".format(item[0], item[1], item[2]))
     newObj.close()
-
-
-def main(input_data, main_threshold, output_path):
-    generate_obj(input_data, main_threshold, output_path)
-    logging.info("numpy2obj: done")
-    return output_path
 
 
 if __name__ == "__main__":

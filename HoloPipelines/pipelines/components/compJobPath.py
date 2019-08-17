@@ -3,6 +3,9 @@ import shutil
 import os
 import logging
 
+# TODO: THIS NEEDS TO BE REFACTORED AND MOVED TO /STATE DIRECTORY
+# NOT TOUCHING IT RIGHT NOW BECAUSE PAP WORKS ON THIS IN THE PIPELINE/API BRANCH
+
 this_comp_path = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
 

@@ -23,9 +23,7 @@ def main(
         generatedNiftiPath,
         str(nifti_path.joinpath("_tempAbdomenSegmented.nii.gz")),
     )
-    generatedNumpyList = convert_nifty_to_numpy(
-        segmentedNiftiPath, deleteNiftiWhenDone=True
-    )
+    generatedNumpyList = convert_nifty_to_numpy(segmentedNiftiPath)
     resizedNumpyList = downscale_and_conditionally_crop(
         generatedNumpyList, resolutionLimit
     )

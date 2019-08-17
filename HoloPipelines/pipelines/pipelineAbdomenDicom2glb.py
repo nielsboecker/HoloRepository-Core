@@ -3,7 +3,7 @@ from pipelines.clients import http
 from pipelines.components import compNifti2numpy
 from pipelines.components import compSeparateNumpy
 from pipelines.components import compNumpyTransformation
-from pipelines.config.io_paths import nifti
+from pipelines.config.io_paths import nifti_path
 
 import sys
 import logging
@@ -15,12 +15,12 @@ def main(
     inputDicomPath, outputGlbFolderPath, segmentationModelUrl, resolutionLimit=300
 ):
     generatedNiftiPath = compDicom2nifti.main(
-        inputDicomPath, str(nifti.joinpath("_temp.nii"))
+        inputDicomPath, str(nifti_path.joinpath("_temp.nii"))
     )
     segmentedNiftiPath = http.send_file_post_request(
         segmentationModelUrl,
         generatedNiftiPath,
-        str(nifti.joinpath("_tempAbdomenSegmented.nii.gz")),
+        str(nifti_path.joinpath("_tempAbdomenSegmented.nii.gz")),
     )
     generatedNumpyList = compNifti2numpy.main(
         segmentedNiftiPath, deleteNiftiWhenDone=True

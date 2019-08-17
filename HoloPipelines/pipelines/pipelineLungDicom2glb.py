@@ -3,7 +3,7 @@
 # from pipelines.components import (
 #     compCommonPath,
 # )  # needs to be removed when compDcm2nifti is replaced (please see other comments below)
-from pipelines.config.io_paths import nifti
+from pipelines.config.io_paths import nifti_path
 from pipelines.components import compJobStatus
 from pipelines.components import compDicom2nifti
 import pipelines.components.lungSegment.main as comp_lung_segment
@@ -31,7 +31,7 @@ def main(job_ID, dicom_download_url, meta_data):
     generated_nifti_path = compDicom2nifti.main(  # compDcm2nifti here is outdated (still has GDCM dependency, will need to be merged with dev). comp should also be updated to return the full path to nii file, not its folder
         str(dicom_path),
         str(
-            nifti.joinpath(str(pathlib.PurePath(dicom_path).parts[-1]))
+            nifti_path.joinpath(str(pathlib.PurePath(dicom_path).parts[-1]))
         ),  # this will need to be updated once compDcm2nifti is replaced
     )  # this comment will be outdated when changes from lines above happens >>> convert dcm and move to temp path inside nifti folder. nifti will be in a sub folder named after the input dicom folder
     generated_segmented_lung_nifti_path = comp_lung_segment(

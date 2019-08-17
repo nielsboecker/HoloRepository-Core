@@ -1,5 +1,5 @@
 from components import compDicom2nifti
-from components import compHttpRequest
+from pipelines.clients import http
 from components import compNifti2numpy
 from components import compSeparateNumpy
 from components import compNumpyTransformation
@@ -16,7 +16,7 @@ def main(
     generatedNiftiPath = compDicom2nifti.main(
         inputDicomPath, str(compCommonPath.nifti.joinpath("_temp.nii"))
     )
-    segmentedNiftiPath = compHttpRequest.send_file_post_request(
+    segmentedNiftiPath = http.send_file_post_request(
         segmentationModelUrl,
         generatedNiftiPath,
         str(compCommonPath.nifti.joinpath("_tempAbdomenSegmented.nii.gz")),

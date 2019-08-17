@@ -1,6 +1,6 @@
 from datetime import datetime
 import logging
-from components.compHttpRequest import send_post_to_status
+from pipelines.clients.http import send_post_to_status
 
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
 logging.basicConfig(level=logging.DEBUG, format=FORMAT)

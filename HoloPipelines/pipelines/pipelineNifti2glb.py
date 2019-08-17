@@ -8,7 +8,6 @@ from pipelines.components import compNumpy2obj
 from pipelines.components import compObj2glbWrapper
 from pipelines.components import compPostToAccesor
 from pipelines.components import compJobPath
-from pipelines.components import compCommonPath
 from pipelines.components.compJobStatusEnum import JobStatus
 from pipelines.components import compCombineInfoForAccesor
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list

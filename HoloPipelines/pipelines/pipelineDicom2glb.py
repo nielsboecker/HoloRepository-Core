@@ -1,7 +1,6 @@
 from pipelines.components import compDicom2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.wrappers import obj2gltf
-from pipelines.components import compPostToAccesor
 from pipelines.components.compJobStatusEnum import JobStatus
 from pipelines.components import compCombineInfoForAccesor
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list
@@ -9,6 +8,7 @@ from pipelines.components.compJobStatus import update_status
 from pipelines.tasks import receive_input
 from pipelines.components import compJobPath
 from pipelines.components import compJobStatus
+from pipelines.tasks.dispatch_output import dispatch_output
 import pathlib
 import json
 import sys
@@ -49,7 +49,7 @@ def main(job_ID, dicom_download_url, meta_data):
         generated_glb_path,
     )
     logging.debug("meta_data: " + json.dumps(meta_data))
-    compPostToAccesor.send_file_request_to_accessor(meta_data)
+    dispatch_output(meta_data)
     compJobStatus.update_status(job_ID, "Cleaning up") # TODO: Enum
     compJobPath.clean_up(job_ID) # TODO: Enum
     update_status(job_ID, JobStatus.FINISHED.name)

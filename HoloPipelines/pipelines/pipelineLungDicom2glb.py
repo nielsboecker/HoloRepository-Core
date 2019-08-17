@@ -10,7 +10,7 @@ import pipelines.components.lungSegment.main as comp_lung_segment
 from pipelines.components import compNifti2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.wrappers import obj2gltf
-from pipelines.components import compPostToAccesor
+from pipelines.tasks.dispatch_output import dispatch_output
 from pipelines.tasks import receive_input
 from pipelines.components import compJobPath
 from pipelines.components.compJobStatusEnum import JobStatus
@@ -68,7 +68,7 @@ def main(job_ID, dicom_download_url, meta_data):
     )
 
     # TODO: Verify if this works after merge...
-    compPostToAccesor.send_file_request_to_accessor(meta_data)
+    dispatch_output(meta_data)
 
     compJobStatus.update_status(job_ID, "Cleaning up")
     compJobPath.clean_up(job_ID)

@@ -3,7 +3,9 @@ import requests
 import pathlib
 import json
 
+# TODO: split this up between http client (for technical stuff), dispatch_output
 
+# TODO: Refactor next lines
 def send_file_request_to_accessor(meta_data):
     output_file_dir = str(pathlib.Path(meta_data["outputFileDir"]))
     size_of_output_file = str(path.getsize(output_file_dir) / 1024)
@@ -45,7 +47,3 @@ def send_file_request_to_accessor(meta_data):
     return_code = response.status_code
     print(return_code)
     return request_body
-
-
-if __name__ == "__main__":
-    print("component can't run on its own")

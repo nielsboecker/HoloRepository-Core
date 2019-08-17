@@ -11,7 +11,7 @@ from pipelines.components import compNifti2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.wrappers import obj2gltf
 from pipelines.components import compPostToAccesor
-from pipelines.components import compFetchResource
+from pipelines.tasks import receive_input
 from pipelines.components import compJobPath
 from pipelines.components.compJobStatusEnum import JobStatus
 from pipelines.components import compCombineInfoForAccesor
@@ -26,7 +26,7 @@ logging.basicConfig(level=logging.INFO)
 
 def main(job_ID, dicom_download_url, meta_data):
     compJobStatus.update_status(job_ID, "Fetching data")
-    dicom_path = compFetchResource.main(job_ID, dicom_download_url)
+    dicom_path = receive_input.fetch_and_unzip(job_ID, dicom_download_url)
     compJobStatus.update_status(job_ID, JobStatus.PPREPROCESSING.name)
     generated_nifti_path = compDicom2nifti.main(  # compDcm2nifti here is outdated (still has GDCM dependency, will need to be merged with dev). comp should also be updated to return the full path to nii file, not its folder
         str(dicom_path),

@@ -21,7 +21,8 @@ def unzip_the_file(zipped_data, save_dest):
     return str(directory_list[0])  # return unzipped location
 
 
-def main(jobID, image_url):
+def fetch_and_unzip(jobID, image_url):
+    logging.info("Fetching " + image_url)
     file_list = [
         # TODO: Refactor this
         str(pathlib.Path(this_comp_path).parents[1].joinpath("jobs")),
@@ -37,7 +38,3 @@ def main(jobID, image_url):
             os.mkdir(file_path)
     download_content = get_content_from_url(image_url)
     return unzip_the_file(download_content, str(pathlib.Path(file_list[-1])))
-
-
-if __name__ == "__main__":
-    logging.error("component can't run on it's own")

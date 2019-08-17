@@ -6,7 +6,7 @@ from pipelines.components.compJobStatusEnum import JobStatus
 from pipelines.components import compCombineInfoForAccesor
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list
 from pipelines.components.compJobStatus import update_status
-from pipelines.components import compFetchResource
+from pipelines.tasks import receive_input
 from pipelines.components import compJobPath
 from pipelines.components import compJobStatus
 import pathlib
@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 def main(job_ID, dicom_download_url, meta_data):
     update_status(job_ID, JobStatus.FETCHINGDATA.name)
-    dicom_folder_path = compFetchResource.main(job_ID, dicom_download_url)
+    dicom_folder_path = receive_input.fetch_and_unzip(job_ID, dicom_download_url)
     update_status(job_ID, JobStatus.PPREPROCESSING.name)
     meta_data = json.loads(meta_data)
     generated_numpy_list = compDicom2numpy.main(str(pathlib.Path(dicom_folder_path)))

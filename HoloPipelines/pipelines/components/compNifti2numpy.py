@@ -42,7 +42,7 @@ def main(input_nifti_path, deleteNiftiWhenDone=False):
     numpyList = np.array(img.dataobj)
 
     if deleteNiftiWhenDone:
-        os.remove(inputNiftiPath)
+        os.remove(input_nifti_path)
 
     return numpyList
 

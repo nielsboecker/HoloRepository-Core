@@ -2,7 +2,7 @@ from pipelines.components import (
     compCommonPath,
 )  # needs to be removed when compDcm2nifti is replaced (please see other comments below)
 from pipelines.components import compJobStatus
-from pipelines.components import compDcm2nifti
+from pipelines.components import compDicom2nifti
 import pipelines.components.lungSegment.main as comp_lung_segment
 from pipelines.components import compNifti2numpy
 from pipelines.components import compNumpy2obj
@@ -13,7 +13,6 @@ from pipelines.components import compJobPath
 from pipelines.components.compJobStatusEnum import JobStatus
 from pipelines.components import compCombineInfoForAccesor
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list
-from components import compDicom2nifti
 
 import pathlib
 import sys
@@ -26,7 +25,7 @@ def main(job_ID, dicom_download_url, meta_data):
     compJobStatus.update_status(job_ID, "Fetching data")
     dicom_path = compFetchResource.main(job_ID, dicom_download_url)
     compJobStatus.update_status(job_ID, JobStatus.PPREPROCESSING.name)
-    generated_nifti_path = compDcm2nifti.main(  # compDcm2nifti here is outdated (still has GDCM dependency, will need to be merged with dev). comp should also be updated to return the full path to nii file, not its folder
+    generated_nifti_path = compDicom2nifti.main(  # compDcm2nifti here is outdated (still has GDCM dependency, will need to be merged with dev). comp should also be updated to return the full path to nii file, not its folder
         str(dicom_path),
         str(
             compCommonPath.nifti.joinpath(str(pathlib.PurePath(dicom_path).parts[-1]))

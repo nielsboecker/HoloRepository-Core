@@ -16,7 +16,7 @@ def main(
     generatedNiftiPath = compDicom2nifti.main(
         inputDicomPath, str(compCommonPath.nifti.joinpath("_temp.nii"))
     )
-    segmentedNiftiPath = compHttpRequest.sendFilePostRequest(
+    segmentedNiftiPath = compHttpRequest.send_file_post_request(
         segmentationModelUrl,
         generatedNiftiPath,
         str(compCommonPath.nifti.joinpath("_tempAbdomenSegmented.nii.gz")),

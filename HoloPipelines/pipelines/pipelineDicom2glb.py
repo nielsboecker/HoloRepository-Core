@@ -8,6 +8,8 @@ from pipelines.components import compCombineInfoForAccesor
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list
 from pipelines.components.compJobStatus import update_status
 from pipelines.components import compFetchResource
+from pipelines.components import compJobPath
+from datetime import datetime
 from pipelines.components import compJobCleanup
 import pathlib
 import json
@@ -30,17 +32,12 @@ def main(job_ID, dicom_download_url, meta_data):
     generated_obj_path = compNumpy2obj.main(
         generated_numpy_list,
         threshold,
-        str(
-            compCommonPath.obj.joinpath(
-                str(pathlib.PurePath(dicom_folder_path).parts[-1])
-            )
-        )
-        + ".obj",
+        compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
     )
     update_status(job_ID, JobStatus.MODELCONVERSION.name)
     generated_glb_path = compObj2glbWrapper.main(
         generated_obj_path,
-        str(pathlib.Path(dicom_folder_path).parent.joinpath(str(job_ID) + ".glb")),
+        compJobPath.make_str_job_path(job_ID, ["out", str(job_ID) + ".glb"]),
         delete_original_obj=True,
         compress_glb=False,
     )
@@ -55,9 +52,10 @@ def main(job_ID, dicom_download_url, meta_data):
     )
     logging.debug("meta_data: " + json.dumps(meta_data))
     compPostToAccesor.send_file_request_to_accessor(meta_data)
+    compJobStatus.update_status(job_ID, "Cleaning up") # TODO: Enum
+    compJobPath.clean_up(job_ID) # TODO: Enum
     update_status(job_ID, JobStatus.FINISHED.name)
 
-    compJobCleanup.main(job_ID)
 
 
 if __name__ == "__main__":

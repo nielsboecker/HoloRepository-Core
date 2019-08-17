@@ -8,6 +8,8 @@ FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
 logging.basicConfig(level=logging.INFO, format=FORMAT)
 
 # TODO: names "compJobClean" and "compJobCleanup" almost the same, what is responsibility??
+# TODO: The both actually need to be coupled so that files will get cleaned up when job is kicked out of dict
+# TODO: Refactor
 
 def activate_status_cleaning_job():
     def run_job():

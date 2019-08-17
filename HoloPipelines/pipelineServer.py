@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from threading import Thread
 from pipelines.components import compJobClean
-from pipelines.components import compMapPipelineInfo
+from pipelines.utils import pipelines_info
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list
 from pipelines.components.compStatus import status
 import uuid
@@ -46,7 +46,7 @@ def update_job_status():
 # get pipeline info
 @app.route(PREFIX + "/pipelines", methods=["GET"])
 def send_list_of_pipelines():
-    pipeline_dict = compMapPipelineInfo.map_pipelines_info()
+    pipeline_dict = pipelines_info.map_pipelines_info()
 
     return json.dumps(pipeline_dict)
 

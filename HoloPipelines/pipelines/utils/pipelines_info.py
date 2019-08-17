@@ -1,11 +1,12 @@
 import os.path
 import json
 
+# TODO: Refactor or delete
 
 def map_pipelines_info():
 
     pipeline_dict = {}
-    with open(os.path.dirname(__file__) + "/../../pipelineList.json") as json_file:
+    with open(os.path.dirname(__file__) + "/../../../pipelineList.json") as json_file:
         pipeline_list = json.load(json_file)
     json_file.close()
 

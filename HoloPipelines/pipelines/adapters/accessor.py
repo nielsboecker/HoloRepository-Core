@@ -1,3 +1,4 @@
+from datetime import datetime
 from os import path
 import requests
 import pathlib
@@ -47,3 +48,19 @@ def send_file_request_to_accessor(meta_data):
     return_code = response.status_code
     print(return_code)
     return request_body
+
+
+# TODO: Refactor
+def add_info_for_accesor(infoForAccessor, title, creationDes, outputDir):
+
+    infoForAccessor.update(
+        {
+            "title": title,
+            "creationDate": datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "creationDescription": creationDes,
+            "outputFileDir": outputDir,
+        }
+    )
+    print("info: " + json.dumps(infoForAccessor))
+
+    return infoForAccessor

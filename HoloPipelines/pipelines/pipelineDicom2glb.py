@@ -1,8 +1,8 @@
+import pipelines.adapters.accessor
 from pipelines.components import compDicom2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.wrappers import obj2gltf
 from pipelines.components.compJobStatusEnum import JobStatus
-from pipelines.components import compCombineInfoForAccesor
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list
 from pipelines.components.compJobStatus import update_status
 from pipelines.tasks import receive_input
@@ -42,7 +42,7 @@ def main(job_ID, dicom_download_url, meta_data):
 
     list_of_pipeline = get_pipeline_list()
     logging.debug("dicom2glb: done, glb saved to {}".format(generated_glb_path))
-    meta_data = compCombineInfoForAccesor.add_info_for_accesor(
+    meta_data = pipelines.adapters.accessor.add_info_for_accesor(
         meta_data,
         "apply on generic bone segmentation",
         "Generate with " + list(list_of_pipeline.keys())[1] + " pipeline",

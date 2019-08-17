@@ -3,6 +3,7 @@
 # from pipelines.components import (
 #     compCommonPath,
 # )  # needs to be removed when compDcm2nifti is replaced (please see other comments below)
+import pipelines.adapters.accessor
 from pipelines.config.io_paths import nifti_path
 from pipelines.components import compJobStatus
 from pipelines.components import compDicom2nifti
@@ -14,7 +15,6 @@ from pipelines.tasks.dispatch_output import dispatch_output
 from pipelines.tasks import receive_input
 from pipelines.components import compJobPath
 from pipelines.components.compJobStatusEnum import JobStatus
-from pipelines.components import compCombineInfoForAccesor
 from pipelines.components.compGetPipelineListInfo import get_pipeline_list
 
 import pathlib
@@ -60,7 +60,7 @@ def main(job_ID, dicom_download_url, meta_data):
 
     compJobStatus.update_status(job_ID, "Posting data")
     list_of_pipeline = get_pipeline_list()
-    meta_data = compCombineInfoForAccesor.add_info_for_accesor(
+    meta_data = pipelines.adapters.accessor.add_info_for_accesor(
         meta_data,
         "apply on generic bone segmentation",
         "Generate with " + list(list_of_pipeline.keys())[1] + " pipeline",

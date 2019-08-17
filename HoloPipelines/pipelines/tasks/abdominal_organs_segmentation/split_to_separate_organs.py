@@ -1,7 +1,10 @@
 # this comp generate numpy lists list from unique value from the numpy list input (comp exclusive for abdomen model at the moment)
 
+# TODO: Depending on how we deciide for this pipeline, this component may get removed.
+# Otherwise, separate organs need to be merged again!
+
 import pathlib
-from . import compNumpy2obj as makeObj
+from pipelines.components import compNumpy2obj as makeObj
 from pipelines.wrappers.obj2gltf import convert_obj_to_glb
 import numpy as np
 import logging
@@ -9,7 +12,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-def main(originalNumpy, outputPath):
+def split_to_separate_organs(originalNumpy, outputPath):
     outputPath = pathlib.Path(outputPath)
 
     # get frequency
@@ -38,7 +41,3 @@ def main(originalNumpy, outputPath):
                 str(outputPath.joinpath("organNo" + str(integer) + ".glb"))
             )
     return outputGlbPathList
-
-
-if __name__ == "__main__":
-    logging.error("component can't run on its own")

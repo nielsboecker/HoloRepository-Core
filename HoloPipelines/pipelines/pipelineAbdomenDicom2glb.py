@@ -1,7 +1,7 @@
 from pipelines.services import format_conversion
 from pipelines.clients import http
 from pipelines.components import compNifti2numpy
-from pipelines.components import compSeparateNumpy
+from pipelines.tasks.abdominal_organs_segmentation import split_to_separate_organs
 from pipelines.services.numpy_transformation import downscale_and_conditionally_crop
 from pipelines.config.io_paths import nifti_path
 
@@ -28,7 +28,7 @@ def main(
     resizedNumpyList = downscale_and_conditionally_crop(
         generatedNumpyList, resolutionLimit
     )
-    generatedGlbPathList = compSeparateNumpy.main(resizedNumpyList, outputGlbFolderPath)
+    generatedGlbPathList = split_to_separate_organs(resizedNumpyList, outputGlbFolderPath)
     logging.info(
         "abdomenDicom2glb: done, glb models generated at "
         + ",".join(generatedGlbPathList)

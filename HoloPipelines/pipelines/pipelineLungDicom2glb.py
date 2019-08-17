@@ -4,8 +4,8 @@
 #     compCommonPath,
 # )  # needs to be removed when compDcm2nifti is replaced (please see other comments below)
 import pipelines.adapters.holostorage_accessor
+import pipelines.state.job_status
 from pipelines.config.io_paths import nifti_path
-from pipelines.components import compJobStatus
 from pipelines.components import compDicom2nifti
 import pipelines.components.lungSegment.main as comp_lung_segment
 from pipelines.components import compNifti2numpy
@@ -25,9 +25,9 @@ logging.basicConfig(level=logging.INFO)
 
 
 def main(job_ID, dicom_download_url, meta_data):
-    compJobStatus.update_status(job_ID, "Fetching data")
+    pipelines.state.job_status.post_status_update(job_ID, "Fetching data")
     dicom_path = receive_input.fetch_and_unzip(job_ID, dicom_download_url)
-    compJobStatus.update_status(job_ID, JobStatus.PREPROCESSING.name)
+    pipelines.state.job_status.post_status_update(job_ID, JobStatus.PREPROCESSING.name)
     generated_nifti_path = compDicom2nifti.main(  # compDcm2nifti here is outdated (still has GDCM dependency, will need to be merged with dev). comp should also be updated to return the full path to nii file, not its folder
         str(dicom_path),
         str(
@@ -40,7 +40,7 @@ def main(job_ID, dicom_download_url, meta_data):
     )
     generated_numpy_list = compNifti2numpy.main(generated_segmented_lung_nifti_path)
 
-    compJobStatus.update_status(job_ID, JobStatus.GENERATING_MODEL.name)
+    pipelines.state.job_status.post_status_update(job_ID, JobStatus.GENERATING_MODEL.name)
 
     generated_obj_path = compNumpy2obj.main(
         generated_numpy_list,
@@ -48,7 +48,7 @@ def main(job_ID, dicom_download_url, meta_data):
         compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
     )
 
-    compJobStatus.update_status(job_ID, JobStatus.CONVERTING_MODEL.name)
+    pipelines.state.job_status.post_status_update(job_ID, JobStatus.CONVERTING_MODEL.name)
 
     generated_glb_path = convert_obj_to_glb(
         generated_obj_path,
@@ -58,7 +58,7 @@ def main(job_ID, dicom_download_url, meta_data):
     )
     logging.debug("lungDicom2glb: done, glb saved to {}".format(generated_glb_path))
 
-    compJobStatus.update_status(job_ID, "Posting data")
+    pipelines.state.job_status.post_status_update(job_ID, "Posting data")
     list_of_pipeline = get_pipeline_list()
     meta_data = pipelines.adapters.holostorage_accessor.add_info_for_accesor(
         meta_data,
@@ -70,9 +70,9 @@ def main(job_ID, dicom_download_url, meta_data):
     # TODO: Verify if this works after merge...
     dispatch_output(meta_data)
 
-    compJobStatus.update_status(job_ID, "Cleaning up")
+    pipelines.state.job_status.post_status_update(job_ID, "Cleaning up")
     compJobPath.clean_up(job_ID)
-    compJobStatus.update_status(job_ID, JobStatus.FINISHED.name)
+    pipelines.state.job_status.post_status_update(job_ID, JobStatus.FINISHED.name)
 
 
 if __name__ == "__main__":

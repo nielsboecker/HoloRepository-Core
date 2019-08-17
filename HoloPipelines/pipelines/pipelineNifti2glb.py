@@ -3,7 +3,7 @@
 
 # do i need status update on this 'internal' pipeline?
 import pipelines.adapters.holostorage_accessor
-from pipelines.components import compJobStatus
+import pipelines.state.job_status
 from pipelines.components import compNifti2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.wrappers.obj2gltf import convert_obj_to_glb
@@ -21,19 +21,19 @@ logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 
 def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
-    compJobStatus.update_status(job_ID, JobStatus.PREPROCESSING.name)
+    pipelines.state.job_status.post_status_update(job_ID, JobStatus.PREPROCESSING.name)
     generated_numpy_list = compNifti2numpy.main(str(pathlib.Path(input_nifti_path)))
 
     logging.debug("job start: " + json.dumps(meta_data))
 
-    compJobStatus.update_status(job_ID, JobStatus.GENERATING_MODEL.name)
+    pipelines.state.job_status.post_status_update(job_ID, JobStatus.GENERATING_MODEL.name)
     generated_obj_path = compNumpy2obj.main(
         generated_numpy_list,
         threshold,
         compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
     )
 
-    compJobStatus.update_status(job_ID, JobStatus.CONVERTING_MODEL.name)
+    pipelines.state.job_status.post_status_update(job_ID, JobStatus.CONVERTING_MODEL.name)
     generated_glb_path = convert_obj_to_glb(
         generated_obj_path,
         str(pathlib.Path(output_glb_path)),
@@ -51,12 +51,12 @@ def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
         output_glb_path,
     )
     # TODO: Verify this works after merge
-    compJobStatus.update_status(job_ID, "Posting data")
+    pipelines.state.job_status.post_status_update(job_ID, "Posting data")
     dispatch_output(meta_data)
 
-    compJobStatus.update_status(job_ID, "Cleaning up")
+    pipelines.state.job_status.post_status_update(job_ID, "Cleaning up")
     compJobPath.clean_up(job_ID)
-    compJobStatus.update_status(job_ID, JobStatus.FINISHED.name)
+    pipelines.state.job_status.post_status_update(job_ID, JobStatus.FINISHED.name)
 
 
 if __name__ == "__main__":

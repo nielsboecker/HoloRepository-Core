@@ -7,10 +7,9 @@ import pipelines.adapters.holostorage_accessor
 import pipelines.services.format_conversion
 import pipelines.state.job_status
 from pipelines.config.io_paths import nifti_path
-from pipelines.services.format_conversion import convert_numpy_to_obj, convert_dicom_to_nifty
+from pipelines.services.format_conversion import convert_numpy_to_obj, convert_dicom_to_nifty, convert_obj_to_glb
 import pipelines.components.lungSegment.main as comp_lung_segment
 from pipelines.components import compNifti2numpy
-from pipelines.wrappers.obj2gltf import convert_obj_to_glb
 from pipelines.tasks.shared.dispatch_output import dispatch_output
 from pipelines.tasks.shared import receive_input
 from pipelines.components import compJobPath

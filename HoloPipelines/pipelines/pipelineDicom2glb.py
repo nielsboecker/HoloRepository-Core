@@ -2,8 +2,7 @@ import pipelines.adapters.holostorage_accessor
 import pipelines.services.format_conversion
 import pipelines.state.job_status
 from pipelines.components import compDicom2numpy
-from pipelines.services.format_conversion import convert_numpy_to_obj
-from pipelines.wrappers.obj2gltf import convert_obj_to_glb
+from pipelines.services.format_conversion import convert_numpy_to_obj, convert_obj_to_glb
 from pipelines.utils.job_status import JobStatus
 from pipelines.utils.pipelines_info import get_pipeline_list
 from pipelines.state.job_status import post_status_update

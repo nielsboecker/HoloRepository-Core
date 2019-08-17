@@ -5,9 +5,7 @@
 
 import pathlib
 
-import pipelines.services.format_conversion
-from pipelines.services.format_conversion import convert_numpy_to_obj
-from pipelines.wrappers.obj2gltf import convert_obj_to_glb
+from pipelines.services.format_conversion import convert_numpy_to_obj, convert_obj_to_glb
 import numpy as np
 import logging
 

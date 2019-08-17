@@ -6,8 +6,7 @@ import pipelines.adapters.holostorage_accessor
 import pipelines.services.format_conversion
 import pipelines.state.job_status
 from pipelines.components import compNifti2numpy
-from pipelines.services.format_conversion import convert_numpy_to_obj
-from pipelines.wrappers.obj2gltf import convert_obj_to_glb
+from pipelines.services.format_conversion import convert_numpy_to_obj, convert_obj_to_glb
 from pipelines.tasks.shared.dispatch_output import dispatch_output
 from pipelines.components import compJobPath
 from pipelines.utils.job_status import JobStatus

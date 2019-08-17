@@ -1,5 +1,5 @@
 import time
-from pipelines.components.compStatus import status
+from pipelines.state.job_status import status
 from datetime import datetime
 import logging
 import threading

@@ -6,7 +6,7 @@ import subprocess
 import pathlib
 import logging
 import importlib
-from pipelines.components.compGetPipelineListInfo import get_pipeline_list
+from pipelines.utils.pipelines_info import get_pipeline_list
 
 from multiprocessing import Process
 from pipelines.config.io_paths import create_common_dirs

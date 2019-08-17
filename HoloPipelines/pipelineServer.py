@@ -4,10 +4,10 @@ from flask_json import json_response
 from datetime import datetime
 from pathlib import Path
 from threading import Thread
-from pipelines.components import compJobClean
+from pipelines.state import status_garbage_collector
 from pipelines.utils import pipelines_info
-from pipelines.components.compGetPipelineListInfo import get_pipeline_list
-from pipelines.components.compStatus import status
+from pipelines.utils.pipelines_info import get_pipeline_list
+from pipelines.state.job_status import status
 import uuid
 import json
 import logging
@@ -101,6 +101,6 @@ def get_job_status(jobid):
 
 
 if __name__ == "__main__":
-    Thread(target=compJobClean.activate_status_cleaning_job).start()
+    Thread(target=status_garbage_collector.activate_status_cleaning_job).start()
     # TODO: Shouldn't be hard-coded here
     Thread(target=app.run, kwargs={"debug": False, "port": 3100}).start()

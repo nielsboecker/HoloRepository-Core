@@ -54,7 +54,3 @@ def generate_obj(input_numpy, this_threshold, output_obj_path):
     for item in faces:
         newObj.write("f {0}//{0} {1}//{1} {2}//{2}\n".format(item[0], item[1], item[2]))
     newObj.close()
-
-
-if __name__ == "__main__":
-    logging.error("component can't run on its own")

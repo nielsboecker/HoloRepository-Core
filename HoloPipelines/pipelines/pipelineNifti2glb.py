@@ -57,7 +57,3 @@ def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
     pipelines.state.job_status.post_status_update(job_ID, "Cleaning up")
     compJobPath.clean_up(job_ID)
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.FINISHED.name)
-
-
-if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])

@@ -14,8 +14,8 @@ def resample(image_data, new_spacing=[1, 1, 1]):
     spacing = map(
         float,
         (
-            [list(image.header.get_zooms())[2]]
-            + [list(image.header.get_zooms())[0], list(image.header.get_zooms())[1]]
+                [list(image.header.get_zooms())[2]]
+                + [list(image.header.get_zooms())[0], list(image.header.get_zooms())[1]]
         ),
     )
     spacing = np.array(list(spacing))
@@ -24,6 +24,7 @@ def resample(image_data, new_spacing=[1, 1, 1]):
     new_real_shape = image.shape[:3] * resize_factor
     new_shape = np.round(new_real_shape)
     real_resize_factor = new_shape / image.shape[:3]
+    # TODO: Why overriding variable? And also why is it unused anyway, afterwards?
     new_spacing = spacing / real_resize_factor
 
     logging.info("Shape before resampling\t" + repr(original_shape))
@@ -45,7 +46,3 @@ def main(input_nifti_path, deleteNiftiWhenDone=False):
         os.remove(input_nifti_path)
 
     return numpyList
-
-
-if __name__ == "__main__":
-    logging.error("component can't run on its own")

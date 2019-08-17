@@ -49,7 +49,3 @@ def downscale_and_conditionally_crop(img, limit):
             "compNumpyTransformation: array smaller than limit given, no resize has been done"
         )
     return img
-
-
-if __name__ == "__main__":
-    logging.error("component can't run on its own")

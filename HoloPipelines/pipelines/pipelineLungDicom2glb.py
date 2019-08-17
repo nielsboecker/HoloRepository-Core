@@ -72,7 +72,3 @@ def main(job_ID, dicom_download_url, meta_data):
     pipelines.state.job_status.post_status_update(job_ID, "Cleaning up")
     compJobPath.clean_up(job_ID)
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.FINISHED.name)
-
-
-if __name__ == "__main__":
-    main(str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3]))

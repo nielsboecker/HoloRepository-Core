@@ -99,7 +99,3 @@ def main(dicom_path):
     logging.info("dicom2numpy: resampling done")
     imgs_after_resamp = reorientateNumpyList(imgs_after_resamp)
     return imgs_after_resamp
-
-
-if __name__ == "__main__":
-    logging.error("component can't run on its own")

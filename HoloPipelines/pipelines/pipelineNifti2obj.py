@@ -15,7 +15,3 @@ def main(inputNiftiPath, outputObjPath, threshold, flipNpy=False):
         generatedNumpyList, threshold, str(pathlib.Path(outputObjPath))
     )
     logging.info("nifti2obj: done, obj saved to {}".format(generatedObjPath))
-
-
-if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])

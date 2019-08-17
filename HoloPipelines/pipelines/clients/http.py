@@ -44,7 +44,3 @@ def send_post_to_status(json_data):
         # TODO: Don't hard-code that here
         response = requests.post("http://localhost:3100/api/v1/status", json=json_data)
         return response
-
-
-if __name__ == "__main__":
-    logging.error("component can't run on its own")

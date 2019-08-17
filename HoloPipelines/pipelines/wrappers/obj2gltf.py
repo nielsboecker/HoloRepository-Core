@@ -42,7 +42,3 @@ def call_obj2gltf(input_obj_path, output_glb_path, delete_original_obj=True, com
         sys.exit("obj2glb: conversion failed")
     logging.info("obj2glb: done")
     return output_glb_path
-
-
-if __name__ == "__main__":
-    logging.error("component can't run on its own")

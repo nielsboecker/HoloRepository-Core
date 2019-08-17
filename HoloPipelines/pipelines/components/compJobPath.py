@@ -32,7 +32,3 @@ def make_str_job_path(job_ID, sub_dir_list, create_sub_directories=True):
 def clean_up(job_ID):
     if os.path.exists(str_job_path):
         shutil.rmtree(str_job_path)
-
-
-if __name__ == "__main__":
-    logging.error("component can't run on its own")

@@ -114,26 +114,17 @@ def startPipeline(pipeline_ID, parameter_dict):
     )
     pl_package = importlib.import_module(pl_package_name)
 
-    # logging.error("============================ outside")
     process = Process(target=pl_package.main, kwargs=(parameter_dict))
     process.start()
     # process.join
-    # dynamicLoadingPipeline(pipeline_ID, dictionary)
-
-
-def worker():
-    while True:
-        logging.debug("This is logging for TEST1")
 
 
 def dynamicLoadingPipeline(plID, parameter_dict):
-    logging.error("============================= inside")
     list_of_pipeline = get_pipeline_list()
     list_of_pipeline[plID]["src"].split(".py")[0].replace("/", ".")
     pl_package_name = list_of_pipeline[plID]["src"].split(".py")[0].replace("/", ".")
     pl_package = importlib.import_module(pl_package_name)
     pl_package.main(**parameter_dict)
-    # pl_package.main(job_ID=parameter_dict["job_ID"], dicom_folder_path=parameter_dict["dicom_folder_path"],output_glb_path=parameter_dict["output_glb_path"], info_for_accesor=parameter_dict["meta_data"])
 
 
 if __name__ == "__main__":

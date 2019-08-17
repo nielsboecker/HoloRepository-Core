@@ -23,6 +23,7 @@ def unzip_the_file(zipped_data, save_dest):
 
 def main(jobID, image_url):
     file_list = [
+        # TODO: Refactor this
         str(pathlib.Path(this_comp_path).parents[1].joinpath("jobs")),
         str(pathlib.Path(this_comp_path).parents[1].joinpath("jobs", str(jobID))),
         str(

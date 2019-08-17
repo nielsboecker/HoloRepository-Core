@@ -21,7 +21,7 @@ import sys
 import logging
 
 
-def main(job_ID, dicom_download_url, info_for_accessor):
+def main(job_ID, dicom_download_url, meta_data):
     compJobStatus.update_status(job_ID, "Fetching data")
     dicom_path = compFetchResource.main(job_ID, dicom_download_url)
     compJobStatus.update_status(job_ID, JobStatus.PPREPROCESSING.name)
@@ -61,7 +61,7 @@ def main(job_ID, dicom_download_url, info_for_accessor):
         meta_data,
         "apply on generic bone segmentation",
         "Generate with " + list(list_of_pipeline.keys())[1] + " pipeline",
-        output_glb_path,
+        generated_glb_path,
     )
 
     # TODO: Verify if this works after merge...

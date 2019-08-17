@@ -1,4 +1,3 @@
-from pipelines.components import compCommonPath
 from pipelines.components import compDicom2numpy
 from pipelines.components import compNumpy2obj
 from pipelines.components import compObj2glbWrapper
@@ -9,8 +8,7 @@ from pipelines.components.compGetPipelineListInfo import get_pipeline_list
 from pipelines.components.compJobStatus import update_status
 from pipelines.components import compFetchResource
 from pipelines.components import compJobPath
-from datetime import datetime
-from pipelines.components import compJobCleanup
+from pipelines.components import compJobStatus
 import pathlib
 import json
 import sys

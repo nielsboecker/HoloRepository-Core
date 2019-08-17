@@ -7,7 +7,6 @@ import json
 def send_file_request_to_accessor(meta_data):
     output_file_dir = str(pathlib.Path(meta_data["outputFileDir"]))
     size_of_output_file = str(path.getsize(output_file_dir) / 1024)
-    # print("file: "+str(file)
     # get the pipelinelist json file
     print(meta_data["author"]["aid"])
 
@@ -39,6 +38,7 @@ def send_file_request_to_accessor(meta_data):
     files = {"hologramFile": open(output_file_dir, "rb")}
     print(request_body)
     response = requests.post(
+        # TODO: Should not be hard-coded in here
         "http://localhost:3200/api/v1/holograms", data=request_body, files=files
     )
     print(response.content)

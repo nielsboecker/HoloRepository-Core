@@ -16,4 +16,4 @@ def update_status(job_ID, job_status):
 if __name__ == "__main__":
     print(
         "You shouldn't be able to run this component directly"
-    )  # TODO look at this too pls
+    )

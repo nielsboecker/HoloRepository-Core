@@ -7,6 +7,7 @@ import threading
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
 logging.basicConfig(level=logging.INFO, format=FORMAT)
 
+# TODO: names "compJobClean" and "compJobCleanup" almost the same, what is responsibility??
 
 def activate_status_cleaning_job():
     def run_job():

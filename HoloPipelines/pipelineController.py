@@ -111,14 +111,12 @@ def startPipeline(pipeline_ID, parameter_dict):
     )
     pl_package = importlib.import_module(pl_package_name)
 
-    # logging.error("============================ outside")
     process = Process(target=pl_package.main, kwargs=parameter_dict)
     process.start()
-    # dynamicLoadingPipeline(pipeline_ID, dictionary)
 
 
 def getPipelineList():
-    configFileName = "pipelineList.json"  # hard coded
+    configFileName = "pipelineList.json"
 
     with open(str(pathlib.Path(new_cwd).joinpath(str(configFileName)))) as json_file:
         list_of_pipeline = json.load(json_file)
@@ -127,13 +125,11 @@ def getPipelineList():
 
 
 def dynamicLoadingPipeline(plID, parameter_dict):
-    logging.error("============================= inside")
     list_of_pipeline = getPipelineList()
     list_of_pipeline[plID]["src"].split(".py")[0].replace("/", ".")
     pl_package_name = list_of_pipeline[plID]["src"].split(".py")[0].replace("/", ".")
     pl_package = importlib.import_module(pl_package_name)
     pl_package.main(**parameter_dict)
-    # pl_package.main(job_ID=parameter_dict["job_ID"], dicom_folder_path=parameter_dict["dicom_folder_path"],output_glb_path=parameter_dict["output_glb_path"], info_for_accesor=parameter_dict["info_for_accessor"])
 
 
 if __name__ == "__main__":

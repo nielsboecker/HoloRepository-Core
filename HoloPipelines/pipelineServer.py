@@ -34,7 +34,6 @@ logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 @app.route(PREFIX + "/status", methods=["POST"])
 def update_job_status():
     current_job_status = request.get_json()
-    print("+++++++++++++++++++++++++" + str(current_job_status))
     current_jobID = list(current_job_status.keys())[0]
     status.update(current_job_status)
     logging.debug(
@@ -100,9 +99,10 @@ def get_job_status(jobid):
         current_status = status[jobid]["status"]
         return json_response(message=current_status, status_code=202)
     else:
-        return json_response(message="does not exist", status_code=202)
+        return json_response(message="does not exist", status_code=404)
 
 
 if __name__ == "__main__":
     Thread(target=compJobClean.activate_status_cleaning_job).start()
+    # TODO: Shouldn't be hard-coded here
     Thread(target=app.run, kwargs={"debug": False, "port": 3100}).start()

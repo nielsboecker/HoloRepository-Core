@@ -29,6 +29,7 @@ def send_post_to_status(json_data):
         return json_data
     else:
         logging.debug("json_data: " + json.dumps(json_data))
+        # TODO: Don't hard-code that here
         response = requests.post("http://localhost:3100/api/v1/status", json=json_data)
         return response
 

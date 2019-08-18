@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 def main(
     inputDicomPath, outputGlbFolderPath, segmentationModelUrl, resolutionLimit=300
 ):
-    generatedNiftiPath = format_conversion.convert_dicom_to_nifty(
+    generatedNiftiPath = format_conversion.convert_dicom_to_nifti(
         inputDicomPath, str(nifti_path.joinpath("_temp.nii"))
     )
     segmentedNiftiPath = http.send_file_post_request(

@@ -1,7 +1,7 @@
 import pathlib
 import os
 
-# TODO: nifty variable is used in other components, even though the dir is not /job/<id>/...
+# TODO: nifti variable is used in other components, even though the dir is not /job/<id>/...
 # TODO: Should be refactored, but not sure if still up to date with the /job/id concept
 cwd = pathlib.Path.cwd()
 medical_scans_path = cwd.joinpath("medicalScans")

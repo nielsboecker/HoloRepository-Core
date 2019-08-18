@@ -8,7 +8,7 @@ from pipelines.services.marching_cubes import generate_obj
 from pipelines.wrappers.obj2gltf import call_obj2gltf
 
 
-def convert_dicom_to_nifty(dicomInputPath, niftiOutputPath):
+def convert_dicom_to_nifti(dicomInputPath, niftiOutputPath):
     # convert series of dicom to numpy
     # TODO: Read vs. convert
     dicomNumpyList = read_dicom_as_np_ndarray_and_normalise(dicomInputPath)

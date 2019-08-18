@@ -51,7 +51,7 @@ def normalise_nifti_image(image_data: nibabel.nifti1.Nifti1Image):
     return image
 
 
-def read_nifty_image(input_path: str):
+def read_nifti_image(input_path: str):
     """
     Reads NIfTI image from disk.
     :param input_path: Path to the NIfTI image
@@ -63,7 +63,7 @@ def read_nifty_image(input_path: str):
 
 
 def read_nifti_as_np_array_and_normalise(input_path: str):
-    nifti_image: nibabel.nifti1.Nifti1Image = read_nifty_image(input_path)
-    normalised_nifty_image: nibabel.nifti1.Nifti1Image = normalise_nifti_image(nifti_image)
-    normalised_nifty_image_as_np_array: np.array = extract_np_array_from_nifti_image(normalised_nifty_image)
-    return normalised_nifty_image_as_np_array
+    nifti_image: nibabel.nifti1.Nifti1Image = read_nifti_image(input_path)
+    normalised_nifti_image: nibabel.nifti1.Nifti1Image = normalise_nifti_image(nifti_image)
+    normalised_nifti_image_as_np_array: np.array = extract_np_array_from_nifti_image(normalised_nifti_image)
+    return normalised_nifti_image_as_np_array

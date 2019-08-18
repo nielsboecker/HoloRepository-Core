@@ -5,7 +5,7 @@ import numpy as np
 
 from pipelines.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 from pipelines.services.marching_cubes import generate_obj
-from pipelines.services.nifty_transformation import normalise_nifti
+from pipelines.adapters.nifty_file import normalise_nifti
 from pipelines.wrappers.obj2gltf import call_obj2gltf
 
 

@@ -113,6 +113,9 @@ def normalise_dicom(dicom_image_array: np.ndarray, input_path: str):
     resize_factor = spacing / new_spacing
     new_real_shape = dicom_image_array.shape * resize_factor
     new_shape = np.round(new_real_shape)
+
+    # TODO: After refactoring, adjust to flipping before resampling
+    # Udomkarn: Yes you can but you will need to look into real_resize_factor variable inside resample(), and update it to the right array axis for the new image's orientation.
     real_resize_factor = new_shape / dicom_image_array.shape
 
     dicom_image_array = scipy.ndimage.interpolation.zoom(dicom_image_array, real_resize_factor)

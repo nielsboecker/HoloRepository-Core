@@ -114,7 +114,6 @@ def normalise_dicom(dicom_image_array: np.ndarray, input_path: str):
     new_real_shape = dicom_image_array.shape * resize_factor
     new_shape = np.round(new_real_shape)
     real_resize_factor = new_shape / dicom_image_array.shape
-    new_spacing = spacing / real_resize_factor
 
     dicom_image_array = scipy.ndimage.interpolation.zoom(dicom_image_array, real_resize_factor)
     logging.info("Shape after resampling\t" + repr(dicom_image_array.shape))

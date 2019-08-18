@@ -1,10 +1,9 @@
 import logging
-import os
 
-from components import compDicom2numpy
 import nibabel as nib
 import numpy as np
 
+from pipelines.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 from pipelines.services.marching_cubes import generate_obj
 from pipelines.services.nifty_transformation import normalise_nifti
 from pipelines.wrappers.obj2gltf import call_obj2gltf
@@ -12,7 +11,8 @@ from pipelines.wrappers.obj2gltf import call_obj2gltf
 
 def convert_dicom_to_nifty(dicomInputPath, niftiOutputPath):
     # convert series of dicom to numpy
-    dicomNumpyList = compDicom2numpy.main(dicomInputPath)
+    # TODO: Read vs. convert
+    dicomNumpyList = read_dicom_as_np_ndarray_and_normalise(dicomInputPath)
 
     # convert numpy array to nifti image
     niftiImage = nib.Nifti1Image(dicomNumpyList, affine=np.eye(4))

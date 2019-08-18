@@ -1,7 +1,7 @@
 import pipelines.adapters.holostorage_accessor
 import pipelines.services.format_conversion
 import pipelines.state.job_status
-from pipelines.components.compDicom2numpy import read_dicom_as_np_ndarray_and_normalise
+from pipelines.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 from pipelines.services.format_conversion import convert_numpy_to_obj, convert_obj_to_glb
 from pipelines.utils.job_status import JobStatus
 from pipelines.utils.pipelines_info import get_pipeline_list

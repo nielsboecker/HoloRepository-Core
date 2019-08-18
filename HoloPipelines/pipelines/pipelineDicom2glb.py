@@ -39,7 +39,6 @@ def main(job_ID, dicom_download_url, meta_data):
     generated_glb_path = convert_obj_to_glb(
         obj_output_path,
         compJobPath.make_str_job_path(job_ID, ["out", str(job_ID) + ".glb"]),
-        compress_glb=False,
     )
 
     list_of_pipeline = get_pipeline_list()

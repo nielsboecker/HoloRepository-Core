@@ -6,7 +6,7 @@ from scipy import stats
 import pathlib
 
 
-def segment_lung(params, I, I_affine, outputNiftiFolderPath):
+def segment_lung(params, I, I_affine):
 
     #####################################################
     # Intensity thresholding & Morphological operations
@@ -50,9 +50,6 @@ def segment_lung(params, I, I_affine, outputNiftiFolderPath):
     M = ndimage.binary_closing(M, structure=struct_m, iterations=1)
     M = ndimage.binary_fill_holes(M)
     Mlung = np.int8(M)
-    # nib.Nifti1Image(Mlung,I_affine).to_filename('./result/sample_lungaw.nii.gz')
-    nib.Nifti1Image(Mlung, I_affine).to_filename(
-        str(pathlib.Path(outputNiftiFolderPath).joinpath("lungaw.nii.gz"))
-    )
+    # Note: Skip writing "lungaw.nii.gz" to disk, as we don't use it
 
     return Mlung

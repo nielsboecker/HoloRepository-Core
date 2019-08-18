@@ -1,5 +1,7 @@
+from typing import List
+
 import numpy as np
-import pydicom as dicom
+import pydicom
 import os
 import scipy.ndimage
 import SimpleITK as sitk
@@ -10,9 +12,9 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-def load_scan(scan_path):
+def read_dicom_dataset(scan_path):
     slices = [
-        dicom.read_file(str(pathlib.Path(scan_path, s)))
+        pydicom.read_file(str(pathlib.Path(scan_path, s)))
         for s in os.listdir(str(scan_path))
     ]
     slices.sort(key=lambda x: int(x.InstanceNumber))
@@ -35,7 +37,7 @@ def load_scan(scan_path):
     return slices
 
 
-def load_pixel_array(input_path):
+def read_dicom_pixel_array(input_path):
     reader = sitk.ImageSeriesReader()
 
     dicom_name = reader.GetGDCMSeriesFileNames(input_path)
@@ -47,45 +49,47 @@ def load_pixel_array(input_path):
     return numpy_array_image
 
 
-def resample(data_path, new_spacing=[1, 1, 1]):
-    scan = load_scan(data_path)
-    image = load_pixel_array(data_path)
-    logging.info("Shape before resampling\t" + repr(image.shape))
+def normalise_dicom(data_path, new_spacing=[1, 1, 1]):
+    dicom_dataset: List[pydicom.dataset.FileDataset] = read_dicom_dataset(data_path)
+    dicom_sample_slice = dicom_dataset[0]
+    dicom_image_array: np.ndarray = read_dicom_pixel_array(data_path)
+
+    logging.info("Shape before resampling\t" + repr(dicom_image_array.shape))
     # Determine current pixel spacing
     try:
         spacing = map(
             float,
             (
-                [scan[0].SliceThickness]
-                + [scan[0].PixelSpacing[0], scan[0].PixelSpacing[1]]
+                [dicom_sample_slice.SliceThickness]
+                + [dicom_sample_slice.PixelSpacing[0], dicom_sample_slice.PixelSpacing[1]]
             ),
         )
         spacing = np.array(list(spacing))
     except Exception as e:
         logging.warning(
-            "Unable to load elements of PixelSpacing from dicom, please make sure header data exist. scan[0].PixelSpacing: "
-            + len(scan[0].PixelSpacing)
+            "Unable to load elements of PixelSpacing from dicom, please make sure header data exist. dicom_dataset[0].PixelSpacing: "
+            + str(len(dicom_sample_slice.PixelSpacing))
         )
         logging.warning(
             "Pixel Spacing (row, col): (%f, %f) "
-            % (scan[0].PixelSpacing[0], scan[0].PixelSpacing[1])
+            % (dicom_sample_slice.PixelSpacing[0], dicom_sample_slice.PixelSpacing[1])
         )
-        sys.exit("dicom2numpy: error loading scan: {}".format(str(e)))
+        sys.exit("dicom2numpy: error loading dicom_dataset: {}".format(str(e)))
 
     # calculate resize factor
     resize_factor = spacing / new_spacing
-    new_real_shape = image.shape * resize_factor
+    new_real_shape = dicom_image_array.shape * resize_factor
     new_shape = np.round(new_real_shape)
-    real_resize_factor = new_shape / image.shape
+    real_resize_factor = new_shape / dicom_image_array.shape
     new_spacing = spacing / real_resize_factor
 
-    image = scipy.ndimage.interpolation.zoom(image, real_resize_factor)
-    logging.info("Shape after resampling\t" + repr(image.shape))
+    dicom_image_array = scipy.ndimage.interpolation.zoom(dicom_image_array, real_resize_factor)
+    logging.info("Shape after resampling\t" + repr(dicom_image_array.shape))
 
-    return image, new_spacing
+    return dicom_image_array
 
 
-def reorientateNumpyList(numpyList):
+def flip_numpy_array_dimensions(numpyList):
     # transpose numpy i.e. (z, y, x) ---> (x, y, z)
     numpyList = numpyList.transpose(2, 1, 0)
     numpyList = np.flip(numpyList, 0)
@@ -93,9 +97,9 @@ def reorientateNumpyList(numpyList):
     return numpyList
 
 
-def main(dicom_path):
+def convert_dicom_to_numpy_and_normalise(dicom_path):
     logging.info("dicom2numpy: resampling dicom...")
-    imgs_after_resamp, spacing = resample(dicom_path)
+    imgs_after_resamp = normalise_dicom(dicom_path)
     logging.info("dicom2numpy: resampling done")
-    imgs_after_resamp = reorientateNumpyList(imgs_after_resamp)
+    imgs_after_resamp = flip_numpy_array_dimensions(imgs_after_resamp)
     return imgs_after_resamp

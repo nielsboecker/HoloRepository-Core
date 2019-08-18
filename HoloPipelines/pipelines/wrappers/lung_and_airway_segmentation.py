@@ -3,12 +3,11 @@ import pathlib
 import os
 import glob
 import sys
-import pipelines.components.lungSegment.utils as utils
-from pipelines.components.lungSegment.segment_lung import segment_lung
-from pipelines.components.lungSegment.segment_airway import segment_airway
+import pipelines.third_party.ct_lung_segmentation.utils as utils
+from pipelines.third_party.ct_lung_segmentation.segment_lung import segment_lung
+from pipelines.third_party.ct_lung_segmentation.segment_airway import segment_airway
 
-
-def main(inputNiftiPath, outputNiftiFolderPath):
+def perform_lung_segmentation(inputNiftiPath, outputNiftiFolderPath):
     inputNiftiPath = str(pathlib.Path(inputNiftiPath))
     if not os.path.exists(outputNiftiFolderPath):
         os.makedirs(outputNiftiFolderPath)
@@ -20,7 +19,7 @@ def main(inputNiftiPath, outputNiftiFolderPath):
         lsdir = glob.glob(str(pathlib.Path(inputNiftiPath).joinpath("*.nii.gz")))
         if len(lsdir) != 1:
             sys.exit(
-                "lungSegment.main: error, invalid number of Nifti file found inside folder "
+                "ct_lung_segmentation.main: error, invalid number of Nifti file found inside folder "
                 + inputNiftiPath
             )
         inputNiftiPath = str(pathlib.Path(lsdir[0]))

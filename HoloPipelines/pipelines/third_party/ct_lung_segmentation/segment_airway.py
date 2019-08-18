@@ -15,7 +15,7 @@ except ModuleNotFoundError as e:
     )
 
     logging.warning(
-        "Unable to import from 'utils', importing from 'components.lungSegment.utils': {}".format(
+        "Unable to import from 'utils', importing from 'components.ct_lung_segmentation.utils': {}".format(
             str(e)
         )
     )

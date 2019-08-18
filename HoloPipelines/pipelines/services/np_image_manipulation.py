@@ -2,8 +2,6 @@ import scipy.ndimage
 import sys
 import logging
 
-logging.basicConfig(level=logging.INFO)
-
 
 def crop_around_centre(img, newX, newY, newZ):
     x, y, z = img.shape

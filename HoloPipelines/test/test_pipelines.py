@@ -11,7 +11,6 @@ import requests
 from zipfile import ZipFile
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-logging.basicConfig(level=logging.INFO)
 
 pythonPath = sys.executable
 thisCwd = pathlib.Path.cwd()

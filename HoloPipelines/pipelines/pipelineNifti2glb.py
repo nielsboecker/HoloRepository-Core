@@ -17,9 +17,6 @@ import pathlib
 import json
 import logging
 
-FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
-logging.basicConfig(level=logging.DEBUG, format=FORMAT)
-
 
 def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.PREPROCESSING.name)

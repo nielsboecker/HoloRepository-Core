@@ -12,8 +12,6 @@ import logging
 
 from pipelines.services.marching_cubes import generate_mesh
 
-logging.basicConfig(level=logging.INFO)
-
 
 def split_to_separate_organs(originalNumpy, outputPath):
     outputPath = pathlib.Path(outputPath)

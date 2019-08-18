@@ -24,8 +24,6 @@ import logging
 
 from pipelines.wrappers.lung_and_airway_segmentation import perform_lung_segmentation
 
-logging.basicConfig(level=logging.INFO)
-
 
 def main(job_ID, dicom_download_url, meta_data):
     pipelines.state.job_status.post_status_update(job_ID, "Fetching data")

@@ -9,8 +9,6 @@ from pipelines.config.io_paths import nifti_path
 import sys
 import logging
 
-logging.basicConfig(level=logging.INFO)
-
 
 def main(
     inputDicomPath, outputGlbFolderPath, segmentationModelUrl, resolutionLimit=300

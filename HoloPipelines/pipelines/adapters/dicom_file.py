@@ -9,8 +9,6 @@ import pathlib
 import sys
 import logging
 
-logging.basicConfig(level=logging.INFO)
-
 
 def read_dicom_dataset(input_path: str):
     """

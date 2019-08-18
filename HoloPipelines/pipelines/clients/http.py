@@ -7,9 +7,6 @@ import logging
 import os
 import json
 
-FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
-logging.basicConfig(level=logging.DEBUG, format=FORMAT)
-
 
 def send_file_post_request(url, inputFile, outputFile):
     inputFile = str(pathlib.Path(inputFile))

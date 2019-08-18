@@ -13,7 +13,7 @@ from pipelines.config.io_paths import create_common_dirs
 
 
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
-logging.basicConfig(level=logging.INFO, format=FORMAT)
+logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 
 new_cwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))

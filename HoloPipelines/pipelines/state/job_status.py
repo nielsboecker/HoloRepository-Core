@@ -1,8 +1,6 @@
 import logging
 from datetime import datetime
 
-FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
-logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 # TODO: Refactor (or remove, if we only do the logging to file?)
 from pipelines.clients.http import send_post_to_status

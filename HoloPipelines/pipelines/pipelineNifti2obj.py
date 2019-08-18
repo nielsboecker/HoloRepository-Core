@@ -6,8 +6,6 @@ import logging
 
 from pipelines.services.marching_cubes import generate_mesh
 
-logging.basicConfig(level=logging.INFO)
-
 
 def main(inputNiftiPath, outputObjPath, threshold, flipNpy=False):
     nifti_image_as_np_array = read_nifti_as_np_array_and_normalise(str(pathlib.Path(inputNiftiPath)))

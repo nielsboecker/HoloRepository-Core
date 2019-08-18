@@ -5,7 +5,6 @@ import os
 import sys
 import logging
 
-logging.basicConfig(level=logging.INFO)
 new_cwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
 success = True

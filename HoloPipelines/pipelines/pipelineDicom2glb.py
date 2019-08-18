@@ -17,9 +17,6 @@ import sys
 import logging
 import numpy as np
 
-FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
-logging.basicConfig(level=logging.DEBUG, format=FORMAT)
-
 
 def main(job_ID, dicom_download_url, meta_data):
     post_status_update(job_ID, JobStatus.FETCHING_DATA.name)

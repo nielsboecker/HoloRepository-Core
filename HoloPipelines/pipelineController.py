@@ -10,7 +10,7 @@ from multiprocessing import Process
 from pipelines.config.io_paths import create_common_dirs
 
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
-logging.basicConfig(level=logging.INFO, format=FORMAT)
+logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 
 new_cwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
@@ -25,7 +25,7 @@ parser.add_argument(
     help="path to pipeline config file relative to pipelineController",
 )
 parser.add_argument(
-    "-l", "--ls", action="store_true", help="list all the available piplines"
+    "-l", "--ls", action="store_true", help="list all the available pipelines"
 )
 parser.add_argument(
     "-i",

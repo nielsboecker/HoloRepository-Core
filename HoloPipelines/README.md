@@ -64,12 +64,6 @@ These 2 dependencies can be installed using Node.js package manager. Please make
 npm install -g obj2gltf
 ```
 
-**glTF Pipeline** https://github.com/AnalyticalGraphicsInc/gltf-pipeline
-
-```
-npm install -g gltf-pipeline
-```
-
 ### Local usage
 
 ```

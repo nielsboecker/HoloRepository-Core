@@ -6,9 +6,10 @@
 import pipelines.adapters.holostorage_accessor
 import pipelines.services.format_conversion
 import pipelines.state.job_status
-from pipelines.adapters.nifti_file import read_nifti_as_np_array_and_normalise
+from pipelines.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
+from pipelines.adapters.nifti_file import read_nifti_as_np_array_and_normalise, write_nifti_image
 from pipelines.config.io_paths import nifti_path
-from pipelines.services.format_conversion import convert_numpy_to_obj, convert_dicom_to_nifti, convert_obj_to_glb
+from pipelines.services.format_conversion import convert_numpy_to_obj, convert_obj_to_glb
 import pipelines.components.lungSegment.main as comp_lung_segment
 from pipelines.tasks.shared.dispatch_output import dispatch_output
 from pipelines.tasks.shared import receive_input
@@ -27,14 +28,15 @@ def main(job_ID, dicom_download_url, meta_data):
     pipelines.state.job_status.post_status_update(job_ID, "Fetching data")
     dicom_path = receive_input.fetch_and_unzip(job_ID, dicom_download_url)
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.PREPROCESSING.name)
-    generated_nifti_path = convert_dicom_to_nifti(  # compDcm2nifti here is outdated (still has GDCM dependency, will need to be merged with dev). comp should also be updated to return the full path to nii file, not its folder
-        str(dicom_path),
-        str(
-            nifti_path.joinpath(str(pathlib.PurePath(dicom_path).parts[-1]))
-        ),  # this will need to be updated once compDcm2nifti is replaced
-    )  # this comment will be outdated when changes from lines above happens >>> convert dcm and move to temp path inside nifti folder. nifti will be in a sub folder named after the input dicom folder
+
+    dicom_image_array = read_dicom_as_np_ndarray_and_normalise(dicom_path)
+    nifti_image = pipelines.convert_dicom_np_ndarray_to_nifti_image(dicom_image_array)
+
+    nifti_output_path = str(nifti_path.joinpath(str(pathlib.PurePath(dicom_path).parts[-1])))
+    write_nifti_image(nifti_image, nifti_output_path)
+
     generated_segmented_lung_nifti_path = comp_lung_segment(
-        generated_nifti_path,
+        nifti_output_path,
         compJobPath.make_str_job_path(job_ID, ["temp"], create_sub_directories=False),
     )
     generated_numpy_list = read_nifti_as_np_array_and_normalise(generated_segmented_lung_nifti_path)

@@ -1,7 +1,7 @@
 import pipelines.adapters.holostorage_accessor
 import pipelines.services.format_conversion
 import pipelines.state.job_status
-from pipelines.components.compDicom2numpy import convert_dicom_to_numpy_and_normalise
+from pipelines.components.compDicom2numpy import read_dicom_as_np_ndarray_and_normalise
 from pipelines.services.format_conversion import convert_numpy_to_obj, convert_obj_to_glb
 from pipelines.utils.job_status import JobStatus
 from pipelines.utils.pipelines_info import get_pipeline_list
@@ -13,6 +13,7 @@ import pathlib
 import json
 import sys
 import logging
+import numpy as np
 
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
 logging.basicConfig(level=logging.DEBUG, format=FORMAT)
@@ -23,12 +24,12 @@ def main(job_ID, dicom_download_url, meta_data):
     dicom_folder_path = receive_input.fetch_and_unzip(job_ID, dicom_download_url)
     post_status_update(job_ID, JobStatus.PREPROCESSING.name)
     meta_data = json.loads(meta_data)
-    generated_numpy_list = convert_dicom_to_numpy_and_normalise(str(pathlib.Path(dicom_folder_path)))
+    dicom_image: np.ndarray = read_dicom_as_np_ndarray_and_normalise(str(pathlib.Path(dicom_folder_path)))
     threshold = 300
 
     post_status_update(job_ID, JobStatus.GENERATING_MODEL.name)
     generated_obj_path = convert_numpy_to_obj(
-        generated_numpy_list,
+        dicom_image,
         threshold,
         compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
     )

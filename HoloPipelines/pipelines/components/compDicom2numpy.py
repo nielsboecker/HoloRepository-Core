@@ -12,10 +12,16 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-def read_dicom_dataset(scan_path):
+def read_dicom_dataset(input_path: str):
+    """
+    Reads a DICOM file and returns a pydicom representation, used to obtain knowledge about the
+    slice thickness, that can then e.g. be used to manipulate image data.
+    :param input_path: Path to the DICOM file
+    :return: pydicom.dataset.FileDataset representing the DICOM file
+    """
     slices = [
-        pydicom.read_file(str(pathlib.Path(scan_path, s)))
-        for s in os.listdir(str(scan_path))
+        pydicom.read_file(str(pathlib.Path(input_path, s)))
+        for s in os.listdir(str(input_path))
     ]
     slices.sort(key=lambda x: int(x.InstanceNumber))
     try:
@@ -37,7 +43,13 @@ def read_dicom_dataset(scan_path):
     return slices
 
 
-def read_dicom_pixel_array(input_path):
+def read_dicom_pixels_as_np_ndarray(input_path):
+    """
+    Reads a DICOM image and returns it as a numpy ndarray. The method will always call
+    flip_numpy_array_dimensions() to mirror the dimensions and return accurate data.
+    :param input_path: Path to the DICOM file
+    :return: numpy ndarray representing the DICOM file
+    """
     reader = sitk.ImageSeriesReader()
 
     dicom_name = reader.GetGDCMSeriesFileNames(input_path)
@@ -45,14 +57,34 @@ def read_dicom_pixel_array(input_path):
 
     image = reader.Execute()
     numpy_array_image = sitk.GetArrayFromImage(image)
+    fixed_numpy_array_image = flip_numpy_array_dimensions(numpy_array_image)
 
-    return numpy_array_image
+    return fixed_numpy_array_image
 
 
-def normalise_dicom(data_path, new_spacing=[1, 1, 1]):
-    dicom_dataset: List[pydicom.dataset.FileDataset] = read_dicom_dataset(data_path)
+def flip_numpy_array_dimensions(array: np.ndarray):
+    """
+    Transposes and flips numpy axes, i.e. (z, y, x) ---> (x, y, z). This is needed as the default
+    data when we read it is "mirrored" and therefore not accurate and, e.g., not valid as input
+    for pre-trained NN models.
+    :param array: ndarray from pydicom.read_file()
+    :return: array with flipped axis to represent the accurate DICOM data
+    """
+    array = array.transpose((2, 1, 0))
+    array = np.flip(array, 0)
+    array = np.flip(array, 1)
+    return array
+
+
+def normalise_dicom(dicom_image_array: np.ndarray, input_path: str):
+    """
+    Compensates the distortion caused by slice thickness, using data obtained from the DICOM header
+    :param dicom_image_array: numpy ndarray representing the DICOM file
+    :param input_path: Path to the DICOM file
+    :return: normalised dicom_image_array
+    """
+    dicom_dataset: List[pydicom.dataset.FileDataset] = read_dicom_dataset(input_path)
     dicom_sample_slice = dicom_dataset[0]
-    dicom_image_array: np.ndarray = read_dicom_pixel_array(data_path)
 
     logging.info("Shape before resampling\t" + repr(dicom_image_array.shape))
     # Determine current pixel spacing
@@ -65,7 +97,7 @@ def normalise_dicom(data_path, new_spacing=[1, 1, 1]):
             ),
         )
         spacing = np.array(list(spacing))
-    except Exception as e:
+    except Exception:
         logging.warning(
             "Unable to load elements of PixelSpacing from dicom, please make sure header data exist. dicom_dataset[0].PixelSpacing: "
             + str(len(dicom_sample_slice.PixelSpacing))
@@ -77,6 +109,7 @@ def normalise_dicom(data_path, new_spacing=[1, 1, 1]):
         sys.exit("dicom2numpy: error loading dicom_dataset: {}".format(str(e)))
 
     # calculate resize factor
+    new_spacing = [1, 1, 1]
     resize_factor = spacing / new_spacing
     new_real_shape = dicom_image_array.shape * resize_factor
     new_shape = np.round(new_real_shape)
@@ -89,17 +122,7 @@ def normalise_dicom(data_path, new_spacing=[1, 1, 1]):
     return dicom_image_array
 
 
-def flip_numpy_array_dimensions(numpyList):
-    # transpose numpy i.e. (z, y, x) ---> (x, y, z)
-    numpyList = numpyList.transpose(2, 1, 0)
-    numpyList = np.flip(numpyList, 0)
-    numpyList = np.flip(numpyList, 1)
-    return numpyList
-
-
-def convert_dicom_to_numpy_and_normalise(dicom_path):
-    logging.info("dicom2numpy: resampling dicom...")
-    imgs_after_resamp = normalise_dicom(dicom_path)
-    logging.info("dicom2numpy: resampling done")
-    imgs_after_resamp = flip_numpy_array_dimensions(imgs_after_resamp)
-    return imgs_after_resamp
+def read_dicom_as_np_ndarray_and_normalise(input_path: str):
+    dicom_image: np.ndarray = read_dicom_pixels_as_np_ndarray(input_path)
+    normalised_dicom_image: np.ndarray = normalise_dicom(dicom_image, input_path)
+    return normalised_dicom_image

@@ -10,7 +10,7 @@ from pipelines.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 from pipelines.adapters.nifti_file import read_nifti_as_np_array_and_normalise, write_nifti_image
 from pipelines.adapters.obj_file import write_mesh_as_obj
 from pipelines.config.io_paths import nifti_path
-from pipelines.adapters.glb_file import convert_obj_to_glb
+from pipelines.adapters.glb_file import convert_obj_to_glb_and_write
 import pipelines.components.lungSegment.main as comp_lung_segment
 from pipelines.services.marching_cubes import generate_mesh
 from pipelines.tasks.shared.dispatch_output import dispatch_output
@@ -49,7 +49,7 @@ def main(job_ID, dicom_download_url, meta_data):
     write_mesh_as_obj(verts, faces, norm, obj_output_path)
 
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.CONVERTING_MODEL.name)
-    generated_glb_path = convert_obj_to_glb(
+    generated_glb_path = convert_obj_to_glb_and_write(
         obj_output_path,
         compJobPath.make_str_job_path(job_ID, ["out", str(job_ID) + ".glb"]),
     )

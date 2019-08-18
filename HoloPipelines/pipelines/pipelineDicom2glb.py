@@ -3,7 +3,7 @@ import pipelines.adapters.glb_file
 import pipelines.state.job_status
 from pipelines.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 from pipelines.adapters.obj_file import write_mesh_as_obj
-from pipelines.adapters.glb_file import convert_obj_to_glb
+from pipelines.adapters.glb_file import convert_obj_to_glb_and_write
 from pipelines.services.marching_cubes import generate_mesh
 from pipelines.utils.job_status import JobStatus
 from pipelines.utils.pipelines_info import get_pipeline_list
@@ -36,7 +36,7 @@ def main(job_ID, dicom_download_url, meta_data):
     write_mesh_as_obj(verts, faces, norm, obj_output_path)
 
     post_status_update(job_ID, JobStatus.CONVERTING_MODEL.name)
-    generated_glb_path = convert_obj_to_glb(
+    generated_glb_path = convert_obj_to_glb_and_write(
         obj_output_path,
         compJobPath.make_str_job_path(job_ID, ["out", str(job_ID) + ".glb"]),
     )

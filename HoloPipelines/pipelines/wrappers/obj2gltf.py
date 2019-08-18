@@ -14,6 +14,7 @@ success = True
 def call_obj2gltf(obj_input_path, glb_output_path):
     # TODO: Paths vs strings
     obj_input_path = str(pathlib.Path(obj_input_path))
+    glb_output_path = str(pathlib.Path(glb_output_path))
     obj2gltf_command = f"obj2gltf --binary --input {obj_input_path} --output {glb_output_path}"
     completed_process = subprocess.run(obj2gltf_command)
     if completed_process.returncode == 0:

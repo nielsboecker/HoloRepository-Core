@@ -6,7 +6,7 @@
 import pathlib
 
 from pipelines.adapters.obj_file import write_mesh_as_obj
-from pipelines.services.format_conversion import convert_obj_to_glb
+from pipelines.adapters.glb_file import convert_obj_to_glb
 import numpy as np
 import logging
 
@@ -39,7 +39,7 @@ def split_to_separate_organs(originalNumpy, outputPath):
             convert_obj_to_glb(
                 pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),
                 outputPath.joinpath("organNo" + str(integer) + ".glb"),
-                deleteOriginalObj=True,
+                delete_original_obj=True,
             )
             outputGlbPathList.append(
                 str(outputPath.joinpath("organNo" + str(integer) + ".glb"))

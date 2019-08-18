@@ -1,9 +1,9 @@
 import pipelines.adapters.holostorage_accessor
-import pipelines.services.format_conversion
+import pipelines.adapters.glb_file
 import pipelines.state.job_status
 from pipelines.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 from pipelines.adapters.obj_file import write_mesh_as_obj
-from pipelines.services.format_conversion import convert_obj_to_glb
+from pipelines.adapters.glb_file import convert_obj_to_glb
 from pipelines.services.marching_cubes import generate_mesh
 from pipelines.utils.job_status import JobStatus
 from pipelines.utils.pipelines_info import get_pipeline_list

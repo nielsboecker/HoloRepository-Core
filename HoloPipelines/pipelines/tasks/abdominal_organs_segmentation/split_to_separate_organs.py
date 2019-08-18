@@ -5,9 +5,12 @@
 
 import pathlib
 
-from pipelines.services.format_conversion import convert_numpy_to_obj, convert_obj_to_glb
+from pipelines.adapters.obj_file import write_mesh_as_obj
+from pipelines.services.format_conversion import convert_obj_to_glb
 import numpy as np
 import logging
+
+from pipelines.services.marching_cubes import generate_mesh
 
 logging.basicConfig(level=logging.INFO)
 
@@ -27,11 +30,12 @@ def split_to_separate_organs(originalNumpy, outputPath):
         if integer != 0:
             singleHUnumpy = originalNumpy == integer
             singleHUnumpy = singleHUnumpy.astype(int)
-            convert_numpy_to_obj(
-                singleHUnumpy,
-                threshold=0,
-                outputPath=pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),
-            )
+            threshold = 0
+
+            obj_output_path = pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj")
+            verts, faces, norm = generate_mesh(singleHUnumpy, threshold)
+            write_mesh_as_obj(verts, faces, norm, obj_output_path)
+
             convert_obj_to_glb(
                 pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),
                 outputPath.joinpath("organNo" + str(integer) + ".glb"),

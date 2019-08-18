@@ -6,7 +6,9 @@ import pipelines.adapters.holostorage_accessor
 import pipelines.services.format_conversion
 import pipelines.state.job_status
 from pipelines.adapters.nifti_file import read_nifti_as_np_array_and_normalise
-from pipelines.services.format_conversion import convert_numpy_to_obj, convert_obj_to_glb
+from pipelines.adapters.obj_file import write_mesh_as_obj
+from pipelines.services.format_conversion import convert_obj_to_glb
+from pipelines.services.marching_cubes import generate_mesh
 from pipelines.tasks.shared.dispatch_output import dispatch_output
 from pipelines.components import compJobPath
 from pipelines.utils.job_status import JobStatus
@@ -22,20 +24,18 @@ logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.PREPROCESSING.name)
-    generated_numpy_list = read_nifti_as_np_array_and_normalise(str(pathlib.Path(input_nifti_path)))
+    nifti_image_as_np_array = read_nifti_as_np_array_and_normalise(str(pathlib.Path(input_nifti_path)))
 
     logging.debug("job start: " + json.dumps(meta_data))
 
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.GENERATING_MODEL.name)
-    generated_obj_path = convert_numpy_to_obj(
-        generated_numpy_list,
-        threshold,
-        compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
-    )
+    obj_output_path = compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"])
+    verts, faces, norm = generate_mesh(nifti_image_as_np_array, threshold)
+    write_mesh_as_obj(verts, faces, norm, obj_output_path)
 
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.CONVERTING_MODEL.name)
     generated_glb_path = convert_obj_to_glb(
-        generated_obj_path,
+        obj_output_path,
         str(pathlib.Path(output_glb_path)),
         delete_original_obj=True,
         compress_glb=False,

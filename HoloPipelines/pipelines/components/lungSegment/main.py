@@ -3,6 +3,9 @@ import pathlib
 import os
 import glob
 import sys
+import pipelines.components.lungSegment.utils as utils
+from pipelines.components.lungSegment.segment_lung import segment_lung
+from pipelines.components.lungSegment.segment_airway import segment_airway
 
 
 def main(inputNiftiPath, outputNiftiFolderPath):
@@ -10,9 +13,6 @@ def main(inputNiftiPath, outputNiftiFolderPath):
     if not os.path.exists(outputNiftiFolderPath):
         os.makedirs(outputNiftiFolderPath)
 
-    import components.lungSegment.utils as utils
-    from components.lungSegment.segment_lung import segment_lung
-    from components.lungSegment.segment_airway import segment_airway
 
     params = utils.define_parameter()
 

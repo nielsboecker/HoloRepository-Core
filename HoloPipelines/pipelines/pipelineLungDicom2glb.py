@@ -3,7 +3,7 @@
 # from pipelines.components import (
 #     compCommonPath,
 # )  # needs to be removed when compDcm2nifti is replaced (please see other comments below)
-import pipelines.adapters.holostorage_accessor
+import pipelines.clients.holostorage_accessor
 import pipelines.adapters.glb_file
 import pipelines.state.job_status
 from pipelines.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
@@ -57,7 +57,7 @@ def main(job_ID, dicom_download_url, meta_data):
 
     pipelines.state.job_status.post_status_update(job_ID, "Posting data")
     list_of_pipeline = get_pipeline_list()
-    meta_data = pipelines.adapters.holostorage_accessor.add_info_for_accesor(
+    meta_data = pipelines.clients.holostorage_accessor.add_info_for_accesor(
         meta_data,
         "apply on generic bone segmentation",
         "Generate with " + list(list_of_pipeline.keys())[1] + " pipeline",

@@ -39,7 +39,6 @@ def split_to_separate_organs(originalNumpy, outputPath):
             convert_obj_to_glb(
                 pathlib.Path.cwd().joinpath("temp" + str(integer) + ".obj"),
                 outputPath.joinpath("organNo" + str(integer) + ".glb"),
-                delete_original_obj=True,
             )
             outputGlbPathList.append(
                 str(outputPath.joinpath("organNo" + str(integer) + ".glb"))

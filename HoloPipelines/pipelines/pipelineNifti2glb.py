@@ -36,7 +36,6 @@ def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
     generated_glb_path = convert_obj_to_glb(
         obj_output_path,
         str(pathlib.Path(output_glb_path)),
-        delete_original_obj=True,
         compress_glb=False,
     )
     logging.info("nifti2glb: done, glb saved to {}".format(generated_glb_path))

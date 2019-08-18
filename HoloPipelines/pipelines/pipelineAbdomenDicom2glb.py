@@ -2,7 +2,7 @@ from pipelines.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 from pipelines.adapters.nifti_file import read_nifti_as_np_array_and_normalise, write_nifti_image, \
     convert_dicom_np_ndarray_to_nifti_image
 from pipelines.clients import http
-from pipelines.tasks.abdominal_organs_segmentation import split_to_separate_organs
+from pipelines.tasks.abdominal_organs_segmentation.split_to_separate_organs import split_to_separate_organs
 from pipelines.services.np_image_manipulation import downscale_and_conditionally_crop
 from pipelines.config.io_paths import nifti_path
 

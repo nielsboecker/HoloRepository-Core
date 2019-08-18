@@ -6,8 +6,9 @@
 import pipelines.adapters.holostorage_accessor
 import pipelines.services.format_conversion
 import pipelines.state.job_status
+from pipelines.adapters.nifti_file import read_nifti_as_np_array_and_normalise
 from pipelines.config.io_paths import nifti_path
-from pipelines.services.format_conversion import convert_numpy_to_obj, convert_dicom_to_nifty, convert_obj_to_glb, convert_nifty_to_numpy_and_normalise
+from pipelines.services.format_conversion import convert_numpy_to_obj, convert_dicom_to_nifty, convert_obj_to_glb
 import pipelines.components.lungSegment.main as comp_lung_segment
 from pipelines.tasks.shared.dispatch_output import dispatch_output
 from pipelines.tasks.shared import receive_input
@@ -36,7 +37,7 @@ def main(job_ID, dicom_download_url, meta_data):
         generated_nifti_path,
         compJobPath.make_str_job_path(job_ID, ["temp"], create_sub_directories=False),
     )
-    generated_numpy_list = convert_nifty_to_numpy_and_normalise(generated_segmented_lung_nifti_path)
+    generated_numpy_list = read_nifti_as_np_array_and_normalise(generated_segmented_lung_nifti_path)
 
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.GENERATING_MODEL.name)
 

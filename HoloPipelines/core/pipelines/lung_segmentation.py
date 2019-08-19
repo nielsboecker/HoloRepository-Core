@@ -22,7 +22,7 @@ from core.config.io_paths import nifti_path
 from core.services.marching_cubes import generate_mesh
 from core.tasks.shared import receive_input
 from core.tasks.shared.dispatch_output import dispatch_output
-from core.utils.job_status import JobStatus
+from jobs.job_status import JobStatus
 from core.utils.pipelines_info import get_pipeline_list
 from core.wrappers.lung_and_airway_segmentation import perform_lung_segmentation
 from jobs import job_controller

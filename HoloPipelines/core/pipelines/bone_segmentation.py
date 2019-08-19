@@ -14,10 +14,9 @@ from core.adapters.obj_file import write_mesh_as_obj
 from core.services.marching_cubes import generate_mesh
 from core.tasks.shared import receive_input
 from core.tasks.shared.dispatch_output import dispatch_output
-from core.utils.job_status import JobStatus
 from core.utils.pipelines_info import get_pipeline_list
 from jobs import job_controller
-from jobs.job_status import post_status_update
+from jobs.job_status import post_status_update, JobStatus
 
 
 def main(job_ID, dicom_download_url, meta_data):

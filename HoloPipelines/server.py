@@ -1,7 +1,5 @@
 import json
 import logging
-import uuid
-from datetime import datetime
 from threading import Thread
 
 import coloredlogs
@@ -9,9 +7,8 @@ from flask import Flask, request
 from flask_json import as_json
 
 from core.utils.pipelines_info import read_and_map_pipelines_info
-from jobs import job_status_garbage_collector
+from jobs import job_controller, job_status_garbage_collector
 from jobs.job_status import status
-from pipeline_runner import startPipeline
 
 coloredlogs.install()
 logging.basicConfig(level=logging.DEBUG)
@@ -41,48 +38,21 @@ def get_pipelines():
     return pipeline_dict, 200
 
 
-@app.route(f"{URL_API_PREFIX}/job", methods=["POST"])
+@app.route(f"{URL_API_PREFIX}/jobs", methods=["POST"])
 @as_json
-def start_job():
+def start_new_job():
     job_request = request.get_json()
-    request_plid = job_request["plid"]
-    request_input_data_URL = job_request["imageStudyEndpoint"]
-
-    # get filename
-    if request_input_data_URL.find("/"):
-        filename = request_input_data_URL.rsplit("/", 1)[1]
-        logging.info("filename: " + filename)
-
-    meta_data_keys = ["bodySite", "description", "author", "patient"]
-    meta_data = {key: job_request[key] for key in meta_data_keys}
-    meta_data["dateOfImaging"] = datetime.strptime(
-        job_request["dateOfImaging"], "%Y-%m-%d %H:%M:%S"
-    ).strftime("%Y-%m-%dT%H:%M:%SZ")
-    logging.info("meta_data: " + json.dumps(meta_data))
-
-    # create arglist pass to pipeline controller
-    # (this part will change later, we should not check the pipeline arglist in this way)
-    jobID = str(uuid.uuid1())
-    arg_dict = {
-        "job_ID": jobID,
-        "dicom_download_url": request_input_data_URL,
-        "meta_data": json.dumps(meta_data),
-    }
-    logging.info("arg_dict: " + str(arg_dict))
-
-    # pass to controller to start pipeline
-    startPipeline(request_plid, arg_dict)
-    return {"jobID": jobID}, 202
+    job_started_successfully, response = job_controller.start_new_job(job_request)
+    response_code = 202 if job_started_successfully else 500
+    return response, response_code
 
 
-@app.route(f"{URL_API_PREFIX}/job/<job_id>/status", methods=["GET"])
+@app.route(f"{URL_API_PREFIX}/jobs/<job_id>/status", methods=["GET"])
 @as_json
 def get_job_status(job_id: str):
-    if job_id in status:
-        current_status = status[job_id]["status"]
-        return {"message": current_status}, 200
-    else:
-        return {"message": f"Job ID '{job_id}' not found"}, 404
+    job_found, response = job_controller.get_job_status(job_id)
+    response_code = 200 if job_found else 404
+    return response, response_code
 
 
 if __name__ == "__main__":

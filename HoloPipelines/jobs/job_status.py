@@ -2,8 +2,9 @@ import logging
 from datetime import datetime
 
 # TODO: Refactor (or remove, if we only do the logging to file?)
-from core.clients.http import send_post_to_status
+from enum import Enum
 
+from core.clients.http import send_post_to_status
 
 status = {
     "j0": {"status": "segment", "timestamp": "2019-08-05 14:09:19"},
@@ -12,6 +13,18 @@ status = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     },
 }
+
+
+# TODO: Refactor this whole thing
+# TODO: when using for update_job, pass the enum not the sting value
+# TODO: sort them to be chronological
+class JobStatus(Enum):
+    STARTING = 1
+    PREPROCESSING = 2
+    GENERATING_MODEL = 3
+    CONVERTING_MODEL = 4
+    FINISHED = 5
+    FETCHING_DATA = 6
 
 
 # TODO: Moved from compJobStatus. A bit ugly to have this here, but ideally we can get rid of the self-POSTing altogether

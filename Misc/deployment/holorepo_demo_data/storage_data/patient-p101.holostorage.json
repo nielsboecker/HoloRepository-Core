@@ -1,0 +1,26 @@
+{
+  "fullUrl": "urn:uuid:p101",
+  "request": {
+    "method": "POST",
+    "url": "Patient"
+  },
+  "resource": {
+    "birthDate": "1947-06-04",
+    "gender": "male",
+    "id": "p101",
+    "name": [
+      {
+        "text": "Buster Greenholt",
+        "family": "Greenholt",
+        "given": [
+          "Buster"
+        ],
+        "prefix": [
+          "Mr."
+        ],
+        "use": "official"
+      }
+    ],
+    "resourceType": "Patient"
+  }
+}

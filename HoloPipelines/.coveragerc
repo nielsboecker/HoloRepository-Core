@@ -1,5 +1,5 @@
 [run]
-source = pipelineController.py, pipelines/
+source = ./pipelineController.py, pipelines/
 
 [report]
 ignore_errors = True

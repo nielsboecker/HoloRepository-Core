@@ -6,9 +6,10 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-def resample(imageData, new_spacing=[1, 1, 1]):
-    image = imageData
-    originalShape = image.shape[:3]
+def resample(image_data, new_spacing=[1, 1, 1]):
+    image = image_data
+    original_shape = image.shape[:3]
+
     image._affline = None
     spacing = map(
         float,
@@ -25,23 +26,23 @@ def resample(imageData, new_spacing=[1, 1, 1]):
     real_resize_factor = new_shape / image.shape[:3]
     new_spacing = spacing / real_resize_factor
 
-    logging.info("Shape before resampling\t" + repr(originalShape))
+    logging.info("Shape before resampling\t" + repr(original_shape))
     logging.info("Shape after resampling\t" + repr(image.shape[:3]))
 
-    return image, new_spacing
+    return image
 
 
-def main(inputNiftiPath, deleteNiftiWhenDone=False):
+def main(input_nifti_path, deleteNiftiWhenDone=False):
     # https://github.com/nipy/nibabel/issues/626
     nib.Nifti1Header.quaternion_threshold = -1e-06
-    img = nib.load(inputNiftiPath)
+    img = nib.load(input_nifti_path)
 
-    img, newSpacing = resample(img)
+    img = resample(img)
 
     numpyList = np.array(img.dataobj)
 
     if deleteNiftiWhenDone:
-        os.remove(inputNiftiPath)
+        os.remove(input_nifti_path)
 
     return numpyList
 

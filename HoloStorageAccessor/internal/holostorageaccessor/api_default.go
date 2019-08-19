@@ -247,13 +247,15 @@ func HologramsHidDownloadGet(c *gin.Context) {
 
 	var data bytes.Buffer
 	hologramAPISpec := hologramFhir.ToAPISpec()
-	data, err = DownloadHologramFromBlobStorage(id)
+	hologramFilename := id + ".glb"
+	data, err = DownloadHologramFromBlobStorage(hologramFilename)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
 		return
 	}
+
 	extraHeaders := map[string]string{
-		"Content-Disposition": `attachment; filename="` + id + `.glb"`,
+		"Content-Disposition": `attachment; filename="` + hologramAPISpec.Title + `.glb"`,
 	}
 	c.DataFromReader(http.StatusOK, int64(data.Len()), hologramAPISpec.ContentType, bytes.NewReader(data.Bytes()), extraHeaders)
 }
@@ -329,7 +331,8 @@ func HologramsPost(c *gin.Context) {
 		return
 	}
 
-	err = UploadHologramToBlobStorage(newHologramAPISpec.Hid, hologramFileIO)
+	hologramFilename := newHologramAPISpec.Hid + ".glb"
+	err = UploadHologramToBlobStorage(hologramFilename, hologramFileIO)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, Error{ErrorCode: "500", ErrorMessage: err.Error()})
 		return

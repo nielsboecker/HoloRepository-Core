@@ -1,0 +1,44 @@
+{
+    "entry": [
+        {
+            "fullUrl": "urn:uuid:h100",
+            "request": {
+                "method": "POST",
+                "url": "Practitioner"
+            },
+            "resource": {
+                "resourceType": "DocumentReference",
+                "id": "h100",
+                "meta": {
+                    "versionId": "7",
+                    "lastUpdated": "2019-08-01T22:42:13.477+00:00"
+                },
+                "status": "current",
+                "type": {
+                    "text": "UPLOAD_EXISTING_MODEL"
+                },
+                "subject": {
+                    "reference": "Patient/p100"
+                },
+                "date": "2019-01-02T12:30:45+00:00",
+                "author": [
+                    {
+                        "reference": "Practitioner/a100"
+                    }
+                ],
+                "description": "{\"description\":\"\",\"creationDescription\":\"Uploaded from existing hologram\",\"bodySite\":\"chest\",\"dateOfImaging\":\"2017-07-15T15:20:25Z\"}",
+                "content": [
+                    {
+                        "attachment": {
+                            "contentType": "model/gltf-binary",
+                            "size": 3182168,
+                            "title": "Ribcage Hologram"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "resourceType": "Bundle",
+    "type": "transaction"
+}

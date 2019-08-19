@@ -6,5 +6,4 @@ architectDiagram/
 *.npy
 *.glb
 *.gltf
-medicalScans/dicom/*
-medicalScans/nifti/*
+__test_input__/

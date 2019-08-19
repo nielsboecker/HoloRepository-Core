@@ -95,7 +95,7 @@ python pipelineController.py p4 -p 3_Axial_CE
 ```
 
 - `p4`: pipeline ID. In this case to segment lung and generate glb from it
-- `-p 3_Axial_CE`: param(s) for the specific pipeline, in this case a directory for an upper ct scan from medicalScans/dicom
+- `-p 3_Axial_CE`: param(s) for the specific pipeline, in this case a directory for an upper ct scan from __test_input__/dicom
 
 ## Testing
 

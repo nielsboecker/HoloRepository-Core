@@ -1,7 +1,7 @@
 {
   "samplePipeline": {
     "name": "Dummy pipeline for testing",
-    "src": "test/pipelineHelloWorld.py",
+    "src": "./tests/pipelineHelloWorld.py",
     "info": "A dummy pipeline for testing. It will printout 'Hello World!",
     "addDate": "26/06/2019",
     "modDate": "26/06/2019",
@@ -9,7 +9,7 @@
   },
   "nifti2obj": {
     "name": "Nifti to OBJ generation",
-    "src": "pipelines/pipelineNifti2obj.py",
+    "src": "./core/pipelines/pipelineNifti2obj.py",
     "info": "Generate obj mesh from nifti",
     "addDate": "27/06/2019",
     "modDate": "27/06/2019",
@@ -17,7 +17,7 @@
   },
   "nifti2glb": {
     "name": "Nifti to GLB generation",
-    "src": "pipelines/pipelineNifti2glb.py",
+    "src": "./core/pipelines/pipelineNifti2glb.py",
     "info": "Generate glb mesh from nifti",
     "addDate": "28/06/2019",
     "modDate": "28/06/2019",
@@ -25,7 +25,7 @@
   },
   "dicom2glb": {
     "name": "DICOM to glb generation",
-    "src": "pipelines/pipelineDicom2glb.py",
+    "src": "./core/pipelines/pipelineDicom2glb.py",
     "info": "Generate glb mesh from dicom",
     "addDate": "01/07/2019",
     "modDate": "01/07/2019",
@@ -33,7 +33,7 @@
   },
   "lungDicom2glb": {
     "name": "DICOM to segmented lung GLB generation",
-    "src": "pipelines/pipelineLungDicom2glb.py",
+    "src": "./core/pipelines/pipelineLungDicom2glb.py",
     "info": "Generate segmented lungs (without air way) glb mesh from dicom",
     "addDate": "01/07/2019",
     "modDate": "01/07/2019",
@@ -41,7 +41,7 @@
   },
   "abdomenDicom2glb": {
     "name": "DICOM to segmented abdomen organs GLB generation",
-    "src": "pipelines/pipelineAbdomenDicom2glb.py",
+    "src": "./core/pipelines/pipelineAbdomenDicom2glb.py",
     "info": "Generate 3D models (8 in total) for the organs in the abdomen region",
     "addDate": "07/08/2019",
     "modDate": "07/08/2019",

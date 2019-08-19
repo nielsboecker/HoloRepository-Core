@@ -5,9 +5,9 @@ import pathlib
 # TODO: nifti variable is used in other components, even though the dir is not /job/<id>/...
 # TODO: Should be refactored, but not sure if still up to date with the /job/id concept
 cwd = pathlib.Path.cwd()
-medical_scans_path = cwd.joinpath("medicalScans")
-dicom_path = cwd.joinpath("medicalScans", "dicom")
-nifti_path = cwd.joinpath("medicalScans", "nifti")
+medical_scans_path = cwd.joinpath("__test_input__")
+dicom_path = cwd.joinpath("__test_input__", "dicom")
+nifti_path = cwd.joinpath("__test_input__", "nifti")
 output_path = cwd.joinpath("output")
 obj_path = cwd.joinpath("output", "obj")
 glb_path = cwd.joinpath("output", "glb")

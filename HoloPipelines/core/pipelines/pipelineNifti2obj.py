@@ -2,9 +2,9 @@
 import logging
 import pathlib
 
-from core.adapters.nifti_file import read_nifti_as_np_array_and_normalise
-from core.adapters.obj_file import write_mesh_as_obj
-from core.services.marching_cubes import generate_mesh
+from ..adapters.nifti_file import read_nifti_as_np_array_and_normalise
+from ..adapters.obj_file import write_mesh_as_obj
+from ..services.marching_cubes import generate_mesh
 
 
 def main(inputNiftiPath, outputObjPath, threshold, flipNpy=False):

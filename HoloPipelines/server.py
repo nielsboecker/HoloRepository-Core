@@ -11,7 +11,6 @@ from flask import Flask, request
 from flask_json import json_response
 
 from core.utils import pipelines_info
-from core.utils.pipelines_info import get_pipeline_list
 from jobs import job_status_garbage_collector
 from jobs.job_status import status
 from pipeline_runner import startPipeline
@@ -24,7 +23,6 @@ PREFIX = "/api/v1"
 this_cwd = pathlib.Path.cwd()
 
 output_directory = Path("output")
-pipeline_list = get_pipeline_list()
 
 # logging formatting
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
@@ -47,7 +45,7 @@ def update_job_status():
 # get pipeline info
 @app.route(PREFIX + "/pipelines", methods=["GET"])
 def send_list_of_pipelines():
-    pipeline_dict = pipelines_info.map_pipelines_info()
+    pipeline_dict = pipelines_info.read_and_map_pipelines_info()
 
     return json.dumps(pipeline_dict)
 

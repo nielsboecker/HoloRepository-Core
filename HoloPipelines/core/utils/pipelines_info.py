@@ -1,19 +1,15 @@
 import json
-import os
-import os.path
+from os import path
 
 # TODO: Refactor or delete
 import pathlib
 
 
-# TODO: From compMapPipelineInfo.py, needs refactoring
-def map_pipelines_info():
-    pipeline_dict = {}
-    with open(os.path.dirname(__file__) + "/../../../pipelines_list.json") as json_file:
-        pipeline_list = json.load(json_file)
-    json_file.close()
+def read_and_map_pipelines_info():
+    with open("./core/pipelines/pipelines_list.json") as pipelines_list_file:
+        pipelines_list = json.load(pipelines_list_file)
 
-    components_list = [
+    required_keys = [
         "plid",
         "title",
         "description",
@@ -21,21 +17,19 @@ def map_pipelines_info():
         "inputExampleImageUrl",
         "outputExampleImageUrl",
     ]
-    pipeline_list_keys = list(pipeline_list.keys())
-    pipeline_dict = {
-        plid: {
-            component: pipeline_list[plid][component] for component in components_list
-        }
-        for plid in pipeline_list_keys
-    }
 
-    return pipeline_dict
+    # Remove fields that are just for internal use (may be refactored as actually there
+    # is not necessarily the need to have more fields internally than externally)
+    return {
+        plid: {key: pipelines_list[plid][key] for key in required_keys}
+        for plid in (list(pipelines_list.keys()))
+    }
 
 
 # TODO: From compGetPipelineListInfo.py, needs refactoring
 def get_pipeline_list():
-    new_cwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
-    configFileName = "pipelines_list.json"
+    new_cwd = str(pathlib.Path(str(path.dirname(path.realpath(__file__)))))
+    configFileName = "./core/pipelines/pipelines_list.json"
 
     with open(
         str(pathlib.Path(new_cwd).parents[1].joinpath(str(configFileName)))

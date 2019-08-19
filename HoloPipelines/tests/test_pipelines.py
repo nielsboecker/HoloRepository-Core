@@ -179,63 +179,6 @@ def remove3Dmodels():
 #     assert os.path.isfile(glbPath.joinpath("testResult1.glb"))
 
 
-# FIXME: Test is broken because pipelineController is broken. Invoking other python
-# files like you currently do breaks the module search path, so imports won't work
-# as expected.
-#
-# def test_pipelines_nifti2obj(testSetup):
-#     output = subprocess.run(
-#         [
-#             pythonPath,
-#             "pipeline_runner.py",
-#             "-c",
-#             "tests/pipelineListForTesting.json",
-#             "nifti2obj",
-#             "-p",
-#             str(niftiPath.joinpath("1103_3_glm.nii")),
-#             str(objPath.joinpath("testResult2.obj")),
-#             "30",
-#             "0",
-#         ],
-#         cwd=newCwd,
-#     )
-#
-#     assert 0 == output.returncode
-#
-#     assert os.path.isfile(objPath.joinpath("testResult2.obj"))
-
-
-# FIXME: This tests is failing for reasons maybe Pap can understand?! However this pipeline will be removed probably...
-#
-# def test_pipelines_nifti2glb(testSetup):
-#     job_ID = "0"
-#     input_nifti_path = str(niftiPath.joinpath("1103_3_glm.nii"))
-#     output_glb_path = str(glbPath.joinpath("testResult3.glb"))
-#     threshold = 30
-#     meta_data = {}
-#
-#     output = subprocess.run(
-#         [
-#             pythonPath,
-#             "pipeline_runner.py",
-#             "-c",
-#             "tests/pipelineListForTesting.json",
-#             "nifti2glb",
-#             "-p",
-#             job_ID,
-#             input_nifti_path,
-#             output_glb_path,
-#             threshold,
-#             meta_data
-#         ],
-#         cwd=newCwd,
-#     )
-#
-#     assert 0 == output.returncode
-#
-#     assert os.path.isfile(glbPath.joinpath("testResult3.glb"))
-
-
 # FIXME: How is this supposed to work on the build server Pap?? The segmentation model is not running if you don't
 # start it. And why did you change the port to that wild number??
 #

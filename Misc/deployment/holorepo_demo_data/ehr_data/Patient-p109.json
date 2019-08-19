@@ -1,0 +1,213 @@
+{
+    "address": [
+        {
+            "city": "Lynn",
+            "country": "US",
+            "extension": [
+                {
+                    "extension": [
+                        {
+                            "url": "latitude",
+                            "valueDecimal": 42.474862
+                        },
+                        {
+                            "url": "longitude",
+                            "valueDecimal": -70.96218499999998
+                        }
+                    ],
+                    "url": "http://hl7.org/fhir/StructureDefinition/geolocation"
+                }
+            ],
+            "line": [
+                "738 Quigley Lane Apt 67"
+            ],
+            "postalCode": "01901",
+            "state": "Massachusetts"
+        }
+    ],
+    "birthDate": "1996-10-28",
+    "communication": [
+        {
+            "language": {
+                "coding": [
+                    {
+                        "code": "pt",
+                        "display": "Portuguese",
+                        "system": "urn:ietf:bcp:47"
+                    }
+                ],
+                "text": "Portuguese"
+            }
+        }
+    ],
+    "extension": [
+        {
+            "extension": [
+                {
+                    "url": "ombCategory",
+                    "valueCoding": {
+                        "code": "2106-3",
+                        "display": "White",
+                        "system": "urn:oid:2.16.840.1.113883.6.238"
+                    }
+                },
+                {
+                    "url": "text",
+                    "valueString": "White"
+                }
+            ],
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"
+        },
+        {
+            "extension": [
+                {
+                    "url": "ombCategory",
+                    "valueCoding": {
+                        "code": "2186-5",
+                        "display": "Not Hispanic or Latino",
+                        "system": "urn:oid:2.16.840.1.113883.6.238"
+                    }
+                },
+                {
+                    "url": "text",
+                    "valueString": "Not Hispanic or Latino"
+                }
+            ],
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName",
+            "valueString": "Ceola914 Stokes453"
+        },
+        {
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
+            "valueCode": "M"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/patient-birthPlace",
+            "valueAddress": {
+                "city": "Faro",
+                "country": "PT",
+                "state": "Algarve"
+            }
+        },
+        {
+            "url": "http://synthetichealth.github.io/synthea/disability-adjusted-life-years",
+            "valueDecimal": 0.0
+        },
+        {
+            "url": "http://synthetichealth.github.io/synthea/quality-adjusted-life-years",
+            "valueDecimal": 22.0
+        }
+    ],
+    "gender": "male",
+    "generalPractitioner": [
+        {
+            "reference": "Practitioner/a101"
+        }
+    ],
+    "id": "p109",
+    "identifier": [
+        {
+            "system": "https://github.com/synthetichealth/synthea",
+            "value": "215d6707-df53-4d45-bea6-60bb80e0abea"
+        },
+        {
+            "system": "http://hospital.smarthealthit.org",
+            "type": {
+                "coding": [
+                    {
+                        "code": "MR",
+                        "display": "Medical Record Number",
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                    }
+                ],
+                "text": "Medical Record Number"
+            },
+            "value": "215d6707-df53-4d45-bea6-60bb80e0abea"
+        },
+        {
+            "system": "http://hl7.org/fhir/sid/us-ssn",
+            "type": {
+                "coding": [
+                    {
+                        "code": "SS",
+                        "display": "Social Security Number",
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                    }
+                ],
+                "text": "Social Security Number"
+            },
+            "value": "999-41-6897"
+        },
+        {
+            "system": "urn:oid:2.16.840.1.113883.4.3.25",
+            "type": {
+                "coding": [
+                    {
+                        "code": "DL",
+                        "display": "Driver's License",
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                    }
+                ],
+                "text": "Driver's License"
+            },
+            "value": "S99944683"
+        },
+        {
+            "system": "http://standardhealthrecord.org/fhir/StructureDefinition/passportNumber",
+            "type": {
+                "coding": [
+                    {
+                        "code": "PPN",
+                        "display": "Passport Number",
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                    }
+                ],
+                "text": "Passport Number"
+            },
+            "value": "X84813409X"
+        }
+    ],
+    "maritalStatus": {
+        "coding": [
+            {
+                "code": "S",
+                "display": "Never Married",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus"
+            }
+        ],
+        "text": "Never Married"
+    },
+    "multipleBirthBoolean": false,
+    "name": [
+        {
+            "family": "DuBuque",
+            "given": [
+                "Josiah"
+            ],
+            "prefix": [
+                "Mr."
+            ],
+            "use": "official",
+            "text": "Josiah DuBuque"
+        }
+    ],
+    "photo": [
+        {
+            "url": "https://randomuser.me/api/portraits/men/45.jpg"
+        }
+    ],
+    "resourceType": "Patient",
+    "telecom": [
+        {
+            "system": "phone",
+            "use": "home",
+            "value": "555-324-7410"
+        }
+    ],
+    "text": {
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Generated by <a href=\"https://github.com/synthetichealth/synthea\">Synthea</a>.Version identifier: v2.4.0-121-ge241cd29\n .   Person seed: -1124685045805669390  Population seed: 1563805264424</div>",
+        "status": "generated"
+    }
+}

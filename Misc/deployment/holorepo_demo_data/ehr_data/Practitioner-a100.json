@@ -1,0 +1,40 @@
+{
+    "active": true,
+    "address": [
+        {
+            "city": "SWAMPSCOTT",
+            "country": "US",
+            "line": [
+                "250 PARADISE ROAD"
+            ],
+            "postalCode": "1907",
+            "state": "MA"
+        }
+    ],
+    "gender": "female",
+    "id": "a100",
+    "identifier": [
+        {
+            "system": "http://hl7.org/fhir/sid/us-npi",
+            "value": "93510"
+        }
+    ],
+    "name": [
+        {
+            "family": "Kirlin",
+            "given": [
+                "Maudie"
+            ],
+            "prefix": [
+                "Dr."
+            ],
+            "text": "Maudie Kirlin"
+        }
+    ],
+    "photo": [
+        {
+            "url": "https://randomuser.me/api/portraits/women/78.jpg"
+        }
+    ],
+    "resourceType": "Practitioner"
+}

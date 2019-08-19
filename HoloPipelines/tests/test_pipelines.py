@@ -87,7 +87,7 @@ def testSetup():
 
     remove3Dmodels()
 
-    yield  # code below will run everytime a test case finishes
+    yield  # code below will run everytime a tests case finishes
 
     remove3Dmodels()
 
@@ -136,7 +136,7 @@ def remove3Dmodels():
             os.remove(meshFileName)
 
 
-# FIXME: Fix this test. It is completely outdated, as the commponent now downloads and posts stuff
+# FIXME: Fix this tests. It is completely outdated, as the commponent now downloads and posts stuff
 #
 # def test_pipelines_dicom2glb(testSetup):
 #     output = subprocess.run(
@@ -144,7 +144,7 @@ def remove3Dmodels():
 #             pythonPath,
 #             "pipelineController.py",
 #             "-c",
-#             "test/pipelineListForTesting.json",
+#             "tests/pipelineListForTesting.json",
 #             "dicom2glb",
 #             "-p",
 #             str(dicomPath.joinpath("3_Axial_CE")),
@@ -159,7 +159,7 @@ def remove3Dmodels():
 #     assert os.path.isfile(glbPath.joinpath("testResult0.glb"))
 
 
-# FIXME: Fix this test. It is completely outdated, as the commponent now downloads and posts stuff
+# FIXME: Fix this tests. It is completely outdated, as the commponent now downloads and posts stuff
 #
 # def test_pipelines_lungDicom2glb(testSetup):
 #     output = subprocess.run(
@@ -167,7 +167,7 @@ def remove3Dmodels():
 #             pythonPath,
 #             "pipelineController.py",
 #             "-c",
-#             "test/pipelineListForTesting.json",
+#             "tests/pipelineListForTesting.json",
 #             "lungDicom2glb",
 #             "-p",
 #             str(dicomPath.joinpath("3_Axial_CE")),
@@ -186,7 +186,7 @@ def test_pipelines_nifti2obj(testSetup):
             pythonPath,
             "pipelineController.py",
             "-c",
-            "test/pipelineListForTesting.json",
+            "tests/pipelineListForTesting.json",
             "nifti2obj",
             "-p",
             str(niftiPath.joinpath("1103_3_glm.nii")),
@@ -202,7 +202,7 @@ def test_pipelines_nifti2obj(testSetup):
     assert os.path.isfile(objPath.joinpath("testResult2.obj"))
 
 
-# FIXME: This test is failing for reasons maybe Pap can understand?! However this pipeline will be removed probably...
+# FIXME: This tests is failing for reasons maybe Pap can understand?! However this pipeline will be removed probably...
 #
 # def test_pipelines_nifti2glb(testSetup):
 #     job_ID = "0"
@@ -216,7 +216,7 @@ def test_pipelines_nifti2obj(testSetup):
 #             pythonPath,
 #             "pipelineController.py",
 #             "-c",
-#             "test/pipelineListForTesting.json",
+#             "tests/pipelineListForTesting.json",
 #             "nifti2glb",
 #             "-p",
 #             job_ID,
@@ -242,7 +242,7 @@ def test_pipelines_nifti2obj(testSetup):
 #             pythonPath,
 #             "pipelineController.py",
 #             "-c",
-#             "test/pipelineListForTesting.json",
+#             "tests/pipelineListForTesting.json",
 #             "abdomenDicom2glb",
 #             "-p",
 #             str(dicomPath.joinpath("abdomen")),

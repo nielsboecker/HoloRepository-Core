@@ -18,8 +18,8 @@ It consists of fhir data for the EHR FHIR server, Storage FHIR server and some d
 ### HoloStorage Blob Service
 #### Setup Azure Blob Service
 - Go to `Misc/Deployment/az_blob_storage`
-- Configure `setup_az_blob_storage.sh`
-    - Details on configuration can be found in the README.md there
+- Configure name and resource group in `setup_az_blob_storage.sh`
+    - Additional details on configuration can be found in the tool's README.md
 - Setup azblob
     - `./setup_az_blob_storage.sh`
 - Go to `portal.azure.com` and get the access key to the service
@@ -27,9 +27,7 @@ It consists of fhir data for the EHR FHIR server, Storage FHIR server and some d
 #### Hologram Data Insertion
 - Go to `Misc/tools/az_blob_tool`
 - Configure `config.cfg`
-    - Details on configuration can be found in the README.md there
-- Create `holograms` container
-    - `python az_blob_tool.py - create-container holograms --public`
+    - Additional details on configuration can be found in the tool's README.md
 - Insert the demo data
     - `python az_blob_tool.py - upload-folder holograms ./../holorepo_demo_data/storage_glb`
 
@@ -37,7 +35,7 @@ It consists of fhir data for the EHR FHIR server, Storage FHIR server and some d
 #### Setup Azure FHIR service (EHR and HoloStorage)
 - Go to `Misc/Deployment/az_fhir_service`
 - Configure `config/ehr_fhir.cfg` and `config/holo_fhir.cfg`
-    - Details on configuration can be found in the README.md there
+    - Additional details on configuration can be found in the tool's README.md
 - Setup both FHIR services
     - `./azure_fhir.sh config/ehr_fhir.cfg`
     - `./azure_fhir.sh config/holo_fhir.cfg`

@@ -90,8 +90,8 @@ export class BackendServerService {
       .catch(handleError);
   }
 
-  public async generateHologram(metaData: IHologramCreationRequest_Generate): Promise<boolean> {
-    return BackendServerAxios.post(`${routes.pipelines}/generate`, metaData)
+  public async generateHologram(requestData: IHologramCreationRequest_Generate): Promise<boolean> {
+    return BackendServerAxios.post(`${routes.pipelines}/generate`, requestData)
       .then(response => response.status === 200 || response.status === 201)
       .catch(handleError);
   }

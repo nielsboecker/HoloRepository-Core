@@ -147,15 +147,15 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
 
   private _getPostRequestMetaData_Generate = (): IHologramCreationRequest_Generate | null => {
     const { plid, imagingStudyEndpoint } = this.state;
-    const sharedMetaData = this._generatePostRequestMetaData_Shared();
-    if (!plid || !imagingStudyEndpoint || !sharedMetaData) {
+    const medicalData = this._generatePostRequestMetaData_Shared();
+    if (!plid || !imagingStudyEndpoint || !medicalData) {
       return this._logErrorAndReturnNull();
     }
 
     return {
       plid,
       imagingStudyEndpoint,
-      ...sharedMetaData
+      medicalData
     };
   };
 

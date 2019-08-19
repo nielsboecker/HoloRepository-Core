@@ -29,9 +29,9 @@ It consists of fhir data for the EHR FHIR server, Storage FHIR server and some d
 - Configure `config.cfg`
     - Details on configuration can be found in the README.md there
 - Create `holograms` container
-    - `python az_blob_tool.py - create-container holograms`
-- Insert the demo data (#TODO: Change the way this is done)
-    - `python az_blob_tool.py - upload holograms ./../holorepo_demo_data/storage_glb/<filenames>`
+    - `python az_blob_tool.py - create-container holograms --public`
+- Insert the demo data
+    - `python az_blob_tool.py - upload-folder holograms ./../holorepo_demo_data/storage_glb`
 
 ### HoloStorage FHIR and EHR FHIR Services
 #### Setup Azure FHIR service (EHR and HoloStorage)

@@ -25,8 +25,6 @@ Usage:
 Options:
     --base-url                  the base url of the fhir server needs to be provided (e.g. https://fhirserver.azurewebsites.net)
     delete-all                  delete all resources on the fhir server
-    upload-bundle               upload a single FHIR bundle json file
-    upload-bundle-folder        upload all FHIR bundles stored within a folder
-    upload-resource             upload a single FHIR resource json file
-    upload-resource-folder      upload all FHIR resources stored within a folder
+    upload                      upload a single FHIR bundle or resource json file
+    upload-folder               upload all FHIR bundles or resources stored within a folder
 ```

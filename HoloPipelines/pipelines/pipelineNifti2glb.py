@@ -10,7 +10,7 @@ from pipelines.adapters.obj_file import write_mesh_as_obj
 from pipelines.adapters.glb_file import convert_obj_to_glb_and_write
 from pipelines.services.marching_cubes import generate_mesh
 from pipelines.tasks.shared.dispatch_output import dispatch_output
-from pipelines.components import compJobPath
+from pipelines.state import job_controller
 from pipelines.utils.job_status import JobStatus
 from pipelines.utils.pipelines_info import get_pipeline_list
 import pathlib
@@ -20,19 +20,24 @@ import logging
 
 def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.PREPROCESSING.name)
-    nifti_image_as_np_array = read_nifti_as_np_array_and_normalise(str(pathlib.Path(input_nifti_path)))
+    nifti_image_as_np_array = read_nifti_as_np_array_and_normalise(
+        str(pathlib.Path(input_nifti_path))
+    )
 
     logging.debug("job start: " + json.dumps(meta_data))
 
-    pipelines.state.job_status.post_status_update(job_ID, JobStatus.GENERATING_MODEL.name)
-    obj_output_path = compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"])
+    pipelines.state.job_status.post_status_update(
+        job_ID, JobStatus.GENERATING_MODEL.name
+    )
+    obj_output_path = job_controller.make_str_job_path(job_ID, ["temp", "temp.obj"])
     verts, faces, norm = generate_mesh(nifti_image_as_np_array, threshold)
     write_mesh_as_obj(verts, faces, norm, obj_output_path)
 
-    pipelines.state.job_status.post_status_update(job_ID, JobStatus.CONVERTING_MODEL.name)
+    pipelines.state.job_status.post_status_update(
+        job_ID, JobStatus.CONVERTING_MODEL.name
+    )
     generated_glb_path = convert_obj_to_glb_and_write(
-        obj_output_path,
-        str(pathlib.Path(output_glb_path)),
+        obj_output_path, str(pathlib.Path(output_glb_path))
     )
     logging.info("nifti2glb: done, glb saved to {}".format(generated_glb_path))
     print("nifti2glb: done, glb saved to {}".format(generated_glb_path))
@@ -49,5 +54,5 @@ def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
     dispatch_output(meta_data)
 
     pipelines.state.job_status.post_status_update(job_ID, "Cleaning up")
-    compJobPath.clean_up(job_ID)
+    job_controller.clean_up(job_ID)
     pipelines.state.job_status.post_status_update(job_ID, JobStatus.FINISHED.name)

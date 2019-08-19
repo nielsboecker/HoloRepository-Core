@@ -1,10 +1,10 @@
 import pathlib
 import shutil
 import os
-import logging
 
-# TODO: THIS NEEDS TO BE REFACTORED AND MOVED TO /STATE DIRECTORY
-# NOT TOUCHING IT RIGHT NOW BECAUSE PAP WORKS ON THIS IN THE PIPELINE/API BRANCH
+# TODO: THIS NEEDS TO BE REFACTORED
+# FIXME: Fix all the issues raised in the PIPELINE/API PR, this is broken
+# TODO: Do all job-related tasks in here (merge with config/io_paths?)
 
 this_comp_path = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 

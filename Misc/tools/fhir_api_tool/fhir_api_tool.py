@@ -33,17 +33,18 @@ class FHIRInteraction:
 
         return r
 
-    def upload_bundle(self, fhir_json: str):
+    def upload(self, fhir_json: str):
         logging.info(f"Processing file: {fhir_json}")
         content = None
         with open(fhir_json, "r") as fhir_f:
             content = json.load(fhir_f)
+        if content["resourceType"] == "Bundle" and content["type"] == "transaction":
+            self._upload_bundle(content)
+        else:
+            self._upload_resource(content)
 
-        if not (
-            content["resourceType"] == "Bundle" and content["type"] == "transaction"
-        ):
-            sys.exit("Selected file is not a FHIR transaction")
-
+    def _upload_bundle(self, content: dict):
+        logging.info(f"Processing Bundle")
         for entry in content["entry"]:
             if entry["fullUrl"].index("urn:uuid:") == 0:
                 uid = entry["fullUrl"].split("urn:uuid:")[1]
@@ -53,26 +54,17 @@ class FHIRInteraction:
                 url = urljoin(self._base_url, entry["request"]["url"])
                 self._request(url, "POST", entry["resource"])
 
-    def upload_resource(self, fhir_json: str):
-        logging.info(f"Processing file: {fhir_json}")
-        content = None
-        with open(fhir_json, "r") as fhir_f:
-            content = json.load(fhir_f)
-
-        if "type" in content and (
-            content["resourceType"] == "Bundle" and content["type"] == "transaction"
-        ):
-            sys.exit(
-                "Selected file is not a basic FHIR resource, try upload_bundle instead"
-            )
-
+    def _upload_resource(self, content: dict):
         if "id" not in content or "resourceType" not in content:
-            sys.exit("Singular FHIR resource does not contain Id or resourceType")
+            logging.error(
+                "Singular FHIR resource does not contain Id or resourceType...Skipping"
+            )
+            return
 
         uid = content["id"]
         resource = content["resourceType"]
 
-        logging.info(f"Detected resource type: {resource}")
+        logging.info(f"Processing single resource: {resource}")
 
         url = urljoin(self._base_url, "/".join([resource, uid]))
         self._request(url, "PUT", content)
@@ -91,15 +83,10 @@ class FHIRInteraction:
             for entry in data.get("entry", []):
                 self._request(entry["fullUrl"], "DELETE")
 
-    def upload_resource_folder(self, src_dir: str, ext: str = "json"):
-        logging.info(f"Processing folder for fhir singular resources: {src_dir}")
+    def upload_folder(self, src_dir: str, ext: str = "json"):
+        logging.info(f"Processing folder for fhir resources: {src_dir}")
         for json_file in glob.glob(os.path.join(src_dir, "*." + ext)):
-            self.upload_resource(json_file)
-
-    def upload_bundle_folder(self, src_dir: str, ext: str = "json"):
-        logging.info(f"Processing folder for fhir bundles: {src_dir}")
-        for json_file in glob.glob(os.path.join(src_dir, "*." + ext)):
-            self.upload_bundle(json_file)
+            self.upload(json_file)
 
 
 if __name__ == "__main__":

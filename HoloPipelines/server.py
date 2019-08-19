@@ -1,4 +1,5 @@
 import json
+import coloredlogs
 import logging
 import os
 import pathlib
@@ -17,20 +18,19 @@ from pipeline_runner import startPipeline
 
 app = Flask(__name__)
 app.config["JSON_ADD_STATUS"] = False
-PREFIX = "/api/v1"
+URL_API_PREFIX = "/api/v1"
 
 # global variables
 this_cwd = pathlib.Path.cwd()
 
 output_directory = Path("output")
 
-# logging formatting
-FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
-logging.basicConfig(level=logging.DEBUG, format=FORMAT)
+coloredlogs.install()
+logging.basicConfig(level=logging.DEBUG)
 
 
 # update the status from pipeline
-@app.route(PREFIX + "/status", methods=["POST"])
+@app.route(f"{URL_API_PREFIX}/status", methods=["POST"])
 def update_job_status():
     current_job_status = request.get_json()
     current_jobID = list(current_job_status.keys())[0]
@@ -43,15 +43,14 @@ def update_job_status():
 
 
 # get pipeline info
-@app.route(PREFIX + "/pipelines", methods=["GET"])
-def send_list_of_pipelines():
+@app.route(f"{URL_API_PREFIX}/pipelines", methods=["GET"])
+def get_pipelines():
     pipeline_dict = pipelines_info.read_and_map_pipelines_info()
-
     return json.dumps(pipeline_dict)
 
 
 # use to start the pipeline
-@app.route(PREFIX + "/job", methods=["POST"])
+@app.route(f"{URL_API_PREFIX}/job", methods=["POST"])
 def start_job():
     # get the info from request
     job_request = request.get_json()
@@ -89,7 +88,7 @@ def start_job():
     return json_response(jobID=jobID, status_code=202)
 
 
-@app.route(PREFIX + "/job/<jobid>/status", methods=["GET"])
+@app.route(f"{URL_API_PREFIX}/job/<jobid>/status", methods=["GET"])
 def get_job_status(jobid):
     if jobid in status:
         current_status = status[jobid]["status"]

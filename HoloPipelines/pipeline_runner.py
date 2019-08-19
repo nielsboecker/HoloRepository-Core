@@ -8,14 +8,16 @@ import subprocess
 import sys
 from multiprocessing import Process
 
+import coloredlogs
+
 from core.config.io_paths import create_common_dirs
 from core.utils.pipelines_info import get_pipeline_list
 
 # TODO: This file should be refactored or deprecated. Used to be the only entry point for pipelines
 # But the API is far from ideal and from the server it is not necessary to go through her
 
-FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
-logging.basicConfig(level=logging.DEBUG, format=FORMAT)
+coloredlogs.install()
+logging.basicConfig(level=logging.DEBUG)
 
 new_cwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 

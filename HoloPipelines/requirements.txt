@@ -14,3 +14,4 @@ simpleitk==1.2.0
 Flask==1.0.2      
 Flask-JSON==0.3.3
 requests==2.20.1
+coloredlogs==10.0

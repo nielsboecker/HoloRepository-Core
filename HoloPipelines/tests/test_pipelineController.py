@@ -2,15 +2,15 @@ import os
 import pathlib
 import subprocess
 
+
 newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))).parent)
 
 
 def test_main_samplePipeline_normal():
-
     output = subprocess.run(
         [
             "python",
-            "pipelineController.py",
+            "pipeline_runner.py",
             "-c",
             "tests/pipelineListForTesting.json",
             "samplePipeline",
@@ -23,11 +23,10 @@ def test_main_samplePipeline_normal():
 
 
 def test_main_missing_pipeline():
-
     output = subprocess.run(
         [
             "python",
-            "pipelineController.py",
+            "pipeline_runner.py",
             "-c",
             "tests/pipelineListForTesting.json",
             "samplePipeline0",
@@ -38,11 +37,10 @@ def test_main_missing_pipeline():
 
 
 def test_main_samplePipeline_missing_pipeline_with_extra_arguments():
-
     output = subprocess.run(
         [
             "python",
-            "pipelineController.py",
+            "pipeline_runner.py",
             "-c",
             "tests/pipelineListForTesting.json",
             "samplePipeline0",
@@ -58,7 +56,7 @@ def test_main_ls_normal():
     output = subprocess.run(
         [
             "python",
-            "pipelineController.py",
+            "pipeline_runner.py",
             "-c",
             "tests/pipelineListForTesting.json",
             "--ls",
@@ -72,7 +70,7 @@ def test_main_info_dicom2glb():
     output = subprocess.run(
         [
             "python",
-            "pipelineController.py",
+            "pipeline_runner.py",
             "-c",
             "tests/pipelineListForTesting.json",
             "--info",
@@ -87,7 +85,7 @@ def test_main_info_for_missing_pipeline():
     output = subprocess.run(
         [
             "python",
-            "pipelineController.py",
+            "pipeline_runner.py",
             "-c",
             "tests/pipelineListForTesting.json",
             "--info",

@@ -1,15 +1,15 @@
-import os
-import pytest
-import pathlib
-import subprocess
 import logging
+import os
+import pathlib
 import shutil
-import threading
+import subprocess
 import sys
-
-import requests
-from zipfile import ZipFile
+import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from zipfile import ZipFile
+
+import pytest
+import requests
 
 
 pythonPath = sys.executable
@@ -142,7 +142,7 @@ def remove3Dmodels():
 #     output = subprocess.run(
 #         [
 #             pythonPath,
-#             "pipelineController.py",
+#             "pipeline_runner.py",
 #             "-c",
 #             "tests/pipelineListForTesting.json",
 #             "dicom2glb",
@@ -165,7 +165,7 @@ def remove3Dmodels():
 #     output = subprocess.run(
 #         [
 #             pythonPath,
-#             "pipelineController.py",
+#             "pipeline_runner.py",
 #             "-c",
 #             "tests/pipelineListForTesting.json",
 #             "lungDicom2glb",
@@ -184,7 +184,7 @@ def test_pipelines_nifti2obj(testSetup):
     output = subprocess.run(
         [
             pythonPath,
-            "pipelineController.py",
+            "pipeline_runner.py",
             "-c",
             "tests/pipelineListForTesting.json",
             "nifti2obj",
@@ -214,7 +214,7 @@ def test_pipelines_nifti2obj(testSetup):
 #     output = subprocess.run(
 #         [
 #             pythonPath,
-#             "pipelineController.py",
+#             "pipeline_runner.py",
 #             "-c",
 #             "tests/pipelineListForTesting.json",
 #             "nifti2glb",
@@ -240,7 +240,7 @@ def test_pipelines_nifti2obj(testSetup):
 #     output = subprocess.run(
 #         [
 #             pythonPath,
-#             "pipelineController.py",
+#             "pipeline_runner.py",
 #             "-c",
 #             "tests/pipelineListForTesting.json",
 #             "abdomenDicom2glb",

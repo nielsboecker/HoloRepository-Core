@@ -1,7 +1,9 @@
 import os
+import subprocess
+
 from flask import Flask, request, send_file
 from werkzeug.utils import secure_filename
-import subprocess
+
 
 app = Flask(__name__)
 

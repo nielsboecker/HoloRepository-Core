@@ -15,9 +15,7 @@ from core.tasks.abdominal_organs_segmentation.split_to_separate_organs import (
 )
 
 
-def main(
-    inputDicomPath, outputGlbFolderPath, segmentationModelUrl, resolutionLimit=300
-):
+def main(inputDicomPath, outputGlbFolderPath, segmentationModelUrl):
     dicom_image_array = read_dicom_as_np_ndarray_and_normalise(inputDicomPath)
     nifti_image = convert_dicom_np_ndarray_to_nifti_image(dicom_image_array)
 
@@ -30,9 +28,7 @@ def main(
         str(nifti_path.joinpath("_tempAbdomenSegmented.nii.gz")),
     )
     generatedNumpyList = read_nifti_as_np_array_and_normalise(segmentedNiftiPath)
-    resizedNumpyList = downscale_and_conditionally_crop(
-        generatedNumpyList, resolutionLimit
-    )
+    resizedNumpyList = downscale_and_conditionally_crop(generatedNumpyList)
     generatedGlbPathList = split_to_separate_organs(
         resizedNumpyList, outputGlbFolderPath
     )
@@ -43,4 +39,4 @@ def main(
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4]))
+    main(sys.argv[1], sys.argv[2], sys.argv[3])

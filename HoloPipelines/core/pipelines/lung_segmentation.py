@@ -20,6 +20,7 @@ from core.adapters.nifti_file import (
 from core.adapters.obj_file import write_mesh_as_obj
 from core.config.io_paths import nifti_path
 from core.services.marching_cubes import generate_mesh
+from core.services.np_image_manipulation import downscale_and_conditionally_crop
 from core.tasks.shared import receive_input
 from core.tasks.shared.dispatch_output import dispatch_output
 from jobs.job_status import JobStatus
@@ -36,10 +37,12 @@ def main(job_ID, dicom_download_url, meta_data):
     dicom_image_array = read_dicom_as_np_ndarray_and_normalise(dicom_path)
     nifti_image = convert_dicom_np_ndarray_to_nifti_image(dicom_image_array)
 
+    downscaled_image = downscale_and_conditionally_crop(nifti_image)
+
     nifti_output_path = str(
         nifti_path.joinpath(str(pathlib.PurePath(dicom_path).parts[-1]))
     )
-    write_nifti_image(nifti_image, nifti_output_path)
+    write_nifti_image(downscaled_image, nifti_output_path)
 
     generated_segmented_lung_nifti_path = perform_lung_segmentation(
         nifti_output_path,

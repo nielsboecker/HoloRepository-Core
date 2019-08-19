@@ -62,15 +62,14 @@ def read_dicom_pixels_as_np_ndarray(input_path):
 
 def flip_numpy_array_dimensions(array: np.ndarray):
     """
-    Transposes and flips numpy axes, i.e. (z, y, x) ---> (x, y, z). This is needed as the default
-    data when we read it is "mirrored" and therefore not accurate and, e.g., not valid as input
-    for pre-trained NN models.
+    Transposes numpy axes, i.e. (z, y, x) ---> (x, y, z), and flips x axis. This is
+    needed as the default data when we read it is "mirrored" and therefore not accurate
+    and, e.g., not valid as input for pre-trained NN models.
     :param array: ndarray from pydicom.read_file()
     :return: array with flipped axis to represent the accurate DICOM data
     """
     array = array.transpose((2, 1, 0))
     array = np.flip(array, 0)
-    array = np.flip(array, 1)
     return array
 
 

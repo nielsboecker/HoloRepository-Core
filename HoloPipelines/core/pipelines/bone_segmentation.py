@@ -12,6 +12,7 @@ from core.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 from core.adapters.glb_file import convert_obj_to_glb_and_write
 from core.adapters.obj_file import write_mesh_as_obj
 from core.services.marching_cubes import generate_mesh
+from core.services.np_image_manipulation import downscale_and_conditionally_crop
 from core.tasks.shared import receive_input
 from core.tasks.shared.dispatch_output import dispatch_output
 from core.utils.pipelines_info import get_pipeline_list
@@ -27,12 +28,13 @@ def main(job_ID, dicom_download_url, meta_data):
     dicom_image: np.ndarray = read_dicom_as_np_ndarray_and_normalise(
         str(pathlib.Path(dicom_folder_path))
     )
-    threshold = 300
+
+    downscaled_image = downscale_and_conditionally_crop(dicom_image)
 
     post_status_update(job_ID, JobStatus.GENERATING_MODEL.name)
-
     obj_output_path = job_controller.make_str_job_path(job_ID, ["temp", "temp.obj"])
-    verts, faces, norm = generate_mesh(dicom_image, threshold)
+    threshold = 300
+    verts, faces, norm = generate_mesh(downscaled_image, threshold)
     write_mesh_as_obj(verts, faces, norm, obj_output_path)
 
     post_status_update(job_ID, JobStatus.CONVERTING_MODEL.name)

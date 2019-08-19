@@ -1,35 +1,27 @@
 import json
-import coloredlogs
 import logging
-import os
-import pathlib
 import uuid
 from datetime import datetime
-from pathlib import Path
 from threading import Thread
 
+import coloredlogs
 from flask import Flask, request
-from flask_json import json_response
+from flask_json import as_json
 
-from core.utils import pipelines_info
+from core.utils.pipelines_info import read_and_map_pipelines_info
 from jobs import job_status_garbage_collector
 from jobs.job_status import status
 from pipeline_runner import startPipeline
+
+coloredlogs.install()
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 app.config["JSON_ADD_STATUS"] = False
 URL_API_PREFIX = "/api/v1"
 
-# global variables
-this_cwd = pathlib.Path.cwd()
 
-output_directory = Path("output")
-
-coloredlogs.install()
-logging.basicConfig(level=logging.DEBUG)
-
-
-# update the status from pipeline
+# TODO: Refactor or delete: Shouldn' be here at all. If we keep it, PUT instead...
 @app.route(f"{URL_API_PREFIX}/status", methods=["POST"])
 def update_job_status():
     current_job_status = request.get_json()
@@ -42,17 +34,16 @@ def update_job_status():
     return json.dumps(status[current_jobID])
 
 
-# get pipeline info
 @app.route(f"{URL_API_PREFIX}/pipelines", methods=["GET"])
+@as_json
 def get_pipelines():
-    pipeline_dict = pipelines_info.read_and_map_pipelines_info()
-    return json.dumps(pipeline_dict)
+    pipeline_dict = read_and_map_pipelines_info()
+    return pipeline_dict, 200
 
 
-# use to start the pipeline
 @app.route(f"{URL_API_PREFIX}/job", methods=["POST"])
+@as_json
 def start_job():
-    # get the info from request
     job_request = request.get_json()
     request_plid = job_request["plid"]
     request_input_data_URL = job_request["imageStudyEndpoint"]
@@ -61,10 +52,6 @@ def start_job():
     if request_input_data_URL.find("/"):
         filename = request_input_data_URL.rsplit("/", 1)[1]
         logging.info("filename: " + filename)
-
-    # create output dir
-    if not output_directory.is_dir():
-        os.mkdir(output_directory)
 
     meta_data_keys = ["bodySite", "description", "author", "patient"]
     meta_data = {key: job_request[key] for key in meta_data_keys}
@@ -85,16 +72,17 @@ def start_job():
 
     # pass to controller to start pipeline
     startPipeline(request_plid, arg_dict)
-    return json_response(jobID=jobID, status_code=202)
+    return {"jobID": jobID}, 202
 
 
-@app.route(f"{URL_API_PREFIX}/job/<jobid>/status", methods=["GET"])
-def get_job_status(jobid):
-    if jobid in status:
-        current_status = status[jobid]["status"]
-        return json_response(message=current_status, status_code=202)
+@app.route(f"{URL_API_PREFIX}/job/<job_id>/status", methods=["GET"])
+@as_json
+def get_job_status(job_id: str):
+    if job_id in status:
+        current_status = status[job_id]["status"]
+        return {"message": current_status}, 200
     else:
-        return json_response(message="does not exist", status_code=404)
+        return {"message": f"Job ID '{job_id}' not found"}, 404
 
 
 if __name__ == "__main__":

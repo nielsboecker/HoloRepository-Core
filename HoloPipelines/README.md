@@ -117,28 +117,22 @@ pytest --cov
 ## API specification
 
 ```
-GET /pipelineapp
+GET /pipelines
 ```
 
 To get a list of all available pipelines
 
 ```
-GET /job/<jobid>/status
+GET /job/<jobid>/state
 ```
 
-To get the status of a job with specific ID
+To get the state of a job with specific ID
 
 ```
 POST /job
 ```
 
 To start a job
-
-```
-POST /status
-```
-
-To update status of a job
 
 ## Contact and support
 

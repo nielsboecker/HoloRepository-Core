@@ -7,7 +7,7 @@ from core.pipelines.pipelines_controller import (
     get_pipelines_ids_list,
     load_pipeline_dynamically,
 )
-from jobs.job_status import JobStage, update_status
+from jobs.jobs_state import JobState, update_job_state
 from jobs.jobs_io import create_directory_for_job, get_logger_for_job
 
 num_cpus = cpu_count()
@@ -63,7 +63,7 @@ def init_job(job_request: dict):
     job_id = create_random_job_id()
     create_directory_for_job(job_id)
     logger = get_logger_for_job(job_id)
-    update_status(job_id, JobStage.CREATED.name, logger)
+    update_job_state(job_id, JobState.CREATED.name, logger)
 
     pipeline_id = job_request["plid"]
     input_endpoint = job_request["imagingStudyEndpoint"]
@@ -76,7 +76,7 @@ def init_job(job_request: dict):
         callback=job_success_callback,
         error_callback=job_error_callback,
     )
-    update_status(job_id, JobStage.QUEUED.name, logger)
+    update_job_state(job_id, JobState.QUEUED.name, logger)
     return job_id
 
 

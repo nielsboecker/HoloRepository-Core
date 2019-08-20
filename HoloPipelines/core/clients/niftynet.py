@@ -10,10 +10,13 @@ def call_model(
     """
     model_endpoint = f"{model_host}:{model_port}/model"
 
+    # TODO: move to config / env var
+    niftynet_timeout = 30
+
     with open(input_file_path, "rb") as input_fie:
         files = {"file": input_fie}
-        response = requests.post(model_endpoint, files=files, timeout=10)
+        response = requests.post(model_endpoint, files=files, timeout=niftynet_timeout)
         if response.status_code != 200:
-            raise Exception(f"HTTP Response {response.status_code}: {response.content}")
+            raise Exception(f"HTTP response {response.status_code}: {response.content}")
     with open(output_file_path, "wb") as output_file:
         output_file.write(response.content)

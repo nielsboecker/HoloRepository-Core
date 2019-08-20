@@ -9,7 +9,7 @@
 from multiprocessing import Manager
 import logging
 
-jobs_status = Manager().dict()
+jobs_state_dict = Manager().dict()
 
 logging.basicConfig(level=logging.INFO)
 logging.info("Initialised global state")

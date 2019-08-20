@@ -5,8 +5,8 @@ from flask import Flask, request
 from flask_json import as_json
 
 from core.pipelines.pipelines_controller import get_pipelines_dict
-from jobs import job_controller
-from jobs.job_status import activate_periodic_garbage_collection, get_current_stage
+from jobs import jobs_controller
+from jobs.jobs_state import activate_periodic_garbage_collection, get_current_state
 from jobs.jobs_io import read_log_file_for_job
 
 log_format = "%(asctime)s | %(name)s | %(levelname)s | %(message)s'"
@@ -34,21 +34,21 @@ def start_new_job():
     :return: JSON response {jid: <job_id>} with according HTTP response code set
     """
     job_request = request.get_json()
-    job_started_successfully, response = job_controller.start_new_job(job_request)
+    job_started_successfully, response = jobs_controller.start_new_job(job_request)
     response_code = 202 if job_started_successfully else 500
     return response, response_code
 
 
-@app.route(f"{URL_API_PREFIX}/jobs/<job_id>/status", methods=["GET"])
+@app.route(f"{URL_API_PREFIX}/jobs/<job_id>/state", methods=["GET"])
 @as_json
-def get_job_status(job_id: str):
+def get_job_state(job_id: str):
     """
-    :return: JSON response {stage: <JobStage.name>} or {message: <error_message>} with
+    :return: JSON response {state: <JobState.name>} or {message: <error_message>} with
     according HTTP response code set
     """
-    current_stage = get_current_stage(job_id)
-    if current_stage:
-        return {"stage": current_stage}, 200
+    current_state = get_current_state(job_id)
+    if current_state:
+        return {"state": current_state}, 200
     else:
         return {"message": f"Job '{job_id}' not found"}, 404
 

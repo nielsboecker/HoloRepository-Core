@@ -120,9 +120,9 @@ export interface IHologramCreationResponse_Generate {
 }
 
 /**
- * Interface for responses from GET <HoloPipelinesAPI>/jobs/<jid>/status.
+ * Interface for responses from GET <HoloPipelinesAPI>/jobs/<jid>/state.
  */
-export interface IJobStatusResponse {
-  stage?: string;
+export interface IJobStateResponse {
+  state?: string;
   message?: string;
 }

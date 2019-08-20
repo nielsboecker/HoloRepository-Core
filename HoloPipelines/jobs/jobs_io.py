@@ -28,6 +28,10 @@ def get_result_file_path_for_job(job_id: str):
     return f"{job_directories_root}/{job_id}/output/out.glb"
 
 
+def get_input_directory_path_for_job(job_id: str):
+    return f"{job_directories_root}/{job_id}/input"
+
+
 def create_directory_for_job(job_id: str):
     logging.info(f"Creating directory for job '{job_id}'")
     job_directory_path = get_directory_path_for_job(job_id)

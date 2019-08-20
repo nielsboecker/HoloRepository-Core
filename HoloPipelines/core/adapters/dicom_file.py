@@ -12,31 +12,28 @@ import scipy.ndimage
 
 def read_dicom_dataset(input_path: str):
     """
-    Reads a DICOM file and returns a pydicom representation, used to obtain knowledge about the
-    slice thickness, that can then e.g. be used to manipulate image data.
-    :param input_path: Path to the DICOM file
+    Reads a DICOM file and returns a pydicom representation, used to obtain knowledge
+    about the slice thickness, that can then e.g. be used to manipulate image data.
+    :param input_path: Path to the directory containing the individual DICOM files
     :return: pydicom.dataset.FileDataset representing the DICOM file
     """
-    slices = [
+    slices: List[pydicom.dataset.FileDataset] = [
         pydicom.read_file(str(pathlib.Path(input_path, s)))
         for s in os.listdir(str(input_path))
     ]
     slices.sort(key=lambda x: int(x.InstanceNumber))
-    try:
-        slick_thickness = np.abs(
-            slices[0].ImagePositionscan[2] - slices[1].ImagePositionscan[2]
-        )
 
-    except Exception as e:
-        logging.warning(
-            "Unable to load slice's image positon, using slice location instead: {}".format(
-                str(e)
-            )
+    # Ensure that SliceThickness is set for all slices
+    try:
+        slice_thickness = np.abs(
+            slices[0].ImagePositionPatient[2] - slices[1].ImagePositionPatient[2]
         )
-        slick_thickness = np.abs(slices[0].SliceLocation - slices[1].SliceLocation)
+    except AttributeError:
+        logging.info("ImagePositionPatient is not set, using SliceLocation instead.")
+        slice_thickness = np.abs(slices[0].SliceLocation - slices[1].SliceLocation)
 
     for s in slices:
-        s.SliceThickness = slick_thickness
+        s.SliceThickness = slice_thickness
 
     return slices
 

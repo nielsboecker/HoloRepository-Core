@@ -41,14 +41,21 @@ def check_job_request_validity(job_request: dict):
     return True, ""
 
 
-def job_success_callback(result):
-    logging.info(">>> SUCCESS")
-    logging.warning(result)
+def job_success_callback():
+    """
+    Shows success message on log. The actual cleaning up is done automatically by the
+    garbage collection.
+    """
+    logging.info("[SUCCESS] Job terminated successfully")
 
 
-def job_error_callback(exception):
-    logging.info(">>> ERROR")
-    logging.warning(exception)
+def job_error_callback(error: BaseException):
+    """
+    Logs an Error or Exception. This is called when any component in the job raises
+    an Error or Exception. Unless they can recover themselves, it is encouraged that
+    components error out and let this callback handle the error (kinda) gracefully.
+    """
+    logging.warning(f"[ERROR] An error occurred and caused the job to fail: {error}")
 
 
 def init_job(job_request: dict):

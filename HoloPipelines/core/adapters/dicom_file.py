@@ -1,7 +1,6 @@
 import logging
 import os
 import pathlib
-import sys
 from typing import List
 
 import SimpleITK as sitk
@@ -94,16 +93,12 @@ def normalise_dicom(dicom_image_array: np.ndarray, input_path: str):
             ),
         )
         spacing = np.array(list(spacing))
-    except Exception as e:
-        logging.warning(
-            "Unable to load elements of PixelSpacing from dicom, please make sure header data exist. dicom_dataset[0].PixelSpacing: "
-            + str(len(dicom_sample_slice.PixelSpacing))
+    except AttributeError as e:
+        # Apparently this can happen when PixelSpacing header doesn't exist
+        # Not sure if the actual exception is useful enough so adding extra infos
+        raise AttributeError(
+            f"Error while loading DICOM, maybe due to " f"PixelSpacing: {e}"
         )
-        logging.warning(
-            "Pixel Spacing (row, col): (%f, %f) "
-            % (dicom_sample_slice.PixelSpacing[0], dicom_sample_slice.PixelSpacing[1])
-        )
-        sys.exit("dicom2numpy: error loading dicom_dataset: {}".format(str(e)))
 
     # calculate resize factor
     new_spacing = [1, 1, 1]

@@ -1,7 +1,6 @@
 import glob
 import os
 import pathlib
-import sys
 
 import nibabel as nib
 
@@ -21,7 +20,7 @@ def perform_lung_segmentation(inputNiftiPath, outputNiftiFolderPath):
     if os.path.isdir(inputNiftiPath):
         lsdir = glob.glob(str(pathlib.Path(inputNiftiPath).joinpath("*.nii.gz")))
         if len(lsdir) != 1:
-            sys.exit(
+            raise Exception(
                 "ct_lung_segmentation.main: error, invalid number of Nifti file found inside folder "
                 + inputNiftiPath
             )

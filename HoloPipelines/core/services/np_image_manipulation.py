@@ -1,5 +1,4 @@
 import logging
-import sys
 
 import numpy as np
 import scipy.ndimage
@@ -32,7 +31,10 @@ def downscale_and_conditionally_crop(
         y = image.shape[1]
         z = image.shape[2]
     else:
-        sys.exit("compNumpyTransformation: invalid array dimension (at least x, y, z)")
+        raise Exception(
+            "compNumpyTransformation: invalid array dimension (at least x, y, z)"
+        )
+
     highest = max(x, y, z)
     if highest > resolution_limit:
         resizeRatio = resolution_limit / highest

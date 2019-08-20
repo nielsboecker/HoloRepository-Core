@@ -10,8 +10,8 @@ from core.utils.pipelines_info import read_and_map_pipelines_info
 from jobs import job_controller, job_status_garbage_collector
 from jobs.job_status import status
 
-coloredlogs.install()
-logging.basicConfig(level=logging.DEBUG)
+log_format = "%(asctime)s [pid %(process)d] %(levelname)s | %(message)s'"
+coloredlogs.install(level=logging.DEBUG, fmt=log_format)
 
 app = Flask(__name__)
 app.config["JSON_ADD_STATUS"] = False

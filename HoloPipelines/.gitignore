@@ -1,5 +1,3 @@
-temp/
-architectDiagram/
 *.dcm
 *.nii
 *.gz
@@ -7,3 +5,4 @@ architectDiagram/
 *.glb
 *.gltf
 __test_input__/
+__jobs__/

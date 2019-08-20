@@ -1,13 +1,12 @@
 import logging
-from threading import Thread
 
 import coloredlogs
 from flask import Flask, request
 from flask_json import as_json
 
 from core.utils.pipelines_info import read_and_map_pipelines_info
-from jobs import job_controller, job_status_garbage_collector
-from jobs.job_status import get_current_stage
+from jobs import job_controller
+from jobs.job_status import activate_periodic_garbage_collection, get_current_stage
 from jobs.jobs_io import read_log_file_for_job
 
 log_format = "%(asctime)s | %(name)s | %(levelname)s | %(message)s'"
@@ -65,6 +64,6 @@ def get_job_log(job_id: str):
 
 
 if __name__ == "__main__":
-    Thread(target=job_status_garbage_collector.activate_status_cleaning_job).start()
-    # TODO: Shouldn't be hard-coded here
-    Thread(target=app.run, kwargs={"debug": False, "port": 3100}).start()
+    activate_periodic_garbage_collection()
+    # TODO: port shouldn't be hard-coded here
+    app.run(debug=False, port=3100)

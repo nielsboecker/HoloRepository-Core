@@ -1,5 +1,6 @@
 import logging
 import os
+import shutil
 
 import coloredlogs
 
@@ -11,6 +12,14 @@ def get_directory_path_for_job(job_id: str):
     return f"{job_directories_root}/{job_id}"
 
 
+def get_subdirectories_paths_for_job(job_id: str):
+    job_directory_path = get_directory_path_for_job(job_id)
+    return [
+        f"{job_directory_path}/{subdirectory_name}"
+        for subdirectory_name in job_subdirectories
+    ]
+
+
 def get_temp_file_path_for_job(job_id: str, file_name: str):
     return f"{job_directories_root}/{job_id}/temp/{file_name}"
 
@@ -20,10 +29,19 @@ def create_directory_for_job(job_id: str):
     job_directory_path = get_directory_path_for_job(job_id)
     os.makedirs(job_directory_path, exist_ok=True)
 
-    for subdirectory_name in job_subdirectories:
-        subdirectory_path = f"{job_directory_path}/{subdirectory_name}"
+    for subdirectory_path in get_subdirectories_paths_for_job(job_id):
         if not os.path.isdir(subdirectory_path):
             os.mkdir(subdirectory_path)
+
+
+def remove_directory_for_job(job_id: str, keep_log_file: bool = True):
+    logging.info(f"Removing files for job '{job_id} (keep_log_file={keep_log_file})'")
+    job_directory_path = get_directory_path_for_job(job_id)
+    if keep_log_file:
+        for subdirectory_path in get_subdirectories_paths_for_job(job_id):
+            shutil.rmtree(subdirectory_path)
+    else:
+        shutil.rmtree(job_directory_path)
 
 
 def get_logger_for_job(job_id: str):

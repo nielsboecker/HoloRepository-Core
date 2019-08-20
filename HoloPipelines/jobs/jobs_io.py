@@ -16,7 +16,7 @@ def get_temp_file_path_for_job(job_id: str, file_name: str):
 
 
 def create_directory_for_job(job_id: str):
-    logging.warning(f"Creating directory for job '{job_id}'")
+    logging.info(f"Creating directory for job '{job_id}'")
     job_directory_path = get_directory_path_for_job(job_id)
     os.makedirs(job_directory_path, exist_ok=True)
 
@@ -36,9 +36,26 @@ def get_logger_for_job(job_id: str):
 
     # Append file handler to save log to file in addition to console output
     # (do not manually add a console handler, to use default coloredlogs output)
-    fh = logging.FileHandler(f"{get_directory_path_for_job(job_id)}/job.log")
+    handler = logging.FileHandler(get_log_file_path_for_job(job_id))
+    fh = handler
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(logging.Formatter(fmt=log_format_file))
     logger.addHandler(fh)
 
     return logger
+
+
+def get_log_file_path_for_job(job_id: str):
+    return f"{get_directory_path_for_job(job_id)}/job.log"
+
+
+def read_log_file_for_job(job_id: str):
+    """
+    :return: the complete log for a specific job as text or empty string
+    """
+    log_path = get_log_file_path_for_job(job_id)
+    if not os.path.exists(log_path):
+        return ""
+
+    with open(log_path, "r") as log_file:
+        return log_file.read()

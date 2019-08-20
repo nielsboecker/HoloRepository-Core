@@ -1,12 +1,8 @@
 import logging
 from datetime import datetime
 from enum import Enum
-from multiprocessing import Manager
 
-# Use a python manager dict to share across processes. Note that this is a bit of a
-# misuse, as typically the reference to the variable would be explicitly handed to all
-# processes. But this works, and it's not critical; also this way is much more readable.
-jobs_status = Manager().dict()
+from jobs import jobs_status
 
 JobStage = Enum(
     "JobStage",

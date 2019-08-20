@@ -8,6 +8,7 @@ from flask_json import as_json
 from core.utils.pipelines_info import read_and_map_pipelines_info
 from jobs import job_controller, job_status_garbage_collector
 from jobs.job_status import get_current_stage
+from jobs.jobs_io import read_log_file_for_job
 
 log_format = "%(asctime)s | %(name)s | %(levelname)s | %(message)s'"
 coloredlogs.install(level=logging.DEBUG, fmt=log_format)
@@ -52,6 +53,15 @@ def get_job_status(job_id: str):
         return {"stage": current_stage}, 200
     else:
         return {"message": f"Job '{job_id}' not found"}, 404
+
+
+@app.route(f"{URL_API_PREFIX}/jobs/<job_id>/log", methods=["GET"])
+def get_job_log(job_id: str):
+    """
+    :return: the complete log for a specific job as text
+    """
+    log_text = read_log_file_for_job(job_id)
+    return log_text, 200
 
 
 if __name__ == "__main__":

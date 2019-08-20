@@ -4,7 +4,7 @@ import coloredlogs
 from flask import Flask, request
 from flask_json import as_json
 
-from core.utils.pipelines_info import read_and_map_pipelines_info
+from core.pipelines.pipelines_controller import get_pipelines_dict
 from jobs import job_controller
 from jobs.job_status import activate_periodic_garbage_collection, get_current_stage
 from jobs.jobs_io import read_log_file_for_job
@@ -23,8 +23,7 @@ def get_pipelines():
     """
     :return: JSON List of available pipelines
     """
-    pipeline_dict = read_and_map_pipelines_info()
-    return pipeline_dict, 200
+    return get_pipelines_dict(), 200
 
 
 @app.route(f"{URL_API_PREFIX}/jobs", methods=["POST"])

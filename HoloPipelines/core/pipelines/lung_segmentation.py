@@ -25,7 +25,7 @@ from core.tasks.shared import receive_input
 from core.tasks.shared.dispatch_output import dispatch_output
 from jobs.job_status import JobStatus
 from core.utils.pipelines_info import get_pipeline_list
-from core.wrappers.lung_and_airway_segmentation import perform_lung_segmentation
+from core.third_party.lung_and_airway_segmentation import perform_lung_segmentation
 from jobs import job_controller
 
 

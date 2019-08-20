@@ -1,13 +1,14 @@
-import importlib
 import logging
 import uuid
 from multiprocessing import Pool
 from os import cpu_count
 
-from core.utils.pipelines_info import read_and_map_pipelines_info
-from jobs.jobs_io import create_directory_for_job
-
-pipelines = read_and_map_pipelines_info()
+from core.pipelines.pipelines_controller import (
+    get_pipelines_ids_list,
+    load_pipeline_dynamically,
+)
+from jobs.job_status import JobStage, update_status
+from jobs.jobs_io import create_directory_for_job, get_logger_for_job
 
 num_cpus = cpu_count()
 process_pool = Pool(num_cpus)
@@ -33,7 +34,7 @@ def check_job_request_validity(job_request: dict):
         logging.error(message)
         return False, message
 
-    if job_request["plid"] not in pipelines.keys():
+    if job_request["plid"] not in get_pipelines_ids_list():
         message = f"Invalid pipeline id: {job_request['plid']}"
         logging.error(message)
         return False, message
@@ -61,6 +62,8 @@ def job_error_callback(error: BaseException):
 def init_job(job_request: dict):
     job_id = create_random_job_id()
     create_directory_for_job(job_id)
+    logger = get_logger_for_job(job_id)
+    update_status(job_id, JobStage.CREATED.name, logger)
 
     pipeline_id = job_request["plid"]
     input_endpoint = job_request["imagingStudyEndpoint"]
@@ -73,15 +76,8 @@ def init_job(job_request: dict):
         callback=job_success_callback,
         error_callback=job_error_callback,
     )
-
-    # TODO: Update status for job
+    update_status(job_id, JobStage.QUEUED.name, logger)
     return job_id
-
-
-def load_pipeline_dynamically(plid: str):
-    pl_package_name = f"core.pipelines.{plid}"
-    logging.info(f"Importing pipeline package {pl_package_name}")
-    return importlib.import_module(pl_package_name)
 
 
 def create_random_job_id():

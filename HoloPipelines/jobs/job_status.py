@@ -10,6 +10,7 @@ from jobs.jobs_io import remove_directory_for_job
 JobStage = Enum(
     "JobStage",
     (
+        "CREATED",
         "QUEUED",
         "STARTED",
         "FETCHING_INPUT",
@@ -87,12 +88,11 @@ def perform_garbage_collection():
     """
     while True:
         logging.info(
-            f"Garbage collection | {len(jobs_status)} jobs active:"
+            f"Global state | {len(jobs_status)} jobs active:"
             f" {list(jobs_status.keys())}"
         )
 
         for job_id in list(jobs_status):
-
             current_stage = jobs_status[job_id]["stage"]
             current_timestamp = jobs_status[job_id]["timestamp"]
             time_diff = (datetime.now() - current_timestamp).total_seconds()

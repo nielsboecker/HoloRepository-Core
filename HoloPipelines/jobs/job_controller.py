@@ -1,9 +1,9 @@
+import importlib
 import logging
 import uuid
 from multiprocessing import Pool
 from os import cpu_count
 
-from core.pipelines.bone_segmentation import main
 from core.utils.pipelines_info import read_and_map_pipelines_info
 from jobs.job_status import status
 from jobs.jobs_io import create_directory_for_job
@@ -56,19 +56,26 @@ def init_job(job_request: dict):
     job_id = create_random_job_id()
     create_directory_for_job(job_id)
 
+    pipeline_id = job_request["plid"]
     input_endpoint = job_request["imagingStudyEndpoint"]
     medical_data = job_request["medicalData"]
 
+    pipeline_module = load_pipeline_dynamically(pipeline_id)
     process_pool.apply_async(
-        main,
+        pipeline_module.main,
         args=(job_id, input_endpoint, medical_data),
         callback=job_success_callback,
         error_callback=job_error_callback,
     )
 
-    # TODO: dynamic loading?
     # TODO: Update status for job
     return job_id
+
+
+def load_pipeline_dynamically(plid: str):
+    pl_package_name = f"core.pipelines.{plid}"
+    logging.info(f"Importing pipeline package {pl_package_name}")
+    return importlib.import_module(pl_package_name)
 
 
 def create_random_job_id():

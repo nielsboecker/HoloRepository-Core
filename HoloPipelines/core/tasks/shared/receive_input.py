@@ -1,69 +1,31 @@
-import glob
 import io
-import logging
-import os
-import pathlib
-from pathlib import Path
 from zipfile import ZipFile
 
 import requests
-from flask_json import json_response
 
 
-this_comp_path = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
-
-
-def get_content_from_url(request_input_data_URL):
-    response = requests.get(request_input_data_URL)
+def fetch_input_from_url(url: str):
+    """
+    Fetches and returns a resource.
+    """
+    response = requests.get(url)
+    if response.status_code != 200:
+        raise Exception(f"HTTP response {response.status_code}: {response.content}")
     return response.content
 
 
-def unzip_the_file(zipped_data, save_dest):
-    with ZipFile(io.BytesIO(zipped_data)) as zipObj:  # unzip
-        zipObj.extractall(str(pathlib.Path(save_dest)))
-    directory_list = glob.glob(str(pathlib.Path(save_dest).parents[0].joinpath("*")))
-    return str(directory_list[0])  # return unzipped location
+def unzip_file(zipped_data: bytes, output_directory: str):
+    """
+    Unzips a file to a given directory.
+    """
+    with ZipFile(io.BytesIO(zipped_data)) as zipped_file:
+        zipped_file.extractall(output_directory)
 
 
-def fetch_and_unzip(jobID, image_url):
-    logging.info("Fetching " + image_url)
-    file_list = [
-        # TODO: Refactor this
-        str(pathlib.Path(this_comp_path).parents[1].joinpath("jobs")),
-        str(pathlib.Path(this_comp_path).parents[1].joinpath("jobs", str(jobID))),
-        str(
-            pathlib.Path(this_comp_path)
-            .parents[1]
-            .joinpath("jobs", str(jobID), "image")
-        ),
-    ]
-    for file_path in file_list:
-        if not os.path.exists(file_path):
-            os.mkdir(file_path)
-    download_content = get_content_from_url(image_url)
-    return unzip_the_file(download_content, str(pathlib.Path(file_list[-1])))
-
-
-# TODO: This was an unused method in compGetInput.py (which itself was unused).
-#  Sort out if this does anything different from the above method
-input_directory = Path("input")
-
-
-def fetch_request_input_file(filename, request_input_data_URL):
-    this_cwd = Path.cwd()
-    response = requests.get(request_input_data_URL)
-    if response.status_code != 200:
-        return json_response(message="image study endpoint failure", status_code=404)
-    file_dir = this_cwd.joinpath(str(input_directory), filename)
-    open(file_dir, "wb+").write(response.content)
-    logging.debug("file dir: " + str(file_dir))
-
-    filename_unzip = filename.rsplit(".", 1)[0]
-    logging.debug("unzip file name:" + filename_unzip)
-
-    # unzip the input file
-    file_dir = this_cwd.joinpath(str(input_directory), filename)
-    path_to_store_unzip_file = this_cwd.joinpath(str(input_directory), filename_unzip)
-    with ZipFile(io.BytesIO(response.content), "r") as zipObj:
-        zipObj.extractall(str(path_to_store_unzip_file))
-    return str(path_to_store_unzip_file)
+def fetch_and_unzip(imaging_study_endpoint: str, input_directory_path: str):
+    """
+    Fetches and unpacks a zipped resource. Input is a DICOM directory stored in a
+    zip. Notice how the resource is kept in-memory prior to unzipping.
+    """
+    input_zip = fetch_input_from_url(imaging_study_endpoint)
+    unzip_file(input_zip, input_directory_path)

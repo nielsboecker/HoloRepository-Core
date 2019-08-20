@@ -1,29 +1,43 @@
 import logging
 from datetime import datetime
-
-# TODO: Refactor (or remove, if we only do the logging to file?)
 from enum import Enum
+from multiprocessing import Manager
 
-from core.clients.http import send_post_to_status
+# Use a python manager dict to share across processes. Note that this is a bit of a
+# misuse, as typically the reference to the variable would be explicitly handed to all
+# processes. But this works, and it's not critical; also this way is much more readable.
+jobs_status = Manager().dict()
 
-status = {}
+JobStage = Enum(
+    "JobStage",
+    (
+        "QUEUED",
+        "STARTED",
+        "FETCHING_INPUT",
+        "READING_INPUT",
+        "PREPROCESSING",
+        "PERFORMING_SEGMENTATION",
+        "POSTPROCESSING",
+        "DISPATCHING_OUTPUT",
+        "FINISHED",
+    ),
+)
 
 
-# TODO: Refactor this whole thing
-# TODO: when using for update_job, pass the enum not the sting value
-# TODO: sort them to be chronological
-class JobStatus(Enum):
-    STARTING = 1
-    PREPROCESSING = 2
-    GENERATING_MODEL = 3
-    CONVERTING_MODEL = 4
-    FINISHED = 5
-    FETCHING_DATA = 6
+def update_status(job_id: str, new_stage: str, logger=logging):
+    """
+    Updates the global dictionary that keeps track of all jobs. Note that new_stage
+    must be a string, not an Enum, as the latter leads to problems with multiprocessing.
+    :param job_id: ID of the job to update
+    :param new_stage: new stage (preferably use the "name" of a JobStage Enum constant)
+    :param logger: optional override to the default logger (use to write to file log)
+    """
+    if job_id in jobs_status:
+        prev_stage = jobs_status[job_id]["stage"]
+        prev_timestamp = jobs_status[job_id]["timestamp"]
+        time_diff = (datetime.now() - prev_timestamp).total_seconds()
+        logger.info(f"[{job_id}] Finished stage {prev_stage} in {time_diff} seconds")
 
-
-# TODO: Moved from compJobStatus. A bit ugly to have this here, but ideally we can get rid of the self-POSTing altogether
-def post_status_update(job_ID, job_status):
-    data = {job_ID: {"status": job_status, "timestamp": str(datetime.now())}}
-    response = send_post_to_status(data)
-    return_code = response.status_code
-    logging.debug("return code: " + str(return_code))
+    new_status_for_job = {"stage": new_stage, "timestamp": datetime.now()}
+    logger.info(f"[{job_id}] Entering next stage => {new_stage}")
+    jobs_status[job_id] = new_status_for_job

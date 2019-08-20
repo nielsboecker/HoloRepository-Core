@@ -118,3 +118,11 @@ export interface IHologramCreationRequest_Upload extends IHologramCreationReques
 export interface IHologramCreationResponse_Generate {
   hid: string;
 }
+
+/**
+ * Interface for responses from GET <HoloPipelinesAPI>/jobs/<jid>/status.
+ */
+export interface IJobStatusResponse {
+  stage?: string;
+  message?: string;
+}

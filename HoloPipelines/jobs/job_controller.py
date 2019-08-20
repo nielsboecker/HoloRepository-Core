@@ -5,7 +5,6 @@ from multiprocessing import Pool
 from os import cpu_count
 
 from core.utils.pipelines_info import read_and_map_pipelines_info
-from jobs.job_status import status
 from jobs.jobs_io import create_directory_for_job
 
 pipelines = read_and_map_pipelines_info()
@@ -80,11 +79,3 @@ def load_pipeline_dynamically(plid: str):
 
 def create_random_job_id():
     return str(uuid.uuid4()).replace("-", "")[:10]
-
-
-# TODO: Refactor the status structure (or replace with logging files altogether)
-def get_job_status(job_id: str):
-    if job_id in status:
-        return True, {"status": status[job_id]["status"]}
-    else:
-        return False, {"message": f"Job ID '{job_id}' not found"}

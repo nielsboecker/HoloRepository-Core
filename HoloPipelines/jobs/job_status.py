@@ -41,3 +41,15 @@ def update_status(job_id: str, new_stage: str, logger=logging):
     new_status_for_job = {"stage": new_stage, "timestamp": datetime.now()}
     logger.info(f"[{job_id}] Entering next stage => {new_stage}")
     jobs_status[job_id] = new_status_for_job
+
+
+def get_current_stage(job_id: str):
+    """
+    :param job_id: ID of the job to query
+    :return: Current <JobStage.name> or False if not found
+    """
+    if job_id in jobs_status:
+        return jobs_status[job_id]["stage"]
+    else:
+        logging.warning(f"Could not get current stage for job '{job_id}'")
+        return False

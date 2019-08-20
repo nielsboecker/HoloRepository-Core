@@ -1,14 +1,8 @@
 {
   "bone_segmentation": {
     "plid": "bone_segmentation",
-    "title": "DICOM to glb generation",
-    "name": "Generic bone segmentation",
-    "src": "./core/pipelines/bone_segmentation.py",
-    "info": "Generate glb mesh from dicom",
-    "addDate": "01/07/2019",
-    "modDate": "01/07/2019",
+    "title": "Generic bone segmentation",
     "description": "This pipeline utilises a marching cube algorithm to generate a 3D model from a series of CT scans. As it performs the segmentation based on Hounsfield units, it is agnostic to the specific body site.",
-    "param": "3",
     "inputConstraints": [
       [
         "Body site",
@@ -32,14 +26,8 @@
   },
   "lung_segmentation": {
     "plid": "lung_segmentation",
-    "title": "DICOM to segmented lung GLB generation",
-    "name": "Lungs segmentation",
-    "src": "./core/pipelines/lung_segmentation.py",
-    "info": "Generate segmented lungs (without air way) glb mesh from dicom",
-    "addDate": "01/07/2019",
-    "modDate": "01/07/2019",
+    "title": "Lung segmentation",
     "description": "This pipeline segments the lungs and the airway from a series of CT scans.",
-    "param": "3",
     "inputConstraints": [
       [
         "Body site",
@@ -63,15 +51,15 @@
   },
   "abdominal_organs_segmentation": {
     "plid": "abdominal_organs_segmentation",
-    "title": "DICOM to segmented abdomen organs GLB generation",
-    "src": "./core/pipelines/abdominal_organs_segmentation.py",
-    "info": "Generate 3D models (8 in total) for the organs in the abdomen region",
-    "description": "Generate 3D models (8 in total) for the organs in the abdomen region",
-    "inputConstraints": [],
-    "inputExampleImageUrl": "",
-    "outputExampleImageUrl": "",
-    "addDate": "07/08/2019",
-    "modDate": "07/08/2019",
-    "param": "3"
+    "title": "Abdominal organs segmentation",
+    "description": "This pipeline uses a pre-trained dense VNET neural network to segment abdominal CT scans. The resulting model will provide a segmentation of 8 different organs in the abdominal area.",
+    "inputConstraints": [
+      ["Body site", "Abdominal area"],
+      ["Imaging study type", "CT scan"],
+      ["Image resolution", "144 x 144"],
+      ["Image data format", "DICOM, NIfTI"]
+    ],
+    "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
+    "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
   }
 }

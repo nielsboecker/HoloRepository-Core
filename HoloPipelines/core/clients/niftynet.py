@@ -11,7 +11,7 @@ def call_model(
     model_endpoint = f"{model_host}:{model_port}/model"
 
     # TODO: move to config / env var
-    niftynet_timeout = 30
+    niftynet_timeout = 60 * 15
 
     with open(input_file_path, "rb") as input_fie:
         files = {"file": input_fie}

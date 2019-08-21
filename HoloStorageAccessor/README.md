@@ -21,7 +21,7 @@ The following technologies are used in this component:
 
 The API specification can be found in the `api/` directory. A deployed version of the interactive documentation is available [here](https://app.swaggerhub.com/apis/boonwj/HoloRepository/).
 
-When the application is deployed, the documentation can also be viewed at the `/api/1.0.0/ui` endpoint.
+When the application is deployed, the documentation can also be viewed at the `/api/v1/ui` endpoint.
 
 ## Requirements
 - Go 1.12.7
@@ -42,7 +42,7 @@ To run the server, first configure the necessary [configurations](#configuration
 go run cmd/holo-storage-accessor/main.go
 ```
 
-Verify the accessor by visiting `localhost:3200/api/1.0.0` or `localhost:3200/api/1.0.0/ui`
+Verify the accessor by visiting `localhost:3200/api/v1` or `localhost:3200/api/v1/ui`
 
 ### Testing
 

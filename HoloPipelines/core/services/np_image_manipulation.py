@@ -1,3 +1,7 @@
+"""
+This module contains some functions to perform manipulations upon numpy data.
+"""
+
 import logging
 
 import numpy as np

@@ -1,3 +1,7 @@
+"""
+This module provides a wrapper around the existing ct_lung_segmentation implementation.
+"""
+
 import nibabel as nib
 
 import core.third_party.ct_lung_segmentation.utils as utils

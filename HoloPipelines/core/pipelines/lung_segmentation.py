@@ -1,3 +1,12 @@
+"""
+This pipeline performs automatic segmentation of lungs. It uses an existing algorithmic
+implementation for the actual segmentation.
+
+Algorithm: https://github.com/wanwanbeen/ct_lung_segmentation
+Paper: Discriminative Localization in CNNs for Weakly-Supervised Segmentation of Pulmonary Nodules
+Xinyang Feng, Jie Yang, Andrew F. Laine, Elsa D. Angelini
+"""
+
 import os
 
 from core.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise

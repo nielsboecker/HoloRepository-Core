@@ -1,3 +1,8 @@
+"""
+This pipeline performs automatic segmentation of bones from CT scans. It implements a
+basic Hounsfield unit thresholding.
+"""
+
 import os
 import sys
 

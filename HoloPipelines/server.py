@@ -1,3 +1,9 @@
+"""
+This module represents the entrypoint of the HoloPipelines. It starts
+a Flask server and listens to endpoints, allowing external clients to
+start jobs and trace their progress.
+"""
+
 import logging
 
 import coloredlogs

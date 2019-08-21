@@ -1,3 +1,10 @@
+"""
+This module contains functionality related to communicating with pre-trained neural
+networks built with Niftynet and packaged for HoloPipelines usage as described in
+the /models/README. Models have a well-defined API and this module is the counterpart
+that calls this API and thus integrates it with the pipelines.
+"""
+
 import requests
 
 from config import NIFTYNET_MODEL_TIMEOUT

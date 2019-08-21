@@ -1,3 +1,8 @@
+"""
+This module contains functionality related to reading, writing and
+transforming NIfTI files.
+"""
+
 import logging
 
 import nibabel

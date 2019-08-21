@@ -1,3 +1,8 @@
+"""
+This module governs the jobs that are running on the HoloPipelines. It initiates
+new jobs, does various checks, and performs some high-level error handling.
+"""
+
 import logging
 import uuid
 from multiprocessing import Pool

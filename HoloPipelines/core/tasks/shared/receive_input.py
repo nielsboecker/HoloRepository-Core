@@ -1,3 +1,8 @@
+"""
+This module contains the functions that upon starting a pipeline go and
+fetch the input imaging studies from a PACS.
+"""
+
 import io
 from zipfile import ZipFile
 

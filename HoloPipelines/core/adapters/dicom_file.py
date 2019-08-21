@@ -1,3 +1,7 @@
+"""
+This module contains functionality related to reading and transforming DICOM files.
+"""
+
 import logging
 import os
 from typing import List

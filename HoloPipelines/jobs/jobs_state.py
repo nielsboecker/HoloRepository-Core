@@ -1,3 +1,7 @@
+"""
+This module manages the state of current jobs and performs automatic garbage collection.
+"""
+
 import logging
 import threading
 import time

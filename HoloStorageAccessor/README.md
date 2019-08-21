@@ -8,6 +8,7 @@ The HoloStorage is a cloud-based storage for medical 3D models and associated me
 To protect the HoloStorage and hide concrete implementation details, such as which FHIR resources are used to store data internally, the HoloStorage-Accessor provides a consistent and unified interface to the data, and the single entry-point for 3rd party systems. As such, it acts as a façade. However, it also performs some more complex business logic, like translating calls to a minimalistic interface to FHIR queries and building complex queries, potentially filtering and aggregating results.
 
 The REST API is being carefully designed, so that it not only satisfies the requirements of the HoloPipelines’ artefacts, but also supports adjacent projects (DepthVisor, Annotator) and any future projects in this context. We strive to find a balance between an open, generic interface and enforcing enough relevant data to effectively query and utilise the data.
+
 ## Technologies
 
 The following technologies are used in this component:
@@ -25,8 +26,8 @@ When the application is deployed, the documentation can also be viewed at the `/
 
 ## Requirements
 - Go 1.12.7
-- A FHIR service
-- An Azure blob storage service
+- FHIR server
+- Azure blob storage service
 
 ## Development
 ### Installation

@@ -6,19 +6,32 @@ import { R4 } from "@ahryman40k/ts-fhir-types";
 import { IImagingStudy, IPatient, IPractitioner } from "../../../../types";
 import logger from "../logger";
 
-const { FHIR_SERVER_BASE_URL: fhirUrl } = process.env;
+const { FHIR_SERVER_BASE_URL } = process.env;
 
-const _fhirClient = new Client({
-  baseUrl: fhirUrl
-});
+let _fhirClient;
 
 export type InternalType = IPatient | IPractitioner | IImagingStudy;
 export type SupportedFhirResource = R4.IPatient | R4.IPractitioner | R4.IImagingStudy;
+
 export enum SupportedFhirResourceType {
   Patient = "Patient",
   Practitioner = "Practitioner",
   ImagingStudy = "ImagingStudy"
 }
+
+/**
+ * FhirClient is a singleton and will not get instantiated before its first usage.
+ * Use this method to access it. Not for external callers.
+ * @private
+ */
+const _getFhirClient = (): Client => {
+  if (!_fhirClient) {
+    _fhirClient = new Client({
+      baseUrl: FHIR_SERVER_BASE_URL
+    });
+  }
+  return _fhirClient;
+};
 
 /**
  * Returns an io-ts decoder to validate a FHIR resource complies with the FHIR R4 definitions.
@@ -76,7 +89,7 @@ const _getResource = async <Resource extends SupportedFhirResource>(
 ): Promise<Resource> => {
   logger.debug(`Fetching FHIR resource [${resourceType}/${id}]`);
 
-  return _fhirClient
+  return _getFhirClient()
     .read({ resourceType, id })
     .then(decode(_getDecoder(resourceType)))
     .catch(handleErrorWhileFetchingData);
@@ -93,7 +106,7 @@ const _getAllResources = async <Resource extends SupportedFhirResource>(
 ): Promise<Resource[]> => {
   logger.debug(`Fetching all FHIR resources [${resourceType}]`);
 
-  const bundle: R4.IBundle = await _fhirClient
+  const bundle: R4.IBundle = await _getFhirClient()
     .resourceSearch({
       resourceType,
       searchParams

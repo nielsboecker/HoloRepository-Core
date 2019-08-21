@@ -25,6 +25,8 @@ When the application is deployed, the documentation can also be viewed at the `/
 
 ## Requirements
 - Go 1.12.7
+- A FHIR service
+- An Azure blob storage service
 
 ## Development
 ### Installation

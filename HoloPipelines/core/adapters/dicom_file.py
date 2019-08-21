@@ -1,3 +1,7 @@
+"""
+This module contains functionality related to reading and transforming DICOM files.
+"""
+
 import logging
 import os
 from typing import List
@@ -8,15 +12,16 @@ import pydicom
 import scipy.ndimage
 
 
-def read_dicom_dataset(input_path: str):
+def read_dicom_dataset(input_directory_path: str):
     """
     Reads a DICOM file and returns a pydicom representation, used to obtain knowledge
     about the slice thickness, that can then e.g. be used to manipulate image data.
-    :param input_path: Path to the directory containing the individual DICOM files
+    :param input_directory_path: Path to the directory containing the individual DICOM files
     :return: pydicom.dataset.FileDataset representing the DICOM file
     """
     slices: List[pydicom.dataset.FileDataset] = [
-        pydicom.read_file(input_path) for s in os.listdir(str(input_path))
+        pydicom.read_file(f"{input_directory_path}/{dcm_file}")
+        for dcm_file in os.listdir(input_directory_path)
     ]
     slices.sort(key=lambda x: int(x.InstanceNumber))
 
@@ -78,7 +83,7 @@ def normalise_dicom(dicom_image_array: np.ndarray, input_path: str):
     dicom_sample_slice = dicom_dataset[0]
 
     logging.info("Normalising DICOM image to compensate slice thickness distortion")
-    logging.info(f"Shape before normalising\t{dicom_image_array.shape}")
+    logging.info(f"Shape before normalising: {dicom_image_array.shape}")
 
     # Determine current pixel spacing
     try:
@@ -106,19 +111,20 @@ def normalise_dicom(dicom_image_array: np.ndarray, input_path: str):
     new_real_shape = dicom_image_array.shape * resize_factor
     new_shape = np.round(new_real_shape)
 
-    # TODO: After refactoring, adjust to flipping before resampling
-    # Udomkarn: Yes you can but you will need to look into real_resize_factor variable inside resample(), and update it to the right array axis for the new image's orientation.
     real_resize_factor = new_shape / dicom_image_array.shape
+    real_resize_factor = np.flip(real_resize_factor, 0)
 
     dicom_image_array = scipy.ndimage.interpolation.zoom(
         dicom_image_array, real_resize_factor
     )
-    logging.info(f"Shape after normalising\t{dicom_image_array.shape}")
+    logging.info(f"Shape after normalising: {dicom_image_array.shape}")
 
     return dicom_image_array
 
 
-def read_dicom_as_np_ndarray_and_normalise(input_path: str):
-    dicom_image: np.ndarray = read_dicom_pixels_as_np_ndarray(input_path)
-    normalised_dicom_image: np.ndarray = normalise_dicom(dicom_image, input_path)
+def read_dicom_as_np_ndarray_and_normalise(input_directory_path: str):
+    dicom_image: np.ndarray = read_dicom_pixels_as_np_ndarray(input_directory_path)
+    normalised_dicom_image: np.ndarray = normalise_dicom(
+        dicom_image, input_directory_path
+    )
     return normalised_dicom_image

@@ -1,3 +1,12 @@
+"""
+This module contains functionality concerned with I/O of jobs. Throughout its
+life-cycle, a job creates its own working area on disk where it stores input
+data, intermediate results, and ouput data.
+
+Node that job-specific data is transient. After a job is finished, data will
+be cleaned up through automatic garbage collection (unless configured otherwise).
+"""
+
 import logging
 import os
 import shutil

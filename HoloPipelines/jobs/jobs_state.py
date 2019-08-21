@@ -1,9 +1,19 @@
+"""
+This module manages the state of current jobs and performs automatic garbage collection.
+"""
+
 import logging
 import threading
 import time
 from datetime import datetime
 from enum import Enum
 
+from config import (
+    KEEP_ALL_FILES,
+    KEEP_ALL_LOG_FILES,
+    GARBAGE_COLLECTION_INTERVAL_SECS,
+    GARBAGE_COLLECTION_INACTIVE_JOB_TTL_SECS,
+)
 from jobs import jobs_state_dict
 from jobs.jobs_io import remove_directory_for_job
 
@@ -22,10 +32,6 @@ JobState = Enum(
         "FINISHED",
     ),
 )
-
-# After TTl seconds of unchanged status, job is considered dead and removed
-time_to_live_seconds = 30 * 60
-garbage_collection_cycle_seconds = 30
 
 
 def update_job_state(job_id: str, new_state: str, logger=logging):
@@ -72,12 +78,8 @@ def remove_job(job_id: str, success: bool = True):
     logging.info(f"Garbage collection | Removing job '{job_id}' (success={success})")
     jobs_state_dict.pop(job_id)
 
-    # TODO: Move to config / env variables
-    keep_all_files = False
-    keep_all_log_files = False
-
-    if not keep_all_files:
-        keep_log_file = not success or keep_all_log_files
+    if not KEEP_ALL_FILES:
+        keep_log_file = not success or KEEP_ALL_LOG_FILES
         remove_directory_for_job(job_id, keep_log_file)
 
 
@@ -99,10 +101,11 @@ def perform_garbage_collection():
 
             if current_state == JobState.FINISHED.name:
                 remove_job(job_id, success=True)
-            elif time_diff > time_to_live_seconds:
+            # After TTl seconds of unchanged status, job is considered dead and removed
+            elif time_diff > int(GARBAGE_COLLECTION_INACTIVE_JOB_TTL_SECS):
                 remove_job(job_id, success=False)
 
-        time.sleep(garbage_collection_cycle_seconds)
+        time.sleep(int(GARBAGE_COLLECTION_INTERVAL_SECS))
 
 
 def activate_periodic_garbage_collection():

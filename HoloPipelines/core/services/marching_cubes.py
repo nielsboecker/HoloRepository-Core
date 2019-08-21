@@ -1,3 +1,7 @@
+"""
+This module contains marching cube functionality.
+"""
+
 import logging
 
 import numpy as np

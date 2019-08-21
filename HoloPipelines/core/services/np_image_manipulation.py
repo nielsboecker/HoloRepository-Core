@@ -1,13 +1,18 @@
+"""
+This module contains some functions to perform manipulations upon numpy data.
+"""
+
 import logging
 
 import numpy as np
 import scipy.ndimage
 
-# Set limit to prevent crashing of NN containers and general performance issues
-image_resolution_limit = 256
+from config import INPUT_RESOLUTION_MAX
 
 
 # FIXME: This is broken and needs to be fixed @Udomkarn
+
+
 def crop_around_centre(image: np.ndarray, newX, newY, newZ):
     x, y, z = image.shape
 
@@ -24,8 +29,10 @@ def crop_around_centre(image: np.ndarray, newX, newY, newZ):
 
 # TODO: Does it make sense? When I already did a downscale such that the longest size
 #  is <= the given limit, why would I ever need to then crop it? => @Udomkarn pls fix
+
+# Set limit to prevent crashing of NN containers and general performance issues
 def downscale_and_conditionally_crop(
-    image: np.ndarray, resolution_limit: int = image_resolution_limit
+    image: np.ndarray, resolution_limit: int = int(INPUT_RESOLUTION_MAX)
 ):
     if len(image.shape) >= 3:
         x = image.shape[0]

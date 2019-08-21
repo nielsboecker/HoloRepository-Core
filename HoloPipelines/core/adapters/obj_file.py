@@ -1,3 +1,7 @@
+"""
+This module contains functionality related to writing a mesh to disk as an OBJ file.
+"""
+
 def write_mesh_as_obj(verts, faces, norm, output_obj_path):
     # Workaround according to https://stackoverflow.com/questions/48844778/create-a-obj-file-from-3d-array-in-python
     faces = faces + 1

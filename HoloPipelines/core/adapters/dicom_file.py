@@ -1,6 +1,5 @@
 import logging
 import os
-import pathlib
 from typing import List
 
 import SimpleITK as sitk
@@ -17,8 +16,7 @@ def read_dicom_dataset(input_path: str):
     :return: pydicom.dataset.FileDataset representing the DICOM file
     """
     slices: List[pydicom.dataset.FileDataset] = [
-        pydicom.read_file(str(pathlib.Path(input_path, s)))
-        for s in os.listdir(str(input_path))
+        pydicom.read_file(input_path) for s in os.listdir(str(input_path))
     ]
     slices.sort(key=lambda x: int(x.InstanceNumber))
 

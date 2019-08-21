@@ -1,5 +1,3 @@
-import pathlib
-
 import nibabel as nib
 import numpy as np
 from scipy import ndimage
@@ -46,11 +44,7 @@ def segment_airway(params, I, I_affine, Mlung, outputNiftiFolderPath):
     Mawtmp = ndimage.binary_dilation(Maw, structure=struct_l, iterations=1)
     Mawtmp = np.int8(Mawtmp)
     Mlung[Maw > 0] = 0
-    nib.Nifti1Image(Maw, I_affine).to_filename(
-        str(pathlib.Path(outputNiftiFolderPath).joinpath("aw.nii.gz"))
-    )
-    nib.Nifti1Image(Mlung, I_affine).to_filename(
-        str(pathlib.Path(outputNiftiFolderPath).joinpath("lung.nii.gz"))
-    )
+    nib.Nifti1Image(Maw, I_affine).to_filename(f"{outputNiftiFolderPath}/aw.nii.gz")
+    nib.Nifti1Image(Mlung, I_affine).to_filename(f"{outputNiftiFolderPath}/lung.nii.gz")
 
     return Mlung, Maw

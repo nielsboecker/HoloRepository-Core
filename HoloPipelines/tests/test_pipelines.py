@@ -1,6 +1,5 @@
 import logging
 import os
-import pathlib
 import shutil
 import sys
 import threading
@@ -12,17 +11,16 @@ import requests
 
 
 pythonPath = sys.executable
-thisCwd = pathlib.Path.cwd()
 zipFileName = "__temp__.zip"
 segmentedAbdomenFileName = "__segmentedAbdomen__.nii.gz"
-dicomPath = thisCwd.joinpath("__test_input__", "dicom")
-niftiPath = thisCwd.joinpath("__test_input__", "nifti")
 
-outputPath = pathlib.Path.cwd().joinpath("output")
-objPath = outputPath.joinpath("obj")
-glbPath = outputPath.joinpath("glb")
+test_input_path = "__test_input__"
+dicomPath = f"{test_input_path}/dicom"
+niftiPath = f"{test_input_path}/nifti"
 
-newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))).parent)
+test_output_path = "__test_output__"
+objPath = f"{test_output_path}/obj"
+glbPath = f"{test_output_path}/glb"
 
 
 class testServer(BaseHTTPRequestHandler):
@@ -44,15 +42,15 @@ class testServer(BaseHTTPRequestHandler):
 def testSetup():
     logging.info("Checking for sample files...")
     sampleFileDict = {
-        str(dicomPath.joinpath("3_Axial_CE")): [
+        f"{dicomPath}/3_Axial_CE": [
             "https://holoblob.blob.core.windows.net/test/3_Axial_CE.zip",
             str(dicomPath),
         ],
-        str(dicomPath.joinpath("abdomen")): [
+        f"{dicomPath}/abdomen": [
             "https://holoblob.blob.core.windows.net/mock-pacs/abdomen.zip",
             str(dicomPath),
         ],
-        str(niftiPath.joinpath("1103_3_glm.nii")): [
+        f"{dicomPath}/1103_3_glm.nii": [
             "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip",
             str(niftiPath),
         ],
@@ -67,7 +65,7 @@ def testSetup():
             saveTo = fileData[1]
 
             response = requests.get(url)
-            open(str(thisCwd.joinpath(zipFileName)), "wb+").write(response.content)
+            open(f"{test_input_path}/{zipFileName}", "wb+").write(response.content)
 
             logging.info("Decompressing...")
             with ZipFile(zipFileName, "r") as zipObj:  # unzip
@@ -75,12 +73,10 @@ def testSetup():
             os.remove(zipFileName)
 
     # download data for mock server (not in loop above as this one does not come in zip)
-    if not os.path.exists(str(niftiPath.joinpath(segmentedAbdomenFileName))):
+    if not os.path.exists(f"{niftiPath}/{segmentedAbdomenFileName}"):
         urlNiftyOut = "https://holoblob.blob.core.windows.net/mock-pacs/Owenpap___niftynet_out.nii.gz"
         response = requests.get(urlNiftyOut)
-        open(str(niftiPath.joinpath(segmentedAbdomenFileName)), "wb+").write(
-            response.content
-        )
+        open(f"{niftiPath}/{segmentedAbdomenFileName}", "wb+").write(response.content)
 
     logging.info("setup: done")
 
@@ -115,19 +111,19 @@ def setupMockPOSTresponse():
 
 def remove3Dmodels():
     generatedMeshList = [
-        str(glbPath.joinpath("testResult0.glb")),
-        str(glbPath.joinpath("testResult1.glb")),
-        str(objPath.joinpath("testResult2.obj")),
-        str(glbPath.joinpath("testResult3.glb")),
-        str(glbPath.joinpath("testResult4.glb")),
-        str(glbPath.joinpath("organNo1.glb")),
-        str(glbPath.joinpath("organNo2.glb")),
-        str(glbPath.joinpath("organNo3.glb")),
-        str(glbPath.joinpath("organNo4.glb")),
-        str(glbPath.joinpath("organNo5.glb")),
-        str(glbPath.joinpath("organNo6.glb")),
-        str(glbPath.joinpath("organNo7.glb")),
-        str(glbPath.joinpath("organNo8.glb")),
+        f"{glbPath}/testResult0.glb",
+        f"{glbPath}/testResult1.glb",
+        f"{glbPath}/testResult2.obj",
+        f"{glbPath}/testResult3.glb",
+        f"{glbPath}/testResult4.glb",
+        f"{glbPath}/organNo1.glb",
+        f"{glbPath}/organNo2.glb",
+        f"{glbPath}/organNo3.glb",
+        f"{glbPath}/organNo4.glb",
+        f"{glbPath}/organNo5.glb",
+        f"{glbPath}/organNo6.glb",
+        f"{glbPath}/organNo7.glb",
+        f"{glbPath}/organNo8.glb",
     ]
 
     for meshFileName in generatedMeshList:

@@ -34,11 +34,40 @@ The modules that form a pipeline can perform different tasks:
 - Special adapter modules are used to call the pre-trained NN models, which are being deployed as separate containers and accessed via HTTP calls.
 - The last module is responsible for sending the result off to the HoloStorage Accessor.
 
+## Job-specific working areas
+
+When jobs are triggered, they will automatically create and maintain their local
+ working area in `<app-root-dir>/__jobs__/<job-id>`.
+ 
+This directory contains subdirectories for `input`, `output` and `temp` data. The
+ automatic garbage collection usually deletes all files. Logs for failed jobs are
+ kept around by default. If you want to keep all files or keep all log files, refer
+ to the [configuration](#configuration).
+
 ## Pre-trained NN models
 
 We are continually wrapping existing pre-trained models with a lightweight Flask API and a `Dockerfile`. These models can be found in the `models/` directory.
 
 If you want to train your own model or integrate an existing model that is not officially supported yet, you can easily integrate it yourself. You will need to implement some kind of server to comply with the specified API endpoints (documented in `models/README.md`) and a `Dockerfile`. You can take a look at the existing models for reference.
+
+## How to add new pipelines
+
+Adding a new pipeline is easy. The required steps vary depending on the specific use case, and on the type of pipeline. Currently, we have three types of pipelines, that differ in the way they perform automatic segmentation:
+* Algorithmic segmentation using low-level libraries (e.g. `bone_segmentation` pipeline)
+* Existing implementations of algorithmic segmentation (e.g. `lung_segmentation` pipeline)
+* Automatic segmentation using external neural networks (e.g. `abdominal_organs_segmentation` pipeline)
+
+In each case, you will have to create a new pipeline module in `./core/pipelines/`. It should expose a `run` function (refer to existing pipelines for the signature) and be directly invokable for testing purposes (via `__main__`). You should then also add your pipeline to the `./core/pipelines.json` to document the pipeline's specification and make it visible for external clients.
+
+In the pipeline itself, you should only a) call other components to perform actions and b) update the job status. Pipelines are pieced together from other components, which are really the core building blocks of the system. For the pre- and postprocessing steps, it is encouraged to reuse existing `tasks`, `services`, `adapters`, `wrappers` and `clients`. If your pipeline requires other functionality, try to extract it to a reusable components.
+
+If you want to integrate an existing implementation in python code or need to call an external program, write a wrapper.
+
+If you want to integrate a pre-trained model, you should refer to `/models/README.md` and perform the steps described to wrap the model and integrate it into the system. You can then access it from your pipeline code.
+
+Don't forget to update documentation, tests, and, if you add an additional external
+ model, the container deployments (refer to deployment documentation).
+
 
 ## Development
 
@@ -64,38 +93,23 @@ These 2 dependencies can be installed using Node.js package manager. Please make
 npm install -g obj2gltf
 ```
 
-### Local usage
+### Local development
 
-```
-usage: pipelineController.py [-h] [-c CONFIG] [-l] [-i NAME]
-                             [-p [PARAM [PARAM ...]]]
-                             [pipelineID]
+Just start the Flask server locally. It will automatically run in debug mode
+, including features like live reloading, extensive debug statements, etc.
 
-Select pipeline to process
-
-positional arguments:
-  pipelineID            ID of pipeline
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -c CONFIG, --config CONFIG
-                        path to pipeline config file relative to
-                        pipelineController
-  -l, --ls              list all the available pipelines
-  -i NAME, --info NAME  get info from pipeline's name
-  -p [PARAM [PARAM ...]], --param [PARAM [PARAM ...]]
-                        parameters for pipeline e.g. dicom folder name or HU
-                        threshold
+```shell
+python server.py
 ```
 
-#### Example usage
+### Configuration
 
-```
-python pipelineController.py p4 -p 3_Axial_CE
-```
+The application is configured through environment variables. For local development
+, the `.env` file will automatically be read and the variables will be made available
+ (Note: `.env` file is included with test values in VCS in this case as it doesn't
+  contain any secrets).
 
-- `p4`: pipeline ID. In this case to segment lung and generate glb from it
-- `-p 3_Axial_CE`: param(s) for the specific pipeline, in this case a directory for an upper ct scan from __test_input__/dicom
+In production environments, all variables in `.env` should be set by the CD workflow.
 
 ## Testing
 
@@ -111,8 +125,6 @@ Execute tests by running the following command in `HoloPipelines` directory:
 ```
 pytest --cov
 ```
-
-> Note: Tests downloads sample files during the testing process. These files can be deleted by running _cleanUp.py_
 
 ### Manual testing with Postman
 
@@ -133,28 +145,18 @@ docker run --rm -p 3100:3100 --env-file .env holopipelines-core:latest
 ## API specification
 
 ```
-GET /pipelines
-```
-
-To get a list of all available pipelines
-
-```
-GET /job/<jobid>/state
-```
-
-To get the state of a job with specific ID
-
-```
-GET /job/<jobid>/log
-```
-
-To get the log of a job with specific ID
-
-```
 POST /job
-```
+    Starts a new job.
 
-To start a job
+GET /pipelines
+    Returns a JSON list of available pipelines
+
+GET /job/<job_id>/state
+    Returns the state of a job with specific ID
+
+GET /job/<job_id>/log
+    Returns the complete log of a job with specific ID
+```
 
 ## Contact and support
 

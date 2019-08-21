@@ -57,9 +57,11 @@ Adding a new pipeline is easy. The required steps vary depending on the specific
 * Existing implementations of algorithmic segmentation (e.g. `lung_segmentation` pipeline)
 * Automatic segmentation using external neural networks (e.g. `abdominal_organs_segmentation` pipeline)
 
-In each case, you will have to create a new pipeline module in `./core/pipelines/`. It should expose a `run` function (refer to existing pipelines for the signature) and be directly invokable for testing purposes (via `__main__`). You should then also add your pipeline to the `./core/pipelines.json` to document the pipeline's specification and make it visible for external clients.
+In each case, you will have to create a new pipeline module in `./core/pipelines/`. It should expose a `run` function (refer to existing pipelines for the signature) and be directly invokable for testing purposes (via `__main__`). You should then also add your pipeline to the `./core/pipelines.json` to document the pipeline's specification and make it visible for external clients. By adding it here, it will show up as an option for clients to run. The `job_controller` will then automatically load the new pipeline without any code changes.
 
 In the pipeline itself, you should only a) call other components to perform actions and b) update the job status. Pipelines are pieced together from other components, which are really the core building blocks of the system. For the pre- and postprocessing steps, it is encouraged to reuse existing `tasks`, `services`, `adapters`, `wrappers` and `clients`. If your pipeline requires other functionality, try to extract it to a reusable components.
+
+If you encounter an error in your component, it's okay to just raise an Error or Exception. The `job_controller` which runs the pipelines will catch it and show an error message. The garbage collection will clean up after you.
 
 If you want to integrate an existing implementation in python code or need to call an external program, write a wrapper.
 
@@ -160,4 +162,4 @@ GET /job/<job_id>/log
 
 ## Contact and support
 
-This component is owned by [UdomkarnBoonyaprasert](https://github.com/UdomkarnBoonyaprasert) and [ansonwong9695](https://github.com/ansonwong9695). Please get in touch if you have any questions. For change requests and bug reports, please open a new issue.
+This component is owned by [nbckr](https://github.com/nbckr). The first prototype was developed by [UdomkarnBoonyaprasert](https://github.com/UdomkarnBoonyaprasert) and [ansonwong9695](https://github.com/ansonwong9695). Please get in touch if you have any questions. For change requests and bug reports, please open a new issue.

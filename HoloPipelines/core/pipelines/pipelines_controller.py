@@ -20,7 +20,7 @@ def get_pipelines_ids_list():
 
 def load_pipeline_dynamically(plid: str):
     """
-    Loads a pipeline module dynamically, which can then be invoked by its main function.
+    Loads a pipeline module dynamically, which can then be invoked by its run function.
     """
     pl_package_name = f"core.pipelines.{plid}"
     logging.info(f"Importing pipeline package {pl_package_name}")

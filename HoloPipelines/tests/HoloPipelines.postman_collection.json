@@ -1,0 +1,163 @@
+{
+	"info": {
+		"_postman_id": "5b01a53a-b381-44f6-bef7-62ebc9e25a96",
+		"name": "HoloPipelines",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/pipelines",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3100/api/v1/pipelines",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"api",
+						"v1",
+						"pipelines"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/jobs: trigger bone_segmentation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"imagingStudyEndpoint\": \"https://holoblob.blob.core.windows.net/mock-pacs/normal-chest-mediastinal.zip\",\n\t\"plid\": \"bone_segmentation\",\n\t\"medicalData\": {\n\t\t\"patient\": {\n\t\t\t\"pid\": \"p100\",\n\t\t\t\"name\": { \"full\": \"Quentin Tarantino\" },\n\t\t\t\"gender\": \"male\"\n\t\t},\n\t\t\"author\": {\n\t\t\t\"aid\": \"a100\",\n\t\t\t\"name\": { \"full\": \"Jens Krinke\" },\n\t\t\t\"gender\": \"male\"\n\t\t},\n\t\t\"title\": \"Foo Bar\",\n\t\t\"description\": \"To be or not to be, that is the question\",\n\t\t\"bodySite\": \"Right toe\",\n\t\t\"dateOfImaging\": \"2011-10-05T14:48:00.000Z\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "localhost:3100/api/v1/jobs",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"api",
+						"v1",
+						"jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/jobs: trigger lung_segmentation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"imagingStudyEndpoint\": \"https://holoblob.blob.core.windows.net/mock-pacs/normal-chest-mediastinal.zip\",\n\t\"plid\": \"lung_segmentation\",\n\t\"medicalData\": {\n\t\t\"patient\": {\n\t\t\t\"pid\": \"p100\",\n\t\t\t\"name\": { \"full\": \"Quentin Tarantino\" },\n\t\t\t\"gender\": \"male\"\n\t\t},\n\t\t\"author\": {\n\t\t\t\"aid\": \"a100\",\n\t\t\t\"name\": { \"full\": \"Jens Krinke\" },\n\t\t\t\"gender\": \"male\"\n\t\t},\n\t\t\"title\": \"Foo Bar\",\n\t\t\"description\": \"To be or not to be, that is the question\",\n\t\t\"bodySite\": \"Right toe\",\n\t\t\"dateOfImaging\": \"2011-10-05T14:48:00.000Z\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "localhost:3100/api/v1/jobs",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"api",
+						"v1",
+						"jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/jobs: trigger abdominal_organs_segmentation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"imagingStudyEndpoint\": \"https://holoblob.blob.core.windows.net/mock-pacs/normal-abdomen.zip\",\n\t\"plid\": \"abdominal_organs_segmentation\",\n\t\"medicalData\": {\n\t\t\"patient\": {\n\t\t\t\"pid\": \"p100\",\n\t\t\t\"name\": { \"full\": \"Quentin Tarantino\" },\n\t\t\t\"gender\": \"male\"\n\t\t},\n\t\t\"author\": {\n\t\t\t\"aid\": \"a100\",\n\t\t\t\"name\": { \"full\": \"Jens Krinke\" },\n\t\t\t\"gender\": \"male\"\n\t\t},\n\t\t\"title\": \"Foo Bar\",\n\t\t\"description\": \"To be or not to be, that is the question\",\n\t\t\"bodySite\": \"Right toe\",\n\t\t\"dateOfImaging\": \"2011-10-05T14:48:00.000Z\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "localhost:3100/api/v1/jobs",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"api",
+						"v1",
+						"jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/jobs/<jid>/state",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3100/api/v1/jobs/<jid>/state",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"api",
+						"v1",
+						"jobs",
+						"<jid>",
+						"state"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/jobs/<jid>/log",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3100/api/v1/jobs/<jid>/log",
+					"host": [
+						"localhost"
+					],
+					"port": "3100",
+					"path": [
+						"api",
+						"v1",
+						"jobs",
+						"<jid>",
+						"log"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

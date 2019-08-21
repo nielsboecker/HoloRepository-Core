@@ -11,7 +11,7 @@ A typical pipeline will process the data fully automatic by utilising a NN model
 
 As each pipeline is independent, semi-automated or manual pipelines (which may even include their own front-ends or manual processing steps) could be added later.
 
-Upon receiving a DICOM image series, a job will be started and passed through the different stages of a pipeline. The status of each job can be queried through a distinct API. When finished, the result will be handed on to the HoloStorage Accessor.
+###### Upon receiving a DICOM image series, a job will be started and passed through the different stages of a pipeline. The status of each job can be queried through a distinct API. When finished, the result will be handed on to the HoloStorage Accessor.
 
 ## Technologies
 
@@ -114,6 +114,11 @@ pytest --cov
 
 > Note: Tests downloads sample files during the testing process. These files can be deleted by running _cleanUp.py_
 
+### Manual testing with Postman
+
+The file `tests/HoloPipelines.postman_collection.json` contains a Postman collection
+ that can be used to try out the API endpoints manually.
+
 ## API specification
 
 ```
@@ -127,6 +132,12 @@ GET /job/<jobid>/state
 ```
 
 To get the state of a job with specific ID
+
+```
+GET /job/<jobid>/log
+```
+
+To get the log of a job with specific ID
 
 ```
 POST /job

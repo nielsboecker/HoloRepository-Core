@@ -12,6 +12,7 @@ import {
 import { Layout } from "antd";
 import appLogo from "../../assets/logo/2x/logo_and_font@2x.png";
 import MainFooter from "../shared/MainFooter";
+import { PropsWithContext, withAppContext } from "../shared/AppState";
 
 const options: IDropdownOption[] = [
   { key: "b0016666-1924-455d-8b16-92c631fa5207", text: "Isaac Upton" },
@@ -26,7 +27,9 @@ const imageProps: IImageProps = {
   maximizeFrame: true
 };
 
-class LandingPage extends Component<RouteComponentProps> {
+class LandingPage extends Component<RouteComponentProps & PropsWithContext> {
+  selectedItem: string | number = "";
+
   backgroundStyle = {
     background: "rgba(1,1,1,0.2)"
   };
@@ -65,6 +68,7 @@ class LandingPage extends Component<RouteComponentProps> {
               placeholder="Select an practitioner"
               label="Practitioner:"
               options={options}
+              onChanged={item => this._onChange(item.key)}
             />
             <TextField label="Password:" type="password" style={{ width: "300" }} />
             <div
@@ -75,7 +79,12 @@ class LandingPage extends Component<RouteComponentProps> {
               }}
             >
               <Link to="/app/patients">
-                <PrimaryButton data-automation-id="login" text="Login" allowDisabledFocus={true} />
+                <PrimaryButton
+                  data-automation-id="login"
+                  text="Login"
+                  allowDisabledFocus={true}
+                  onClick={this._selectPractitioner}
+                />
               </Link>
             </div>
           </div>
@@ -85,6 +94,14 @@ class LandingPage extends Component<RouteComponentProps> {
       </Layout>
     );
   }
+
+  private _selectPractitioner = () => {
+    this.props.context!.handleLogin(this.selectedItem);
+  };
+
+  private _onChange = (key: string | number): void => {
+    this.selectedItem = key;
+  };
 }
 
-export default LandingPage;
+export default withAppContext(LandingPage);

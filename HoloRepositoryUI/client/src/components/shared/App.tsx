@@ -20,13 +20,22 @@ class App extends Component<any, IAppState> {
       handlePipelinesChange: this._handlePipelinesChange,
       handleDeleteHolograms: this._handleDeleteHolograms,
       handleDownloadHolograms: this._handleDownloadHolograms,
-      handleHologramCreated: this._handleHologramCreated
+      handleHologramCreated: this._handleHologramCreated,
+      handleLogin: this._handleLogin
     };
   }
 
-  componentDidMount(): void {
-    // Note: SMART login is currently not implemented, so a hard-coded practitioner will be the user
-    const practitionerId = "b0016666-1924-455d-8b16-92c631fa5207";
+  render() {
+    return (
+      <AppContext.Provider value={this.state}>
+        <div className="App">
+          <MainContainer />
+        </div>
+      </AppContext.Provider>
+    );
+  }
+
+  private _handleLogin = (practitionerId: string) => {
     BackendServerService.getPractitioner(practitionerId).then(practitioner => {
       console.log("Fetched data: practitioner", practitioner);
       this._handlePractitionerChange(practitioner!);
@@ -43,17 +52,7 @@ class App extends Component<any, IAppState> {
       console.log("Fetched data: pipelines", pipelines);
       this._handlePipelinesChange(pipelines || []);
     });
-  }
-
-  render() {
-    return (
-      <AppContext.Provider value={this.state}>
-        <div className="App">
-          <MainContainer />
-        </div>
-      </AppContext.Provider>
-    );
-  }
+  };
 
   private _fetchPatientSpecificData = () => {
     this._fetchImagingStudiesForPatients();
@@ -69,7 +68,9 @@ class App extends Component<any, IAppState> {
       for (const pid in combinedResult) {
         const studies = combinedResult[pid];
         const patient = patients[pid];
-        patient.imagingStudies = studies;
+        if (patient !== undefined) {
+          patient.imagingStudies = studies;
+        }
         this.setState({
           patients: {
             ...patients,

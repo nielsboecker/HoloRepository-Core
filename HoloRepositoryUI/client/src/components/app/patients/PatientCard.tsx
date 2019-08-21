@@ -56,7 +56,7 @@ class PatientCard extends Component<IPatientCardProps, object> {
   private _handleClick = () => {
     let pid = this.props.patient.pid;
     this.props.context!.handleSelectedPatientIdChange(pid);
-    navigate(`/app/patient/${pid}`);
+    navigate(`/app/patients/${pid}`);
   };
 }
 

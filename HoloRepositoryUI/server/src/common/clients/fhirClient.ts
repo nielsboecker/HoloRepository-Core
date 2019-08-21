@@ -2,13 +2,15 @@ import Client from "fhir-kit-client";
 import t from "io-ts";
 import { decode, isDecodeError } from "io-ts-promise";
 import { getAdapterFunction } from "../adapters/fhirAdapter";
-import { FHIR_SERVER_BASE_URL } from "../../config";
+//import { FHIR_SERVER_BASE_URL } from "../../config";
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import { IImagingStudy, IPatient, IPractitioner } from "../../../../types";
 import logger from "../logger";
 
+const { FHIR_SERVER_BASE_URL: fhirUrl } = process.env;
+
 const _fhirClient = new Client({
-  baseUrl: FHIR_SERVER_BASE_URL
+  baseUrl: fhirUrl
 });
 
 export type InternalType = IPatient | IPractitioner | IImagingStudy;

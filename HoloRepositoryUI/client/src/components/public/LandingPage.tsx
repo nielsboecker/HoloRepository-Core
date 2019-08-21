@@ -13,7 +13,6 @@ import { Layout } from "antd";
 import appLogo from "../../assets/logo/2x/logo_and_font@2x.png";
 import MainFooter from "../shared/MainFooter";
 import { PropsWithContext, withAppContext } from "../shared/AppState";
-import { string } from "prop-types";
 
 const options: IDropdownOption[] = [
   { key: "a100/03825", text: "Maudie Kirlin" },
@@ -70,7 +69,7 @@ class LandingPage extends Component<RouteComponentProps & PropsWithContext> {
               options={options}
               onChanged={item => this._onChange(item.key)}
             />
-            <TextField label="Password:" type="password" style={{ width: "300" }} />
+            <TextField label="Password:" defaultValue={"password"} type="password" style={{ width: "300" }} />
             <div
               style={{
                 marginTop: "20px",
@@ -96,9 +95,13 @@ class LandingPage extends Component<RouteComponentProps & PropsWithContext> {
   }
 
   private _selectPractitioner = () => {
+    if (this.selectedItem === ""){
+      this.selectedItem = options[0].key;
+    }
+
     if (typeof this.selectedItem !== "number") {
-      let id = this.selectedItem.substring(0, this.selectedItem.indexOf('/'));
-      let pin = this.selectedItem.substring(this.selectedItem.indexOf('/') + 1);
+      let id = this.selectedItem.substring(0, this.selectedItem.indexOf("/"));
+      let pin = this.selectedItem.substring(this.selectedItem.indexOf("/") + 1);
       this.props.context!.handleLogin(id, pin);
     }
   };

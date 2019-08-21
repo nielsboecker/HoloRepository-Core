@@ -74,8 +74,8 @@ def read_nifti_as_np_array_and_normalise(input_path: str):
     return normalised_nifti_image_as_np_array
 
 
-def write_nifti_image(nifti_image: nibabel.nifti1.Nifti1Image, output_path: str):
-    nibabel.save(nifti_image, output_path)
+def write_nifti_image(nifti_image: nibabel.nifti1.Nifti1Image, output_file_path: str):
+    nibabel.save(nifti_image, output_file_path)
 
 
 def convert_dicom_np_ndarray_to_nifti_image(dicom_image: np.ndarray):

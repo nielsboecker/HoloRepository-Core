@@ -17,11 +17,10 @@ services:
     env_file: ./HoloRepositoryUI/server/.env
     ports:
       - "3001:3001"
-#  TODO: Uncomment when HoloPipelines are ready
-#  holopipelines-core:
-#    build: ./HoloPipelines
-#    ports:
-#      - "3100:3100"
+  holopipelines-core:
+    build: ./HoloPipelines
+    ports:
+      - "3100:3100"
   holostorage-accessor:
     build: ./HoloStorageAccessor
     env_file: ./HoloStorageAccessor/config.env

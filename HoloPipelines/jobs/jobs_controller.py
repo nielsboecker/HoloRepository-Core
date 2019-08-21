@@ -1,7 +1,6 @@
 import logging
 import uuid
 from multiprocessing import Pool
-from os import cpu_count
 
 from core.pipelines.pipelines_controller import (
     get_pipelines_ids_list,
@@ -10,7 +9,8 @@ from core.pipelines.pipelines_controller import (
 from jobs.jobs_state import JobState, update_job_state
 from jobs.jobs_io import create_directory_for_job, get_logger_for_job
 
-num_cpus = cpu_count()
+# TODO: use config / env var
+num_cpus = 4
 process_pool = Pool(num_cpus)
 logging.warning(f"Started process pool with {num_cpus} worker processes")
 

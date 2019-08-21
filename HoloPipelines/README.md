@@ -117,7 +117,18 @@ pytest --cov
 ### Manual testing with Postman
 
 The file `tests/HoloPipelines.postman_collection.json` contains a Postman collection
- that can be used to try out the API endpoints manually.
+ that can be used to try out the API endpoints manually. The typical workflow is to trigger one of the pipelines by starting a new job (`POST /jobs`) and then tracking it via the `/state` and `/log` endpoints.
+
+ Note that to test the end-to-end flow, the HoloStorageAccessor and any relevant neural network containers should be running as well. You can use the `docker-compose` file in the project root directory to help start the different sub-systems.
+
+ ## Build and deployment
+
+### Building and running the docker image
+
+```shell
+docker build . -t holopipelines-core
+docker run --rm -p 3100:3100 holopipelines-core:latest
+```
 
 ## API specification
 

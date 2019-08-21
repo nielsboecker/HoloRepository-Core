@@ -38,4 +38,4 @@ EXPOSE ${PORT}
 ENTRYPOINT ["gunicorn"]
 
 # Start server
-CMD ["-w","4","-b", "0.0.0.0:5000", "server:app"]
+CMD ["--workers","4","--bind", "0.0.0.0:3100", "server:app"]

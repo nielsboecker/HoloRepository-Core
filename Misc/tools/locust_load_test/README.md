@@ -8,12 +8,14 @@ It tests the endpoints of the `UI` and `Accessor` components of the HoloReposito
 - HoloRepository Azure FHIR Service Infra (EHR and HoloStorage)
 
 ## Testing
+> Note: Testing is done with the assumption that the service contains data from the `holorepo_demo`. View `Misc/holorepo_demo` for more details.
+
 To execute locust load test on the accessor or UI.
 
 First install LocustIO with `pipenv install --dev`
 
-Then, depending on what you are testing, run the following components.
-- Testing UI: Accessor and UI
+Then, depending on what you are testing, the following components must be running.
+- Testing UI: UI and Accessor
 - Testing Accessor: Accessor
 
 Next, start the locust test service

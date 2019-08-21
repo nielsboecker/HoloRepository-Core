@@ -4,7 +4,7 @@ from config import MODEL_ABDOMINAL_SEGMENTATION_HOST, MODEL_ABDOMINAL_SEGMENTATI
 from core.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 from core.adapters.nifti_file import (
     convert_dicom_np_ndarray_to_nifti_image,
-    read_nifti_as_np_array_and_normalise,
+    read_nifti_as_np_array,
     write_nifti_image,
 )
 from core.clients import niftynet
@@ -48,7 +48,9 @@ def run(job_id: str, input_endpoint: str, medical_data: dict):
     )
 
     update_job_state(job_id, JobState.POSTPROCESSING.name, logger)
-    segmented_array = read_nifti_as_np_array_and_normalise(segmented_output_file_path)
+    segmented_array = read_nifti_as_np_array(
+        segmented_output_file_path, normalise=False
+    )
     segmented_array = downscale_and_conditionally_crop(segmented_array)
     split_to_separate_organs(segmented_array, get_result_file_path_for_job(job_id))
 

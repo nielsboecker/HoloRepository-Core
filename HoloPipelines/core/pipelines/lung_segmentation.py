@@ -4,7 +4,7 @@ from core.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 from core.adapters.glb_file import convert_obj_to_glb_and_write
 from core.adapters.nifti_file import (
     convert_dicom_np_ndarray_to_nifti_image,
-    read_nifti_as_np_array_and_normalise,
+    read_nifti_as_np_array,
     write_nifti_image,
 )
 from core.adapters.obj_file import write_mesh_as_obj
@@ -51,8 +51,8 @@ def run(job_id: str, input_endpoint: str, medical_data: dict):
         nifti_output_file_path, output_nifti_directory_path
     )
 
-    nifti_image_as_np_array = read_nifti_as_np_array_and_normalise(
-        generated_segmented_lung_nifti_path
+    nifti_image_as_np_array = read_nifti_as_np_array(
+        generated_segmented_lung_nifti_path, normalise=False
     )
     obj_output_path = get_temp_file_path_for_job(job_id, "temp.obj")
     verts, faces, norm = generate_mesh(nifti_image_as_np_array, hu_threshold)

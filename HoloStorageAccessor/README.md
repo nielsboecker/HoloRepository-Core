@@ -67,14 +67,14 @@ docker build -t holo-storage-accessor .
 Once the image is built load the configuration, just run
 
 ```
-docker run -it --rm --env-file config.env -p 3200:3200 holo-storage-accessor
+docker run -it --rm --env-file .env -p 3200:3200 holo-storage-accessor
 ```
 You can then access the container via localhost:3200
 
 ## Configuration
 Accessor application uses the following environmental variables as configuration.
 
-If using docker, the environment configuration fields can be set via `config.env`.
+If using docker, the environment configuration fields can be set via `.env`.
 
 If not, `export` the variables before running the program.
 

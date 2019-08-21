@@ -35,7 +35,7 @@ class App extends Component<any, IAppState> {
     );
   }
 
-  private _handleLogin = (practitionerId: string) => {
+  private _handleLogin = (practitionerId: string, pin: string) => {
     BackendServerService.getPractitioner(practitionerId).then(practitioner => {
       console.log("Fetched data: practitioner", practitioner);
       this._handlePractitionerChange(practitioner!);
@@ -52,6 +52,7 @@ class App extends Component<any, IAppState> {
       console.log("Fetched data: pipelines", pipelines);
       this._handlePipelinesChange(pipelines || []);
     });
+    this.setState({pin});
   };
 
   private _fetchPatientSpecificData = () => {

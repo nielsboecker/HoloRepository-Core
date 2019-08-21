@@ -10,6 +10,7 @@ export interface IAppState {
   patients: PidToPatientsMap;
   selectedPatientId?: string;
   pipelines: IPipeline[];
+  pin?: string;
   handlePractitionerChange: Function;
   handlePatientsChange: Function;
   handleSelectedPatientIdChange: Function;
@@ -25,6 +26,7 @@ const initialState: IAppState = {
   patients: {},
   selectedPatientId: undefined,
   pipelines: [],
+  pin: undefined,
   handlePractitionerChange: () => {},
   handleSelectedPatientIdChange: () => {},
   handlePatientsChange: () => {},

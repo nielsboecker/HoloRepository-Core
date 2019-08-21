@@ -165,6 +165,13 @@ Starting holorepository-core_holorepository-ui-server_1                      ...
 Creating holorepository-core_holostorage-accessor_1                          ... done
 ```
 
+In cases where only selective services are required, they can be started by specifying the service name
+```shell
+$ docker-compose -f docker-compose.dev.yml up holorepository-ui-client holorepository-ui-server
+Starting holo-repo-clean_holorepository-ui-server_1 ... done
+Starting holo-repo-clean_holorepository-ui-client_1 ... done
+```
+
 Force a rebuild by replacing `docker-compose up` with `docker-compose build`.
 
 You can also just run a single component or a selection of components, but still use the provided configurations, port mappings etc. from the `docker-compose` file for convenience:

@@ -7,6 +7,7 @@ import scipy.ndimage
 image_resolution_limit = 256
 
 
+# FIXME: This is broken and needs to be fixed @Udomkarn
 def crop_around_centre(image: np.ndarray, newX, newY, newZ):
     x, y, z = image.shape
 
@@ -31,29 +32,24 @@ def downscale_and_conditionally_crop(
         y = image.shape[1]
         z = image.shape[2]
     else:
-        raise Exception(
-            "compNumpyTransformation: invalid array dimension (at least x, y, z)"
-        )
+        raise Exception("Invalid array dimension (at least x, y, z)")
 
-    highest = max(x, y, z)
-    if highest > resolution_limit:
-        resizeRatio = resolution_limit / highest
+    max_side_res = max(x, y, z)
+    if max_side_res > resolution_limit:
+        resize_ratio = resolution_limit / max_side_res
         image = scipy.ndimage.interpolation.zoom(
-            image, [resizeRatio, resizeRatio, resizeRatio]
+            image, [resize_ratio, resize_ratio, resize_ratio]
         )
 
         x = image.shape[0]
         y = image.shape[1]
         z = image.shape[2]
-        highest = max(x, y, z)
-        if highest > resolution_limit:
+        max_side_res = max(x, y, z)
+        if max_side_res > resolution_limit:
             image = crop_around_centre(
                 image, resolution_limit, resolution_limit, resolution_limit
             )
-
-        logging.info("compNumpyTransformation: array resize done")
     else:
-        logging.info(
-            "compNumpyTransformation: array smaller than limit given, no resize has been done"
-        )
+        logging.info("Array smaller than limit given, no resize has been done")
+
     return image

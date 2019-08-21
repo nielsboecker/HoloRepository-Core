@@ -1,11 +1,5 @@
 import logging
-import os
-import pathlib
 import subprocess
-
-new_cwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
-
-success = True
 
 
 def call_obj2gltf(obj_input_path: str, glb_output_path: str):
@@ -20,9 +14,6 @@ def call_obj2gltf(obj_input_path: str, glb_output_path: str):
 
     completed_process = subprocess.run(obj2gltf_command)
     if completed_process.returncode == 0:
-        logging.info("obj2glb: conversion complete")
+        logging.info("obj2gltf wrapper: Conversion succeeded")
     else:
-        raise Exception("obj2glb: conversion failed")
-
-    logging.info("obj2glb: done")
-    return glb_output_path
+        raise Exception("obj2gltf wrapper: Conversion failed")

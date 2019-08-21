@@ -79,7 +79,9 @@ def normalise_dicom(dicom_image_array: np.ndarray, input_path: str):
     dicom_dataset: List[pydicom.dataset.FileDataset] = read_dicom_dataset(input_path)
     dicom_sample_slice = dicom_dataset[0]
 
-    logging.info("Shape before resampling\t" + repr(dicom_image_array.shape))
+    logging.info("Normalising DICOM image to compensate slice thickness distortion")
+    logging.info(f"Shape before normalising\t{dicom_image_array.shape}")
+
     # Determine current pixel spacing
     try:
         spacing = map(
@@ -113,7 +115,7 @@ def normalise_dicom(dicom_image_array: np.ndarray, input_path: str):
     dicom_image_array = scipy.ndimage.interpolation.zoom(
         dicom_image_array, real_resize_factor
     )
-    logging.info("Shape after resampling\t" + repr(dicom_image_array.shape))
+    logging.info(f"Shape after normalising\t{dicom_image_array.shape}")
 
     return dicom_image_array
 

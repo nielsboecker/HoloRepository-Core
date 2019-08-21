@@ -4,6 +4,7 @@ import coloredlogs
 from flask import Flask, request
 from flask_json import as_json
 
+from config import FLASK_ENV, APP_PORT
 from core.pipelines.pipelines_controller import get_pipelines_dict
 from jobs import jobs_controller
 from jobs.jobs_state import activate_periodic_garbage_collection, get_current_state
@@ -64,5 +65,4 @@ def get_job_log(job_id: str):
 
 if __name__ == "__main__":
     activate_periodic_garbage_collection()
-    # TODO: port shouldn't be hard-coded here
-    app.run(debug=False, port=3100)
+    app.run(debug=FLASK_ENV == "development", port=int(APP_PORT))

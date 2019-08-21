@@ -1,5 +1,6 @@
 import sys
 
+from config import MODEL_ABDOMINAL_SEGMENTATION_HOST, MODEL_ABDOMINAL_SEGMENTATION_PORT
 from core.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 from core.adapters.nifti_file import (
     convert_dicom_np_ndarray_to_nifti_image,
@@ -18,13 +19,7 @@ from jobs.jobs_io import (
     get_result_file_path_for_job,
     get_temp_file_path_for_job,
 )
-
-# TODO: modelurl shouldnt be in here
-# TODO: host and port from config / env variable
 from jobs.jobs_state import JobState, update_job_state
-
-model_host = "http://localhost"
-model_port = 5000
 
 
 def run(job_id: str, input_endpoint: str, medical_data: dict):
@@ -46,7 +41,10 @@ def run(job_id: str, input_endpoint: str, medical_data: dict):
     update_job_state(job_id, JobState.PERFORMING_SEGMENTATION.name, logger)
     segmented_output_file_path = get_temp_file_path_for_job(job_id, "segmented.nii")
     niftynet.call_model(
-        model_host, model_port, nifti_output_path, segmented_output_file_path
+        MODEL_ABDOMINAL_SEGMENTATION_HOST,
+        int(MODEL_ABDOMINAL_SEGMENTATION_PORT),
+        nifti_output_path,
+        segmented_output_file_path,
     )
 
     update_job_state(job_id, JobState.POSTPROCESSING.name, logger)

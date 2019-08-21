@@ -2,17 +2,16 @@ import logging
 import uuid
 from multiprocessing import Pool
 
+from config import NUM_OF_WORKER_PROCESSES
 from core.pipelines.pipelines_controller import (
     get_pipelines_ids_list,
     load_pipeline_dynamically,
 )
-from jobs.jobs_state import JobState, update_job_state
 from jobs.jobs_io import create_directory_for_job, get_logger_for_job
+from jobs.jobs_state import JobState, update_job_state
 
-# TODO: use config / env var
-num_cpus = 4
-process_pool = Pool(num_cpus)
-logging.warning(f"Started process pool with {num_cpus} worker processes")
+process_pool = Pool(int(NUM_OF_WORKER_PROCESSES))
+logging.warning(f"Started process pool with {NUM_OF_WORKER_PROCESSES} worker processes")
 
 
 def start_new_job(job_request: dict):

@@ -24,7 +24,7 @@ class UserBehavior(TaskSet):
 
     @task
     def getImagingStudiesOfPatients(self):
-        self.client.get("/api/v1/imagingStudies/pids=p100,p102")
+        self.client.get("/api/v1/imagingStudies?pids=p100,p102")
 
     @task
     def getSpecificImagingStudies(self):

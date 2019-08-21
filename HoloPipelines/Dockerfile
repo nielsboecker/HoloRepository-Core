@@ -7,13 +7,13 @@ RUN mkdir -p ${APP_DIR}
 WORKDIR ${APP_DIR}
 
 COPY requirements.txt ./
-
-RUN pip install -r requirements.txt
 RUN pip install gunicorn
+RUN pip install -r requirements.txt
 
-COPY server.py ./
 COPY core ./core
 COPY jobs ./jobs
+COPY server.py ./
+COPY config.py ./
 
 EXPOSE ${PORT}
 

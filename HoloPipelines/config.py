@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 
@@ -48,4 +49,8 @@ if not all(
         HOLOSTORAGE_ACCESSOR_PORT,
     ]
 ):
-    sys.exit("Fatal error: Not all required environment variables are set")
+    logging.error("Fatal error: Not all required environment variables are set")
+    # Note: This return code is kind of a hack. When invoked through gunicorn,
+    # any other return code seems to restart the server, which is usually good.
+    # In this case however, it is preferable to error out immediately.
+    sys.exit(4)

@@ -127,7 +127,7 @@ The file `tests/HoloPipelines.postman_collection.json` contains a Postman collec
 
 ```shell
 docker build . -t holopipelines-core
-docker run --rm -p 3100:3100 holopipelines-core:latest
+docker run --rm -p 3100:3100 --env-file .env holopipelines-core:latest
 ```
 
 ## API specification

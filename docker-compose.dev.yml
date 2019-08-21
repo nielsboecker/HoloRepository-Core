@@ -19,6 +19,7 @@ services:
       - "3001:3001"
   holopipelines-core:
     build: ./HoloPipelines
+    env_file: ./HoloPipelines/.env
     ports:
       - "3100:3100"
   holostorage-accessor:

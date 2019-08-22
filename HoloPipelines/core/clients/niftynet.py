@@ -22,7 +22,7 @@ def call_model(
     with open(input_file_path, "rb") as input_fie:
         files = {"file": input_fie}
         response = requests.post(
-            model_endpoint, files=files, timeout=int(NIFTYNET_MODEL_TIMEOUT)
+            model_endpoint, files=files, timeout=NIFTYNET_MODEL_TIMEOUT
         )
         if response.status_code != 200:
             raise Exception(f"HTTP response {response.status_code}: {response.content}")

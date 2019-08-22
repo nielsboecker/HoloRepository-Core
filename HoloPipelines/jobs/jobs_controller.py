@@ -15,7 +15,7 @@ from core.pipelines.pipelines_controller import (
 from jobs.jobs_io import create_directory_for_job, get_logger_for_job
 from jobs.jobs_state import JobState, update_job_state
 
-process_pool = Pool(int(NUM_OF_WORKER_PROCESSES))
+process_pool = Pool(NUM_OF_WORKER_PROCESSES)
 logging.warning(f"Started process pool with {NUM_OF_WORKER_PROCESSES} worker processes")
 
 

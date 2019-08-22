@@ -1,6 +1,8 @@
-# Note: This file allows the other tests to import the packages to be tested, as explained at
-# https://docs.python-guide.org/writing/structure/#test-suite.
-# (currently unneeded, as all tests use the subprocess call ... hope this gets fixed though)
+"""
+Note: This file allows the other tests to import the packages to be tested, as explained at
+https://docs.python-guide.org/writing/structure/#test-suite.
+(currently unneeded, as all tests are deprecated after refactoring ... hope this gets fixed!)
+"""
 
 import os
 import sys

@@ -1,3 +1,7 @@
+"""
+This module contains functionality related to transforming OBJ to GLB files.
+"""
+
 from core.wrappers.obj2gltf import call_obj2gltf
 
 

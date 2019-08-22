@@ -1,3 +1,8 @@
+"""
+This module contains functionality related to reading, writing and
+transforming NIfTI files.
+"""
+
 import logging
 
 import nibabel
@@ -60,7 +65,7 @@ def extract_np_array_from_nifti_image_and_normalise(
 def read_nifti_image(input_path: str):
     """
     Reads NIfTI image from disk.
-    :param input_path: Path to the NIfTI image
+    :param input_path: path to the NIfTI image
     :return: NIfTI image represented as nibabel.nifti1.Nifti1Image
     """
     # Note: Workaround according to https://github.com/nipy/nibabel/issues/626
@@ -68,12 +73,25 @@ def read_nifti_image(input_path: str):
     return nibabel.load(input_path)
 
 
-def read_nifti_as_np_array_and_normalise(input_path: str):
+def read_nifti_as_np_array(input_path: str, normalise: bool = True):
+    """
+    Reads a NIfTI image as Nifti1Image and then transforms it to a numpy array.
+    :param input_path: path to the NIfTI image
+    :param normalise: if True, will perform normalisation to compensate distortion
+    through slice thickness. Can be set to False when the input data has been
+    normalised in an earlier step of a pipeline already
+    :return:
+    """
     nifti_image: nibabel.nifti1.Nifti1Image = read_nifti_image(input_path)
-    normalised_nifti_image_as_np_array: np.ndarray = extract_np_array_from_nifti_image_and_normalise(
-        nifti_image
-    )
-    return normalised_nifti_image_as_np_array
+    if normalise:
+        nifti_image_as_np_array: np.array = extract_np_array_from_nifti_image_and_normalise(
+            nifti_image
+        )
+    else:
+        nifti_image_as_np_array: np.array = extract_np_array_from_nifti_image(
+            nifti_image
+        )
+    return nifti_image_as_np_array
 
 
 def write_nifti_image(nifti_image: nibabel.nifti1.Nifti1Image, output_file_path: str):

@@ -7,7 +7,7 @@ import MenuHeader from "../../components/app/core/MenuHeader";
 import ContentContainer from "../../components/app/core/ContentContainer";
 import FilterStatusMessageBar from "../../components/app/core/FilterStatusMessageBar";
 import PlainContentContainer from "../../components/app/core/PlainContentContainer";
-import DeviceConnectorPage from "../../components/app/DeviceConnectorPage";
+import HoloLensRemoteLoginPage from "../../components/app/HoloLensRemoteLoginPage";
 import HologramsCommandBar from "../../components/app/holograms/HologramsCommandBar";
 import HologramsDetailsList from "../../components/app/holograms/HologramsDetailsList";
 import HologramsListPage from "../../components/app/holograms/HologramsListPage";
@@ -57,7 +57,7 @@ it("renders PlainContentContainer without crashing", () => {
 });
 
 it("renders DeviceConnectorPage without crashing", () => {
-  shallow(<DeviceConnectorPage />);
+  shallow(<HoloLensRemoteLoginPage />);
 });
 
 it("renders HologramsCommandBar without crashing", () => {

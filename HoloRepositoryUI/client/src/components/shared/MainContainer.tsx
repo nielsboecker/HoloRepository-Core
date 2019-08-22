@@ -3,9 +3,9 @@ import { Router } from "@reach/router";
 import AppContainer from "../app/core/AppContainer";
 import PublicContainer from "../public/PublicContainer";
 import AboutPage from "../public/AboutPage";
-import LandingPage from "../public/LandingPage";
+import LoginPage from "../public/LoginPage";
 import ErrorPage from "../public/ErrorPage";
-import DeviceConnectorPage from "../app/DeviceConnectorPage";
+import HoloLensRemoteLoginPage from "../app/HoloLensRemoteLoginPage";
 import HologramsListPage from "../app/holograms/HologramsListPage";
 import PatientListPage from "../app/patients/PatientListPage";
 import PatientDetailPage from "../app/patient/PatientDetailPage";
@@ -18,14 +18,14 @@ class MainContainer extends Component {
       <>
         <Router>
           <PublicContainer path="/">
-            <LandingPage default path="start" />
+            <LoginPage default path="start" />
             <AboutPage path="about" />
           </PublicContainer>
 
           <AppContainer path="app">
             <PatientListPage path="patients" />
             <PatientDetailPage path="patients/:pid" />
-            <DeviceConnectorPage path="devices" />
+            <HoloLensRemoteLoginPage path="devices" />
             <HologramsListPage path="holograms" />
             <NewHologramPage path="holograms/new" />
             <ProfileInformationPage path="profile" />

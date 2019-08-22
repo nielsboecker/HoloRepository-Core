@@ -3,7 +3,7 @@ import { RouteComponentProps } from "@reach/router";
 import ContentContainer from "./core/ContentContainer";
 import { PropsWithContext, withAppContext } from "../shared/AppState";
 
-class DeviceConnectorPage extends Component<RouteComponentProps & PropsWithContext> {
+class HoloLensRemoteLoginPage extends Component<RouteComponentProps & PropsWithContext> {
   render() {
     return (
       <ContentContainer
@@ -20,4 +20,4 @@ class DeviceConnectorPage extends Component<RouteComponentProps & PropsWithConte
   }
 }
 
-export default withAppContext(DeviceConnectorPage);
+export default withAppContext(HoloLensRemoteLoginPage);

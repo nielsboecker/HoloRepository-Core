@@ -14,6 +14,7 @@ import appLogo from "../../assets/logo/2x/logo_and_font@2x.png";
 import MainFooter from "../shared/MainFooter";
 import { PropsWithContext, withAppContext } from "../shared/AppState";
 
+//The practitioners list are hard-coded now, because the authentication is just a proof-of-concept
 const options: IDropdownOption[] = [
   { key: "a100/03825", text: "Maudie Kirlin" },
   { key: "a101/03826", text: "Erlinda Franecki" },
@@ -26,7 +27,7 @@ const imageProps: IImageProps = {
   maximizeFrame: true
 };
 
-class LandingPage extends Component<RouteComponentProps & PropsWithContext> {
+class LoginPage extends Component<RouteComponentProps & PropsWithContext> {
   selectedItem: string | number = "";
 
   backgroundStyle = {
@@ -64,7 +65,7 @@ class LandingPage extends Component<RouteComponentProps & PropsWithContext> {
               <Image {...(imageProps as any)} alt="app_logo" />
             </div>
             <Dropdown
-              placeholder="Select an practitioner"
+              placeholder="Select your account"
               label="Practitioner:"
               options={options}
               onChanged={item => this._onChange(item.key)}
@@ -100,8 +101,8 @@ class LandingPage extends Component<RouteComponentProps & PropsWithContext> {
     }
 
     if (typeof this.selectedItem !== "number") {
-      let id = this.selectedItem.substring(0, this.selectedItem.indexOf("/"));
-      let pin = this.selectedItem.substring(this.selectedItem.indexOf("/") + 1);
+      const id = this.selectedItem.substring(0, this.selectedItem.indexOf("/"));
+      const pin = this.selectedItem.substring(this.selectedItem.indexOf("/") + 1);
       this.props.context!.handleLogin(id, pin);
     }
   };
@@ -111,4 +112,4 @@ class LandingPage extends Component<RouteComponentProps & PropsWithContext> {
   };
 }
 
-export default withAppContext(LandingPage);
+export default withAppContext(LoginPage);

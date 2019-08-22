@@ -52,7 +52,7 @@ class App extends Component<any, IAppState> {
       console.log("Fetched data: pipelines", pipelines);
       this._handlePipelinesChange(pipelines || []);
     });
-    this.setState({pin});
+    this.setState({ pin });
   };
 
   private _fetchPatientSpecificData = () => {
@@ -69,7 +69,7 @@ class App extends Component<any, IAppState> {
       for (const pid in combinedResult) {
         const studies = combinedResult[pid];
         const patient = patients[pid];
-        if (patient !== undefined) {
+        if (patient) {
           patient.imagingStudies = studies;
         }
         this.setState({

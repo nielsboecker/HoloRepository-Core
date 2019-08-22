@@ -72,11 +72,16 @@ def remove_temporary_data_for_job(job_id: str) -> None:
     Removes all transient job data except for the log file.
     """
     logging.info(f"Removing temporary files for job '{job_id}")
-    # input, output, temp
-    for subdirectory_path in get_subdirectories_paths_for_job(job_id):
-        shutil.rmtree(subdirectory_path)
-    # job.state
-    os.remove(get_state_file_path_for_job(job_id))
+    try:
+        # input, output, temp
+        for subdirectory_path in get_subdirectories_paths_for_job(job_id):
+            shutil.rmtree(subdirectory_path)
+
+        # job.state
+        os.remove(get_state_file_path_for_job(job_id))
+    except FileNotFoundError as e:
+        # Can happen if another worker process already removed this
+        logging.warning(f"Error while removing: {e}")
 
 
 def remove_log_file_for_job(job_id: str) -> None:
@@ -88,18 +93,22 @@ def get_all_job_subdirectory_names() -> List[str]:
     return [dir.name for dir in os.scandir(jobs_root) if dir.is_dir()]
 
 
-def read_state_file_for_job(jod_id: str) -> Tuple[str, float]:
+def read_state_file_for_job(jod_id: str) -> Union[Tuple[str, float], Tuple[None, None]]:
     """
     Reads state file and returns state and time in seconds since last modification.
     """
     state_file_path = get_state_file_path_for_job(jod_id)
-    with open(state_file_path, "r") as state_file:
-        state = state_file.read()
 
-    modified_time_epoch_seconds = os.path.getmtime(state_file_path)
-    now_epoch_seconds = time.time()
+    try:
+        with open(state_file_path, "r") as state_file:
+            state = state_file.read()
 
-    return state, now_epoch_seconds - modified_time_epoch_seconds
+        modified_time_epoch_seconds = os.path.getmtime(state_file_path)
+        now_epoch_seconds = time.time()
+        return state, now_epoch_seconds - modified_time_epoch_seconds
+    except FileNotFoundError as e:
+        logging.warning(f"State file error: '{e}''")
+        return None, None
 
 
 def state_file_for_job_exists(job_id: str) -> bool:
@@ -108,8 +117,13 @@ def state_file_for_job_exists(job_id: str) -> bool:
 
 def write_state_file_for_job(jod_id: str, state: str) -> None:
     state_file_path = get_state_file_path_for_job(jod_id)
-    with open(state_file_path, "w") as state_file:
-        state_file.write(state)
+
+    try:
+        with open(state_file_path, "w") as state_file:
+            state_file.write(state)
+    except FileNotFoundError as e:
+        # handle rare errors where state would be changed after moving to finished jobs
+        logging.warning(f"Ignoring attempt to update state: {e}")
 
 
 def get_logger_for_job(job_id: str):
@@ -131,16 +145,16 @@ def get_logger_for_job(job_id: str):
     return logger
 
 
-def get_log_file_path_for_job(job_id: str) -> Union[str, None]:
+def get_log_file_path_for_job(job_id: str, finished=False) -> str:
     """
-    Returns the path to a log file. Looks for current jobs first. If nothing found,
-    looks for finished jobs. If still not found, returns None.
+    Returns the path to a log file.
+    :param finished: check in finished jobs directory instead of regular
     """
     path = get_directory_path_for_job(job_id)
-    if os.path.isdir(path):
-        return f"{path}/job.log"
-    elif os.path.isdir(path.replace(jobs_root, finished_jobs_root)):
-        return f"{path.replace(jobs_root, finished_jobs_root)}/job.log"
+    if finished:
+        path = path.replace(jobs_root, finished_jobs_root)
+
+    return f"{path}/job.log"
 
 
 def get_state_file_path_for_job(job_id: str):
@@ -152,7 +166,11 @@ def read_log_file_for_job(job_id: str) -> str:
     :return: the complete log for a specific job as text or empty string
     """
     log_path = get_log_file_path_for_job(job_id)
+    if not os.path.exists(log_path):
+        # Try falling back on finished jobs
+        log_path = get_log_file_path_for_job(job_id, finished=True)
     if not log_path:
+        logging.warning(f"No log found for '{job_id}'")
         return ""
 
     with open(log_path, "r") as log_file:

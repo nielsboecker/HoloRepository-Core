@@ -15,7 +15,7 @@ from core.pipelines.pipelines_controller import (
 from jobs.jobs_io import create_directory_for_job, get_logger_for_job
 from jobs.jobs_state import JobState, update_job_state
 
-process_pool = Pool(int(NUM_OF_WORKER_PROCESSES))
+process_pool = Pool(NUM_OF_WORKER_PROCESSES)
 logging.warning(f"Started process pool with {NUM_OF_WORKER_PROCESSES} worker processes")
 
 
@@ -67,7 +67,7 @@ def init_job(job_request: dict):
     job_id = create_random_job_id()
     create_directory_for_job(job_id)
     logger = get_logger_for_job(job_id)
-    update_job_state(job_id, JobState.CREATED.name, logger)
+    update_job_state(job_id, JobState.CREATED.name, logger, new=True)
 
     pipeline_id = job_request["plid"]
     input_endpoint = job_request["imagingStudyEndpoint"]
@@ -85,4 +85,4 @@ def init_job(job_request: dict):
 
 
 def create_random_job_id():
-    return str(uuid.uuid4()).replace("-", "")[:10]
+    return str(uuid.uuid4()).replace("-", "")[:16]

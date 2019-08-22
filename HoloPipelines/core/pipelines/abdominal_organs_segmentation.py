@@ -53,7 +53,7 @@ def run(job_id: str, input_endpoint: str, medical_data: dict):
     segmented_output_file_path = get_temp_file_path_for_job(job_id, "segmented.nii")
     niftynet.call_model(
         MODEL_ABDOMINAL_SEGMENTATION_HOST,
-        int(MODEL_ABDOMINAL_SEGMENTATION_PORT),
+        MODEL_ABDOMINAL_SEGMENTATION_PORT,
         nifti_output_path,
         segmented_output_file_path,
     )

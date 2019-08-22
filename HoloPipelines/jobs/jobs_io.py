@@ -11,43 +11,43 @@ import logging
 import os
 import shutil
 import time
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import coloredlogs
 
-job_directories_root = "./__jobs__"
-finished_jobs_directories_root = "./__finished_jobs__"
-job_subdirectories = ["input", "temp", "output"]
+jobs_root = "./__jobs__"
+finished_jobs_root = "./__finished_jobs__"
+subdirectories_per_job = ["input", "temp", "output"]
 
 
 def get_directory_path_for_job(job_id: str):
-    return f"{job_directories_root}/{job_id}"
+    return f"{jobs_root}/{job_id}"
 
 
 def get_subdirectories_paths_for_job(job_id: str):
     job_directory_path = get_directory_path_for_job(job_id)
     return [
         f"{job_directory_path}/{subdirectory_name}"
-        for subdirectory_name in job_subdirectories
+        for subdirectory_name in subdirectories_per_job
     ]
 
 
 def get_temp_file_path_for_job(job_id: str, file_name: str):
-    return f"{job_directories_root}/{job_id}/temp/{file_name}"
+    return f"{jobs_root}/{job_id}/temp/{file_name}"
 
 
 def get_result_file_path_for_job(job_id: str):
-    return f"{job_directories_root}/{job_id}/output/out.glb"
+    return f"{jobs_root}/{job_id}/output/out.glb"
 
 
 def get_input_directory_path_for_job(job_id: str):
-    return f"{job_directories_root}/{job_id}/input"
+    return f"{jobs_root}/{job_id}/input"
 
 
 def init_create_job_state_root_directories() -> None:
     logging.info("Creating job state root directories")
-    os.makedirs(job_directories_root, exist_ok=True)
-    os.makedirs(finished_jobs_directories_root, exist_ok=True)
+    os.makedirs(jobs_root, exist_ok=True)
+    os.makedirs(finished_jobs_root, exist_ok=True)
 
 
 def create_directory_for_job(job_id: str):
@@ -62,7 +62,7 @@ def create_directory_for_job(job_id: str):
 
 def move_job_to_finished_jobs_directory(job_id: str) -> None:
     old_path = get_directory_path_for_job(job_id)
-    new_path = old_path.replace(job_directories_root, finished_jobs_directories_root)
+    new_path = old_path.replace(jobs_root, finished_jobs_root)
     logging.info(f"Moving '{old_path}' to '{new_path}'")
     shutil.move(old_path, new_path)
 
@@ -85,7 +85,7 @@ def remove_log_file_for_job(job_id: str) -> None:
 
 
 def get_all_job_subdirectory_names() -> List[str]:
-    return [dir.name for dir in os.scandir(job_directories_root) if dir.is_dir()]
+    return [dir.name for dir in os.scandir(jobs_root) if dir.is_dir()]
 
 
 def read_state_file_for_job(jod_id: str) -> Tuple[str, float]:
@@ -131,20 +131,28 @@ def get_logger_for_job(job_id: str):
     return logger
 
 
-def get_log_file_path_for_job(job_id: str):
-    return f"{get_directory_path_for_job(job_id)}/job.log"
+def get_log_file_path_for_job(job_id: str) -> Union[str, None]:
+    """
+    Returns the path to a log file. Looks for current jobs first. If nothing found,
+    looks for finished jobs. If still not found, returns None.
+    """
+    path = get_directory_path_for_job(job_id)
+    if os.path.isdir(path):
+        return f"{path}/job.log"
+    elif os.path.isdir(path.replace(jobs_root, finished_jobs_root)):
+        return f"{path.replace(jobs_root, finished_jobs_root)}/job.log"
 
 
 def get_state_file_path_for_job(job_id: str):
     return f"{get_directory_path_for_job(job_id)}/job.state"
 
 
-def read_log_file_for_job(job_id: str):
+def read_log_file_for_job(job_id: str) -> str:
     """
     :return: the complete log for a specific job as text or empty string
     """
     log_path = get_log_file_path_for_job(job_id)
-    if not os.path.exists(log_path):
+    if not log_path:
         return ""
 
     with open(log_path, "r") as log_file:

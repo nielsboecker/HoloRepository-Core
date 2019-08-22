@@ -1,3 +1,9 @@
+"""
+This module contains functionality related to communicating with the
+HoloStorageAccessor service. This is where requests should be prepared
+such that they comply with the API spec, and the network calls are made.
+"""
+
 import json
 import logging
 from datetime import datetime

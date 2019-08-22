@@ -1,3 +1,9 @@
+"""
+This module loads the variables defined in the .env file (if it exists)
+into the environment and loads configuration variables for other components
+to import.
+"""
+
 import logging
 import os
 import sys

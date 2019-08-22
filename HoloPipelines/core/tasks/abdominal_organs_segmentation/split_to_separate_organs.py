@@ -1,7 +1,11 @@
-# this comp generate numpy lists list from unique value from the numpy list input (comp exclusive for abdomen model at the moment)
+"""
+This module contains the functionality of the abdominal_organs_segmentation pipeline
+of splitting the combined result into multiple sub-results.
+"""
 
 # TODO: Depending on how we deciide for this pipeline, this component may get removed.
-# Otherwise, separate organs need to be merged again!
+# Otherwise, separate organs need to be merged again! (can also be in this task, which
+# should then be renamed though)
 # TODO: If we keep this, refactor and verify
 # Refactoring should include only doing the OBJs in here, and transforming to GLB on
 # pipeline level

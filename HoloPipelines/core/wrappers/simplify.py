@@ -8,15 +8,15 @@ STAT_OWNER_EXECUTABLE = stat.S_IEXEC
 current_script_directory = os.path.dirname(os.path.realpath(__file__))
 
 
-def call_simplify(obj_input_path: str, obj_output_path: str, simplification_ratio: int):
+def call_simplify(
+    obj_input_path: str, obj_output_path: str, simplification_ratio: float
+):
     # NOTE: link to simplify repository https://github.com/sp4cerat/Fast-Quadric-Mesh-Simplification
     simplify_command = [
         "./simplify",
-        "--input",
         obj_input_path,
-        "--output",
         obj_output_path,
-        simplification_ratio,
+        str(simplification_ratio),
     ]
 
     os.chmod("simplify", STAT_OWNER_EXECUTABLE)

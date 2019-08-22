@@ -39,10 +39,14 @@ The modules that form a pipeline can perform different tasks:
 When jobs are triggered, they will automatically create and maintain their local
  working area in `<app-root-dir>/__jobs__/<job-id>`.
  
-This directory contains subdirectories for `input`, `output` and `temp` data. The
- automatic garbage collection usually deletes all files. Logs for failed jobs are
- kept around by default. If you want to keep all files or keep all log files, refer
- to the [configuration](#configuration).
+This directory contains subdirectories for `input`, `output` and `temp`
+data. Furthermore, a `job.log` file contains the job-specific logs and a
+`job.state` file contains the current state. The automatic garbage
+collection usually deletes all binary files, but keeps logs around by
+default. For production deployment, this should be changed (or the
+`__finished_jobs__` directory should be emptied regularly). If you want
+to keep all files or change other settings, refer to the
+[configuration](#configuration).
 
 ## Pre-trained NN models
 

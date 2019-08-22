@@ -70,9 +70,6 @@ def read_nifti_image(input_path: str):
 def read_nifti_as_np_array_and_normalise(input_path: str):
     nifti_image: nibabel.nifti1.Nifti1Image = read_nifti_image(input_path)
     normalised_nifti_image_as_np_array: np.ndarray = normalise_nifti_image(nifti_image)
-    # normalised_nifti_image_as_np_array: np.array = extract_np_array_from_nifti_image(
-    #    normalised_nifti_image
-    # )
     return normalised_nifti_image_as_np_array
 
 

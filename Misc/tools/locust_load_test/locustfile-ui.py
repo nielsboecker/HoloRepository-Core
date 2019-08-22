@@ -7,8 +7,8 @@ class UserBehavior(TaskSet):
         self.client.get("/api/v1/patients")
 
     @task
-    def getMultiplePatients(self):
-        self.client.get("/api/v1/patients?pids=p100,p102")
+    def getPatientsByPractitioner(self):
+        self.client.get("/api/v1/patients?practitioner=a100")
 
     @task
     def getSpecificPatient(self):

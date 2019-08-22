@@ -2,13 +2,14 @@ import Client from "fhir-kit-client";
 import t from "io-ts";
 import { decode, isDecodeError } from "io-ts-promise";
 import { getAdapterFunction } from "../adapters/fhirAdapter";
-import { FHIR_SERVER_BASE_URL } from "../../config";
 import { R4 } from "@ahryman40k/ts-fhir-types";
 import { IImagingStudy, IPatient, IPractitioner } from "../../../../types";
 import logger from "../logger";
 
 const _fhirClient = new Client({
-  baseUrl: FHIR_SERVER_BASE_URL
+  // Note: This will lead to a merge conflict with Fanbo's branch, who extracted the variable
+  // to .env file. Accept his change and put this new URL into the .env file, future developer!
+  baseUrl: "https://holoehr-demo.azurewebsites.net"
 });
 
 export type InternalType = IPatient | IPractitioner | IImagingStudy;

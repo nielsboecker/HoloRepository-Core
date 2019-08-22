@@ -25,8 +25,9 @@ class App extends Component<any, IAppState> {
   }
 
   componentDidMount(): void {
-    // Note: SMART login is currently not implemented, so a hard-coded practitioner will be the user
-    const practitionerId = "b0016666-1924-455d-8b16-92c631fa5207";
+    // Note: This will lead to a merge conflict with Fanbo's branch. Accept his change
+    // which should use a100-102 practitioners, future developer!
+    const practitionerId = "a100";
     BackendServerService.getPractitioner(practitionerId).then(practitioner => {
       console.log("Fetched data: practitioner", practitioner);
       this._handlePractitionerChange(practitioner!);

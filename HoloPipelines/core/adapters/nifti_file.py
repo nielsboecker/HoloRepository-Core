@@ -14,7 +14,9 @@ def extract_np_array_from_nifti_image(image_data: nibabel.nifti1.Nifti1Image):
     return np.array(image_data.dataobj)
 
 
-def normalise_nifti_image(image_data: nibabel.nifti1.Nifti1Image):
+def extract_np_array_from_nifti_image_and_normalise(
+    image_data: nibabel.nifti1.Nifti1Image
+):
     """
     After loading a NIfTI file, this function resamples it according to the file headers
     in order to compensate different slice thickness.
@@ -25,9 +27,7 @@ def normalise_nifti_image(image_data: nibabel.nifti1.Nifti1Image):
 
     original_shape = image_data_as_np_array.shape[:3]
 
-    # TODO: document what happens here
-    # TODO: _affline seems like a typo and even as "affine" i don't see what it should do?
-    image_data._affline = None
+    # getting slice thickness (z) in relative to x and y from the header data
     spacing = map(
         float,
         (
@@ -40,11 +40,12 @@ def normalise_nifti_image(image_data: nibabel.nifti1.Nifti1Image):
     )
     spacing = np.array(list(spacing))
 
+    # calculate resize factor
     new_spacing = [1, 1, 1]
     resize_factor = spacing / new_spacing
     new_real_shape = original_shape * resize_factor
     new_shape = np.round(new_real_shape)
-    real_resize_factor = new_shape / image_data.shape[:3]
+    real_resize_factor = new_shape / image_data_as_np_array.shape[:3]
 
     image_data_as_np_array = scipy.ndimage.interpolation.zoom(
         image_data_as_np_array, real_resize_factor
@@ -69,7 +70,9 @@ def read_nifti_image(input_path: str):
 
 def read_nifti_as_np_array_and_normalise(input_path: str):
     nifti_image: nibabel.nifti1.Nifti1Image = read_nifti_image(input_path)
-    normalised_nifti_image_as_np_array: np.ndarray = normalise_nifti_image(nifti_image)
+    normalised_nifti_image_as_np_array: np.ndarray = extract_np_array_from_nifti_image_and_normalise(
+        nifti_image
+    )
     return normalised_nifti_image_as_np_array
 
 

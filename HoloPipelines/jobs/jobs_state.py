@@ -5,8 +5,8 @@ This module manages the state of current jobs and performs automatic garbage col
 import logging
 import threading
 import time
-from datetime import datetime
 from enum import Enum
+from typing import List
 
 from config import (
     KEEP_ALL_FILES,
@@ -14,8 +14,15 @@ from config import (
     GARBAGE_COLLECTION_INTERVAL_SECS,
     GARBAGE_COLLECTION_INACTIVE_JOB_TTL_SECS,
 )
-from jobs import jobs_state_dict
-from jobs.jobs_io import remove_directory_for_job
+from jobs.jobs_io import (
+    get_all_job_subdirectory_names,
+    read_state_file_for_job,
+    remove_temporary_data_for_job,
+    remove_log_file_for_job,
+    move_job_to_finished_jobs_directory,
+    write_state_file_for_job,
+    state_file_for_job_exists,
+)
 
 JobState = Enum(
     "JobState",
@@ -34,23 +41,23 @@ JobState = Enum(
 )
 
 
-def update_job_state(job_id: str, new_state: str, logger=logging):
+def update_job_state(job_id: str, new_state: str, logger=logging, new: bool = False):
     """
-    Updates the global dictionary that keeps track of all jobs. Note that new_state
+    Updates the state for aa job by updating the job.state file. Note that new_state
     must be a string, not an Enum, as the latter leads to problems with multiprocessing.
+    :param new: True if this is the first state update for a job
     :param job_id: ID of the job to update
     :param new_state: new state (preferably use the "name" of a JobState Enum constant)
     :param logger: optional override to the default logger (use to write to file log)
     """
-    if job_id in jobs_state_dict:
-        prev_state = jobs_state_dict[job_id]["state"]
-        prev_timestamp = jobs_state_dict[job_id]["timestamp"]
-        time_diff = (datetime.now() - prev_timestamp).total_seconds()
-        logger.info(f"[{job_id}] Finished state {prev_state} in {time_diff} seconds")
+    if not new:
+        prev_state, prev_duration = read_state_file_for_job(job_id)
+        logger.info(
+            f"[{job_id}] Finished state {prev_state} in {prev_duration} seconds"
+        )
 
-    new_status_for_job = {"state": new_state, "timestamp": datetime.now()}
-    logger.info(f"[{job_id}] Entering next state => {new_state}")
-    jobs_state_dict[job_id] = new_status_for_job
+    logger.info(f"[{job_id}] Entering state => {new_state}")
+    write_state_file_for_job(job_id, new_state)
 
 
 def get_current_state(job_id: str):
@@ -58,8 +65,9 @@ def get_current_state(job_id: str):
     :param job_id: ID of the job to query
     :return: Current <JobState.name> or False if not found
     """
-    if job_id in jobs_state_dict:
-        return jobs_state_dict[job_id]["state"]
+    state, age = read_state_file_for_job(job_id)
+    if state:
+        return state, age
     else:
         logging.warning(f"Could not get current state for job '{job_id}'")
         return False
@@ -76,11 +84,19 @@ def remove_job(job_id: str, success: bool = True):
     :param success: True if job terminated successfully as intended, False otherwise
     """
     logging.info(f"Garbage collection | Removing job '{job_id}' (success={success})")
-    jobs_state_dict.pop(job_id)
 
+    # clean up files
     if not KEEP_ALL_FILES:
-        keep_log_file = not success or KEEP_ALL_LOG_FILES
-        remove_directory_for_job(job_id, keep_log_file)
+        remove_temporary_data_for_job(job_id)
+    if success and not KEEP_ALL_LOG_FILES:
+        remove_log_file_for_job(job_id)
+
+    # move directory (empty or with just log file remaining) to finished jobs
+    move_job_to_finished_jobs_directory(job_id)
+
+
+def get_list_of_active_jobs() -> List[str]:
+    return get_all_job_subdirectory_names()
 
 
 def perform_garbage_collection():
@@ -89,23 +105,27 @@ def perform_garbage_collection():
     inactive for a long period of time, and conditionally removes them.
     """
     while True:
+        active_job_ids = get_list_of_active_jobs()
+
         logging.info(
-            f"Global state | {len(jobs_state_dict)} jobs active:"
-            f" {list(jobs_state_dict.keys())}"
+            f"Global state | {len(active_job_ids)} jobs active: {active_job_ids}"
         )
 
-        for job_id in list(jobs_state_dict):
-            current_state = jobs_state_dict[job_id]["state"]
-            current_timestamp = jobs_state_dict[job_id]["timestamp"]
-            time_diff = (datetime.now() - current_timestamp).total_seconds()
+        for job_id in active_job_ids:
+            if not state_file_for_job_exists(job_id):
+                # Note: To avoid errors for newly created jobs
+                logging.warning(f"skipping state check for job '{job_id}'")
+                continue
 
-            if current_state == JobState.FINISHED.name:
+            state, age = read_state_file_for_job(job_id)
+
+            if state == JobState.FINISHED.name:
                 remove_job(job_id, success=True)
             # After TTl seconds of unchanged status, job is considered dead and removed
-            elif time_diff > int(GARBAGE_COLLECTION_INACTIVE_JOB_TTL_SECS):
+            elif age > GARBAGE_COLLECTION_INACTIVE_JOB_TTL_SECS:
                 remove_job(job_id, success=False)
 
-        time.sleep(int(GARBAGE_COLLECTION_INTERVAL_SECS))
+        time.sleep(GARBAGE_COLLECTION_INTERVAL_SECS)
 
 
 def activate_periodic_garbage_collection():

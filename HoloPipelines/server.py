@@ -14,7 +14,7 @@ from config import FLASK_ENV, APP_PORT
 from core.pipelines.pipelines_controller import get_pipelines_dict
 from jobs import jobs_controller
 from jobs.jobs_state import activate_periodic_garbage_collection, get_current_state
-from jobs.jobs_io import read_log_file_for_job
+from jobs.jobs_io import read_log_file_for_job, init_create_job_state_root_directories
 
 log_format = "%(asctime)s | %(name)s | %(levelname)s | %(message)s'"
 coloredlogs.install(level=logging.DEBUG, fmt=log_format)
@@ -53,9 +53,9 @@ def get_job_state(job_id: str):
     :return: JSON response {state: <JobState.name>} or {message: <error_message>} with
     according HTTP response code set
     """
-    current_state = get_current_state(job_id)
-    if current_state:
-        return {"state": current_state}, 200
+    state, age = get_current_state(job_id)
+    if state:
+        return {"state": state, "age": age}, 200
     else:
         return {"message": f"Job '{job_id}' not found"}, 404
 
@@ -70,5 +70,6 @@ def get_job_log(job_id: str):
 
 
 if __name__ == "__main__":
+    init_create_job_state_root_directories()
     activate_periodic_garbage_collection()
-    app.run(debug=FLASK_ENV == "development", port=int(APP_PORT))
+    app.run(debug=FLASK_ENV == "development", port=APP_PORT)

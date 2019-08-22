@@ -31,12 +31,8 @@ class UserBehavior(TaskSet):
         self.client.get("/api/v1/imagingStudies/i100")
 
     @task
-    def getHolograms(self):
-        self.client.get("/api/v1/holograms")
-
-    @task
     def getMultipleHolograms(self):
-        self.client.get("/api/v1/holograms?hids=h100,h102")
+        self.client.get("/api/v1/holograms?pids=p100,p102")
 
 
 class AccessorLocust(HttpLocust):

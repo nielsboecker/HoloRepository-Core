@@ -17,7 +17,12 @@ from jobs.jobs_state import activate_periodic_garbage_collection, get_current_st
 from jobs.jobs_io import read_log_file_for_job, init_create_job_state_root_directories
 
 log_format = "%(asctime)s | %(name)s | %(levelname)s | %(message)s'"
-coloredlogs.install(level=logging.DEBUG, fmt=log_format)
+coloredlogs.install(level=logging.INFO, fmt=log_format)
+
+# Note: Code to run at import time, see https://stackoverflow.com/a/44406384/8495954
+logging.info("Running setup from server.py")
+init_create_job_state_root_directories()
+activate_periodic_garbage_collection()
 
 app = Flask(__name__)
 app.config["JSON_ADD_STATUS"] = False
@@ -70,6 +75,4 @@ def get_job_log(job_id: str):
 
 
 if __name__ == "__main__":
-    init_create_job_state_root_directories()
-    activate_periodic_garbage_collection()
     app.run(debug=FLASK_ENV == "development", port=APP_PORT)

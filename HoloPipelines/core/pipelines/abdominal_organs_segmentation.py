@@ -27,6 +27,7 @@ from core.adapters.glb_file import convert_obj_to_glb_and_write
 from core.clients import niftynet
 from core.services.np_image_manipulation import downscale_and_conditionally_crop
 from core.services.marching_cubes import generate_mesh
+
 # from core.tasks.abdominal_organs_segmentation.split_to_separate_organs import (
 #     split_to_separate_organs,
 # )
@@ -45,8 +46,6 @@ this_plid = os.path.basename(__file__).replace(".py", "")
 hu_threshold = 0
 
 
-
-
 def run(job_id: str, input_endpoint: str, medical_data: dict):
 
     logger = get_logger_for_job(job_id)
@@ -59,7 +58,6 @@ def run(job_id: str, input_endpoint: str, medical_data: dict):
     update_job_state(job_id, JobState.READING_INPUT.name, logger)
     dicom_image_array = read_dicom_as_np_ndarray_and_normalise(dicom_directory_path)
     crop_dicom_image_array = downscale_and_conditionally_crop(dicom_image_array)
-
 
     update_job_state(job_id, JobState.PREPROCESSING.name, logger)
     nifti_image = convert_dicom_np_ndarray_to_nifti_image(crop_dicom_image_array)

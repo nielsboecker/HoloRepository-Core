@@ -27,10 +27,6 @@ from core.adapters.glb_file import convert_obj_to_glb_and_write
 from core.clients import niftynet
 from core.services.np_image_manipulation import downscale_and_conditionally_crop
 from core.services.marching_cubes import generate_mesh
-
-# from core.tasks.abdominal_organs_segmentation.split_to_separate_organs import (
-#     split_to_separate_organs,
-# )
 from core.tasks.shared.receive_input import fetch_and_unzip
 from core.tasks.shared.dispatch_output import dispatch_output
 
@@ -47,7 +43,6 @@ hu_threshold = 0
 
 
 def run(job_id: str, input_endpoint: str, medical_data: dict):
-
     logger = get_logger_for_job(job_id)
     update_job_state(job_id, JobState.STARTED.name, logger)
 
@@ -68,19 +63,18 @@ def run(job_id: str, input_endpoint: str, medical_data: dict):
     segmented_output_file_path = get_temp_file_path_for_job(job_id, "segmented.nii.gz")
     niftynet.call_model(
         MODEL_ABDOMINAL_SEGMENTATION_HOST,
-        int(MODEL_ABDOMINAL_SEGMENTATION_PORT),
+        MODEL_ABDOMINAL_SEGMENTATION_PORT,
         nifti_output_path,
         segmented_output_file_path,
     )
 
+    update_job_state(job_id, JobState.POSTPROCESSING.name, logger)
     segmented_array = read_nifti_as_np_array(
         segmented_output_file_path, normalise=False
     )
     obj_output_path = get_temp_file_path_for_job(job_id, "temp.obj")
     verts, faces, norm = generate_mesh(segmented_array, hu_threshold)
     write_mesh_as_obj(verts, faces, norm, obj_output_path)
-
-    update_job_state(job_id, JobState.POSTPROCESSING.name, logger)
     convert_obj_to_glb_and_write(obj_output_path, get_result_file_path_for_job(job_id))
 
     update_job_state(job_id, JobState.DISPATCHING_OUTPUT.name, logger)

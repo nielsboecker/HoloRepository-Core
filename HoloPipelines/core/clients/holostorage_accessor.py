@@ -22,7 +22,7 @@ api_version = "v1"
 holograms_endpoint = f"{holostorage_baseurl}/api/{api_version}/holograms"
 
 
-def send_file_request_to_accessor(job_id: str, plid: str, medical_data: dict):
+def send_file_request_to_accessor(job_id: str, plid: str, medical_data: dict) -> None:
     output_file_path = get_result_file_path_for_job(job_id)
     file_size_in_kb = int(path.getsize(output_file_path) / 1024)
 
@@ -40,12 +40,11 @@ def send_file_request_to_accessor(job_id: str, plid: str, medical_data: dict):
 
     if response.status_code == 200:
         logging.info(f"Success! Created hologram: {response.json()}")
-        return True
     else:
         raise Exception(f"Failed to created hologram: {response.json()}")
 
 
-def create_meta_data(file_size_in_kb: int, plid: str):
+def create_meta_data(file_size_in_kb: int, plid: str) -> dict:
     """
     Returns a dict with the metadata fields defined HoloStorageAccessor API v1.1.0
     (fileSizeInKb, creationDate, creationDescription, contentType, creationMode)

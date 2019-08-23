@@ -5,6 +5,7 @@ start jobs and trace their progress.
 """
 
 import logging
+from typing import Tuple
 
 import coloredlogs
 from flask import Flask, request
@@ -27,7 +28,7 @@ URL_API_PREFIX = "/api/v1"
 
 @app.route(f"{URL_API_PREFIX}/pipelines", methods=["GET"])
 @as_json
-def get_pipelines():
+def get_pipelines() -> Tuple[dict, int]:
     """
     :return: JSON List of available pipelines
     """
@@ -36,7 +37,7 @@ def get_pipelines():
 
 @app.route(f"{URL_API_PREFIX}/jobs", methods=["POST"])
 @as_json
-def start_new_job():
+def start_new_job() -> Tuple[dict, int]:
     """
     Starts a new job.
     :return: JSON response {jid: <job_id>} with according HTTP response code set
@@ -49,7 +50,7 @@ def start_new_job():
 
 @app.route(f"{URL_API_PREFIX}/jobs/<job_id>/state", methods=["GET"])
 @as_json
-def get_job_state(job_id: str):
+def get_job_state(job_id: str) -> Tuple[dict, int]:
     """
     :return: JSON response {state: <JobState.name>} or {message: <error_message>} with
     according HTTP response code set
@@ -62,7 +63,7 @@ def get_job_state(job_id: str):
 
 
 @app.route(f"{URL_API_PREFIX}/jobs/<job_id>/log", methods=["GET"])
-def get_job_log(job_id: str):
+def get_job_log(job_id: str) -> Tuple[str, int]:
     """
     :return: the complete log for a specific job as text
     """

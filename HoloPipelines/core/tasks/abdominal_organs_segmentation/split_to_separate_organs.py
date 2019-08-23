@@ -11,6 +11,7 @@ of splitting the combined result into multiple sub-results.
 # pipeline level
 
 import logging
+from typing import Optional
 
 import numpy as np
 
@@ -19,7 +20,7 @@ from core.adapters.obj_file import write_mesh_as_obj
 from core.services.marching_cubes import generate_mesh
 
 
-def get_organ_name(hu_value: int):
+def get_organ_name(hu_value: int) -> Optional[str]:
     """
     Maps the "HU value" to the according organ name. Note that this is just an
     assumption. The paper (Automatic multi-organ segmentation on abdominal CT with
@@ -42,7 +43,7 @@ def get_organ_name(hu_value: int):
     return organs[hu_value]
 
 
-def split_to_separate_organs(input: np.ndarray, output_directory_path: str):
+def split_to_separate_organs(input: np.ndarray, output_directory_path: str) -> None:
     logging.info("Separating different organs")
     # Each segmented organ has been masked with a unique "HU value"
     unique_hu_values = np.unique(input)

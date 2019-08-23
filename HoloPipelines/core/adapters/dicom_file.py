@@ -12,12 +12,12 @@ import pydicom
 import scipy.ndimage
 
 
-def read_dicom_dataset(input_directory_path: str):
+def read_dicom_dataset(input_directory_path: str) -> List[pydicom.dataset.FileDataset]:
     """
     Reads a DICOM file and returns a pydicom representation, used to obtain knowledge
     about the slice thickness, that can then e.g. be used to manipulate image data.
     :param input_directory_path: Path to the directory containing the individual DICOM files
-    :return: pydicom.dataset.FileDataset representing the DICOM file
+    :return: List[pydicom.dataset.FileDataset] representing the DICOM file
     """
     slices: List[pydicom.dataset.FileDataset] = [
         pydicom.read_file(f"{input_directory_path}/{dcm_file}")
@@ -59,7 +59,7 @@ def read_dicom_pixels_as_np_ndarray(input_file_path: str) -> np.ndarray:
     return fixed_numpy_array_image
 
 
-def flip_numpy_array_dimensions(array: np.ndarray):
+def flip_numpy_array_dimensions(array: np.ndarray) -> np.ndarray:
     """
     Transposes numpy axes, i.e. (z, y, x) ---> (x, y, z), and flips x axis. This is
     needed as the default data when we read it is "mirrored" and therefore not accurate
@@ -72,14 +72,16 @@ def flip_numpy_array_dimensions(array: np.ndarray):
     return array
 
 
-def normalise_dicom(dicom_image_array: np.ndarray, input_path: str):
+def normalise_dicom(dicom_image_array: np.ndarray, input_file_path: str) -> np.ndarray:
     """
     Compensates the distortion caused by slice thickness, using data obtained from the DICOM header
     :param dicom_image_array: numpy ndarray representing the DICOM file
-    :param input_path: Path to the DICOM file
+    :param input_file_path: Path to the DICOM file
     :return: normalised dicom_image_array
     """
-    dicom_dataset: List[pydicom.dataset.FileDataset] = read_dicom_dataset(input_path)
+    dicom_dataset: List[pydicom.dataset.FileDataset] = read_dicom_dataset(
+        input_file_path
+    )
     dicom_sample_slice = dicom_dataset[0]
 
     logging.info("Normalising DICOM image to compensate slice thickness distortion")
@@ -122,9 +124,7 @@ def normalise_dicom(dicom_image_array: np.ndarray, input_path: str):
     return dicom_image_array
 
 
-def read_dicom_as_np_ndarray_and_normalise(input_directory_path: str):
-    dicom_image: np.ndarray = read_dicom_pixels_as_np_ndarray(input_directory_path)
-    normalised_dicom_image: np.ndarray = normalise_dicom(
-        dicom_image, input_directory_path
-    )
+def read_dicom_as_np_ndarray_and_normalise(input_directory_path: str) -> np.ndarray:
+    dicom_image = read_dicom_pixels_as_np_ndarray(input_directory_path)
+    normalised_dicom_image = normalise_dicom(dicom_image, input_directory_path)
     return normalised_dicom_image

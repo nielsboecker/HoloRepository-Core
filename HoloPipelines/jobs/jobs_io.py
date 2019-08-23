@@ -20,11 +20,11 @@ finished_jobs_root = "./__finished_jobs__"
 subdirectories_per_job = ["input", "temp", "output"]
 
 
-def get_directory_path_for_job(job_id: str):
+def get_directory_path_for_job(job_id: str) -> str:
     return f"{jobs_root}/{job_id}"
 
 
-def get_subdirectories_paths_for_job(job_id: str):
+def get_subdirectories_paths_for_job(job_id: str) -> List[str]:
     job_directory_path = get_directory_path_for_job(job_id)
     return [
         f"{job_directory_path}/{subdirectory_name}"
@@ -32,15 +32,15 @@ def get_subdirectories_paths_for_job(job_id: str):
     ]
 
 
-def get_temp_file_path_for_job(job_id: str, file_name: str):
+def get_temp_file_path_for_job(job_id: str, file_name: str) -> str:
     return f"{jobs_root}/{job_id}/temp/{file_name}"
 
 
-def get_result_file_path_for_job(job_id: str):
+def get_result_file_path_for_job(job_id: str) -> str:
     return f"{jobs_root}/{job_id}/output/out.glb"
 
 
-def get_input_directory_path_for_job(job_id: str):
+def get_input_directory_path_for_job(job_id: str) -> str:
     return f"{jobs_root}/{job_id}/input"
 
 
@@ -50,7 +50,7 @@ def init_create_job_state_root_directories() -> None:
     os.makedirs(finished_jobs_root, exist_ok=True)
 
 
-def create_directory_for_job(job_id: str):
+def create_directory_for_job(job_id: str) -> None:
     logging.info(f"Creating directory for job '{job_id}'")
     job_directory_path = get_directory_path_for_job(job_id)
     os.mkdir(job_directory_path)
@@ -145,7 +145,7 @@ def get_log_file_path_for_job(job_id: str) -> Optional[str]:
         return None
 
 
-def get_state_file_path_for_job(job_id: str):
+def get_state_file_path_for_job(job_id: str) -> str:
     return f"{get_directory_path_for_job(job_id)}/job.state"
 
 

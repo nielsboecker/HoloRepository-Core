@@ -1,4 +1,4 @@
-import sys
+import sys  # NOTE: left uncghanged as Kawai might be working on this pipeline
 
 from config import MODEL_ABDOMINAL_SEGMENTATION_HOST, MODEL_ABDOMINAL_SEGMENTATION_PORT
 from core.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise

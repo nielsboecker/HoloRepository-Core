@@ -13,6 +13,9 @@ APP_PORT = os.getenv("APP_PORT")
 
 # Settings for processing etc.
 INPUT_RESOLUTION_MAX = os.getenv("INPUT_RESOLUTION_MAX", 256)
+SIMPLIFICATION_RATIO = os.getenv(
+    "SIMPLIFICATION_RATIO", 0.5
+)  # TODO is this all i have to do?
 
 # Jobs
 NUM_OF_WORKER_PROCESSES = os.getenv("NUMBER_OF_WORKER_PROCESSES", 4)

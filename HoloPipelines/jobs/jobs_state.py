@@ -43,7 +43,7 @@ JobState = Enum(
 
 def update_job_state(job_id: str, new_state: str, logger=logging, new: bool = False):
     """
-    Updates the state for aa job by updating the job.state file. Note that new_state
+    Updates the state for a job by updating the job.state file. Note that new_state
     must be a string, not an Enum, as the latter leads to problems with multiprocessing.
     :param new: True if this is the first state update for a job
     :param job_id: ID of the job to update

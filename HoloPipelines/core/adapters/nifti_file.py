@@ -27,7 +27,7 @@ def normalise_nifti_image(image_data: nibabel.nifti1.Nifti1Image):
     """
     # TODO: Why copy??
     image = image_data
-    # TODO: does the Nifti1Image have a .shape field? according to documentary, no?
+    # TODO: does the Nifti1Image have a .shape field? according to documentation, no?
     original_shape = image.shape[:3]
 
     # TODO: document what happens here

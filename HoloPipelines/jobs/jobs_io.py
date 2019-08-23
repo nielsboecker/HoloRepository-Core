@@ -11,7 +11,7 @@ import logging
 import os
 import shutil
 import time
-from typing import List, Tuple, Union
+from typing import List, Tuple, Optional
 
 import coloredlogs
 
@@ -112,7 +112,7 @@ def write_state_file_for_job(jod_id: str, state: str) -> None:
         state_file.write(state)
 
 
-def get_logger_for_job(job_id: str):
+def get_logger_for_job(job_id: str) -> logging.Logger:
     log_format_console = "%(asctime)s | %(name)s | %(levelname)-5s | %(message)s"
     log_format_file = "%(asctime)s | %(levelname)-5s | %(message)s"
     coloredlogs.install(level=logging.DEBUG, fmt=log_format_console)
@@ -131,7 +131,7 @@ def get_logger_for_job(job_id: str):
     return logger
 
 
-def get_log_file_path_for_job(job_id: str) -> Union[str, None]:
+def get_log_file_path_for_job(job_id: str) -> Optional[str]:
     """
     Returns the path to a log file. Looks for current jobs first. If nothing found,
     looks for finished jobs. If still not found, returns None.
@@ -141,6 +141,8 @@ def get_log_file_path_for_job(job_id: str) -> Union[str, None]:
         return f"{path}/job.log"
     elif os.path.isdir(path.replace(jobs_root, finished_jobs_root)):
         return f"{path.replace(jobs_root, finished_jobs_root)}/job.log"
+    else:
+        return None
 
 
 def get_state_file_path_for_job(job_id: str):

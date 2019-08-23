@@ -3,7 +3,7 @@ This module contains the functionality of the abdominal_organs_segmentation pipe
 of splitting the combined result into multiple sub-results.
 """
 
-# TODO: Depending on how we deciide for this pipeline, this component may get removed.
+# TODO: Depending on how we decide for this pipeline, this component may get removed.
 # Otherwise, separate organs need to be merged again! (can also be in this task, which
 # should then be renamed though)
 # TODO: If we keep this, refactor and verify
@@ -21,7 +21,7 @@ from core.services.marching_cubes import generate_mesh
 
 def get_organ_name(hu_value: int):
     """
-    Maps the "HU valuee" to the according organ name. Note that this is just an
+    Maps the "HU value" to the according organ name. Note that this is just an
     assumption. The paper (Automatic multi-organ segmentation on abdominal CT with
     dense v-networks https://doi.org/10.1109/TMI.2018.2806309) doesn't actually state
     the mapping. But it always uses this order, thus the assumption. Also, I manually

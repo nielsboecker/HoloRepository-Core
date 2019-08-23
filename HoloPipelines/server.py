@@ -17,7 +17,8 @@ from jobs.jobs_state import activate_periodic_garbage_collection, get_current_st
 from jobs.jobs_io import read_log_file_for_job, init_create_job_state_root_directories
 
 log_format = "%(asctime)s | %(name)s | %(levelname)s | %(message)s'"
-coloredlogs.install(level=logging.DEBUG, fmt=log_format)
+log_level = logging.DEBUG if FLASK_ENV == "development" else logging.INFO
+coloredlogs.install(level=log_level, fmt=log_format)
 
 app = Flask(__name__)
 app.config["JSON_ADD_STATUS"] = False

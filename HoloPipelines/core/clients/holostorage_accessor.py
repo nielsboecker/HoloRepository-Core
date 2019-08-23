@@ -18,7 +18,8 @@ from jobs.jobs_io import get_result_file_path_for_job
 # directories and less stuff has to be handed from component to component.
 
 holostorage_baseurl = f"{HOLOSTORAGE_ACCESSOR_HOST}:{HOLOSTORAGE_ACCESSOR_PORT}"
-holograms_endpoint = f"{holostorage_baseurl}/api/v1/holograms"
+api_version = "v1"
+holograms_endpoint = f"{holostorage_baseurl}/api/{api_version}/holograms"
 
 
 def send_file_request_to_accessor(job_id: str, plid: str, medical_data: dict):

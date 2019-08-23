@@ -40,16 +40,16 @@ def read_dicom_dataset(input_directory_path: str):
     return slices
 
 
-def read_dicom_pixels_as_np_ndarray(input_path):
+def read_dicom_pixels_as_np_ndarray(input_file_path: str) -> np.ndarray:
     """
     Reads a DICOM image and returns it as a numpy ndarray. The method will always call
     flip_numpy_array_dimensions() to mirror the dimensions and return accurate data.
-    :param input_path: Path to the DICOM file
+    :param input_file_path: Path to the DICOM file
     :return: numpy ndarray representing the DICOM file
     """
     reader = sitk.ImageSeriesReader()
 
-    dicom_name = reader.GetGDCMSeriesFileNames(input_path)
+    dicom_name = reader.GetGDCMSeriesFileNames(input_file_path)
     reader.SetFileNames(dicom_name)
 
     image = reader.Execute()

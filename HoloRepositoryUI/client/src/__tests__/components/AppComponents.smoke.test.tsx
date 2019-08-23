@@ -56,8 +56,8 @@ it("renders PlainContentContainer without crashing", () => {
   shallow(<PlainContentContainer />);
 });
 
-it("renders DeviceConnectorPage without crashing", () => {
-  shallow(<HoloLensRemoteLoginPage />);
+it("renders HoloLensRemoteLoginPage without crashing", () => {
+  mountWithContextProvider(<HoloLensRemoteLoginPage />);
 });
 
 it("renders HologramsCommandBar without crashing", () => {

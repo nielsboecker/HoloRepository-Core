@@ -174,13 +174,14 @@ Testing is done using pytest:
 
 ```
 pip install pytest
+pip install pytest-mock
 pip install pytest-cov
 ```
 
 Execute tests by running the following command in `HoloPipelines` directory:
 
 ```
-pytest --cov
+pytest --cov -W ignore::DeprecationWarning
 ```
 
 ### Manual testing with Postman

@@ -22,3 +22,7 @@ def test_pipeline(
     job_id: str,
 ):
     bone_segmentation.run(job_id, imagingStudyEndpoint, sample_medical_data)
+
+    mock_send_to_holostorage_accessor.assert_called_with(
+        job_id=job_id, plid="bone_segmentation", medical_data=sample_medical_data
+    )

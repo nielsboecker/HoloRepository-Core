@@ -5,4 +5,6 @@
 *.glb
 *.gltf
 __test_input__/
+__test_jobs__/
+__test_finished_jobs__/
 __jobs__/

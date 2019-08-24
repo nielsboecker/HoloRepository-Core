@@ -11,7 +11,7 @@ from ._fixtures import patch_jobs_io_and_create_dirs, mock_send_to_holostorage_a
 this_test_name = os.path.basename(__file__).replace(".py", "")
 
 imagingStudyEndpoint = (
-    "https://holoblob.blob.core.windows.net/mock-pacs/normal-chest" "-mediastinal.zip"
+    "https://holoblob.blob.core.windows.net/mock-pacs/normal-chest-mediastinal.zip"
 )
 
 

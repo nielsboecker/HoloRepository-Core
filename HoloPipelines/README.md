@@ -181,7 +181,7 @@ pip install pytest-cov
 Execute tests by running the following command in `HoloPipelines` directory:
 
 ```
-pytest --cov -W ignore::DeprecationWarning
+pytest --cov
 ```
 
 ### Manual testing with Postman

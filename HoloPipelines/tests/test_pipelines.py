@@ -6,13 +6,25 @@ import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from zipfile import ZipFile
 
+# from core.pipelines.pipelines_controller import load_pipeline_dynamically
+from jobs.jobs_controller import create_random_job_id
+
+# from jobs.jobs_io import (
+#     create_directory_for_job,
+#     remove_directory_for_job,
+#     get_logger_for_job,
+# )
 import pytest
 import requests
 
+# import json
+# import pathlib
 
 pythonPath = sys.executable
 zipFileName = "__temp__.zip"
 segmentedAbdomenFileName = "__segmentedAbdomen__.nii.gz"
+lung_pipeline_job_id = create_random_job_id()
+abdominal_pipeline_job_id = create_random_job_id()
 
 test_input_path = "__test_input__"
 dicomPath = f"{test_input_path}/dicom"
@@ -132,6 +144,32 @@ def remove3Dmodels():
 
 
 # FIXME: Fix this tests. It is completely outdated, as the commponent now downloads and posts stuff
+# def test_lung_pipelines():
+#     test_lung_pipeline_json=pathlib.Path(__file__).parent.joinpath('test_lung_pipeline.json')
+#     with open(test_lung_pipeline_json) as json_file:
+#         request = json.load(json_file)
+#     create_directory_for_job(lung_pipeline_job_id)
+#     pipeline_module = load_pipeline_dynamically("lung_segmentation")
+#     result = pipeline_module.run(lung_pipeline_job_id, request["imagingStudyEndpoint"], request["medicalData"])
+#     assert result
+
+
+#
+# def test_abdominal_pipelines():
+#     os.makedirs( f"./__jobs__/{lung_pipeline_job_id}", exist_ok=True)
+#     test_abdominal_pipeline_json = pathlib.Path(__file__).parent.joinpath('test_abdominal_pipeline.json')
+#     with open(test_abdominal_pipeline_json) as json_file:
+#         request = json.load(json_file)
+#
+#     pipeline_module = load_pipeline_dynamically("abdominal_organs_segmentation")
+#     result = pipeline_module.run(lung_pipeline_job_id, request["imagingStudyEndpoint"], request["medicalData"])
+#     assert result
+
+
+# def pytest_sessionfinish(session, exitstatus):
+#     remove_directory_for_job(lung_pipeline_job_id)
+#     remove_directory_for_job(abdominal_pipeline_job_id)
+
 #
 # def test_pipelines_dicom2glb(testSetup):
 #     output = subprocess.run(

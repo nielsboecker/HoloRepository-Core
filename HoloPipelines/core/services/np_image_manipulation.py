@@ -9,6 +9,9 @@ import scipy.ndimage
 
 from config import INPUT_RESOLUTION_MAX
 
+import warnings
+
+warnings.filterwarnings("ignore", ".*the output shape of zoom() is calculated with*")
 
 # FIXME: This is broken and needs to be fixed @Udomkarn
 

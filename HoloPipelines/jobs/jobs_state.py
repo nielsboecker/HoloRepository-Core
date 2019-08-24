@@ -47,12 +47,14 @@ def update_job_state(
     """
     Updates the state for a job by updating the job.state file. Note that new_state
     must be a string, not an Enum, as the latter leads to problems with multiprocessing.
-    :param new: True if this is the first state update for a job
+    :param new: True if this is the first state update for a job. This is called
+    before a job even enters the pipeline, while still being at the job_controller
+    level; so represents the state change from <None> to JobState.CREATED
     :param job_id: ID of the job to update
     :param new_state: new state (preferably use the "name" of a JobState Enum constant)
     :param logger: optional override to the default logger (use to write to file log)
     """
-    if not new:
+    if state_file_for_job_exists(job_id) and not new:
         prev_state, prev_duration = read_state_file_for_job(job_id)
         logger.info(
             f"[{job_id}] Finished state {prev_state} in {prev_duration} seconds"

@@ -6,8 +6,8 @@ import pytest
 from pytest import fixture
 
 from core.pipelines import abdominal_organs_segmentation
-from .input_data import sample_medical_data
-from .shared_fixtures import (
+from tests.utils.input_data import sample_medical_data
+from tests.utils.shared_fixtures import (
     patch_jobs_io_and_create_dirs,
     mock_send_to_holostorage_accessor,
 )

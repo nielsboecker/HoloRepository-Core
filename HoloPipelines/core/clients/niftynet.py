@@ -12,7 +12,7 @@ from config import NIFTYNET_MODEL_TIMEOUT
 
 def call_model(
     model_host: str, model_port: int, input_file_path: str, output_file_path: str
-):
+) -> None:
     """
     Calls a pre-trained Niftynet model. The model has to be running and expose the
     /model endpoint, as documented in the /models directory.

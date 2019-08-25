@@ -6,7 +6,7 @@ import logging
 import threading
 import time
 from enum import Enum
-from typing import List
+from typing import List, Union, Tuple
 
 from config import (
     KEEP_ALL_FILES,
@@ -41,9 +41,11 @@ JobState = Enum(
 )
 
 
-def update_job_state(job_id: str, new_state: str, logger=logging, new: bool = False):
+def update_job_state(
+    job_id: str, new_state: str, logger=logging, new: bool = False
+) -> None:
     """
-    Updates the state for aa job by updating the job.state file. Note that new_state
+    Updates the state for a job by updating the job.state file. Note that new_state
     must be a string, not an Enum, as the latter leads to problems with multiprocessing.
     :param new: True if this is the first state update for a job
     :param job_id: ID of the job to update
@@ -60,7 +62,8 @@ def update_job_state(job_id: str, new_state: str, logger=logging, new: bool = Fa
     write_state_file_for_job(job_id, new_state)
 
 
-def get_current_state(job_id: str):
+# Note: The return signature here is confusing, could be refactored
+def get_current_state(job_id: str) -> Union[Tuple[str, float], bool]:
     """
     :param job_id: ID of the job to query
     :return: Current <JobState.name> or False if not found
@@ -73,7 +76,7 @@ def get_current_state(job_id: str):
         return False
 
 
-def remove_job(job_id: str, success: bool = True):
+def remove_job(job_id: str, success: bool = True) -> None:
     """
     Removes a job from the global state dict, and conditionally deletes temporary files.
     Note that this does not terminate the actual worker process of the job. In success
@@ -99,7 +102,7 @@ def get_list_of_active_jobs() -> List[str]:
     return get_all_job_subdirectory_names()
 
 
-def perform_garbage_collection():
+def perform_garbage_collection() -> None:
     """
     Checks the global state if any jobs have successfully terminated or have been
     inactive for a long period of time, and conditionally removes them.
@@ -128,7 +131,7 @@ def perform_garbage_collection():
         time.sleep(GARBAGE_COLLECTION_INTERVAL_SECS)
 
 
-def activate_periodic_garbage_collection():
+def activate_periodic_garbage_collection() -> None:
     """
     Starts the thread which will periodically wake up and check if data can be removed.
     """

@@ -1,9 +1,2 @@
 [run]
-source = ./pipelineController.py, pipelines/
-
-[report]
-ignore_errors = True
-
-[html]
-title = Python test coverage report
-directory = test/report
+source = ./server.py, core/, jobs/

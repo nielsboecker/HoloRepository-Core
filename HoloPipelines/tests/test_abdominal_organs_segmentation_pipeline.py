@@ -1,4 +1,5 @@
 import os
+import shutil
 from typing import Any
 from unittest import mock
 
@@ -6,6 +7,7 @@ import pytest
 from pytest import fixture
 
 from core.pipelines import abdominal_organs_segmentation
+from jobs import jobs_io
 from tests.utils.input_data import sample_medical_data
 from tests.utils.shared_fixtures import (
     patch_jobs_io_and_create_dirs,
@@ -19,19 +21,32 @@ imagingStudyEndpoint = (
 )
 
 
+def create_mock_niftynet_output(_1: Any, _2: Any, _3: Any, _4: Any) -> None:
+    """
+    Copies a minimal sample Nifti dataset (from https://nifti.nimh.nih.gov/nifti-1/data)
+    to the location where Niftynet would place its output in a regular run.
+    """
+    sample_nifti_file_path = "./tests/utils/minimal.nii.gz"
+    niftynet_output_file_path = jobs_io.get_temp_file_path_for_job(
+        this_test_name, "segmented.nii.gz"
+    )
+    shutil.copyfile(sample_nifti_file_path, niftynet_output_file_path)
+
+
 @fixture
 def mock_call_niftynet_model(mocker: Any) -> mock.MagicMock:
     """
     Mock the function that a pipeline will call to trigger Niftynet models.
     """
     mock_send_to_accessor = mocker.patch(
-        "core.clients.niftynet.call_model", return_value=None, autospec=True
+        "core.clients.niftynet.call_model",
+        side_effect=create_mock_niftynet_output,
+        autospec=True,
     )
     return mock_send_to_accessor
 
 
 @pytest.mark.parametrize("job_id", [this_test_name])
-@pytest.mark.skip(reason=" Niftynet step's output is needed by subsequent steps")
 def test_pipeline(
     patch_jobs_io_and_create_dirs: Any,
     mock_send_to_holostorage_accessor: mock.MagicMock,

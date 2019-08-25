@@ -5,8 +5,11 @@ from unittest import mock
 import pytest
 
 from core.pipelines import bone_segmentation
-from ._input_utils import sample_medical_data
-from ._fixtures import patch_jobs_io_and_create_dirs, mock_send_to_holostorage_accessor
+from .input_data import sample_medical_data
+from .shared_fixtures import (
+    patch_jobs_io_and_create_dirs,
+    mock_send_to_holostorage_accessor,
+)
 
 this_test_name = os.path.basename(__file__).replace(".py", "")
 

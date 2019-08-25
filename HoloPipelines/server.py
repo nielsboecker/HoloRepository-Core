@@ -5,6 +5,7 @@ start jobs and trace their progress.
 """
 
 import logging
+from typing import Tuple
 
 import coloredlogs
 from flask import Flask, request
@@ -17,7 +18,8 @@ from jobs.jobs_state import activate_periodic_garbage_collection, get_current_st
 from jobs.jobs_io import read_log_file_for_job, init_create_job_state_root_directories
 
 log_format = "%(asctime)s | %(name)s | %(levelname)s | %(message)s'"
-coloredlogs.install(level=logging.DEBUG, fmt=log_format)
+log_level = logging.DEBUG if FLASK_ENV == "development" else logging.INFO
+coloredlogs.install(level=log_level, fmt=log_format)
 
 app = Flask(__name__)
 app.config["JSON_ADD_STATUS"] = False
@@ -26,7 +28,7 @@ URL_API_PREFIX = "/api/v1"
 
 @app.route(f"{URL_API_PREFIX}/pipelines", methods=["GET"])
 @as_json
-def get_pipelines():
+def get_pipelines() -> Tuple[dict, int]:
     """
     :return: JSON List of available pipelines
     """
@@ -35,7 +37,7 @@ def get_pipelines():
 
 @app.route(f"{URL_API_PREFIX}/jobs", methods=["POST"])
 @as_json
-def start_new_job():
+def start_new_job() -> Tuple[dict, int]:
     """
     Starts a new job.
     :return: JSON response {jid: <job_id>} with according HTTP response code set
@@ -48,7 +50,7 @@ def start_new_job():
 
 @app.route(f"{URL_API_PREFIX}/jobs/<job_id>/state", methods=["GET"])
 @as_json
-def get_job_state(job_id: str):
+def get_job_state(job_id: str) -> Tuple[dict, int]:
     """
     :return: JSON response {state: <JobState.name>} or {message: <error_message>} with
     according HTTP response code set
@@ -61,7 +63,7 @@ def get_job_state(job_id: str):
 
 
 @app.route(f"{URL_API_PREFIX}/jobs/<job_id>/log", methods=["GET"])
-def get_job_log(job_id: str):
+def get_job_log(job_id: str) -> Tuple[str, int]:
     """
     :return: the complete log for a specific job as text
     """

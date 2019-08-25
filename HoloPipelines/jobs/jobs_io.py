@@ -11,7 +11,7 @@ import logging
 import os
 import shutil
 import time
-from typing import List, Tuple, Union
+from typing import List, Tuple, Optional
 
 import coloredlogs
 
@@ -20,11 +20,11 @@ finished_jobs_root = "./__finished_jobs__"
 subdirectories_per_job = ["input", "temp", "output"]
 
 
-def get_directory_path_for_job(job_id: str):
+def get_directory_path_for_job(job_id: str) -> str:
     return f"{jobs_root}/{job_id}"
 
 
-def get_subdirectories_paths_for_job(job_id: str):
+def get_subdirectories_paths_for_job(job_id: str) -> List[str]:
     job_directory_path = get_directory_path_for_job(job_id)
     return [
         f"{job_directory_path}/{subdirectory_name}"
@@ -32,15 +32,15 @@ def get_subdirectories_paths_for_job(job_id: str):
     ]
 
 
-def get_temp_file_path_for_job(job_id: str, file_name: str):
+def get_temp_file_path_for_job(job_id: str, file_name: str) -> str:
     return f"{jobs_root}/{job_id}/temp/{file_name}"
 
 
-def get_result_file_path_for_job(job_id: str):
+def get_result_file_path_for_job(job_id: str) -> str:
     return f"{jobs_root}/{job_id}/output/out.glb"
 
 
-def get_input_directory_path_for_job(job_id: str):
+def get_input_directory_path_for_job(job_id: str) -> str:
     return f"{jobs_root}/{job_id}/input"
 
 
@@ -50,7 +50,7 @@ def init_create_job_state_root_directories() -> None:
     os.makedirs(finished_jobs_root, exist_ok=True)
 
 
-def create_directory_for_job(job_id: str):
+def create_directory_for_job(job_id: str) -> None:
     logging.info(f"Creating directory for job '{job_id}'")
     job_directory_path = get_directory_path_for_job(job_id)
     os.mkdir(job_directory_path)
@@ -126,7 +126,7 @@ def write_state_file_for_job(jod_id: str, state: str) -> None:
         logging.warning(f"Ignoring attempt to update state: {e}")
 
 
-def get_logger_for_job(job_id: str):
+def get_logger_for_job(job_id: str) -> logging.Logger:
     log_format_console = "%(asctime)s | %(name)s | %(levelname)-5s | %(message)s"
     log_format_file = "%(asctime)s | %(levelname)-5s | %(message)s"
     coloredlogs.install(level=logging.DEBUG, fmt=log_format_console)
@@ -145,19 +145,22 @@ def get_logger_for_job(job_id: str):
     return logger
 
 
-def get_log_file_path_for_job(job_id: str, finished=False) -> str:
+def get_log_file_path_for_job(job_id: str) -> Optional[str]:
     """
     Returns the path to a log file.
     :param finished: check in finished jobs directory instead of regular
     """
     path = get_directory_path_for_job(job_id)
-    if finished:
-        path = path.replace(jobs_root, finished_jobs_root)
 
-    return f"{path}/job.log"
+    if os.path.isdir(path):
+        return f"{path}/job.log"
+    elif os.path.isdir(path.replace(jobs_root, finished_jobs_root)):
+        return f"{path.replace(jobs_root, finished_jobs_root)}/job.log"
+    else:
+        return None
 
 
-def get_state_file_path_for_job(job_id: str):
+def get_state_file_path_for_job(job_id: str) -> str:
     return f"{get_directory_path_for_job(job_id)}/job.state"
 
 

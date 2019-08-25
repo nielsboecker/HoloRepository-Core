@@ -3,12 +3,15 @@ This module contains marching cube functionality.
 """
 
 import logging
+from typing import Tuple
 
 import numpy as np
 from skimage import measure
 
 
-def generate_mesh(image_data: np.ndarray, threshold=300, step_size=1):
+def generate_mesh(
+    image_data: np.ndarray, threshold=300, step_size=1
+) -> Tuple[np.array, np.array, np.array]:
     logging.info("Marching cubes: Transposing surface")
 
     # For NIfTI with 5D shape (time etc.); most NIfTI comes in 3D anyway

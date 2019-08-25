@@ -28,6 +28,7 @@ def mock_send_to_holostorage_accessor(mocker: Any) -> mock.MagicMock:
     """
     Mock the function that a pipeline will attempt to call in order to send the
     result off to HoloStorageAccessor. Do nothing instead.
+    :param mocker: injected by pytest-mock
     """
     mock_send_to_accessor = mocker.patch(
         "core.tasks.shared.dispatch_output.send_file_request_to_accessor",

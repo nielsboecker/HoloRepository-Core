@@ -112,6 +112,18 @@ export class BackendServerService {
       .then(pipelineDict => Object.values(pipelineDict))
       .catch(handleError);
   }
+
+  public async getJobStateById(jid: string): Promise<string | null> {
+    return BackendServerAxios.get<string>(`${routes.pipelines}/${jid}/state`)
+      .then(response => response.data as string)
+      .catch(handleError);
+  }
+
+  public async getJobLogById(jid: string): Promise<string | null> {
+    return BackendServerAxios.get<string>(`${routes.pipelines}/${jid}/log`)
+      .then(response => response.data as string)
+      .catch(handleError);
+  }
 }
 
 const _extractCombinedPidsString = (patients: PidToPatientsMap): string => {

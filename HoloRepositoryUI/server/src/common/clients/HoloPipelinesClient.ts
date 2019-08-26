@@ -6,9 +6,12 @@ const getJobsURL = (): string => {
   return `${baseURL}/jobs`;
 };
 
-// TODO @Niels: Change to /state, and add /log
 const getJobStatusURL = (jid: string): string => {
-  return `${baseURL}/${jid}/status`;
+  return `${baseURL}/${jid}/state`;
+};
+
+const getJobLogURL = (jid: string): string => {
+  return `${baseURL}/${jid}/log`;
 };
 
 const getPipelinesURL = (): string => {
@@ -17,6 +20,6 @@ const getPipelinesURL = (): string => {
 
 export default {
   getJobsURL,
-  getJobStatusURL,
+  getJobStateURL: getJobStatusURL,
   getPipelinesURL
 };

@@ -6,8 +6,12 @@ export class PipelinesController {
     res.redirect(307, PipelinesService.getPipelinesURL());
   }
 
-  public getStatus(req: Request, res: Response): void {
-    res.redirect(307, PipelinesService.getJobStatusURL(req.params.jid));
+  public getState(req: Request, res: Response): void {
+    res.redirect(307, PipelinesService.getJobStateURL(req.params.jid));
+  }
+
+  public getLog(req: Request, res: Response): void {
+    res.redirect(307, PipelinesService.getJobLogURL(req.params.jid));
   }
 
   public generate(req: Request, res: Response): void {

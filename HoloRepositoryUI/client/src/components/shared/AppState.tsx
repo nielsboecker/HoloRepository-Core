@@ -10,6 +10,7 @@ export interface IAppState {
   patients: PidToPatientsMap;
   selectedPatientId?: string;
   pipelines: IPipeline[];
+  pin?: string;
   handlePractitionerChange: Function;
   handlePatientsChange: Function;
   handleSelectedPatientIdChange: Function;
@@ -17,6 +18,7 @@ export interface IAppState {
   handleDeleteHolograms: Function;
   handleDownloadHolograms: Function;
   handleHologramCreated: Function;
+  handleLogin: Function;
 }
 
 const initialState: IAppState = {
@@ -24,13 +26,15 @@ const initialState: IAppState = {
   patients: {},
   selectedPatientId: undefined,
   pipelines: [],
+  pin: undefined,
   handlePractitionerChange: () => {},
   handleSelectedPatientIdChange: () => {},
   handlePatientsChange: () => {},
   handlePipelinesChange: () => {},
   handleDeleteHolograms: () => {},
   handleDownloadHolograms: () => {},
-  handleHologramCreated: () => {}
+  handleHologramCreated: () => {},
+  handleLogin: () => {}
 };
 
 // using same interface for App state and context

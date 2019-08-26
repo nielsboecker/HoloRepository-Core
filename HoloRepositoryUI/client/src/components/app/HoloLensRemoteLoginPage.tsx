@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { RouteComponentProps } from "@reach/router";
 import ContentContainer from "./core/ContentContainer";
+import { PropsWithContext, withAppContext } from "../shared/AppState";
 
-class DeviceConnectorPage extends Component<RouteComponentProps> {
+class HoloLensRemoteLoginPage extends Component<RouteComponentProps & PropsWithContext> {
   render() {
     return (
       <ContentContainer
@@ -13,10 +14,10 @@ class DeviceConnectorPage extends Component<RouteComponentProps> {
           Use the code on this page to link your HoloLens application with your SMART on FHIR login.`
         ]}
       >
-        <div>This feature is not available yet.</div>
+        <div>Your authentication PIN: <b>{this.props.context!.pin}</b></div>
       </ContentContainer>
     );
   }
 }
 
-export default DeviceConnectorPage;
+export default withAppContext(HoloLensRemoteLoginPage);

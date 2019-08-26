@@ -22,6 +22,15 @@ log_format = "%(asctime)s | %(name)s | %(levelname)s | %(message)s'"
 log_level = logging.DEBUG if FLASK_ENV == "development" else logging.INFO
 coloredlogs.install(level=log_level, fmt=log_format)
 
+# Note: Code to run at import time, see https://stackoverflow.com/a/44406384/8495954
+# When you run the server through gunicorn, the __main__ doesn't run, so to workaround
+# puts the initialisation to the top level, invoking it at import time. This may be a 
+# problem if/when we start gunicorn with multiple workers. If we keep gunicorn workers
+# at 1, as we have now, and start multiple processes in our own code, it should be fine.
+logging.info("Running setup from server.py")
+init_create_job_state_root_directories()
+activate_periodic_garbage_collection()
+
 app = Flask(__name__)
 app.config["JSON_ADD_STATUS"] = False
 CORS(app)
@@ -74,6 +83,4 @@ def get_job_log(job_id: str) -> Tuple[str, int]:
 
 
 if __name__ == "__main__":
-    init_create_job_state_root_directories()
-    activate_periodic_garbage_collection()
     app.run(debug=FLASK_ENV == "development", port=APP_PORT)

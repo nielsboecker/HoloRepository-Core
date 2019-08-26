@@ -1,11 +1,6 @@
-import os
-import sys
 import numpy as np
 
-sys.path.insert(1, os.path.join(sys.path[0], ".."))  # noqa
 from core.services import np_image_manipulation
-
-this_test_name = os.path.basename(__file__).replace(".py", "")
 
 
 def create_np_array(x_length, y_length, z_length):

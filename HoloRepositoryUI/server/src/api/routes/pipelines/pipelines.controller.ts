@@ -13,7 +13,7 @@ export class PipelinesController {
   public generate(req: Request, res: Response): void {
     // Note: Ideally, the request should be checked for validity
     // Note: Upload models goes directly to the POST /job of HoloPipelines
-    res.redirect(307, PipelinesService.getJobURL());
+    res.redirect(307, PipelinesService.getJobsURL());
   }
 }
 

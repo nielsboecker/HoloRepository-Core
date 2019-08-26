@@ -1,12 +1,9 @@
 import PipelinesService from "./pipelines.service";
 import { Request, Response } from "express";
-import samplePipelines from "../../../__tests__/samples/internal/samplePipelines.json";
 
-export class ImagingStudiesController {
+export class PipelinesController {
   public getAll(req: Request, res: Response): void {
-    // Note: Once the HoloPipelines are ready, delete next line and uncomment the one after that
-    res.json(samplePipelines);
-    // res.redirect(308, PipelinesService.getPipelinesURL());
+    res.redirect(308, PipelinesService.getPipelinesURL());
   }
 
   public getStatus(req: Request, res: Response): void {
@@ -20,4 +17,4 @@ export class ImagingStudiesController {
   }
 }
 
-export default new ImagingStudiesController();
+export default new PipelinesController();

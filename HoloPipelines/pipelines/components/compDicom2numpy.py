@@ -10,45 +10,46 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-def loadScan(scanPath):
+def load_scan(scan_path):
     slices = [
-        dicom.read_file(str(pathlib.Path(scanPath, s)))
-        for s in os.listdir(str(scanPath))
+        dicom.read_file(str(pathlib.Path(scan_path, s)))
+        for s in os.listdir(str(scan_path))
     ]
     slices.sort(key=lambda x: int(x.InstanceNumber))
     try:
-        slickThickness = np.abs(
+        slick_thickness = np.abs(
             slices[0].ImagePositionscan[2] - slices[1].ImagePositionscan[2]
         )
+
     except Exception as e:
         logging.warning(
             "Unable to load slice's image positon, using slice location instead: {}".format(
                 str(e)
             )
         )
-        slickThickness = np.abs(slices[0].SliceLocation - slices[1].SliceLocation)
+        slick_thickness = np.abs(slices[0].SliceLocation - slices[1].SliceLocation)
 
     for s in slices:
-        s.SliceThickness = slickThickness
+        s.SliceThickness = slick_thickness
 
     return slices
 
 
-def loadPixelArray(inputPath):
+def load_pixel_array(input_path):
     reader = sitk.ImageSeriesReader()
 
-    dicomName = reader.GetGDCMSeriesFileNames(inputPath)
-    reader.SetFileNames(dicomName)
+    dicom_name = reader.GetGDCMSeriesFileNames(input_path)
+    reader.SetFileNames(dicom_name)
 
     image = reader.Execute()
-    numpyArrayImage = sitk.GetArrayFromImage(image)
+    numpy_array_image = sitk.GetArrayFromImage(image)
 
-    return numpyArrayImage
+    return numpy_array_image
 
 
-def resample(dataPath, new_spacing=[1, 1, 1]):
-    scan = loadScan(dataPath)
-    image = loadPixelArray(dataPath)
+def resample(data_path, new_spacing=[1, 1, 1]):
+    scan = load_scan(data_path)
+    image = load_pixel_array(data_path)
     logging.info("Shape before resampling\t" + repr(image.shape))
     # Determine current pixel spacing
     try:
@@ -92,9 +93,9 @@ def reorientateNumpyList(numpyList):
     return numpyList
 
 
-def main(dicomPath):
+def main(dicom_path):
     logging.info("dicom2numpy: resampling dicom...")
-    imgs_after_resamp, spacing = resample(dicomPath)
+    imgs_after_resamp, spacing = resample(dicom_path)
     logging.info("dicom2numpy: resampling done")
     imgs_after_resamp = reorientateNumpyList(imgs_after_resamp)
     return imgs_after_resamp

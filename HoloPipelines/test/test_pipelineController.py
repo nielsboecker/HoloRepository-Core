@@ -6,20 +6,7 @@ newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))).pare
 
 
 def test_main_samplePipeline_normal():
-    output = subprocess.run(
-        [
-            "python",
-            "pipelineController.py",
-            "-c",
-            "test/pipelineListForTesting.json",
-            "samplePipeline",
-        ],
-        cwd=newCwd,
-    )
-    assert 0 == output.returncode
 
-
-def test_main_samplePipeline_invalid_number_of_argument():
     output = subprocess.run(
         [
             "python",
@@ -36,6 +23,7 @@ def test_main_samplePipeline_invalid_number_of_argument():
 
 
 def test_main_missing_pipeline():
+
     output = subprocess.run(
         [
             "python",
@@ -50,6 +38,7 @@ def test_main_missing_pipeline():
 
 
 def test_main_samplePipeline_missing_pipeline_with_extra_arguments():
+
     output = subprocess.run(
         [
             "python",

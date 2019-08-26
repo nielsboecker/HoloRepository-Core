@@ -14,7 +14,7 @@ services:
     build:
       context: ./HoloRepositoryUI
       dockerfile: ./server/Dockerfile
-    env_file: ./HoloRepositoryUI/server/.env
+    env_file: ./HoloRepositoryUI/server/.env.local
     ports:
       - "3001:3001"
 #  TODO: Uncomment when HoloPipelines are ready
@@ -24,7 +24,7 @@ services:
 #      - "3100:3100"
   holostorage-accessor:
     build: ./HoloStorageAccessor
-    env_file: ./HoloStorageAccessor/config.env
+    env_file: ./HoloStorageAccessor/.env
     ports:
       - "3200:3200"
   holopipelines-models__dense_vnet_abdominal_ct:

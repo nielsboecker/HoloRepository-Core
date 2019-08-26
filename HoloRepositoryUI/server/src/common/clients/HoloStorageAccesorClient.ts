@@ -1,8 +1,7 @@
-const accessorBaseUrl = "http://localhost";
-const port = 3200;
+const { HOLOSTORAGE_ACCESSOR_HOST, HOLOSTORAGE_ACCESSOR_PORT } = process.env;
+
 const apiPrefix = `api/v1`;
-const hologramsEndpoint = "holograms";
-const baseURL = `${accessorBaseUrl}:${port}/${apiPrefix}/${hologramsEndpoint}`;
+const baseURL = `${HOLOSTORAGE_ACCESSOR_HOST}:${HOLOSTORAGE_ACCESSOR_PORT}/${apiPrefix}/holograms`;
 
 const getBaseURL = () => baseURL;
 

@@ -6,30 +6,33 @@ import sys
 import logging
 
 logging.basicConfig(level=logging.INFO)
-newCwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
+new_cwd = str(pathlib.Path(str(os.path.dirname(os.path.realpath(__file__)))))
 
 success = True
 
 
-def main(inputObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False):
-    success = subprocess.run(["obj2gltf", "-i", str(pathlib.Path(inputObjPath)), "-b"])
+def main(input_obj_path, output_glb_path, delete_original_obj=True, compress_glb=False):
+    success = subprocess.run(
+        ["obj2gltf", "-i", str(pathlib.Path(input_obj_path)), "-b"]
+    )
     if success.returncode == 0:
-        outputGlbPath = str(pathlib.Path(outputGlbPath))
-        move(str(pathlib.Path(inputObjPath)).replace(".obj", ".glb"), outputGlbPath)
-        if deleteOriginalObj:
-            os.remove(str(pathlib.Path(inputObjPath)))
+
+        output_glb_path = output_glb_path
+        move(str(pathlib.Path(input_obj_path)).replace(".obj", ".glb"), output_glb_path)
+        if delete_original_obj:
+            os.remove(str(pathlib.Path(input_obj_path)))
         logging.info("obj2glb: conversion complete")
 
         # Draco compression. note that draco compresssion in viewers may not be common
-        if compressGlb:
+        if compress_glb:
             success = subprocess.run(
                 "gltf-pipeline",
                 "-i",
-                outputGlbPath,
+                output_glb_path,
                 "-o",
-                outputGlbPath,
+                output_glb_path,
                 "-d",
-                cwd=newCwd,
+                cwd=new_cwd,
             )
             if success.returncode == 0:
                 logging.info("obj2glb: Draco compression finished")
@@ -38,7 +41,7 @@ def main(inputObjPath, outputGlbPath, deleteOriginalObj=True, compressGlb=False)
     else:
         sys.exit("obj2glb: conversion failed")
     logging.info("obj2glb: done")
-    return outputGlbPath
+    return output_glb_path
 
 
 if __name__ == "__main__":

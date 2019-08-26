@@ -29,23 +29,23 @@ def main(inputNiftiPath, outputNiftiFolderPath):
     # Load image
     #####################################################
 
-    I = nib.load(inputNiftiPath)
-    I_affine = I.affine
-    I = I.get_data()
+    image = nib.load(inputNiftiPath)
+    I_affine = image.affine
+    image = image.get_data()
 
     #####################################################
     # Coarse segmentation of lung & airway
     #####################################################
 
-    Mlung = segment_lung(params, I, I_affine, outputNiftiFolderPath)
+    Mlung = segment_lung(params, image, I_affine, outputNiftiFolderPath)
 
     #####################################################
     # Romove airway from lung mask
     #####################################################
 
-    Mlung, Maw = segment_airway(params, I, I_affine, Mlung, outputNiftiFolderPath)
+    Mlung, Maw = segment_airway(params, image, I_affine, Mlung, outputNiftiFolderPath)
 
-    return str(outputNiftiFolderPath)
+    return str(pathlib.Path(outputNiftiFolderPath).joinpath("lung.nii.gz"))
 
 
 if __name__ == "__main__":

@@ -1,41 +1,65 @@
 {
-   "nifti2obj":
-      {
-         "name":"Nifti to OBJ generation",
-         "src":"pipelines/pipelineNifti2obj.py",
-         "info":"Generate obj mesh from nifti",
-         "addDate":"27/06/2019",
-         "modDate":"27/06/2019",
-         "param":"4"
-      },
    "nifti2glb":
       {
-         "name":"Nifti to GLB generation",
+         "plid": "nifti2glb",
+         "title":"Nifti to GLB generation",
          "src":"pipelines/pipelineNifti2glb.py",
          "info":"Generate glb mesh from nifti",
+         "name": "Generic bone segmentation",
          "addDate":"28/06/2019",
          "modDate":"28/06/2019",
-         "param":"3"
+         "description": "This pipeline utilises a marching cube algorithm to generate a 3D model from a series of CT scans. As it performs the segmentation based on Hounsfield units, it is agnostic to the specific body site.",
+         "param":"4",
+         "inputConstraints": [
+            ["Body site", "Any"],
+            ["Imaging study type", "CT scan, Micro CT scan"],
+            ["Image resolution", "Any"],
+            ["Image data format", "DICOM, NIfTI"]
+          ],
+          "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_2_input.png",
+          "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_2_output.png"
       },
    "dicom2glb":
       {
-         "name":"DICOM to glb generation",
+         "plid" : "dicom2glb",
+         "title" : "DICOM to glb generation",
+         "name": "Generic bone segmentation",
          "src":"pipelines/pipelineDicom2glb.py",
          "info":"Generate glb mesh from dicom",
          "addDate":"01/07/2019",
          "modDate":"01/07/2019",
-         "param":"3"
+         "description": "This pipeline utilises a marching cube algorithm to generate a 3D model from a series of CT scans. As it performs the segmentation based on Hounsfield units, it is agnostic to the specific body site.",
+         "param":"3",
+         "inputConstraints": [
+            ["Body site", "Any"],
+            ["Imaging study type", "CT scan, Micro CT scan"],
+            ["Image resolution", "Any"],
+            ["Image data format", "DICOM"]
+          ],
+          "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_2_input.png",
+          "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_2_output.png"
       },
    "lungDicom2glb":
       {
-         "name":"DICOM to segmented lung GLB generation",
+         "plid" : "lungDicom2glb",
+         "title":"DICOM to segmented lung GLB generation",
+         "name": "Lungs segmentation",
          "src":"pipelines/pipelineLungDicom2glb.py",
          "info":"Generate segmented lungs (without air way) glb mesh from dicom",
          "addDate":"01/07/2019",
          "modDate":"01/07/2019",
-         "param":"2"
+         "description": "This pipeline segments the lungs and the airway from a series of CT scans.",
+         "param":"3",
+         "inputConstraints": [
+            ["Body site", "Chest region"],
+            ["Imaging study type", "CT scan"],
+            ["Image resolution", "Any"],
+            ["Image data format", "DICOM"]
+          ],
+          "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_3_input.png",
+          "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_3_output.png"
       },
-   "abdomenDicom2glb":
+     "abdomenDicom2glb":
       {
          "name":"DICOM to segmented abdomen organs GLB generation",
          "src":"pipelines/pipelineAbdomenDicom2glb.py",

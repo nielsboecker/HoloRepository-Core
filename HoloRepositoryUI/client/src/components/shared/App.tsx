@@ -20,14 +20,22 @@ class App extends Component<any, IAppState> {
       handlePipelinesChange: this._handlePipelinesChange,
       handleDeleteHolograms: this._handleDeleteHolograms,
       handleDownloadHolograms: this._handleDownloadHolograms,
-      handleHologramCreated: this._handleHologramCreated
+      handleHologramCreated: this._handleHologramCreated,
+      handleLogin: this._handleLogin
     };
   }
 
-  componentDidMount(): void {
-    // Note: This will lead to a merge conflict with Fanbo's branch. Accept his change
-    // which should use a100-102 practitioners, future developer!
-    const practitionerId = "a100";
+  render() {
+    return (
+      <AppContext.Provider value={this.state}>
+        <div className="App">
+          <MainContainer />
+        </div>
+      </AppContext.Provider>
+    );
+  }
+
+  private _handleLogin = (practitionerId: string, pin: string) => {
     BackendServerService.getPractitioner(practitionerId).then(practitioner => {
       console.log("Fetched data: practitioner", practitioner);
       this._handlePractitionerChange(practitioner!);
@@ -44,17 +52,8 @@ class App extends Component<any, IAppState> {
       console.log("Fetched data: pipelines", pipelines);
       this._handlePipelinesChange(pipelines || []);
     });
-  }
-
-  render() {
-    return (
-      <AppContext.Provider value={this.state}>
-        <div className="App">
-          <MainContainer />
-        </div>
-      </AppContext.Provider>
-    );
-  }
+    this.setState({ pin });
+  };
 
   private _fetchPatientSpecificData = () => {
     this._fetchImagingStudiesForPatients();
@@ -70,7 +69,9 @@ class App extends Component<any, IAppState> {
       for (const pid in combinedResult) {
         const studies = combinedResult[pid];
         const patient = patients[pid];
-        patient.imagingStudies = studies;
+        if (patient) {
+          patient.imagingStudies = studies;
+        }
         this.setState({
           patients: {
             ...patients,

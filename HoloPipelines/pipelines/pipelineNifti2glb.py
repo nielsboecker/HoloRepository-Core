@@ -1,29 +1,63 @@
-from components import compCommonPath
+# pipeline left in current state (work with local files) as unsure if there's a use case where user can download nii from PACS
+# could be left as is for internal use? Keep this file but delete index from pipelineList.json?
+
+# do i need status update on this 'internal' pipeline?
+from components import compJobStatus
 from components import compNifti2numpy
 from components import compNumpy2obj
 from components import compObj2glbWrapper
+from components import compPostToAccesor
+from components import compJobPath
+from components.compJobStatusEnum import JobStatus
+from components import compCombineInfoForAccesor
+from components.compGetPipelineListInfo import get_pipeline_list
 import pathlib
+import json
 import sys
 import logging
 
-logging.basicConfig(level=logging.INFO)
+FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
+logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 
 
-def main(inputNiftiPath, outputGlbPath, threshold):
-    generatedNumpyList = compNifti2numpy.main(str(pathlib.Path(inputNiftiPath)))
-    generatedObjPath = compNumpy2obj.main(
-        generatedNumpyList,
+def main(job_ID, input_nifti_path, output_glb_path, threshold, meta_data):
+    compJobStatus.update_status(job_ID, JobStatus.PPREPROCESSING.name)
+    generated_numpy_list = compNifti2numpy.main(str(pathlib.Path(input_nifti_path)))
+
+    logging.debug("job start: " + json.dumps(meta_data))
+
+    compJobStatus.update_status(job_ID, JobStatus.MODELGENERATION.name)
+    generated_obj_path = compNumpy2obj.main(
+        generated_numpy_list,
         threshold,
-        str(compCommonPath.obj.joinpath("nifti2glb_tempObj.obj")),
+        compJobPath.make_str_job_path(job_ID, ["temp", "temp.obj"]),
     )
-    generatedGlbPath = compObj2glbWrapper.main(
-        generatedObjPath,
-        str(pathlib.Path(outputGlbPath)),
-        deleteOriginalObj=True,
-        compressGlb=False,
+
+    compJobStatus.update_status(job_ID, JobStatus.MODELCONVERSION.name)
+    generated_glb_path = compObj2glbWrapper.main(
+        generated_obj_path,
+        str(pathlib.Path(output_glb_path)),
+        delete_original_obj=True,
+        compress_glb=False,
     )
-    logging.info("nifti2glb: done, glb saved to {}".format(generatedGlbPath))
+    logging.info("nifti2glb: done, glb saved to {}".format(generated_glb_path))
+    print("nifti2glb: done, glb saved to {}".format(generated_glb_path))
+
+    list_of_pipeline = get_pipeline_list()
+    meta_data = compCombineInfoForAccesor.add_info_for_accesor(
+        meta_data,
+        "apply on generic bone segmentation",
+        "Generate with " + list(list_of_pipeline.keys())[1] + " pipeline",
+        output_glb_path,
+    )
+    # TODO: Verify this works after merge
+    compJobStatus.update_status(job_ID, "Posting data")
+    compPostToAccesor.send_file_request_to_accessor(meta_data)
+
+    compJobStatus.update_status(job_ID, "Cleaning up")
+    compJobPath.clean_up(job_ID)
+    compJobStatus.update_status(job_ID, JobStatus.FINISHED.name)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3])
+    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])

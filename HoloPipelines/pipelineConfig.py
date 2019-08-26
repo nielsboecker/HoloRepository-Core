@@ -6,8 +6,11 @@ import subprocess
 import pathlib
 import logging
 import importlib
+from pipelines.components.compGetPipelineListInfo import get_pipeline_list
+
 from multiprocessing import Process
 import pipelines.components.compCommonPath as pl_common_path
+
 
 FORMAT = "%(asctime)-15s -function name:%(funcName)s -%(message)s"
 logging.basicConfig(level=logging.INFO, format=FORMAT)
@@ -20,9 +23,9 @@ parser = argparse.ArgumentParser(description="Select pipeline to process")
 parser.add_argument(
     "-c",
     "--config",
-    default="./pipelineList.json",
+    default="pipelineList.json",
     type=str,
-    help="path to pipeline config file relative to pipelineController",
+    help="path to pipeline config file relative to pipelineConfig",
 )
 parser.add_argument(
     "-l", "--ls", action="store_true", help="list all the available piplines"
@@ -77,17 +80,17 @@ def main():
                     logging.info("")
                     search_counter += 1
             if search_counter == 0:
-                sys.exit("pipelineController: no pipeline with such name")
+                sys.exit("pipelineConfig: no pipeline with such name")
 
             else:
-                logging.info("pipelineController: " + str(search_counter) + " results")
+                logging.info("pipelineConfig: " + str(search_counter) + " results")
             sys.exit()
         # check if pipeline exist
         if args.pipelineID not in list_of_pipeline:
-            sys.exit("pipelineController: no pipeline with such ID")
+            sys.exit("pipelineConfig: no pipeline with such ID")
         if len(args.param) != int(list_of_pipeline[args.pipelineID]["param"]):
             sys.exit(
-                "pipelineController: invalid number of param [expected: "
+                "pipelineConfig: invalid number of param [expected: "
                 + str(list_of_pipeline[args.pipelineID]["param"])
                 + ", got: "
                 + str(len(args.param))
@@ -104,28 +107,20 @@ def main():
 
 
 def startPipeline(pipeline_ID, parameter_dict):
-    list_of_pipeline = getPipelineList()
+    list_of_pipeline = get_pipeline_list()
     list_of_pipeline[pipeline_ID]["src"].split(".py")[0].replace("/", ".")
     pl_package_name = (
         list_of_pipeline[pipeline_ID]["src"].split(".py")[0].replace("/", ".")
     )
     pl_package = importlib.import_module(pl_package_name)
 
-    process = Process(target=pl_package.main, kwargs=parameter_dict)
+    process = Process(target=pl_package.main, kwargs=(parameter_dict))
     process.start()
-
-
-def getPipelineList():
-    configFileName = "pipelineList.json"
-
-    with open(str(pathlib.Path(new_cwd).joinpath(str(configFileName)))) as json_file:
-        list_of_pipeline = json.load(json_file)
-    json_file.close()
-    return list_of_pipeline
+    # process.join
 
 
 def dynamicLoadingPipeline(plID, parameter_dict):
-    list_of_pipeline = getPipelineList()
+    list_of_pipeline = get_pipeline_list()
     list_of_pipeline[plID]["src"].split(".py")[0].replace("/", ".")
     pl_package_name = list_of_pipeline[plID]["src"].split(".py")[0].replace("/", ".")
     pl_package = importlib.import_module(pl_package_name)

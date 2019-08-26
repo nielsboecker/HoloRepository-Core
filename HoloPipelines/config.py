@@ -11,6 +11,9 @@ import sys
 from dotenv import load_dotenv
 
 # Load data from .env file (will not override actual env variables if set)
+# Note that the .env file is .dockerignored, so in production it is expected
+# to set these variables throug the deployment workflow.
+logging.info("Attempting to load environment variables from .env file, if it exists")
 load_dotenv(verbose=True)
 
 # Application

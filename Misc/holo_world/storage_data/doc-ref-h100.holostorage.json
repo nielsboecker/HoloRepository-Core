@@ -1,0 +1,31 @@
+{
+    "author": [
+        {
+            "reference": "Practitioner/a100"
+        }
+    ],
+    "content": [
+        {
+            "attachment": {
+                "contentType": "model/gltf-binary",
+                "size": 3182168,
+                "title": "Ribcage Hologram"
+            }
+        }
+    ],
+    "date": "2019-01-02T12:30:45+00:00",
+    "description": "{\"description\":\"Ribcage scan of patient\",\"creationDescription\":\"Uploaded from existing hologram\",\"bodySite\":\"chest\",\"dateOfImaging\":\"2017-07-15T15:20:25Z\"}",
+    "id": "h100",
+    "meta": {
+        "lastUpdated": "2019-08-01T22:42:13.477+00:00",
+        "versionId": "7"
+    },
+    "resourceType": "DocumentReference",
+    "status": "current",
+    "subject": {
+        "reference": "Patient/p100"
+    },
+    "type": {
+        "text": "UPLOAD_EXISTING_MODEL"
+    }
+}

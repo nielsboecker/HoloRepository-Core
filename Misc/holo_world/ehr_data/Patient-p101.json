@@ -1,0 +1,213 @@
+{
+    "address": [
+        {
+            "city": "Malden",
+            "country": "US",
+            "extension": [
+                {
+                    "extension": [
+                        {
+                            "url": "latitude",
+                            "valueDecimal": 42.42938
+                        },
+                        {
+                            "url": "longitude",
+                            "valueDecimal": -71.058706
+                        }
+                    ],
+                    "url": "http://hl7.org/fhir/StructureDefinition/geolocation"
+                }
+            ],
+            "line": [
+                "710 Kuphal Harbor Apt 28"
+            ],
+            "postalCode": "02148",
+            "state": "Massachusetts"
+        }
+    ],
+    "birthDate": "1947-06-04",
+    "communication": [
+        {
+            "language": {
+                "coding": [
+                    {
+                        "code": "en-US",
+                        "display": "English",
+                        "system": "urn:ietf:bcp:47"
+                    }
+                ],
+                "text": "English"
+            }
+        }
+    ],
+    "extension": [
+        {
+            "extension": [
+                {
+                    "url": "ombCategory",
+                    "valueCoding": {
+                        "code": "2106-3",
+                        "display": "White",
+                        "system": "urn:oid:2.16.840.1.113883.6.238"
+                    }
+                },
+                {
+                    "url": "text",
+                    "valueString": "White"
+                }
+            ],
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"
+        },
+        {
+            "extension": [
+                {
+                    "url": "ombCategory",
+                    "valueCoding": {
+                        "code": "2186-5",
+                        "display": "Not Hispanic or Latino",
+                        "system": "urn:oid:2.16.840.1.113883.6.238"
+                    }
+                },
+                {
+                    "url": "text",
+                    "valueString": "Not Hispanic or Latino"
+                }
+            ],
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName",
+            "valueString": "Helaine42 McDermott739"
+        },
+        {
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
+            "valueCode": "M"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/patient-birthPlace",
+            "valueAddress": {
+                "city": "Norton",
+                "country": "US",
+                "state": "Massachusetts"
+            }
+        },
+        {
+            "url": "http://synthetichealth.github.io/synthea/disability-adjusted-life-years",
+            "valueDecimal": 0.1975385913702482
+        },
+        {
+            "url": "http://synthetichealth.github.io/synthea/quality-adjusted-life-years",
+            "valueDecimal": 70.80246140862975
+        }
+    ],
+    "gender": "male",
+    "generalPractitioner": [
+        {
+            "reference": "Practitioner/a100"
+        }
+    ],
+    "id": "p101",
+    "identifier": [
+        {
+            "system": "https://github.com/synthetichealth/synthea",
+            "value": "6481a0f0-75ca-4a46-9d54-b9b38c53add4"
+        },
+        {
+            "system": "http://hospital.smarthealthit.org",
+            "type": {
+                "coding": [
+                    {
+                        "code": "MR",
+                        "display": "Medical Record Number",
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                    }
+                ],
+                "text": "Medical Record Number"
+            },
+            "value": "6481a0f0-75ca-4a46-9d54-b9b38c53add4"
+        },
+        {
+            "system": "http://hl7.org/fhir/sid/us-ssn",
+            "type": {
+                "coding": [
+                    {
+                        "code": "SS",
+                        "display": "Social Security Number",
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                    }
+                ],
+                "text": "Social Security Number"
+            },
+            "value": "999-91-9253"
+        },
+        {
+            "system": "urn:oid:2.16.840.1.113883.4.3.25",
+            "type": {
+                "coding": [
+                    {
+                        "code": "DL",
+                        "display": "Driver's License",
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                    }
+                ],
+                "text": "Driver's License"
+            },
+            "value": "S99943848"
+        },
+        {
+            "system": "http://standardhealthrecord.org/fhir/StructureDefinition/passportNumber",
+            "type": {
+                "coding": [
+                    {
+                        "code": "PPN",
+                        "display": "Passport Number",
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                    }
+                ],
+                "text": "Passport Number"
+            },
+            "value": "X227767X"
+        }
+    ],
+    "maritalStatus": {
+        "coding": [
+            {
+                "code": "M",
+                "display": "M",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus"
+            }
+        ],
+        "text": "M"
+    },
+    "multipleBirthBoolean": false,
+    "name": [
+        {
+            "family": "Greenholt",
+            "given": [
+                "Buster"
+            ],
+            "prefix": [
+                "Mr."
+            ],
+            "use": "official",
+            "text": "Buster Greenholt"
+        }
+    ],
+    "photo": [
+        {
+            "url": "https://randomuser.me/api/portraits/men/1.jpg"
+        }
+    ],
+    "resourceType": "Patient",
+    "telecom": [
+        {
+            "system": "phone",
+            "use": "home",
+            "value": "555-106-8806"
+        }
+    ],
+    "text": {
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Generated by <a href=\"https://github.com/synthetichealth/synthea\">Synthea</a>.Version identifier: v2.4.0-121-ge241cd29\n .   Person seed: -1508915988095604114  Population seed: 12345</div>",
+        "status": "generated"
+    }
+}

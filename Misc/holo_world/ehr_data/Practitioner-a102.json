@@ -1,0 +1,40 @@
+{
+    "active": true,
+    "address": [
+        {
+            "city": "TAUNTON",
+            "country": "US",
+            "line": [
+                "88 WASHINGTON STREET"
+            ],
+            "postalCode": "02780",
+            "state": "MA"
+        }
+    ],
+    "gender": "male",
+    "id": "a102",
+    "identifier": [
+        {
+            "system": "http://hl7.org/fhir/sid/us-npi",
+            "value": "290"
+        }
+    ],
+    "name": [
+        {
+            "family": "Schroeder",
+            "given": [
+                "Jonah"
+            ],
+            "prefix": [
+                "Dr."
+            ],
+            "text": "Jonah Schroeder"
+        }
+    ],
+    "photo": [
+        {
+            "url": "https://randomuser.me/api/portraits/men/23.jpg"
+        }
+    ],
+    "resourceType": "Practitioner"
+}

@@ -1,0 +1,18 @@
+{
+    "active": true,
+    "gender": "female",
+    "id": "a101",
+    "name": [
+        {
+            "family": "Franecki",
+            "given": [
+                "Erlinda"
+            ],
+            "prefix": [
+                "Dr."
+            ],
+            "text": "Erlinda Franecki"
+        }
+    ],
+    "resourceType": "Practitioner"
+}

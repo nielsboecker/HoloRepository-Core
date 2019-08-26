@@ -11,7 +11,7 @@ import logging
 import os
 import shutil
 import time
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Union
 
 import coloredlogs
 
@@ -171,7 +171,7 @@ def read_log_file_for_job(job_id: str) -> str:
     log_path = get_log_file_path_for_job(job_id)
     if not os.path.exists(log_path):
         # Try falling back on finished jobs
-        log_path = get_log_file_path_for_job(job_id, finished=True)
+        log_path = get_log_file_path_for_job(job_id)
     if not log_path:
         logging.warning(f"No log found for '{job_id}'")
         return ""

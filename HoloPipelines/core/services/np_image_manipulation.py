@@ -51,11 +51,11 @@ def downscale_and_conditionally_crop(
         x = image.shape[0]
         y = image.shape[1]
         z = image.shape[2]
-        max_side_res = max(x, y, z)
-        if max_side_res > resolution_limit:
-            image = crop_around_centre(
-                image, resolution_limit, resolution_limit, resolution_limit
-            )
+
+        # each dimension must be divisible by 8, code below crop the remainder after division by 8
+
+        if (x % 8 != 0) or (y % 8 != 0) or (z % 8 != 0):
+            image = crop_around_centre(image, x % 8, y % 8, z % 8)
     else:
         logging.info("Array smaller than limit given, no resize has been done")
 

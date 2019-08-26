@@ -1,3 +1,7 @@
+"""
+This module provides a wrapper around the existing ct_lung_segmentation implementation.
+"""
+
 import nibabel as nib
 
 import core.third_party.ct_lung_segmentation.utils as utils
@@ -7,7 +11,10 @@ from core.third_party.ct_lung_segmentation.segment_lung import segment_lung
 
 def perform_lung_segmentation(
     input_nifti_file_path: str, output_nifti_directory_path: str
-):
+) -> str:
+    """
+    Calls the implementation of lung segmentation and returns path to the result file.
+    """
     params = utils.define_parameter()
 
     # Load image

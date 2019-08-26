@@ -1,3 +1,7 @@
+"""
+This module contains some functions to perform manipulations upon numpy data.
+"""
+
 import logging
 
 import numpy as np
@@ -28,7 +32,7 @@ def crop_around_centre(image: np.ndarray, newX, newY, newZ):
 
 # Set limit to prevent crashing of NN containers and general performance issues
 def downscale_and_conditionally_crop(
-    image: np.ndarray, resolution_limit: int = int(INPUT_RESOLUTION_MAX)
+    image: np.ndarray, resolution_limit: int = INPUT_RESOLUTION_MAX
 ):
     if len(image.shape) >= 3:
         x = image.shape[0]

@@ -10,30 +10,46 @@ import scipy.ndimage
 from config import INPUT_RESOLUTION_MAX
 
 
-# FIXME: This is broken and needs to be fixed @Udomkarn
+def crop_around_centre(
+    image: np.ndarray,
+    new_x_dimension_length,
+    new_y_dimension_length,
+    new_z_dimension_length,
+) -> np.ndarray:
+    """
+    Crop the 3D NumPy array around the centre to a new dimension given as arguments.
+    :param image: 3 dimensions NumPy array representing a series of image
+    :param new_x_dimension_length: the new X dimension length after cropping
+    :param new_y_dimension_length: the new Y dimension length after cropping
+    :param new_z_dimension_length: the new Z dimension length after cropping
+    :return: numpy ndarray representing the cropped image
+    """
+    x_dimension_length, y_dimension_length, z_dimension_length = image.shape
+
+    x_start_position = x_dimension_length // 2 - (new_x_dimension_length // 2)
+    y_start_position = y_dimension_length // 2 - (new_y_dimension_length // 2)
+    z_start_position = z_dimension_length // 2 - (new_z_dimension_length // 2)
+
+    x_end_position = x_start_position + new_x_dimension_length
+    y_end_position = y_start_position + new_y_dimension_length
+    z_end_position = z_start_position + new_z_dimension_length
+
+    return image[
+        x_start_position:x_end_position,
+        y_start_position:y_end_position,
+        z_start_position:z_end_position,
+    ]
 
 
-def crop_around_centre(image: np.ndarray, newX, newY, newZ):
-    x, y, z = image.shape
-
-    startX = x // 2 - (newX // 2)
-    startY = y // 2 - (newY // 2)
-    startZ = z // 2 - (newZ // 2)
-
-    endX = startX + newX
-    endY = startY + newY
-    endZ = startZ + newZ
-
-    return image[startX:endX, startY:endY, startZ:endZ]
-
-
-# TODO: Does it make sense? When I already did a downscale such that the longest size
-#  is <= the given limit, why would I ever need to then crop it? => @Udomkarn pls fix
-
-# Set limit to prevent crashing of NN containers and general performance issues
 def downscale_and_conditionally_crop(
     image: np.ndarray, resolution_limit: int = INPUT_RESOLUTION_MAX
-):
+) -> np.ndarray:
+    """
+    Downscale and crop 3D NumPy array, this is to set limit to prevent crashing of NN containers and general performance issues.
+    :param image: 3 dimensions NumPy array representing a series of image
+    :param resolution_limit: the resolution limit
+    :return: numpy ndarray representing the downscaled and cropped(for the dimension to be divisible by 8 for the NN model) image
+    """
     if len(image.shape) >= 3:
         x = image.shape[0]
         y = image.shape[1]

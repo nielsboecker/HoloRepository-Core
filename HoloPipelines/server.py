@@ -10,6 +10,7 @@ from typing import Tuple
 import coloredlogs
 from flask import Flask, request
 from flask_json import as_json
+from flask_cors import CORS
 
 from config import FLASK_ENV, APP_PORT
 from core.pipelines.pipelines_controller import get_pipelines_dict
@@ -23,6 +24,7 @@ coloredlogs.install(level=log_level, fmt=log_format)
 
 app = Flask(__name__)
 app.config["JSON_ADD_STATUS"] = False
+CORS(app)
 URL_API_PREFIX = "/api/v1"
 
 

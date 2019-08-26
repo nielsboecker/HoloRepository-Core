@@ -246,6 +246,7 @@ func HologramsHidDownloadGet(c *gin.Context) {
 		return
 	}
 
+	// Filename of hologram stored on the blob storage
 	var data bytes.Buffer
 	hologramAPISpec := hologramFhir.ToAPISpec()
 	hologramFilename := id + ".glb"
@@ -255,6 +256,7 @@ func HologramsHidDownloadGet(c *gin.Context) {
 		return
 	}
 
+	// Set the filename as the hologram's title when a user downloads the hologram
 	extraHeaders := map[string]string{
 		"Content-Disposition": `attachment; filename="` + hologramAPISpec.Title + `.glb"`,
 	}

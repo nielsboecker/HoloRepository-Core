@@ -57,7 +57,7 @@ class FHIRInteraction:
     def _upload_resource(self, content: dict):
         if "id" not in content or "resourceType" not in content:
             logging.error(
-                "Singular FHIR resource does not contain Id or resourceType...Skipping"
+                "Singular FHIR resource does not contain id or resourceType...Skipping"
             )
             return
 

@@ -5,7 +5,8 @@ This folder contains demo data to setup HoloRepository and the README will docum
 - An Azure subscription
 
 ## Contents
-The following describes the contents in this
+The following describes the contents provided in the demo.
+
 It consists of fhir data for the EHR FHIR server, Storage FHIR server and some dummy holograms for the blob storage.
 
 | Folder       | Description                                |

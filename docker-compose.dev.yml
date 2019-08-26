@@ -22,6 +22,10 @@ services:
     env_file: ./HoloPipelines/.env
     ports:
       - "3100:3100"
+    links:
+      - holopipelines-models__dense_vnet_abdominal_ct
+    environment:
+      - MODEL_ABDOMINAL_SEGMENTATION_HOST=http://holopipelines-models__dense_vnet_abdominal_ct
   holostorage-accessor:
     build: ./HoloStorageAccessor
     env_file: ./HoloStorageAccessor/.env

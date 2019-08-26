@@ -63,16 +63,17 @@ def downscale_and_conditionally_crop(
         image = scipy.ndimage.interpolation.zoom(
             image, [resize_ratio, resize_ratio, resize_ratio]
         )
-
-        x = image.shape[0]
-        y = image.shape[1]
-        z = image.shape[2]
-
-        # each dimension must be divisible by 8, code below crop the remainder after division by 8
-
-        if (x % 8 != 0) or (y % 8 != 0) or (z % 8 != 0):
-            image = crop_around_centre(image, x % 8, y % 8, z % 8)
+        logging.info("Array downscale finished")
     else:
-        logging.info("Array smaller than limit given, no resize has been done")
+        logging.info("Array smaller than limit given, no downscale has been done")
+
+    x = image.shape[0]
+    y = image.shape[1]
+    z = image.shape[2]
+
+    # each dimension must be divisible by 8, code below crop the remainder after division by 8
+    if (x % 8 != 0) or (y % 8 != 0) or (z % 8 != 0):
+        image = crop_around_centre(image, x - (x % 8), y - (y % 8), z - (z % 8))
+        logging.info("Array not divisible by 8, image cropped")
 
     return image

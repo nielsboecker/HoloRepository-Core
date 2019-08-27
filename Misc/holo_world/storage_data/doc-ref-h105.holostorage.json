@@ -26,6 +26,6 @@
         "reference": "Patient/p102"
     },
     "type": {
-        "text": "UPLOAD_EXISTING_MODEL"
+        "text": "GENERATE_FROM_IMAGING_STUDY"
     }
 }

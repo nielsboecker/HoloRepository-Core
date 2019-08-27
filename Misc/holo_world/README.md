@@ -1,4 +1,4 @@
-# HoloRepository Demo
+# Holo World: How to set up a complete HoloRepository demo infrastructure
 This folder contains demo data to setup HoloRepository and the README will document the steps to spin up the necessary infrastructure for HoloRepository
 
 ## Prerequisites
@@ -30,7 +30,7 @@ It consists of fhir data for the EHR FHIR server, Storage FHIR server and some d
 - Configure `config.cfg`
     - Additional details on configuration can be found in the tool's README.md
 - Insert the demo data
-    - `python az_blob_tool.py - upload-folder holograms ./../holorepo_demo_data/storage_glb`
+    - `python az_blob_tool.py - upload-folder holograms ../../holo_world/storage_glb`
 
 ### HoloStorage FHIR and EHR FHIR Services
 #### Setup Azure FHIR service (EHR and HoloStorage)
@@ -45,9 +45,9 @@ It consists of fhir data for the EHR FHIR server, Storage FHIR server and some d
 #### FHIR Data Insertion
 - Go to `Misc/tools/fhir_api_tool`
 - Insert ehr data
-    - `python fhir_api_tool.py --base-url <url_to_ehr_fhir> upload-folder ../../holorepo_demo_data/ehr_data`
+    - `python fhir_api_tool.py --base-url <url_to_ehr_fhir> upload-folder ../../holo_world/ehr_data`
 - Insert storage data
-    - `python fhir_api_tool.py --base-url <url_to_storage_fhir> upload-folder ../../holorepo_demo_data/storage_data`
+    - `python fhir_api_tool.py --base-url <url_to_storage_fhir> upload-folder ../../holo_world/storage_data`
 
 ## HoloRepository Demo Data Breakdown
 The following describes the demo data that is created for the individual services.
@@ -68,11 +68,12 @@ The following describes the demo data that is created for the individual service
 | p110 | Patient | a101 to a102      | -                 | Patient with 2 Practitioners and 0 ImagingStudies |
 
 ### HoloStorage FHIR Service Demo Data
-| ID   | Type              | Practitioner Link | Patient Link | Hologram File | Description |
-|------|-------------------|-------------------|--------------|---------------|-------------|
-| h100 | DocumentReference | a100              | p100         | h100.glb      | Ribcage     |
-| h101 | DocumentReference | a102              | p100         | h101.glb      | Lungs       |
-| h102 | DocumentReference | a100              | p101         | h102.glb      | Abdomen     |
-| h103 | DocumentReference | a100              | p102         | h103.glb      | Pelvis      |
-| h104 | DocumentReference | a101              | p107         | h104.glb      | Airways     |
+| ID   | Type              | Practitioner Link | Patient Link | Hologram File | Description      |
+|------|-------------------|-------------------|--------------|---------------|------------------|
+| h100 | DocumentReference | a100              | p100         | h100.glb      | Ribcage          |
+| h101 | DocumentReference | a102              | p100         | h101.glb      | Lungs            |
+| h102 | DocumentReference | a100              | p101         | h102.glb      | Abdomen          |
+| h103 | DocumentReference | a100              | p102         | h103.glb      | Pelvis           |
+| h104 | DocumentReference | a101              | p107         | h104.glb      | Airways          |
+| h105 | DocumentReference | a100              | p102         | h105.glb      | Left-Scfe-Pelvis |
 

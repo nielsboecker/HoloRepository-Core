@@ -1,0 +1,31 @@
+{
+    "author": [
+        {
+            "reference": "Practitioner/a100"
+        }
+    ],
+    "content": [
+        {
+            "attachment": {
+                "contentType": "model/gltf-binary",
+                "size": 4415068,
+                "title": "Left Scfe Pelvis Bones"
+            }
+        }
+    ],
+    "date": "2019-01-02T12:30:45+00:00",
+    "description": "{\"description\":\"Left Scfe Pelvis bone hologram\",\"creationDescription\":\"Uploaded from existing hologram\",\"bodySite\":\"groin\",\"dateOfImaging\":\"2017-07-15T15:20:25Z\"}",
+    "id": "h105",
+    "meta": {
+        "lastUpdated": "2019-08-01T22:42:13.477+00:00",
+        "versionId": "7"
+    },
+    "resourceType": "DocumentReference",
+    "status": "current",
+    "subject": {
+        "reference": "Patient/p102"
+    },
+    "type": {
+        "text": "UPLOAD_EXISTING_MODEL"
+    }
+}

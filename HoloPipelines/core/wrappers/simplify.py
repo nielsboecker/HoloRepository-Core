@@ -4,7 +4,9 @@ import subprocess
 
 from config import SIMPLIFICATION_RATIO
 
-current_script_directory = os.path.dirname(os.path.realpath(__file__))
+current_script_directory = (
+    os.path.dirname(os.path.realpath(__file__)) + "/../third_party/"
+)
 
 
 def call_simplify(

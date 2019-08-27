@@ -1,4 +1,4 @@
-# HoloRepository Demo
+# Holo World: How to set up a complete HoloRepository demo infrastructure
 This folder contains demo data to setup HoloRepository and the README will document the steps to spin up the necessary infrastructure for HoloRepository
 
 ## Prerequisites

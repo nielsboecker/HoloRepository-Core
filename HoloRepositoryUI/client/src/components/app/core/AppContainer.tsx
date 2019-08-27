@@ -30,9 +30,21 @@ class AppContainer extends Component<RouteComponentProps & PropsWithContext> {
             {this.props.children}
           </Layout.Content>
 
-          <MainFooter style={this.backgroundStyle} />
+          <MainFooter
+            style={{
+              background: "rgba(1,1,1,0.2)",
+              position: "fixed",
+              right: 0,
+              bottom: 0,
+              left: 0
+            }}
+          />
         </Layout>
       );
+    } else if (!this.props.context!.loginFlag) {
+      {
+        window.location.href = "/";
+      }
     } else {
       return (
         <div>

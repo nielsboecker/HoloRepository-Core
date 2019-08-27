@@ -11,6 +11,7 @@ export interface IAppState {
   selectedPatientId?: string;
   pipelines: IPipeline[];
   pin?: string;
+  loginFlag: boolean;
   handlePractitionerChange: Function;
   handlePatientsChange: Function;
   handleSelectedPatientIdChange: Function;
@@ -27,6 +28,7 @@ const initialState: IAppState = {
   selectedPatientId: undefined,
   pipelines: [],
   pin: undefined,
+  loginFlag: false,
   handlePractitionerChange: () => {},
   handleSelectedPatientIdChange: () => {},
   handlePatientsChange: () => {},

@@ -10,7 +10,9 @@ import numpy as np
 import scipy.ndimage
 
 
-def extract_np_array_from_nifti_image(image_data: nibabel.nifti1.Nifti1Image):
+def extract_np_array_from_nifti_image(
+    image_data: nibabel.nifti1.Nifti1Image
+) -> np.array:
     """
     Returns the numpy array representation of the dataobj inside a NIfTI image
     :param image_data: NIfTI image
@@ -21,7 +23,7 @@ def extract_np_array_from_nifti_image(image_data: nibabel.nifti1.Nifti1Image):
 
 def extract_np_array_from_nifti_image_and_normalise(
     image_data: nibabel.nifti1.Nifti1Image
-):
+) -> np.array:
     """
     After loading a NIfTI file, this function resamples it according to the file headers
     in order to compensate different slice thickness.
@@ -62,18 +64,18 @@ def extract_np_array_from_nifti_image_and_normalise(
     return image_data_as_np_array
 
 
-def read_nifti_image(input_path: str):
+def read_nifti_image(input_file_path: str) -> nibabel.nifti1.Nifti1Image:
     """
     Reads NIfTI image from disk.
-    :param input_path: path to the NIfTI image
+    :param input_file_path: path to the NIfTI image
     :return: NIfTI image represented as nibabel.nifti1.Nifti1Image
     """
     # Note: Workaround according to https://github.com/nipy/nibabel/issues/626
     nibabel.Nifti1Header.quaternion_threshold = -1e-06
-    return nibabel.load(input_path)
+    return nibabel.load(input_file_path)
 
 
-def read_nifti_as_np_array(input_path: str, normalise: bool = True):
+def read_nifti_as_np_array(input_path: str, normalise: bool = True) -> np.array:
     """
     Reads a NIfTI image as Nifti1Image and then transforms it to a numpy array.
     :param input_path: path to the NIfTI image
@@ -94,9 +96,13 @@ def read_nifti_as_np_array(input_path: str, normalise: bool = True):
     return nifti_image_as_np_array
 
 
-def write_nifti_image(nifti_image: nibabel.nifti1.Nifti1Image, output_file_path: str):
+def write_nifti_image(
+    nifti_image: nibabel.nifti1.Nifti1Image, output_file_path: str
+) -> None:
     nibabel.save(nifti_image, output_file_path)
 
 
-def convert_dicom_np_ndarray_to_nifti_image(dicom_image: np.ndarray):
+def convert_dicom_np_ndarray_to_nifti_image(
+    dicom_image: np.ndarray
+) -> nibabel.nifti1.Nifti1Image:
     return nibabel.Nifti1Image(dicom_image, affine=np.eye(4))

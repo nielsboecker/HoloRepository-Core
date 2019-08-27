@@ -6,6 +6,7 @@ new jobs, does various checks, and performs some high-level error handling.
 import logging
 import uuid
 from multiprocessing import Pool
+from typing import Tuple
 
 from config import NUM_OF_WORKER_PROCESSES
 from core.pipelines.pipelines_controller import (
@@ -15,11 +16,11 @@ from core.pipelines.pipelines_controller import (
 from jobs.jobs_io import create_directory_for_job, get_logger_for_job
 from jobs.jobs_state import JobState, update_job_state
 
-process_pool = Pool(int(NUM_OF_WORKER_PROCESSES))
+process_pool = Pool(NUM_OF_WORKER_PROCESSES)
 logging.warning(f"Started process pool with {NUM_OF_WORKER_PROCESSES} worker processes")
 
 
-def start_new_job(job_request: dict):
+def start_new_job(job_request: dict) -> Tuple[bool, dict]:
     logging.debug(f"Received request to start new job: {job_request}")
 
     request_is_valid, error_message = check_job_request_validity(job_request)
@@ -31,7 +32,7 @@ def start_new_job(job_request: dict):
     return True, {"jid": job_id}
 
 
-def check_job_request_validity(job_request: dict):
+def check_job_request_validity(job_request: dict) -> Tuple[bool, str]:
     required_keys = ["plid", "imagingStudyEndpoint", "medicalData"]
     if not all(key in job_request for key in required_keys):
         message = f"Missing keys in request: '{job_request}'"
@@ -46,7 +47,7 @@ def check_job_request_validity(job_request: dict):
     return True, ""
 
 
-def job_success_callback():
+def job_success_callback() -> None:
     """
     Shows success message on log. The actual cleaning up is done automatically by the
     garbage collection.
@@ -54,7 +55,7 @@ def job_success_callback():
     logging.info("[SUCCESS] Job terminated successfully")
 
 
-def job_error_callback(error: BaseException):
+def job_error_callback(error: BaseException) -> None:
     """
     Logs an Error or Exception. This is called when any component in the job raises
     an Error or Exception. Unless they can recover themselves, it is encouraged that
@@ -63,11 +64,11 @@ def job_error_callback(error: BaseException):
     logging.warning(f"[ERROR] An error occurred and caused the job to fail: {error}")
 
 
-def init_job(job_request: dict):
+def init_job(job_request: dict) -> str:
     job_id = create_random_job_id()
     create_directory_for_job(job_id)
     logger = get_logger_for_job(job_id)
-    update_job_state(job_id, JobState.CREATED.name, logger)
+    update_job_state(job_id, JobState.CREATED.name, logger, new=True)
 
     pipeline_id = job_request["plid"]
     input_endpoint = job_request["imagingStudyEndpoint"]
@@ -84,5 +85,5 @@ def init_job(job_request: dict):
     return job_id
 
 
-def create_random_job_id():
-    return str(uuid.uuid4()).replace("-", "")[:10]
+def create_random_job_id() -> str:
+    return str(uuid.uuid4()).replace("-", "")[:16]

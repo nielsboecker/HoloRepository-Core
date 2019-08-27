@@ -14,7 +14,6 @@ export class PatientsService {
     return FhirClient.getAllAndMap<R4.IPatient, IPatient>(SupportedFhirResourceType.Patient, {
       "general-practitioner": practitionerId
     });
-
   }
 
   public getById(pid: string): Promise<IPatient> {

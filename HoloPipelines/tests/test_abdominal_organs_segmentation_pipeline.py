@@ -14,7 +14,7 @@ from tests.utils.shared_fixtures import (
     mock_send_to_holostorage_accessor,
 )
 
-this_test_name = os.path.basename(__file__).replace(".py", "")
+test_job_id = os.path.basename(__file__).replace(".py", "")
 
 imagingStudyEndpoint = (
     "https://holoblob.blob.core.windows.net/mock-pacs/normal-abdomen.zip"
@@ -28,7 +28,7 @@ def create_mock_niftynet_output(_1: Any, _2: Any, _3: Any, _4: Any) -> None:
     """
     sample_nifti_file_path = "./tests/utils/minimal.nii.gz"
     niftynet_output_file_path = jobs_io.get_temp_file_path_for_job(
-        this_test_name, "segmented.nii.gz"
+        test_job_id, "segmented.nii.gz"
     )
     shutil.copyfile(sample_nifti_file_path, niftynet_output_file_path)
 
@@ -46,7 +46,7 @@ def mock_call_niftynet_model(mocker: Any) -> mock.MagicMock:
     return mock_send_to_accessor
 
 
-@pytest.mark.parametrize("job_id", [this_test_name])
+@pytest.mark.parametrize("job_id", [test_job_id])
 def test_pipeline(
     patch_jobs_io_and_create_dirs: Any,
     mock_send_to_holostorage_accessor: mock.MagicMock,

@@ -7,7 +7,7 @@ from jobs.jobs_io import (
     get_directory_path_for_job,
 )
 from jobs.jobs_state import JobState, update_job_state, get_current_state, remove_job
-from .utils.shared_fixtures import (
+from tests.utils.shared_fixtures import (
     test_finished_jobs_dir_path,
     patch_jobs_io_and_create_dirs,
 )

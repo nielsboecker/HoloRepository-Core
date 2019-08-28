@@ -93,4 +93,5 @@ View deployment status
 
 ## References
 https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-acr
+
 https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster

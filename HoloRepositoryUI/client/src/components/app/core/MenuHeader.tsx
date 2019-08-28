@@ -81,8 +81,7 @@ class MenuHeader extends Component<PropsWithContext> {
   }
 
   doLogout(): void {
-    console.log("Log out");
-    navigate("/");
+    this.props.context!.handleLogout();
   }
 
   doNavigate(component: string) {

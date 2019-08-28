@@ -20,15 +20,21 @@ export interface IAppState {
   handleDownloadHolograms: Function;
   handleHologramCreated: Function;
   handleLogin: Function;
+  handleLogout: Function;
 }
 
-const initialState: IAppState = {
+// Subset of initial state that can be reused to wipe practitioner-specific data after logout
+const initialPractitionerSpecificState = {
   practitioner: undefined,
   patients: {},
   selectedPatientId: undefined,
-  pipelines: [],
   pin: undefined,
-  loginWasInitiated: false,
+  loginWasInitiated: false
+};
+
+const initialState: IAppState = {
+  ...initialPractitionerSpecificState,
+  pipelines: [],
   handlePractitionerChange: () => {},
   handleSelectedPatientIdChange: () => {},
   handlePatientsChange: () => {},
@@ -36,7 +42,8 @@ const initialState: IAppState = {
   handleDeleteHolograms: () => {},
   handleDownloadHolograms: () => {},
   handleHologramCreated: () => {},
-  handleLogin: () => {}
+  handleLogin: () => {},
+  handleLogout: () => {}
 };
 
 // using same interface for App state and context
@@ -65,4 +72,4 @@ const withAppContext = <ComponentProps extends {}>(
   };
 };
 
-export { initialState, AppContext, withAppContext };
+export { initialState, initialPractitionerSpecificState, AppContext, withAppContext };

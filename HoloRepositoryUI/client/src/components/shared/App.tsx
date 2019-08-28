@@ -4,7 +4,8 @@ import MainContainer from "./MainContainer";
 import { initializeIcons } from "@uifabric/icons";
 import BackendServerService from "../../services/BackendServerService";
 import { IHologram, IPatient, IPractitioner, IPipeline } from "../../../../types";
-import { AppContext, IAppState, initialState } from "./AppState";
+import { AppContext, IAppState, initialState, initialPractitionerSpecificState } from "./AppState";
+import { navigate } from "@reach/router";
 
 // Note: See https://developer.microsoft.com/en-us/fabric/#/styles/web/icons#fabric-react
 initializeIcons();
@@ -21,7 +22,8 @@ class App extends Component<any, IAppState> {
       handleDeleteHolograms: this._handleDeleteHolograms,
       handleDownloadHolograms: this._handleDownloadHolograms,
       handleHologramCreated: this._handleHologramCreated,
-      handleLogin: this._handleLogin
+      handleLogin: this._handleLogin,
+      handleLogout: this._handleLogout
     };
   }
 
@@ -54,6 +56,12 @@ class App extends Component<any, IAppState> {
     });
     this.setState({ pin });
     this.setState({ loginWasInitiated: true });
+  };
+
+  private _handleLogout = () => {
+    console.log("Practitioner logged out");
+    navigate("/");
+    this.setState({ ...initialPractitionerSpecificState });
   };
 
   private _fetchPatientSpecificData = () => {

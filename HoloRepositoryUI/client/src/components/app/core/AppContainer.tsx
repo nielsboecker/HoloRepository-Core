@@ -54,9 +54,7 @@ class AppContainer extends Component<RouteComponentProps & PropsWithContext> {
       // This will happen if practitioners go directly to a subpage instead of starting on the login
       // page. Given that we currently don't store anything in the cache, after a direct load or
       // page refresh, there is no way to know who the user is.
-      return (
-        <Redirect to="/" noThrow />
-      );
+      return <Redirect to="/" noThrow />;
     }
   }
 }

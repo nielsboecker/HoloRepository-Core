@@ -1,12 +1,9 @@
 import logging
-import os
 import subprocess
 
 from config import SIMPLIFICATION_RATIO
 
-current_script_directory = (
-    os.path.dirname(os.path.realpath(__file__)) + "/../third_party/"
-)
+simplify_binary_path = "./core/third_party/fast_quadric_mesh_simplification/simplify"
 
 
 def call_simplify(
@@ -16,13 +13,13 @@ def call_simplify(
 ):
     # NOTE: link to simplify repository https://github.com/sp4cerat/Fast-Quadric-Mesh-Simplification
     simplify_command = [
-        "./simplify",
+        simplify_binary_path,
         obj_input_path,
         obj_output_path,
         str(simplification_ratio),
     ]
 
-    completed_process = subprocess.run(simplify_command, cwd=current_script_directory)
+    completed_process = subprocess.run(simplify_command)
     if completed_process.returncode == 0:
         logging.info("simplify wrapper: Simplification succeeded")
     else:

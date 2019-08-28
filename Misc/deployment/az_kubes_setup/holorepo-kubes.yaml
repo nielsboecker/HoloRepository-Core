@@ -1,0 +1,270 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: holorepository-accessor
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: holorepository-accessor
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: holorepository-accessor
+        image: holocontainers.azurecr.io/holostorage-accessor:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3200 
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: AZURE_STORAGE_ACCOUNT
+          value: "holoblobdemo"
+        - name: AZURE_STORAGE_ACCESS_KEY 
+          valueFrom:
+            secretKeyRef:
+              name: blobstorekey
+              key: AZURE_STORAGE_ACCESS_KEY
+        - name: ACCESSOR_FHIR_URL 
+          value: "https://holostorage-demo.azurewebsites.net"
+        - name: ENABLE_CORS 
+          value: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: holorepository-accessor 
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80 
+    targetPort: 3200
+  selector:
+    app: holorepository-accessor
+---
+
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: holorepository-ui-client
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: holorepository-ui-client
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: holorepository-ui-client
+        image: holocontainers.azurecr.io/holorepository-ui-client:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000 
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: holorepository-client 
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80 
+    targetPort: 3000
+  selector:
+    app: holorepository-ui-client
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: holorepository-server
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80 
+    targetPort: 3001
+  selector:
+    app: holorepository-ui-server
+
+---
+
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: holorepository-ui-server
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: holorepository-ui-server
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: holorepository-ui-sever
+        image: holocontainers.azurecr.io/holorepository-ui-server:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3001 
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: PORT
+          value: "3001"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: REQUEST_LIMIT
+          value: "100kb"
+        - name: NODE_ENV
+          value: "development"
+        - name: HOLOPIPELINES_HOST
+          value: "http://51.105.47.56"
+        - name: HOLOPIPELINES_PORT
+          value: "80"
+        - name: HOLOSTORAGE_ACCESSOR_HOST
+          value: "http://51.104.216.54"
+        - name: HOLOSTORAGE_ACCESSOR_PORT
+          value: "80"
+        - name: FHIR_SERVER_BASE_URL
+          value: "https://holoehr-demo.azurewebsites.net"
+
+---
+
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: holorepository-pipelines
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: holorepository-pipelines
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux 
+      containers:
+      - name: holorepository-pipelines
+        image: holocontainers.azurecr.io/holorepository-pipelines:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3100
+        env:
+        - name: APP_PORT
+          value: "3100"
+        - name: FLASK_ENV
+          value: "production"
+        - name: INPUT_RESOLUTION_MAX
+          value: "256"
+        - name: NUM_OF_WORKER_PROCESSES
+          value: "4"
+        - name: KEEP_ALL_FILES
+          value: "False"
+        - name: KEEP_ALL_LOG_FILES
+          value: "True"
+        - name: GARBAGE_COLLECTION_INTERVAL_SECS
+          value: "30"
+        - name: GARBAGE_COLLECTION_INACTIVE_JOB_TTL_SECS
+          value: "1800"
+        - name: NIFTYNET_MODEL_TIMEOUT
+          value: "300"
+        - name: MODEL_ABDOMINAL_SEGMENTATION_HOST
+          value: "http://holorepository-pipelines-models"
+        - name: MODEL_ABDOMINAL_SEGMENTATION_PORT
+          value: "5000"
+        - name: HOLOSTORAGE_ACCESSOR_HOST
+          value: "http://51.104.216.54"
+        - name: HOLOSTORAGE_ACCESSOR_PORT
+          value: "80"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: holorepository-pipelines
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80 
+    targetPort: 3100
+  selector:
+    app: holorepository-pipelines
+
+---
+
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: holorepository-pipelines-models
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: holorepository-pipelines-models
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: holorepository-pipelines-models
+        image: holocontainers.azurecr.io/holopipelines-models:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000 
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: holorepository-pipelines-models
+spec:
+  selector:
+    app: holorepository-pipelines-models
+  ports:
+    - port: 5000

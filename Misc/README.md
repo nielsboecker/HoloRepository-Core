@@ -15,10 +15,11 @@ This directory contains a collection of tools and deployment scripts that were u
 
 ## [Deployment Scripts](https://github.com/nbckr/HoloRepository-Core/tree/master/Misc/deployment)
 
-| Name               | Description                         |
-| ------------------ | ----------------------------------- |
-| Azure Blob Storage | Setup of azure blob storage service |
-| Azure FHIR Service | Setup of azure FHIR service         |
+| Name                   | Description                                                |
+| ---------------------- | ---------------------------------------------------------- |
+| Azure Blob Storage     | Setup of azure blob storage service                        |
+| Azure FHIR Service     | Setup of azure FHIR service                                |
+| Azure Kubernetes Setup | Guide to setup azure kubernetes service for holorepository |
 
 ## [Demo Environment Setup](https://github.com/nbckr/HoloRepository-Core/tree/master/Misc/holo_world)
 

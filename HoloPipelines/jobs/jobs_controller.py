@@ -6,7 +6,7 @@ new jobs, does various checks, and performs some high-level error handling.
 import logging
 import uuid
 from multiprocessing import Pool
-from typing import Tuple
+from typing import Tuple, Optional
 
 from config import NUM_OF_WORKER_PROCESSES
 from core.pipelines.pipelines_controller import (
@@ -47,10 +47,13 @@ def check_job_request_validity(job_request: dict) -> Tuple[bool, str]:
     return True, ""
 
 
-def job_success_callback() -> None:
+def job_success_callback(result: Optional[any]) -> None:
     """
     Shows success message on log. The actual cleaning up is done automatically by the
     garbage collection.
+
+    Though the `result` variable is not used, its declaration is necessary.
+    Reference: https://docs.python.org/3.4/library/multiprocessing.html?highlight=process#multiprocessing.pool.Pool.apply_async
     """
     logging.info("[SUCCESS] Job terminated successfully")
 

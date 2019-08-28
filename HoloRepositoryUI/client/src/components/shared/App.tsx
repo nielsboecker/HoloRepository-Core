@@ -53,7 +53,7 @@ class App extends Component<any, IAppState> {
       this._handlePipelinesChange(pipelines || []);
     });
     this.setState({ pin });
-    this.setState({ loginFlag: true });
+    this.setState({ loginWasInitiated: true });
   };
 
   private _fetchPatientSpecificData = () => {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { Redirect, RouteComponentProps } from "@reach/router";
 import { Layout } from "antd";
 import MenuHeader from "./MenuHeader";
 import MainFooter from "../../shared/MainFooter";
@@ -43,21 +43,22 @@ class AppContainer extends Component<RouteComponentProps & PropsWithContext> {
           />
         </Layout>
       );
-    } else if (!this.props.context!.loginFlag) {
-      this._hrefToLoginPage();
-      return <div />;
-    } else {
+    } else if (this.props.context!.loginWasInitiated) {
+      // Will appear after initiating login, and before the server returns the practitioners's details
       return (
         <div>
           <Spinner label="Loading..." />
         </div>
       );
+    } else {
+      // This will happen if practitioners go directly to a subpage instead of starting on the login
+      // page. Given that we currently don't store anything in the cache, after a direct load or
+      // page refresh, there is no way to know who the user is.
+      return (
+        <Redirect to="/" noThrow />
+      );
     }
   }
-
-  private _hrefToLoginPage = (): void => {
-    window.location.href = "/";
-  };
 }
 
 export default withAppContext(AppContainer);

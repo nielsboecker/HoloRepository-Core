@@ -102,7 +102,15 @@ def write_nifti_image(
     nibabel.save(nifti_image, output_file_path)
 
 
+def write_np_array_as_nifti_image(
+    nifti_image_as_np_array: np.ndarray, output_file_path: str
+) -> None:
+    nifti_image = convert_dicom_np_ndarray_to_nifti_image(nifti_image_as_np_array)
+    write_nifti_image(nifti_image, output_file_path)
+
+
 def convert_dicom_np_ndarray_to_nifti_image(
     dicom_image: np.ndarray
 ) -> nibabel.nifti1.Nifti1Image:
+    # https://stackoverflow.com/questions/28330785/creating-a-nifti-file-from-a-numpy-array
     return nibabel.Nifti1Image(dicom_image, affine=np.eye(4))

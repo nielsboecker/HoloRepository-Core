@@ -7,14 +7,14 @@ simplify_binary_path = "./core/third_party/fast_quadric_mesh_simplification/simp
 
 
 def call_simplify(
-    obj_input_path: str,
-    obj_output_path: str,
+    obj_input_file_path: str,
+    obj_output_file_path: str,
     simplification_ratio: float = SIMPLIFICATION_RATIO,
 ):
     simplify_command = [
         simplify_binary_path,
-        obj_input_path,
-        obj_output_path,
+        obj_input_file_path,
+        obj_output_file_path,
         str(simplification_ratio),
     ]
 

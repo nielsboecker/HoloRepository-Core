@@ -1,0 +1,19 @@
+{
+    "birthDate": "1909-07-19",
+    "gender": "female",
+    "id": "p102",
+    "name": [
+        {
+            "text": "Annita Dickinson",
+            "family": "Dickinson",
+            "given": [
+                "Annita"
+            ],
+            "prefix": [
+                "Mrs."
+            ],
+            "use": "official"
+        }
+    ],
+    "resourceType": "Patient"
+}

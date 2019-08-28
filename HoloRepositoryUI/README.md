@@ -155,12 +155,6 @@ echo "Testing server" && curl http://localhost:3001/api/v1/patients
 
 Note that the `Dockerfile`s are specified independently of the build context through the `-f` flag. This is necessary in order to copy `./types`, which would otherwise cause an error as it is outside the default build context. The build context therefore needs to be this parent directory.
 
-### Using docker-compose
-
-Alternatively, you can start both client and server with one command: `docker-compose up`. Note that this will use port 3000 for the client and 3001 for the server, in contrast to a production deployment where the ports would usually be mapped to port 80 on the host.
-
-**Deprecated**: While this will still work, there is now a comprehensive docker-compose file at the project root directory. As the UI depends on other components to run properly, it is highly recommended to use that one instead.
-
 ## Integration
 
 ### Client-Server API specification

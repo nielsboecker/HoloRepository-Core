@@ -1,0 +1,182 @@
+{
+    "address": [
+        {
+            "city": "Gloucester",
+            "country": "US",
+            "extension": [
+                {
+                    "extension": [
+                        {
+                            "url": "latitude",
+                            "valueDecimal": 42.62885
+                        },
+                        {
+                            "url": "longitude",
+                            "valueDecimal": -70.685875
+                        }
+                    ],
+                    "url": "http://hl7.org/fhir/StructureDefinition/geolocation"
+                }
+            ],
+            "line": [
+                "891 Graham Harbor"
+            ],
+            "postalCode": "01930",
+            "state": "Massachusetts"
+        }
+    ],
+    "birthDate": "2012-06-11",
+    "communication": [
+        {
+            "language": {
+                "coding": [
+                    {
+                        "code": "en-US",
+                        "display": "English",
+                        "system": "urn:ietf:bcp:47"
+                    }
+                ],
+                "text": "English"
+            }
+        }
+    ],
+    "extension": [
+        {
+            "extension": [
+                {
+                    "url": "ombCategory",
+                    "valueCoding": {
+                        "code": "2106-3",
+                        "display": "White",
+                        "system": "urn:oid:2.16.840.1.113883.6.238"
+                    }
+                },
+                {
+                    "url": "text",
+                    "valueString": "White"
+                }
+            ],
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"
+        },
+        {
+            "extension": [
+                {
+                    "url": "ombCategory",
+                    "valueCoding": {
+                        "code": "2186-5",
+                        "display": "Not Hispanic or Latino",
+                        "system": "urn:oid:2.16.840.1.113883.6.238"
+                    }
+                },
+                {
+                    "url": "text",
+                    "valueString": "Not Hispanic or Latino"
+                }
+            ],
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName",
+            "valueString": "Lakita48 Aufderhar910"
+        },
+        {
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
+            "valueCode": "F"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/patient-birthPlace",
+            "valueAddress": {
+                "city": "Braintree Town",
+                "country": "US",
+                "state": "Massachusetts"
+            }
+        },
+        {
+            "url": "http://synthetichealth.github.io/synthea/disability-adjusted-life-years",
+            "valueDecimal": 0.0
+        },
+        {
+            "url": "http://synthetichealth.github.io/synthea/quality-adjusted-life-years",
+            "valueDecimal": 6.0
+        }
+    ],
+    "gender": "female",
+    "generalPractitioner": [
+        {
+            "reference": "Practitioner/a101"
+        }
+    ],
+    "id": "p107",
+    "identifier": [
+        {
+            "system": "https://github.com/synthetichealth/synthea",
+            "value": "6c6363a1-3810-492b-9ea8-a633fcbfbf63"
+        },
+        {
+            "system": "http://hospital.smarthealthit.org",
+            "type": {
+                "coding": [
+                    {
+                        "code": "MR",
+                        "display": "Medical Record Number",
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                    }
+                ],
+                "text": "Medical Record Number"
+            },
+            "value": "6c6363a1-3810-492b-9ea8-a633fcbfbf63"
+        },
+        {
+            "system": "http://hl7.org/fhir/sid/us-ssn",
+            "type": {
+                "coding": [
+                    {
+                        "code": "SS",
+                        "display": "Social Security Number",
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                    }
+                ],
+                "text": "Social Security Number"
+            },
+            "value": "999-97-3322"
+        }
+    ],
+    "maritalStatus": {
+        "coding": [
+            {
+                "code": "S",
+                "display": "Never Married",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus"
+            }
+        ],
+        "text": "Never Married"
+    },
+    "multipleBirthBoolean": false,
+    "name": [
+        {
+            "family": "Zieme",
+            "given": [
+                "Belia"
+            ],
+            "use": "official",
+            "text": "Belia Zieme"
+        }
+    ],
+    "photo": [
+        {
+            "url": "https://randomuser.me/api/portraits/women/80.jpg"
+        }
+    ],
+    "resourceType": "Patient",
+    "telecom": [
+        {
+            "system": "phone",
+            "use": "home",
+            "value": "555-634-1781"
+        }
+    ],
+    "text": {
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Generated by <a href=\"https://github.com/synthetichealth/synthea\">Synthea</a>.Version identifier: v2.4.0-121-ge241cd29\n .   Person seed: 2919502189498201214  Population seed: 12345</div>",
+        "status": "generated"
+    }
+}

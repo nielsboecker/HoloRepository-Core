@@ -52,7 +52,7 @@ def update_job_state(
     :param new_state: new state (preferably use the "name" of a JobState Enum constant)
     :param logger: optional override to the default logger (use to write to file log)
     """
-    if not new:
+    if state_file_for_job_exists(job_id) and not new:
         prev_state, prev_duration = read_state_file_for_job(job_id)
         logger.info(
             f"[{job_id}] Finished state {prev_state} in {prev_duration} seconds"
@@ -62,27 +62,33 @@ def update_job_state(
     write_state_file_for_job(job_id, new_state)
 
 
-# Note: The return signature here is confusing, could be refactored
-def get_current_state(job_id: str) -> Union[Tuple[str, float], bool]:
+def get_current_state(job_id: str) -> Union[Tuple[str, float], Tuple[None, None]]:
     """
     :param job_id: ID of the job to query
     :return: Current <JobState.name> or False if not found
     """
-    state, age = read_state_file_for_job(job_id)
-    if state:
+    if state_file_for_job_exists(job_id):
+        state, age = read_state_file_for_job(job_id)
         return state, age
+
     else:
         logging.warning(f"Could not get current state for job '{job_id}'")
-        return False
+        return None, None
 
 
 def remove_job(job_id: str, success: bool = True) -> None:
     """
     Removes a job from the global state dict, and conditionally deletes temporary files.
+
     Note that this does not terminate the actual worker process of the job. In success
     cases it already finished. In error cases, the process has likely died. THere may be
     some cases of dangling processes however, and ideally we had better error handling.
-    This can lead to errors which are currently not properly handled.
+
+    TODO: This can lead to nasty errors which are currently not properly handled. A
+    finished job's directories/files may not exist any more or may have been moved.
+    Late responses to still pending jobs may try to read/write files that are not
+    here any more. We need to add a way to actually kill the active jobs.
+
     :param job_id: ID of the job to remove
     :param success: True if job terminated successfully as intended, False otherwise
     """

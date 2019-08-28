@@ -11,7 +11,7 @@ import sys
 from dotenv import load_dotenv
 
 # Load data from .env file (will not override actual env variables if set)
-load_dotenv(verbose=True)
+load_dotenv()
 
 # Application
 FLASK_ENV = os.getenv("FLASK_ENV")

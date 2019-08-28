@@ -17,15 +17,21 @@ Usage:
     az_blob_tool.py - delete-container <CONTAINER_NAME>
     az_blob_tool.py - list-blobs <CONTAINER_NAME>
     az_blob_tool.py - list-containers
-    az_blob_tool.py - upload <CONTAINER_NAME> <LOCAL_FILEPATH>
+    az_blob_tool.py - upload-file <CONTAINER_NAME> <LOCAL_FILEPATH> [--add-uuid]
+    az_blob_tool.py - upload-folder <CONTAINER_NAME> <LOCAL_DIRPATH> [--ext <filetype>] [--add-uuid]
 
 Options:
-    create-container    create a new container in the blob storage (default: private, add --public for public)
+    create-container    create a new container in the blob storage
+                        (default: private, add --public for public)
     delete-container    delete a container
     delete-blob         delete a blob within a container
     list-container      list all available containers
     list-blob           list all blobs within a container
-    upload              upload a local file to a container
+    upload-file         upload a local file to a container
+                        (default: no uuid, add --add-uuid to append uuids to end of file)
+    upload-folder       upload a all contents in a folder to a container
+                        (default: no uuid, add --add-uuid to append uuids to end of file)
+                        (optional: add --ext option to filter files in folder by file extension, e.g. json)
 ```
 
 ## Configuration

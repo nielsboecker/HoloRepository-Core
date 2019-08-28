@@ -1,0 +1,18 @@
+{
+    "birthDate": "1947-05-25",
+    "gender": "female",
+    "id": "p100",
+    "name": [
+        {
+            "text": "Rosario Aufderhar",
+            "family": "Aufderhar",
+            "given": [
+                "Rosario"
+            ],
+            "prefix": [
+                "Mrs."
+            ]
+        }
+    ],
+    "resourceType": "Patient"
+}

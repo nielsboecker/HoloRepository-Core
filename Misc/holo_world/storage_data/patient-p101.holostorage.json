@@ -1,0 +1,19 @@
+{
+    "birthDate": "1947-06-04",
+    "gender": "male",
+    "id": "p101",
+    "name": [
+        {
+            "text": "Buster Greenholt",
+            "family": "Greenholt",
+            "given": [
+                "Buster"
+            ],
+            "prefix": [
+                "Mr."
+            ],
+            "use": "official"
+        }
+    ],
+    "resourceType": "Patient"
+}

@@ -1,0 +1,18 @@
+{
+    "active": true,
+    "gender": "male",
+    "id": "a102",
+    "name": [
+        {
+            "text": "Jonah Schroeder",
+            "family": "Schroeder",
+            "given": [
+                "Jonah"
+            ],
+            "prefix": [
+                "Dr."
+            ]
+        }
+    ],
+    "resourceType": "Practitioner"
+}

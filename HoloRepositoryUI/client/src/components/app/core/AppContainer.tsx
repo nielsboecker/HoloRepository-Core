@@ -47,7 +47,7 @@ class AppContainer extends Component<RouteComponentProps & PropsWithContext> {
       // Will appear after initiating login, and before the server returns the practitioners's details
       return (
         <div>
-          <Spinner label="Loading..." />
+          <Spinner label="Loading..." style={{ paddingTop: "50vh" }} />
         </div>
       );
     } else {

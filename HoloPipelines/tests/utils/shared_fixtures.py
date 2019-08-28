@@ -33,9 +33,8 @@ def mock_send_to_holostorage_accessor(mocker: Any) -> mock.MagicMock:
     result off to HoloStorageAccessor. Do nothing instead.
     :param mocker: injected by pytest-mock
     """
-    mock_send_to_accessor = mocker.patch(
+    return mocker.patch(
         "core.tasks.shared.dispatch_output.send_file_request_to_accessor",
         return_value=None,
         autospec=True,
     )
-    return mock_send_to_accessor

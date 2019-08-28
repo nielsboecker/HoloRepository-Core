@@ -1,0 +1,182 @@
+{
+    "address": [
+        {
+            "city": "Taunton",
+            "country": "US",
+            "extension": [
+                {
+                    "extension": [
+                        {
+                            "url": "latitude",
+                            "valueDecimal": 41.903323
+                        },
+                        {
+                            "url": "longitude",
+                            "valueDecimal": -71.094984
+                        }
+                    ],
+                    "url": "http://hl7.org/fhir/StructureDefinition/geolocation"
+                }
+            ],
+            "line": [
+                "720 Kassulke Divide"
+            ],
+            "postalCode": "02718",
+            "state": "Massachusetts"
+        }
+    ],
+    "birthDate": "2007-04-08",
+    "communication": [
+        {
+            "language": {
+                "coding": [
+                    {
+                        "code": "en-US",
+                        "display": "English",
+                        "system": "urn:ietf:bcp:47"
+                    }
+                ],
+                "text": "English"
+            }
+        }
+    ],
+    "extension": [
+        {
+            "extension": [
+                {
+                    "url": "ombCategory",
+                    "valueCoding": {
+                        "code": "2054-5",
+                        "display": "Black or African American",
+                        "system": "urn:oid:2.16.840.1.113883.6.238"
+                    }
+                },
+                {
+                    "url": "text",
+                    "valueString": "Black or African American"
+                }
+            ],
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"
+        },
+        {
+            "extension": [
+                {
+                    "url": "ombCategory",
+                    "valueCoding": {
+                        "code": "2186-5",
+                        "display": "Not Hispanic or Latino",
+                        "system": "urn:oid:2.16.840.1.113883.6.238"
+                    }
+                },
+                {
+                    "url": "text",
+                    "valueString": "Not Hispanic or Latino"
+                }
+            ],
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName",
+            "valueString": "Michaela318 Mraz590"
+        },
+        {
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
+            "valueCode": "M"
+        },
+        {
+            "url": "http://hl7.org/fhir/StructureDefinition/patient-birthPlace",
+            "valueAddress": {
+                "city": "Rockland",
+                "country": "US",
+                "state": "Massachusetts"
+            }
+        },
+        {
+            "url": "http://synthetichealth.github.io/synthea/disability-adjusted-life-years",
+            "valueDecimal": 0.0
+        },
+        {
+            "url": "http://synthetichealth.github.io/synthea/quality-adjusted-life-years",
+            "valueDecimal": 11.0
+        }
+    ],
+    "gender": "male",
+    "generalPractitioner": [
+        {
+            "reference": "Practitioner/a101"
+        }
+    ],
+    "id": "p108",
+    "identifier": [
+        {
+            "system": "https://github.com/synthetichealth/synthea",
+            "value": "45f9d05f-81f2-4aad-8b6f-72e92820210e"
+        },
+        {
+            "system": "http://hospital.smarthealthit.org",
+            "type": {
+                "coding": [
+                    {
+                        "code": "MR",
+                        "display": "Medical Record Number",
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                    }
+                ],
+                "text": "Medical Record Number"
+            },
+            "value": "45f9d05f-81f2-4aad-8b6f-72e92820210e"
+        },
+        {
+            "system": "http://hl7.org/fhir/sid/us-ssn",
+            "type": {
+                "coding": [
+                    {
+                        "code": "SS",
+                        "display": "Social Security Number",
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                    }
+                ],
+                "text": "Social Security Number"
+            },
+            "value": "999-67-1916"
+        }
+    ],
+    "maritalStatus": {
+        "coding": [
+            {
+                "code": "S",
+                "display": "Never Married",
+                "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus"
+            }
+        ],
+        "text": "Never Married"
+    },
+    "multipleBirthBoolean": false,
+    "name": [
+        {
+            "family": "Kshlerin",
+            "given": [
+                "Raymon"
+            ],
+            "use": "official",
+            "text": "Raymon Kshlerin"
+        }
+    ],
+    "photo": [
+        {
+            "url": "https://randomuser.me/api/portraits/men/70.jpg"
+        }
+    ],
+    "resourceType": "Patient",
+    "telecom": [
+        {
+            "system": "phone",
+            "use": "home",
+            "value": "555-870-3611"
+        }
+    ],
+    "text": {
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Generated by <a href=\"https://github.com/synthetichealth/synthea\">Synthea</a>.Version identifier: v2.4.0-121-ge241cd29\n .   Person seed: -1495304943538409773  Population seed: 1563805264424</div>",
+        "status": "generated"
+    }
+}

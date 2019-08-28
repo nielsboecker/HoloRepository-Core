@@ -1,0 +1,40 @@
+{
+    "active": true,
+    "address": [
+        {
+            "city": "BEVERLY",
+            "country": "US",
+            "line": [
+                "85 HERRICK STREET"
+            ],
+            "postalCode": "01915",
+            "state": "MA"
+        }
+    ],
+    "gender": "female",
+    "id": "a101",
+    "identifier": [
+        {
+            "system": "http://hl7.org/fhir/sid/us-npi",
+            "value": "150"
+        }
+    ],
+    "name": [
+        {
+            "family": "Franecki",
+            "given": [
+                "Erlinda"
+            ],
+            "prefix": [
+                "Dr."
+            ],
+            "text": "Erlinda Franecki"
+        }
+    ],
+    "photo": [
+        {
+            "url": "https://randomuser.me/api/portraits/women/22.jpg"
+        }
+    ],
+    "resourceType": "Practitioner"
+}

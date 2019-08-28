@@ -10,6 +10,12 @@ COPY requirements.txt ./
 RUN pip install gunicorn
 RUN pip install -r requirements.txt
 
+RUN cat /etc/os-release
+
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt-get install -y nodejs
+RUN npm install -g obj2gltf
+
 COPY core ./core
 COPY jobs ./jobs
 COPY server.py ./

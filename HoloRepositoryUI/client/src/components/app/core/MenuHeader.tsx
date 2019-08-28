@@ -31,7 +31,7 @@ class MenuHeader extends Component<PropsWithContext> {
 
     return (
       <Header>
-        <Link to="/app/patients">
+        <Link to="/app/patients" style={{ height: "100%" }}>
           <div className="logo">
             <Image {...(imageProps as any)} alt="HoloRepository logo" />
           </div>
@@ -41,7 +41,7 @@ class MenuHeader extends Component<PropsWithContext> {
           theme="light"
           mode="horizontal"
           defaultSelectedKeys={["patients"]}
-          style={{ lineHeight: "64px" }}
+          style={{ lineHeight: "62px", height: "100%" }}
         >
           <Menu.Item key="patients" onClick={({ key }) => this.doNavigate(key)}>
             Patients
@@ -81,8 +81,7 @@ class MenuHeader extends Component<PropsWithContext> {
   }
 
   doLogout(): void {
-    console.log("Log out");
-    navigate("/");
+    this.props.context!.handleLogout();
   }
 
   doNavigate(component: string) {

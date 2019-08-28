@@ -4,7 +4,8 @@ import MainContainer from "./MainContainer";
 import { initializeIcons } from "@uifabric/icons";
 import BackendServerService from "../../services/BackendServerService";
 import { IHologram, IPatient, IPractitioner, IPipeline } from "../../../../types";
-import { AppContext, IAppState, initialState } from "./AppState";
+import { AppContext, IAppState, initialState, initialPractitionerSpecificState } from "./AppState";
+import { navigate } from "@reach/router";
 
 // Note: See https://developer.microsoft.com/en-us/fabric/#/styles/web/icons#fabric-react
 initializeIcons();
@@ -20,13 +21,23 @@ class App extends Component<any, IAppState> {
       handlePipelinesChange: this._handlePipelinesChange,
       handleDeleteHolograms: this._handleDeleteHolograms,
       handleDownloadHolograms: this._handleDownloadHolograms,
-      handleHologramCreated: this._handleHologramCreated
+      handleHologramCreated: this._handleHologramCreated,
+      handleLogin: this._handleLogin,
+      handleLogout: this._handleLogout
     };
   }
 
-  componentDidMount(): void {
-    // Note: SMART login is currently not implemented, so a hard-coded practitioner will be the user
-    const practitionerId = "b0016666-1924-455d-8b16-92c631fa5207";
+  render() {
+    return (
+      <AppContext.Provider value={this.state}>
+        <div className="App">
+          <MainContainer />
+        </div>
+      </AppContext.Provider>
+    );
+  }
+
+  private _handleLogin = (practitionerId: string, pin: string) => {
     BackendServerService.getPractitioner(practitionerId).then(practitioner => {
       console.log("Fetched data: practitioner", practitioner);
       this._handlePractitionerChange(practitioner!);
@@ -43,17 +54,15 @@ class App extends Component<any, IAppState> {
       console.log("Fetched data: pipelines", pipelines);
       this._handlePipelinesChange(pipelines || []);
     });
-  }
+    this.setState({ pin });
+    this.setState({ loginWasInitiated: true });
+  };
 
-  render() {
-    return (
-      <AppContext.Provider value={this.state}>
-        <div className="App">
-          <MainContainer />
-        </div>
-      </AppContext.Provider>
-    );
-  }
+  private _handleLogout = () => {
+    console.log("Practitioner logged out");
+    navigate("/");
+    this.setState({ ...initialPractitionerSpecificState });
+  };
 
   private _fetchPatientSpecificData = () => {
     this._fetchImagingStudiesForPatients();
@@ -69,7 +78,9 @@ class App extends Component<any, IAppState> {
       for (const pid in combinedResult) {
         const studies = combinedResult[pid];
         const patient = patients[pid];
-        patient.imagingStudies = studies;
+        if (patient) {
+          patient.imagingStudies = studies;
+        }
         this.setState({
           patients: {
             ...patients,

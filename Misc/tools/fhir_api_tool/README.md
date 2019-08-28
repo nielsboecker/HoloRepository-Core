@@ -16,13 +16,15 @@ Install using `pipenv install` or `pip install -r requirements.txt`.
 
 ```
 Usage:
-    fhir_interactions.py --base-url <FHIR_SERVER_URL> delete-all
-    fhir_interactions.py --base-url <FHIR_SERVER_URL> upload-bundle <FHIR bundle file>
-    fhir_interactions.py --base-url <FHIR_SERVER_URL> upload-folder <FHIR bundle directory>
+    fhir_api_tool.py --base-url <FHIR_SERVER_URL> delete-all
+    fhir_api_tool.py --base-url <FHIR_SERVER_URL> upload-bundle <FHIR bundle file>
+    fhir_api_tool.py --base-url <FHIR_SERVER_URL> upload-bundle-folder <FHIR bundle directory>
+    fhir_api_tool.py --base-url <FHIR_SERVER_URL> upload-resource <FHIR resource file>
+    fhir_api_tool.py --base-url <FHIR_SERVER_URL> upload-resource-folder <FHIR resource directory>
 
 Options:
-    --base-url      the base url of the fhir server needs to be provided (e.g. https://fhirserver.azurewebsites.net)
-    delete-all      delete all resources on the fhir server
-    upload-bundle   upload a single FHIR bundle json file
-    upload-folder   upload all FHIR bundles stored within a folder
+    --base-url                  the base url of the fhir server needs to be provided (e.g. https://fhirserver.azurewebsites.net)
+    delete-all                  delete all resources on the fhir server
+    upload                      upload a single FHIR bundle or resource json file
+    upload-folder               upload all FHIR bundles or resources stored within a folder
 ```

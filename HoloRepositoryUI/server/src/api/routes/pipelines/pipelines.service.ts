@@ -1,8 +1,8 @@
 import PipelinesClient from "../../../common/clients/HoloPipelinesClient";
 
 export class PipelinesService {
-  public getJobURL = (): string => {
-    return PipelinesClient.getJobURL();
+  public getJobsURL = (): string => {
+    return PipelinesClient.getJobsURL();
   };
 
   public getJobStatusURL = (jid: string): string => {

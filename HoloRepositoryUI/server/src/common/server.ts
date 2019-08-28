@@ -8,7 +8,7 @@ import cors from "cors";
 
 const app = express();
 
-const { PORT: port, REQUEST_LIMIT: limit } = process.env;
+const { NODE_ENV, PORT, REQUEST_LIMIT } = process.env;
 const rootPath = path.normalize(__dirname + "/../..");
 const staticFilesPath = `${rootPath}/public`;
 
@@ -18,8 +18,8 @@ export default class ExpressServer {
     app.set("appPath", rootPath);
 
     // Set configuration
-    app.use(bodyParser.json({ limit }));
-    app.use(bodyParser.urlencoded({ extended: true, limit }));
+    app.use(bodyParser.json({ limit: REQUEST_LIMIT }));
+    app.use(bodyParser.urlencoded({ extended: true, limit: REQUEST_LIMIT }));
 
     // Serve static assets
     app.use(express.static(staticFilesPath));
@@ -40,10 +40,8 @@ export default class ExpressServer {
 
   public listen(): Application {
     const welcomeMessage = () =>
-      logger.info(
-        `Up and running in ${process.env.NODE_ENV} @: ${os.hostname()} on port: ${port}}`
-      );
-    http.createServer(app).listen(port, welcomeMessage);
+      logger.info(`Up and running in ${NODE_ENV} @: ${os.hostname()} on port: ${PORT}}`);
+    http.createServer(app).listen(PORT, welcomeMessage);
     return app;
   }
 }

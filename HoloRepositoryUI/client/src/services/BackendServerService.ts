@@ -107,8 +107,9 @@ export class BackendServerService {
   }
 
   public async getAllPipelines(): Promise<IPipeline[] | null> {
-    return BackendServerAxios.get<IPipeline[]>(routes.pipelines)
-      .then(pipeline => pipeline.data as IPipeline[])
+    return BackendServerAxios.get<Record<string, IPipeline>>(routes.pipelines)
+      .then(pipeline => pipeline.data as Record<string, IPipeline>)
+      .then(pipelineDict => Object.values(pipelineDict))
       .catch(handleError);
   }
 }

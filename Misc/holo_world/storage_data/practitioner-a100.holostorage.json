@@ -1,0 +1,18 @@
+{
+    "active": true,
+    "gender": "female",
+    "id": "a100",
+    "name": [
+        {
+            "text": "Maudie Kirlin",
+            "family": "Kirlin",
+            "given": [
+                "Maudie"
+            ],
+            "prefix": [
+                "Dr."
+            ]
+        }
+    ],
+    "resourceType": "Practitioner"
+}

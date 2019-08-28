@@ -3,13 +3,13 @@
 RES_GRP="holorepository-rg"
 LOC="uksouth"
 BLOB_STORE_NAME="holoblob"
-CONTAINERS=('3dmodels' 'attachments')
+CONTAINERS=('holograms')
 
 az login
 
 az group create \
     --name ${RES_GRP} \
-    --location ${LOC} 
+    --location ${LOC}
 
 az storage account create \
     --name ${BLOB_STORE_NAME} \

@@ -6,6 +6,7 @@ numpy==1.16.4
 simpleitk==1.2.0
 Flask==1.0.2
 Flask-JSON==0.3.3
+Flask-Cors==3.0.8
 requests==2.20.1
 coloredlogs==10.0
 python-dotenv==0.10.3

@@ -27,8 +27,7 @@ def get_pipelines_ids_list() -> list:
 def load_pipeline_dynamically(plid: str) -> Any:
     """
     Loads and returns a pipeline module dynamically, which can then be invoked by its
-    run
-    function.
+    run function.
     """
     pl_package_name = f"core.pipelines.{plid}"
     logging.info(f"Importing pipeline package {pl_package_name}")

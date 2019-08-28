@@ -227,7 +227,7 @@
 						},
 						{
 							"key": "creationDescription",
-							"value": "Created using bone pipelines with HU threshold of 750 ",
+							"value": "Created using bone pipelines with HU threshold of 750",
 							"type": "text"
 						},
 						{
@@ -342,7 +342,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3200/api/v1/holograms?pids=p500&creationmode=UPLOAD_EXISTING_MODEL",
+					"raw": "localhost:3200/api/v1/holograms?pids=p100&creationmode=UPLOAD_EXISTING_MODEL",
 					"host": [
 						"localhost"
 					],
@@ -355,7 +355,7 @@
 					"query": [
 						{
 							"key": "pids",
-							"value": "p500"
+							"value": "p100"
 						},
 						{
 							"key": "creationmode",

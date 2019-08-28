@@ -1,3 +1,4 @@
+import os
 from typing import Any
 from unittest import mock
 
@@ -7,6 +8,24 @@ from jobs import jobs_io
 
 test_jobs_dir_path = "./__test_jobs__"
 test_finished_jobs_dir_path = "./__test_finished_jobs__"
+test_output_path = "./__test_output__"
+test_input_path = "./__test_output__"
+
+
+@fixture
+def create_output_directory():
+    """
+    Creates directory for test output data, if it does not exist yet.
+    """
+    os.makedirs(test_output_path, exist_ok=True)
+
+
+@fixture
+def create_input_directory():
+    """
+    Creates directory for test input data, if it does not exist yet.
+    """
+    os.makedirs(test_input_path, exist_ok=True)
 
 
 @fixture

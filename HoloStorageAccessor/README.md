@@ -8,6 +8,7 @@ The HoloStorage is a cloud-based storage for medical 3D models and associated me
 To protect the HoloStorage and hide concrete implementation details, such as which FHIR resources are used to store data internally, the HoloStorage-Accessor provides a consistent and unified interface to the data, and the single entry-point for 3rd party systems. As such, it acts as a façade. However, it also performs some more complex business logic, like translating calls to a minimalistic interface to FHIR queries and building complex queries, potentially filtering and aggregating results.
 
 The REST API is being carefully designed, so that it not only satisfies the requirements of the HoloPipelines’ artefacts, but also supports adjacent projects (DepthVisor, Annotator) and any future projects in this context. We strive to find a balance between an open, generic interface and enforcing enough relevant data to effectively query and utilise the data.
+
 ## Technologies
 
 The following technologies are used in this component:
@@ -21,10 +22,12 @@ The following technologies are used in this component:
 
 The API specification can be found in the `api/` directory. A deployed version of the interactive documentation is available [here](https://app.swaggerhub.com/apis/boonwj/HoloRepository/).
 
-When the application is deployed, the documentation can also be viewed at the `/api/1.0.0/ui` endpoint.
+When the application is deployed, the documentation can also be viewed at the `/api/v1/ui` endpoint.
 
 ## Requirements
 - Go 1.12.7
+- FHIR server
+- Azure blob storage service
 
 ## Development
 ### Installation
@@ -42,7 +45,7 @@ To run the server, first configure the necessary [configurations](#configuration
 go run cmd/holo-storage-accessor/main.go
 ```
 
-Verify the accessor by visiting `localhost:3200/api/1.0.0` or `localhost:3200/api/1.0.0/ui`
+Verify the accessor by visiting `localhost:3200/api/v1` or `localhost:3200/api/v1/ui`
 
 ### Testing
 
@@ -67,14 +70,14 @@ docker build -t holo-storage-accessor .
 Once the image is built load the configuration, just run
 
 ```
-docker run -it --rm --env-file config.env -p 3200:3200 holo-storage-accessor
+docker run -it --rm --env-file .env -p 3200:3200 holo-storage-accessor
 ```
 You can then access the container via localhost:3200
 
 ## Configuration
 Accessor application uses the following environmental variables as configuration.
 
-If using docker, the environment configuration fields can be set via `config.env`.
+If using docker, the environment configuration fields can be set via `.env`.
 
 If not, `export` the variables before running the program.
 

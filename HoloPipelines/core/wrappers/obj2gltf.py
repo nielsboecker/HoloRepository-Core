@@ -2,12 +2,12 @@ import logging
 import subprocess
 
 
-def call_obj2gltf(obj_input_filepath: str, glb_output_file_path: str) -> None:
+def call_obj2gltf(obj_input_file_path: str, glb_output_file_path: str) -> None:
     obj2gltf_command = [
         "obj2gltf",
         "--binary",
         "--input",
-        obj_input_filepath,
+        obj_input_file_path,
         "--output",
         glb_output_file_path,
     ]

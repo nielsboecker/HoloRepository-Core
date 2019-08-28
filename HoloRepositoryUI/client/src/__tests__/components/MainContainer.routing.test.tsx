@@ -4,7 +4,7 @@ import MainContainer from "../../components/shared/MainContainer";
 import AppContainer from "../../components/app/core/AppContainer";
 import PublicContainer from "../../components/public/PublicContainer";
 import { createHistory, createMemorySource, LocationProvider } from "@reach/router";
-import LandingPage from "../../components/public/LandingPage";
+import LoginPage from "../../components/public/LoginPage";
 import PatientListPage from "../../components/app/patients/PatientListPage";
 import ErrorPage from "../../components/public/ErrorPage";
 import { mountWithContextProvider } from "../../__test_utils__/MockContextProvider";
@@ -18,13 +18,13 @@ it("should render PublicContainer for route '/'", () => {
 it("should render LandingPage for route '/start'", () => {
   const underTest = prepareAndMountComponent("/start");
   expect(underTest.find(PublicContainer)).toHaveLength(1);
-  expect(underTest.find(LandingPage)).toHaveLength(1);
+  expect(underTest.find(LoginPage)).toHaveLength(1);
 });
 
 it("should render LandingPage for invalid URLs outside the '/app' main route", () => {
   const underTest = prepareAndMountComponent("/foobar");
   expect(underTest.find(PublicContainer)).toHaveLength(1);
-  expect(underTest.find(LandingPage)).toHaveLength(1);
+  expect(underTest.find(LoginPage)).toHaveLength(1);
 });
 
 it("should render AppContainer for route '/app'", () => {

@@ -63,6 +63,11 @@ def create_directory_for_job(job_id: str) -> None:
 def move_job_to_finished_jobs_directory(job_id: str) -> None:
     old_path = get_directory_path_for_job(job_id)
     new_path = old_path.replace(jobs_root, finished_jobs_root)
+
+    # Handle edge cases where new_path already exists
+    if os.path.isdir(new_path):
+        shutil.rmtree(new_path)
+
     logging.info(f"Moving '{old_path}' to '{new_path}'")
     shutil.move(old_path, new_path)
 

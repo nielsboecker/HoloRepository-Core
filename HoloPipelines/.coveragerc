@@ -1,2 +1,2 @@
 [run]
-source = ./pipelineController.py, pipelines/	source = ./server.py, core/, jobs/
+source = ./server.py, core/, jobs/

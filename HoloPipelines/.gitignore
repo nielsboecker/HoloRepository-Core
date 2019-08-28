@@ -1,10 +1,9 @@
-temp/
-architectDiagram/
 *.dcm
 *.nii
 *.gz
 *.npy
 *.glb
 *.gltf
-medicalScans/dicom/*
-medicalScans/nifti/*
+__test_input__/
+__test_output__/
+__jobs__/

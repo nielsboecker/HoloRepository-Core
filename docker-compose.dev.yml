@@ -17,11 +17,17 @@ services:
     env_file: ./HoloRepositoryUI/server/.env.local
     ports:
       - "3001:3001"
-#  TODO: Uncomment when HoloPipelines are ready
-#  holopipelines-core:
-#    build: ./HoloPipelines
-#    ports:
-#      - "3100:3100"
+  holopipelines-core:
+    build: ./HoloPipelines
+    env_file: ./HoloPipelines/.env
+    ports:
+      - "3100:3100"
+    links:
+      - holopipelines-models__dense_vnet_abdominal_ct
+      - holostorage-accessor
+    environment:
+      - MODEL_ABDOMINAL_SEGMENTATION_HOST=http://holopipelines-models__dense_vnet_abdominal_ct
+      - HOLOSTORAGE_ACCESSOR_HOST=http://holostorage-accessor
   holostorage-accessor:
     build: ./HoloStorageAccessor
     env_file: ./HoloStorageAccessor/.env

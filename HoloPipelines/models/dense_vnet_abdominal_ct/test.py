@@ -1,8 +1,9 @@
-from server import app
-
-import unittest
 import tarfile
+import unittest
+
 import requests
+
+from server import app
 
 
 class FlaskTestCase(unittest.TestCase):

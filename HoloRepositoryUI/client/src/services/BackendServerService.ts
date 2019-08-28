@@ -90,8 +90,8 @@ export class BackendServerService {
       .catch(handleError);
   }
 
-  public async generateHologram(metaData: IHologramCreationRequest_Generate): Promise<boolean> {
-    return BackendServerAxios.post(`${routes.pipelines}/generate`, metaData)
+  public async generateHologram(requestData: IHologramCreationRequest_Generate): Promise<boolean> {
+    return BackendServerAxios.post(`${routes.pipelines}/generate`, requestData)
       .then(response => response.status === 200 || response.status === 201)
       .catch(handleError);
   }
@@ -107,8 +107,9 @@ export class BackendServerService {
   }
 
   public async getAllPipelines(): Promise<IPipeline[] | null> {
-    return BackendServerAxios.get<IPipeline[]>(routes.pipelines)
-      .then(pipeline => pipeline.data as IPipeline[])
+    return BackendServerAxios.get<Record<string, IPipeline>>(routes.pipelines)
+      .then(pipeline => pipeline.data as Record<string, IPipeline>)
+      .then(pipelineDict => Object.values(pipelineDict))
       .catch(handleError);
   }
 }

@@ -5,7 +5,7 @@ FROM ubuntu:18.04
 ARG APP_DIR=/usr/src/app
 ARG PORT=5000
 
-# Update Software repository, install package and clean the package 
+# Update Software repository, install package and clean the package
 RUN apt-get update  && \
     apt-get install -y --no-install-recommends python3-pip python3-dev build-essential nano &&\
     apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -38,4 +38,4 @@ EXPOSE ${PORT}
 ENTRYPOINT ["gunicorn"]
 
 # Start server
-CMD ["-w","4","-b", "0.0.0.0:5000", "server:app"]
+CMD ["--workers","4","--bind", "0.0.0.0:5000", "server:app"]

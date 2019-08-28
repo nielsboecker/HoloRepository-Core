@@ -66,11 +66,16 @@ class LoginPage extends Component<RouteComponentProps & PropsWithContext> {
             </div>
             <Dropdown
               placeholder="Select your account"
-              label="Practitioner:"
+              label="Practitioner"
               options={options}
-              onChanged={item => this._onChange(item.key)}
+              onChange={this._handleDropdownOptionChange}
             />
-            <TextField label="Password:" defaultValue={"password"} type="password" style={{ width: "300" }} />
+            <TextField
+              label="Password"
+              defaultValue={"password"}
+              type="password"
+              style={{ width: "300" }}
+            />
             <div
               style={{
                 marginTop: "20px",
@@ -96,7 +101,7 @@ class LoginPage extends Component<RouteComponentProps & PropsWithContext> {
   }
 
   private _selectPractitioner = () => {
-    if (this.selectedItem === ""){
+    if (this.selectedItem === "") {
       this.selectedItem = options[0].key;
     }
 
@@ -107,8 +112,11 @@ class LoginPage extends Component<RouteComponentProps & PropsWithContext> {
     }
   };
 
-  private _onChange = (key: string | number): void => {
-    this.selectedItem = key;
+  private _handleDropdownOptionChange = (
+    event: React.FormEvent<HTMLDivElement>,
+    option?: IDropdownOption
+  ): void => {
+    this.selectedItem = option!.key;
   };
 }
 

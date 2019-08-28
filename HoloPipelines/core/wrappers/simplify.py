@@ -11,7 +11,6 @@ def call_simplify(
     obj_output_path: str,
     simplification_ratio: float = SIMPLIFICATION_RATIO,
 ):
-    # NOTE: link to simplify repository https://github.com/sp4cerat/Fast-Quadric-Mesh-Simplification
     simplify_command = [
         simplify_binary_path,
         obj_input_path,

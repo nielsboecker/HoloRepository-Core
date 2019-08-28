@@ -1,14 +1,12 @@
 import os
-import sys
 import pytest
 
-sys.path.insert(1, os.path.join(sys.path[0], ".."))  # noqa
 from core.wrappers import simplify
 
 this_test_name = os.path.basename(__file__).replace(".py", "")
 
-test_obj_file_path = "/tests/utils/teddy.obj"
-test_output_obj_file_path = "/tests/utils/simplifed_teddy.obj"
+test_obj_file_path = "tests/utils/teddy.obj"
+test_output_obj_file_path = "tests/utils/simplifed_teddy.obj"
 
 
 @pytest.fixture

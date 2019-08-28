@@ -23,8 +23,10 @@ class AppContainer extends Component<RouteComponentProps & PropsWithContext> {
             style={{
               padding: "0 50px",
               marginTop: "50px",
+              marginBottom: "90px",
               display: "flex",
-              justifyContent: "center"
+              justifyContent: "center",
+              overflowY: "auto"
             }}
           >
             {this.props.children}
@@ -42,9 +44,8 @@ class AppContainer extends Component<RouteComponentProps & PropsWithContext> {
         </Layout>
       );
     } else if (!this.props.context!.loginFlag) {
-      {
-        window.location.href = "/";
-      }
+      this._hrefToLoginPage();
+      return <div />;
     } else {
       return (
         <div>
@@ -53,6 +54,10 @@ class AppContainer extends Component<RouteComponentProps & PropsWithContext> {
       );
     }
   }
+
+  private _hrefToLoginPage = (): void => {
+    window.location.href = "/";
+  };
 }
 
 export default withAppContext(AppContainer);

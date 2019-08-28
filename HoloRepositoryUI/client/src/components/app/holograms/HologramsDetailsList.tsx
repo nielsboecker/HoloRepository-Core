@@ -147,7 +147,6 @@ class HologramsDetailsList extends Component<
                 isHeaderVisible={true}
                 selection={this._selection}
                 selectionPreservedOnEmptyClick={true}
-                onItemInvoked={this._onItemInvoked}
                 enterModalSelectionOnTouch={true}
                 ariaLabelForSelectionColumn="Toggle selection"
                 ariaLabelForSelectAllCheckbox="Toggle selection for all items"
@@ -209,10 +208,6 @@ class HologramsDetailsList extends Component<
 
   private _onChangeText = (_: any, filterText: string = ""): void => {
     this.setState({ filterText });
-  };
-
-  private _onItemInvoked = (item: any): void => {
-    alert(`Item invoked: ${item.name}`);
   };
 
   private _getSelectionDetails = (): string => {

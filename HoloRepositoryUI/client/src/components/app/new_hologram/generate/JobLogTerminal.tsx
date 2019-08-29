@@ -13,8 +13,10 @@ export interface IJobLogTerminalState {
 class JobLogTerminal extends Component<IJobLogTerminalProps, IJobLogTerminalState> {
   state = {
     lastJobState: "",
-    log: "..."
+    log: "Connecting to HoloPipelines service"
   };
+
+  idleIntervalId: any = undefined;
 
   // TODO: go through server
   jobLogEndpoint = `http://51.105.47.56/api/v1/jobs/${this.props.jobId}/log`;
@@ -36,13 +38,24 @@ class JobLogTerminal extends Component<IJobLogTerminalProps, IJobLogTerminalStat
     );
   }
 
+  componentDidMount(): void {
+    // Until real log arrives, add "dot dot dot"
+    this.idleIntervalId = setInterval(() => {
+      this.setState(state => ({ log: state.log + "." }))
+    }, 1000);
+  }
+
   componentWillReceiveProps(nextProps: Readonly<IJobLogTerminalProps>): void {
     // Note: This is a deprecated React hook, should be refactored to use more elegant solution
     if (nextProps.jobState !== this.state.lastJobState) {
       console.info(`New state: ${nextProps.jobState} => Updating logs`);
       fetch(this.jobLogEndpoint)
         .then(response => response.text())
-        .then(log => this.setState({ log }));
+        .then(log => {
+          // As soon as any real log arrives, stop adding "dot dot dot"
+          clearInterval(this.idleIntervalId);
+          return this.setState({ log });
+        });
     }
   }
 }

@@ -6,7 +6,7 @@ import BackendServerService from "../../../../services/BackendServerService";
 import { IHologramCreationRequest_Generate } from "../../../../../../types";
 
 const stateRefreshInterval = 2500;
-const waitTimeAfterFinishBeforeRedirect = 4000;
+const waitTimeAfterFinishBeforeRedirect = 3000;
 
 export interface IGenerationProcessingStepProps {
   generateMetaData: () => IHologramCreationRequest_Generate | null;

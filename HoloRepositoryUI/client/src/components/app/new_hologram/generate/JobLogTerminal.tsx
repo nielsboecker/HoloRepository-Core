@@ -13,7 +13,7 @@ export interface IJobLogTerminalState {
 class JobLogTerminal extends Component<IJobLogTerminalProps, IJobLogTerminalState> {
   state = {
     lastJobState: "",
-    log: "Connecting to HoloPipelines service"
+    log: `Connecting to HoloPipelines to fetch logs for job [${this.props.jobId}]`
   };
 
   idleIntervalId: any = undefined;
@@ -25,7 +25,7 @@ class JobLogTerminal extends Component<IJobLogTerminalProps, IJobLogTerminalStat
     return (
       <div
         style={{
-          height: "250px",
+          height: "300px",
           padding: "20px",
           overflowY: "scroll",
           backgroundColor: "#333",
@@ -41,7 +41,7 @@ class JobLogTerminal extends Component<IJobLogTerminalProps, IJobLogTerminalStat
   componentDidMount(): void {
     // Until real log arrives, add "dot dot dot"
     this.idleIntervalId = setInterval(() => {
-      this.setState(state => ({ log: state.log + "." }))
+      this.setState(state => ({ log: state.log + "." }));
     }, 1000);
   }
 

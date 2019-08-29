@@ -95,12 +95,18 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
     navigate("/app/holograms");
   };
 
-  private _handleSubmit_Generate = () => {
-    const metaData = this._getPostRequestMetaData_Generate();
-    if (!metaData) {
-      return this._logErrorAndReturnNull();
-    }
-    BackendServerService.generateHologram(metaData).then(response => console.log(response)); // boolean
+  private _handleGenerateHologram_Success = () => {
+    // TODO: Update global state, refresh holograms
+    console.log("HoloPipelines successfully created a new hologram");
+
+    // Note: GenerationProcessingStep will navigate("/app/holograms");
+  };
+
+  private _handleGenerateHologram_Failure = () => {
+    console.error("Something went wrong while creating the hologram, try refreshing the page.");
+
+    // Note: Should have better error handling
+    navigate("/app/holograms");
   };
 
   private _generatePostRequestMetaData_Shared = (): IHologramCreationRequest | null => {
@@ -192,7 +198,14 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
       },
       {
         title: "Process",
-        content: <GenerationProcessingStep onComponentDidMount={this._handleSubmit_Generate} />
+        content: (
+          <GenerationProcessingStep
+            generateMetaData={this._getPostRequestMetaData_Generate}
+            onError={this._logErrorAndReturnNull}
+            onGenerationSuccess={this._handleGenerateHologram_Success}
+            onGenerationFailure={this._handleGenerateHologram_Failure}
+          />
+        )
       }
     ],
     [HologramCreationMode.UPLOAD_EXISTING_MODEL]: [

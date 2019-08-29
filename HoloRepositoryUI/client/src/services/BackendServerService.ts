@@ -90,9 +90,16 @@ export class BackendServerService {
       .catch(handleError);
   }
 
-  public async generateHologram(requestData: IHologramCreationRequest_Generate): Promise<boolean> {
+  public async generateHologram(requestData: IHologramCreationRequest_Generate): Promise<string> {
     return BackendServerAxios.post(`${routes.pipelines}/generate`, requestData)
-      .then(response => response.status === 200 || response.status === 201)
+      .then(response => {
+        if (response.status !== 202 || !response.data.jid) {
+          throw new Error(
+            `Got invalid response ${response.status}: ${JSON.stringify(response.data)}`
+          );
+        }
+        return response.data.jid;
+      })
       .catch(handleError);
   }
 

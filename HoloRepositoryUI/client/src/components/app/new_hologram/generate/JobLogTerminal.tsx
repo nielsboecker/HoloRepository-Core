@@ -3,19 +3,35 @@ import React, { Component } from "react";
 import { LazyLog } from "react-lazylog";
 
 export interface IJobLogTerminalProps {
-  jid: string;
+  jobId: string;
+  jobState: string;
 }
 
-class JobLogTerminal extends Component<IJobLogTerminalProps> {
+export interface IJobLogTerminalState {
+  lastJobState: string;
+}
+
+class JobLogTerminal extends Component<IJobLogTerminalProps, IJobLogTerminalState> {
+  state = {
+    lastJobState: ""
+  };
+
   // TODO: go through server
-  logEndpoint = `http://51.105.47.56/api/v1/jobs/${this.props.jid}/log`;
+  logEndpoint = `http://51.105.47.56/api/v1/jobs/${this.props.jobId}/log`;
 
   render() {
     return (
       <div>
-        <LazyLog url={this.logEndpoint} height={200} />
+        <LazyLog url={this.logEndpoint} height={250} />
       </div>
     );
+  }
+
+  componentWillReceiveProps(nextProps: Readonly<IJobLogTerminalProps>): void {
+    // Note: This is a deprecated React hook, should be refactored to use more elegant solution
+    if (nextProps.jobState !== this.state.lastJobState) {
+      console.info(`New state: ${nextProps.jobState} => Updating logs`);
+    }
   }
 }
 

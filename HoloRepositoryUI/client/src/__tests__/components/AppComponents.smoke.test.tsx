@@ -35,6 +35,7 @@ import { mountWithContextProvider } from "../../__test_utils__/MockContextProvid
 import samplePatients from "../samples/samplePatients.json";
 import { wrapWithFormsy } from "../../__test_utils__/MockFormsy";
 import FileUploadStep from "../../components/app/new_hologram/upload/FileUploadStep";
+import JobLogTerminal from "../../components/app/new_hologram/generate/JobLogTerminal";
 
 it("renders AppContainer without crashing", () => {
   mountWithContextProvider(<AppContainer />);
@@ -73,7 +74,18 @@ it("renders HologramsListPage without crashing", () => {
 });
 
 it("renders GenerationProcessingStep without crashing", () => {
-  shallow(<GenerationProcessingStep onComponentDidMount={jest.fn()} />);
+  shallow(
+    <GenerationProcessingStep
+      generateMetaData={jest.fn()}
+      onError={jest.fn()}
+      onGenerationFailure={jest.fn()}
+      onGenerationSuccess={jest.fn()}
+    />
+  );
+});
+
+it("renders JobLogTerminal without crashing", () => {
+  shallow(<JobLogTerminal jobId="" jobState="" />);
 });
 
 it("renders ImagingStudyDetailsCard without crashing", () => {

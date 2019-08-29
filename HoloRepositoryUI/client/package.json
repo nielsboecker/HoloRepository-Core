@@ -21,6 +21,7 @@
     "office-ui-fabric-react": "^7.6.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-lazylog": "^4.3.2",
     "react-scripts": "3.0.1",
     "typescript": "3.5.2"
   },

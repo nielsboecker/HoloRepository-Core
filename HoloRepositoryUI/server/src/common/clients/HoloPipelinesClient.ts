@@ -1,25 +1,28 @@
 const { HOLOPIPELINES_HOST, HOLOPIPELINES_PORT } = process.env;
 const apiPrefix = `api/v1`;
 const baseURL = `${HOLOPIPELINES_HOST}:${HOLOPIPELINES_PORT}/${apiPrefix}`;
+const jobsEndpoint = `${baseURL}/jobs`;
+const pipelinesEndpoint = `${baseURL}/pipelines`;
 
 const getJobsURL = (): string => {
-  return `${baseURL}/jobs`;
+  return jobsEndpoint;
 };
 
-const getJobStatusURL = (jid: string): string => {
-  return `${baseURL}/${jid}/state`;
+const getJobStateURL = (jid: string): string => {
+  return `${jobsEndpoint}/${jid}/state`;
 };
 
 const getJobLogURL = (jid: string): string => {
-  return `${baseURL}/${jid}/log`;
+  return `${jobsEndpoint}/${jid}/log`;
 };
 
 const getPipelinesURL = (): string => {
-  return `${baseURL}/pipelines`;
+  return pipelinesEndpoint;
 };
 
 export default {
   getJobsURL,
-  getJobStateURL: getJobStatusURL,
+  getJobStateURL,
+  getJobLogURL,
   getPipelinesURL
 };

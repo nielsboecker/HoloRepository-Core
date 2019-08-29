@@ -82,7 +82,7 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
 
   private _handleUploadHologram_Success = (hologram: IHologram) => {
     // Update global state
-    this.props.context!.handleHologramCreated(hologram);
+    this.props.context!.handleHologramCreated_Upload(hologram);
 
     console.log("Upload successful");
     navigate("/app/holograms");
@@ -96,8 +96,8 @@ class NewHologramPage extends Component<INewHologramPageProps, INewHologramPageS
   };
 
   private _handleGenerateHologram_Success = () => {
-    // TODO: Update global state, refresh holograms
     console.log("HoloPipelines successfully created a new hologram");
+    this.props.context!.handleHologramCreated_Generate();
 
     // Note: GenerationProcessingStep will navigate("/app/holograms");
   };

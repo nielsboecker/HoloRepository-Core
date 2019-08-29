@@ -72,6 +72,16 @@ def flip_numpy_array_dimensions(array: np.ndarray) -> np.ndarray:
     return array
 
 
+def flip_numpy_array_dimensions_y_only(array: np.ndarray) -> np.ndarray:
+    """
+    Flip y axis in numpy array.
+    :param array: ndarray from pydicom.read_file()
+    :return: array with flipped y axis to represent the accurate DICOM data
+    """
+    array = np.flip(array, 1)
+    return array
+
+
 def normalise_dicom(dicom_image_array: np.ndarray, input_file_path: str) -> np.ndarray:
     """
     Compensates the distortion caused by slice thickness, using data obtained from the DICOM header

@@ -13,7 +13,7 @@ RUN apt-get update  && \
 # Copy the flask script into the container and set the working directory
 RUN mkdir -p ${APP_DIR}
 WORKDIR ${APP_DIR}
-COPY server.py test.py ./
+COPY server.py test.py config.py ./
 
 # Copy the requirements file in to image for pip download
 COPY requirements.txt ./

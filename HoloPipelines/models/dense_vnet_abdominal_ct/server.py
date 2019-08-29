@@ -1,5 +1,6 @@
 import os
 import subprocess
+import config
 
 from flask import Flask, request, send_file
 from werkzeug.utils import secure_filename
@@ -42,7 +43,9 @@ def seg_file():
         if file.filename != UPLOAD_FILENAME:
             file.filename = UPLOAD_FILENAME
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+        nifty_image_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+        file.save(nifty_image_path)
+        config.update_config_with_new_resolution(nifty_image_path)
         subprocess.run(
             [
                 "/usr/local/bin/net_segment",
@@ -55,4 +58,4 @@ def seg_file():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="127.0.0.1")
+    app.run(debug=True, host="127.0.0.1")

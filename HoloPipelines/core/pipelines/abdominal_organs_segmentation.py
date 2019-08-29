@@ -13,7 +13,10 @@ import os
 import sys
 
 from config import MODEL_ABDOMINAL_SEGMENTATION_HOST, MODEL_ABDOMINAL_SEGMENTATION_PORT
-from core.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
+from core.adapters.dicom_file import (
+    read_dicom_as_np_ndarray_and_normalise,
+    flip_numpy_array_dimensions_y_only,
+)
 from core.adapters.glb_file import convert_obj_to_glb_and_write
 from core.adapters.nifti_file import (
     convert_dicom_np_ndarray_to_nifti_image,
@@ -49,6 +52,7 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
 
     update_job_state(job_id, JobState.READING_INPUT.name, logger)
     dicom_image_array = read_dicom_as_np_ndarray_and_normalise(dicom_directory_path)
+    dicom_image_array = flip_numpy_array_dimensions_y_only(dicom_image_array)
     crop_dicom_image_array = downscale_and_conditionally_crop(dicom_image_array)
 
     update_job_state(job_id, JobState.PREPROCESSING.name, logger)

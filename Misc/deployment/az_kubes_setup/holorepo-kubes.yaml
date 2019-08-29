@@ -8,7 +8,7 @@ spec:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-  minReadySeconds: 5 
+  minReadySeconds: 5
   template:
     metadata:
       labels:
@@ -21,7 +21,7 @@ spec:
         image: holocontainers.azurecr.io/holostorage-accessor:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 3200 
+        - containerPort: 3200
         resources:
           requests:
             cpu: 250m
@@ -30,24 +30,24 @@ spec:
         env:
         - name: AZURE_STORAGE_ACCOUNT
           value: "holoblobdemo"
-        - name: AZURE_STORAGE_ACCESS_KEY 
+        - name: AZURE_STORAGE_ACCESS_KEY
           valueFrom:
             secretKeyRef:
               name: blobstorekey
               key: AZURE_STORAGE_ACCESS_KEY
-        - name: ACCESSOR_FHIR_URL 
+        - name: ACCESSOR_FHIR_URL
           value: "https://holostorage-demo.azurewebsites.net"
-        - name: ENABLE_CORS 
+        - name: ENABLE_CORS
           value: "true"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: holorepository-accessor 
+  name: holorepository-accessor
 spec:
   type: LoadBalancer
   ports:
-  - port: 80 
+  - port: 80
     targetPort: 3200
   selector:
     app: holorepository-accessor
@@ -63,7 +63,7 @@ spec:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-  minReadySeconds: 5 
+  minReadySeconds: 5
   template:
     metadata:
       labels:
@@ -76,7 +76,7 @@ spec:
         image: holocontainers.azurecr.io/holorepository-ui-client:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 3000 
+        - containerPort: 3000
         resources:
           requests:
             cpu: 250m
@@ -88,11 +88,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: holorepository-client 
+  name: holorepository-client
 spec:
   type: LoadBalancer
   ports:
-  - port: 80 
+  - port: 80
     targetPort: 3000
   selector:
     app: holorepository-ui-client
@@ -106,7 +106,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 80 
+  - port: 80
     targetPort: 3001
   selector:
     app: holorepository-ui-server
@@ -123,7 +123,7 @@ spec:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-  minReadySeconds: 5 
+  minReadySeconds: 5
   template:
     metadata:
       labels:
@@ -136,7 +136,7 @@ spec:
         image: holocontainers.azurecr.io/holorepository-ui-server:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 3001 
+        - containerPort: 3001
         resources:
           requests:
             cpu: 250m
@@ -174,14 +174,14 @@ spec:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-  minReadySeconds: 5 
+  minReadySeconds: 5
   template:
     metadata:
       labels:
         app: holorepository-pipelines
     spec:
       nodeSelector:
-        "beta.kubernetes.io/os": linux 
+        "beta.kubernetes.io/os": linux
       containers:
       - name: holorepository-pipelines
         image: holocontainers.azurecr.io/holorepository-pipelines:latest
@@ -225,7 +225,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 80 
+  - port: 80
     targetPort: 3100
   selector:
     app: holorepository-pipelines
@@ -242,7 +242,7 @@ spec:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-  minReadySeconds: 5 
+  minReadySeconds: 5
   template:
     metadata:
       labels:
@@ -255,7 +255,7 @@ spec:
         image: holocontainers.azurecr.io/holopipelines-models:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 5000 
+        - containerPort: 5000
 
 ---
 

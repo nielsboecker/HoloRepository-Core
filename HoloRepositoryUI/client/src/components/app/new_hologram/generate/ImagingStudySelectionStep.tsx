@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { IImagingStudy, IPatient } from "../../../../../../types";
-import { IChoiceGroupOption, IDropdownOption } from "office-ui-fabric-react";
+import { IChoiceGroupOption, IDropdownOption, MessageBar, MessageBarType } from "office-ui-fabric-react";
 import { Col, Divider, Row } from "antd";
 import ImagingStudyDetailsCard from "./ImagingStudyDetailsCard";
 import { PropsWithContext, withAppContext } from "../../../shared/AppState";
 import ImagingStudySelectionInput from "./inputs/ImagingStudySelectionInput";
 import PatientForImagingStudySelectionInput from "./inputs/PatientForImagingStudySelectionInput";
 
-export interface IImagingStudySelectionStepProps extends PropsWithContext {}
+export interface IImagingStudySelectionStepProps extends PropsWithContext {
+}
 
 export interface IImagingStudySelectionStepState {
   selectedPatient?: IPatient;
@@ -18,10 +19,8 @@ export interface IExtendedChoiceGroupOption extends IChoiceGroupOption {
   endpoint: string;
 }
 
-class ImagingStudySelectionStep extends Component<
-  IImagingStudySelectionStepProps,
-  IImagingStudySelectionStepState
-> {
+class ImagingStudySelectionStep extends Component<IImagingStudySelectionStepProps,
+  IImagingStudySelectionStepState> {
   state: IImagingStudySelectionStepState = {};
 
   render() {
@@ -35,7 +34,13 @@ class ImagingStudySelectionStep extends Component<
             required
           />
 
-          <Divider />
+          <Divider/>
+
+          <MessageBar messageBarType={MessageBarType.warning} style={{ marginBottom: "10px" }}>
+            The system is currently not performing any input validation on the selected imaging
+            studies. Please ensure that the selected study depicts the correct body site for the
+            selected pipeline.
+          </MessageBar>
 
           {this.state.selectedPatient &&
           this.state.selectedPatient.imagingStudies &&
@@ -52,7 +57,7 @@ class ImagingStudySelectionStep extends Component<
         </Col>
 
         <Col span={14} offset={2}>
-          <ImagingStudyDetailsCard study={this.state.selectedStudy} />
+          <ImagingStudyDetailsCard study={this.state.selectedStudy}/>
         </Col>
       </Row>
     );

@@ -34,6 +34,7 @@
   - [HoloRepository Demo application](#holorepository-demo-application)
   - [Other tools](#other-tools)
   - [Integration with other projects](#integration-with-other-projects)
+- [A word of warning](#a-word-of-warning)
 - [Code organisation](#code-organisation)
 - [Development](#development)
   - [Get started](#get-started)
@@ -101,6 +102,26 @@ Several scripts and tools were developed to help perform tasks, for instance tes
 ### Integration with other projects
 
 The system is designed to enable other systems to integrate. Some current projects plugging into the system are DepthVisor, Annotator and SyntheticDataGenerator.
+
+## A word of warning
+
+> The system is currently not performing any input validation on the selected imaging
+> studies. There are some known issues that occur when the input images are not fit for
+> the selected pipelines. For instance, when a pelvis DICOM input is selected with the
+> `lung_segmentation` pipeline, it will fail. When this is invoked from the UI, the
+> error handling and messages may not be conclusive.
+
+To ensure good results and avoid unexpected system behaviour, you have to manually make
+sure that the image study you select depicts the correct body site for the selected
+pipeline. With the current set of pipelines and sample data, the appropriate inputs
+which are guaranteed to succeed are:
+
+* `bone_segmentation`
+  * all inputs (chest, abdomen, pelvis)
+* `lung_segmentation`
+  * chest
+* `abdominal_organs_segmentation`
+  * abdomen
 
 ## Code organisation
 

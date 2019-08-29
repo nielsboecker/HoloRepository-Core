@@ -3,7 +3,7 @@ import { Icon, MessageBar, Spinner } from "office-ui-fabric-react";
 import { navigate } from "@reach/router";
 import JobLogTerminal from "./JobLogTerminal";
 import BackendServerService from "../../../../services/BackendServerService";
-import { IHologramCreationRequest_Generate } from "../../../../../../types";
+import { IHologramCreationRequest_Generate, IJobStateResponse } from "../../../../../../types";
 
 const stateRefreshInterval = 2500;
 const waitTimeAfterFinishBeforeRedirect = 3000;
@@ -88,17 +88,14 @@ class GenerationProcessingStep extends Component<
   updateJobState = () => {
     console.log("Update function called");
 
-    // TODO: go through server
-    const StateEndpoint = `http://51.105.47.56/api/v1/jobs/${this.state.jobId}/state`;
-
     // Note: Due to a bug in HoloPipelines, this will get a 404 after the job has been cleaned up
     // by garbage collection. When requests from UI have been issued before termination, but only
     // get through after, this happens. It won't break anything, just show "404 NOT FOUND" errors
     // in console. Can be ignored for now; the issue should rather be fixed in the HoloPipelines.
     if (this.state.jobId && !this.state.finished) {
-      fetch(StateEndpoint)
-        .then(response => response.json())
-        .then(stateUpdate => {
+      // @ts-ignore because it looks to TS like state.jobId would always be undefined
+      BackendServerService.getJobStateById(this.state.jobId)
+        .then((stateUpdate: IJobStateResponse) => {
           console.log("Received job state update:", stateUpdate);
           const jobState = stateUpdate.state;
           const duration = stateUpdate.age;

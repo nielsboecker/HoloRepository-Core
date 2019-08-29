@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import BackendServerService from "../../../../services/BackendServerService";
 
 export interface IJobLogTerminalProps {
   jobId: string;
@@ -17,9 +18,6 @@ class JobLogTerminal extends Component<IJobLogTerminalProps, IJobLogTerminalStat
   };
 
   idleIntervalId: any = undefined;
-
-  // TODO: go through server
-  jobLogEndpoint = `http://51.105.47.56/api/v1/jobs/${this.props.jobId}/log`;
 
   render() {
     return (
@@ -49,12 +47,13 @@ class JobLogTerminal extends Component<IJobLogTerminalProps, IJobLogTerminalStat
     // Note: This is a deprecated React hook, should be refactored to use more elegant solution
     if (nextProps.jobState !== this.state.lastJobState) {
       console.info(`New state: ${nextProps.jobState} => Updating logs`);
-      fetch(this.jobLogEndpoint)
-        .then(response => response.text())
+      BackendServerService.getJobLogById(this.props.jobId)
         .then(log => {
           // As soon as any real log arrives, stop adding "dot dot dot"
           clearInterval(this.idleIntervalId);
-          return this.setState({ log });
+          if (log) {
+            this.setState({ log });
+          }
         });
     }
   }

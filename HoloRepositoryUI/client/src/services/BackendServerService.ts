@@ -1,6 +1,7 @@
 import BackendServerAxios, { routes } from "./BackendServerAxios";
 import {
   IHologram,
+  IJobStateResponse,
   IHologramCreationRequest_Generate,
   IHologramCreationRequest_Upload,
   IImagingStudy,
@@ -120,9 +121,9 @@ export class BackendServerService {
       .catch(handleError);
   }
 
-  public async getJobStateById(jid: string): Promise<string | null> {
+  public async getJobStateById(jid: string): Promise<IJobStateResponse | null> {
     return BackendServerAxios.get<string>(`${routes.pipelines}/${jid}/state`)
-      .then(response => response.data as string)
+      .then(response => response.data as IJobStateResponse)
       .catch(handleError);
   }
 

@@ -1,14 +1,15 @@
 """
 This module contains the functionality of the abdominal_organs_segmentation pipeline
 of splitting the combined result into multiple sub-results.
-"""
 
-# TODO: Depending on how we decide for this pipeline, this component may get removed.
-# Otherwise, separate organs need to be merged again! (can also be in this task, which
-# should then be renamed though)
-# TODO: If we keep this, refactor and verify
-# Refactoring should include only doing the OBJs in here, and transforming to GLB on
-# pipeline level
+Currently this module is not in used. The current implementation of
+this module is unable to provide an appropriate name to each output
+,and of which we feel that it will not provide much useful information
+for the user. Under time constrain, we were unable to provide each output with colour
+and merge it back together and have every organs with different colours in a single
+3D model as we have originally envisioned. So, in the end we decided to provide the user
+with a single output instead of 8 separate ones.
+"""
 
 import logging
 from typing import Optional

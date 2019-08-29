@@ -19,3 +19,10 @@ This directory contains a collection of tools and deployment scripts that were u
 | ------------------ | ----------------------------------- |
 | Azure Blob Storage | Setup of azure blob storage service |
 | Azure FHIR Service | Setup of azure FHIR service         |
+
+## [Demo Environment Setup](https://github.com/nbckr/HoloRepository-Core/tree/master/Misc/holo_world)
+
+| Name               | Description                                                       |
+| ------------------ | ----------------------------------------------------------------- |
+| Holo World         | Steps and data to setup a demo environment for the holorepository |
+

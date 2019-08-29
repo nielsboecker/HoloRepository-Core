@@ -14,7 +14,9 @@ class HoloLensRemoteLoginPage extends Component<RouteComponentProps & PropsWithC
           Use the code on this page to link your HoloLens application with your SMART on FHIR login.`
         ]}
       >
-        <div>Your authentication PIN: <b>{this.props.context!.pin}</b></div>
+        <div>
+          Your authentication PIN: <b>{this.props.context!.pin}</b>
+        </div>
       </ContentContainer>
     );
   }

@@ -11,10 +11,7 @@ import sys
 from dotenv import load_dotenv
 
 # Load data from .env file (will not override actual env variables if set)
-# Note that the .env file is .dockerignored, so in production it is expected
-# to set these variables throug the deployment workflow.
-logging.info("Attempting to load environment variables from .env file, if it exists")
-load_dotenv(verbose=True)
+load_dotenv()
 
 # Application
 FLASK_ENV = os.getenv("FLASK_ENV")
@@ -22,6 +19,7 @@ APP_PORT = int(os.getenv("APP_PORT"))
 
 # Settings for processing etc.
 INPUT_RESOLUTION_MAX = int(os.getenv("INPUT_RESOLUTION_MAX", 256))
+SIMPLIFICATION_RATIO = float(os.getenv("SIMPLIFICATION_RATIO", 0.5))
 
 # Jobs
 NUM_OF_WORKER_PROCESSES = int(os.getenv("NUMBER_OF_WORKER_PROCESSES", 4))

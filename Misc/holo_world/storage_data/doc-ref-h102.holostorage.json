@@ -1,0 +1,31 @@
+{
+    "author": [
+        {
+            "reference": "Practitioner/a100"
+        }
+    ],
+    "content": [
+        {
+            "attachment": {
+                "contentType": "model/gltf-binary",
+                "size": 2749324,
+                "title": "Abdomen Scan"
+            }
+        }
+    ],
+    "date": "2019-01-02T12:30:45+00:00",
+    "description": "{\"description\":\"Abdomen scan of patient\",\"creationDescription\":\"Uploaded from existing hologram\",\"bodySite\":\"chest\",\"dateOfImaging\":\"2017-07-15T15:20:25Z\"}",
+    "id": "h102",
+    "meta": {
+        "lastUpdated": "2019-08-01T22:42:13.477+00:00",
+        "versionId": "7"
+    },
+    "resourceType": "DocumentReference",
+    "status": "current",
+    "subject": {
+        "reference": "Patient/p101"
+    },
+    "type": {
+        "text": "UPLOAD_EXISTING_MODEL"
+    }
+}

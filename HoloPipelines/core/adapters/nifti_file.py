@@ -7,6 +7,7 @@ import logging
 
 import nibabel
 import numpy as np
+import scipy.ndimage
 
 
 def extract_np_array_from_nifti_image(
@@ -20,45 +21,47 @@ def extract_np_array_from_nifti_image(
     return np.array(image_data.dataobj)
 
 
-def normalise_nifti_image(
+def extract_np_array_from_nifti_image_and_normalise(
     image_data: nibabel.nifti1.Nifti1Image
-) -> nibabel.nifti1.Nifti1Image:
+) -> np.array:
     """
     After loading a NIfTI file, this function resamples it according to the file headers
     in order to compensate different slice thickness.
     :param image_data: input image data
-    :return: normalised NIfTI
+    :return: numpy array representing normalised NIfTI
     """
-    # TODO: Why copy??
-    image = image_data
-    # TODO: does the Nifti1Image have a .shape field? according to documentation, no?
-    original_shape = image.shape[:3]
+    image_data_as_np_array = extract_np_array_from_nifti_image(image_data)
 
-    # TODO: document what happens here
-    # TODO: _affline seems like a typo and even as "affine" i don't see what it should do?
-    image._affline = None
+    original_shape = image_data_as_np_array.shape[:3]
+
+    # getting slice thickness (z) in relative to x and y from the header data
     spacing = map(
         float,
         (
-            [list(image.header.get_zooms())[2]]
-            + [list(image.header.get_zooms())[0], list(image.header.get_zooms())[1]]
+            [list(image_data.header.get_zooms())[2]]
+            + [
+                list(image_data.header.get_zooms())[0],
+                list(image_data.header.get_zooms())[1],
+            ]
         ),
     )
     spacing = np.array(list(spacing))
 
+    # calculate resize factor
     new_spacing = [1, 1, 1]
     resize_factor = spacing / new_spacing
-    new_real_shape = image.shape[:3] * resize_factor
+    new_real_shape = original_shape * resize_factor
     new_shape = np.round(new_real_shape)
-    real_resize_factor = new_shape / image.shape[:3]
-    # TODO: Why overriding variable? And also why is it unused anyway, afterwards?
-    new_spacing = spacing / real_resize_factor
+    real_resize_factor = new_shape / image_data_as_np_array.shape[:3]
+
+    image_data_as_np_array = scipy.ndimage.interpolation.zoom(
+        image_data_as_np_array, real_resize_factor
+    )
 
     logging.info("Shape before resampling\t" + repr(original_shape))
-    logging.info("Shape after resampling\t" + repr(image.shape[:3]))
+    logging.info("Shape after resampling\t" + repr(image_data_as_np_array.shape[:3]))
 
-    # TODO: Is the image even changed??
-    return image
+    return image_data_as_np_array
 
 
 def read_nifti_image(input_file_path: str) -> nibabel.nifti1.Nifti1Image:
@@ -82,11 +85,14 @@ def read_nifti_as_np_array(input_path: str, normalise: bool = True) -> np.array:
     :return:
     """
     nifti_image: nibabel.nifti1.Nifti1Image = read_nifti_image(input_path)
-
     if normalise:
-        nifti_image = normalise_nifti_image(nifti_image)
-
-    nifti_image_as_np_array: np.array = extract_np_array_from_nifti_image(nifti_image)
+        nifti_image_as_np_array: np.array = extract_np_array_from_nifti_image_and_normalise(
+            nifti_image
+        )
+    else:
+        nifti_image_as_np_array: np.array = extract_np_array_from_nifti_image(
+            nifti_image
+        )
     return nifti_image_as_np_array
 
 
@@ -96,7 +102,15 @@ def write_nifti_image(
     nibabel.save(nifti_image, output_file_path)
 
 
+def write_np_array_as_nifti_image(
+    nifti_image_as_np_array: np.ndarray, output_file_path: str
+) -> None:
+    nifti_image = convert_dicom_np_ndarray_to_nifti_image(nifti_image_as_np_array)
+    write_nifti_image(nifti_image, output_file_path)
+
+
 def convert_dicom_np_ndarray_to_nifti_image(
     dicom_image: np.ndarray
 ) -> nibabel.nifti1.Nifti1Image:
+    # https://stackoverflow.com/questions/28330785/creating-a-nifti-file-from-a-numpy-array
     return nibabel.Nifti1Image(dicom_image, affine=np.eye(4))

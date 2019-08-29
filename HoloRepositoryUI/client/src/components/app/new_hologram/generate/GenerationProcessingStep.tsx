@@ -97,6 +97,11 @@ class GenerationProcessingStep extends Component<
       BackendServerService.getJobStateById(this.state.jobId)
         .then((stateUpdate: IJobStateResponse) => {
           console.log("Received job state update:", stateUpdate);
+
+          // Handle edge case of late arriving data when the job is already cleaned in HoloPipelines
+          if (!stateUpdate) {
+            return;
+          }
           const jobState = stateUpdate.state;
           const duration = stateUpdate.age;
           if (jobState && duration) {

@@ -24,13 +24,13 @@ jobs:
     displayName: 'Use Node 12.6.x'
     inputs:
       versionSpec: 12.6.x
-  
+
   - task: Npm@1
     displayName: 'npm install'
     inputs:
       workingDir: ./HoloRepositoryUI/client
       verbose: false
-  
+
   - task: Npm@1
     displayName: 'npm test'
     inputs:
@@ -39,7 +39,7 @@ jobs:
       verbose: false
       customCommand: test
     continueOnError: true
-  
+
   - task: Npm@1
     displayName: 'npm build'
     inputs:
@@ -47,7 +47,7 @@ jobs:
       workingDir: ./HoloRepositoryUI/client
       verbose: false
       customCommand: build
-  
+
   - task: Docker@2
     displayName: build
     inputs:
@@ -61,7 +61,7 @@ jobs:
        $(Build.BuildId)
        latest
       arguments: '--build-arg REACT_APP_BACKEND_HOST=http://51.145.18.102 --build-arg REACT_APP_BACKEND_PORT=80 --build-arg REACT_APP_BACKEND_TIMEOUT=15000'
-  
+
   - task: Docker@2
     displayName: push
     inputs:
@@ -82,13 +82,13 @@ jobs:
     displayName: 'Use Node 12.6.x'
     inputs:
       versionSpec: 12.6.x
-  
+
   - task: Npm@1
     displayName: 'npm install'
     inputs:
       workingDir: ./HoloRepositoryUI/server
       verbose: false
-  
+
   - task: Npm@1
     displayName: 'npm test'
     inputs:
@@ -97,7 +97,7 @@ jobs:
       verbose: false
       customCommand: test
     continueOnError: true
-  
+
   - script: |
      # Can't just use the npm task for this, as that is limited to one package.json in one folder
      # whereas here we need to manually build the TypeScript code first.
@@ -112,7 +112,7 @@ jobs:
      ls -l ./dist
     workingDirectory: HoloRepositoryUI
     displayName: 'npm run compile'
-  
+
   - task: Docker@2
     displayName: buildAndPush
     inputs:
@@ -134,7 +134,7 @@ jobs:
     displayName: 'Use Python 3.7'
     inputs:
       versionSpec: 3.7
-  
+
   - script: |
      # Script to do the installation steps as described in HoloPipelines/README.md
      
@@ -151,11 +151,11 @@ jobs:
      sudo npm install -g obj2gltf
     workingDirectory: HoloPipelines
     displayName: 'Command Line: install packages'
-  
+
   - script: 'pytest --cov'
     workingDirectory: HoloPipelines
     displayName: 'Command Line: run tests'
-  
+
   - task: Docker@2
     displayName: buildAndPush
     inputs:
@@ -166,7 +166,7 @@ jobs:
       tags: |
        $(Build.BuildId)
        latest
-    
+
 - job: holopipelines_models
   displayName: HoloPipelines - Models
   pool:
@@ -193,7 +193,7 @@ jobs:
     inputs:
       arguments: '-d -t -v ./...'
       workingDirectory: ./HoloStorageAccessor
-  
+
   - task: Go@0
     displayName: 'go test'
     inputs:

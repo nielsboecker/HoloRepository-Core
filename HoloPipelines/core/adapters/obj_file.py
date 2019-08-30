@@ -15,7 +15,8 @@ def write_mesh_as_obj(
             obj_file.write("v {0} {1} {2}\n".format(item[0], item[1], item[2]))
 
         for item in norm:
-            obj_file.write("vn {0} {1} {2}\n".format(item[0], item[1], item[2]))
+            # NOTE: negative item to inverse faces.
+            obj_file.write("vn {0} {1} {2}\n".format(-item[0], -item[1], -item[2]))
 
         for item in faces:
             obj_file.write(

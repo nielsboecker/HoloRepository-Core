@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.scss";
 import MainContainer from "./MainContainer";
 import { initializeIcons } from "@uifabric/icons";
+import { loadTheme } from "office-ui-fabric-react";
 import BackendServerService from "../../services/BackendServerService";
 import { IHologram, IPatient, IPractitioner, IPipeline } from "../../../../types";
 import { AppContext, IAppState, initialState, initialPractitionerSpecificState } from "./AppState";
@@ -9,6 +10,36 @@ import { navigate } from "@reach/router";
 
 // Note: See https://developer.microsoft.com/en-us/fabric/#/styles/web/icons#fabric-react
 initializeIcons();
+
+// Note: See https://fabricweb.z5.web.core.windows.net/pr-deploy-site/refs/heads/master/theming-designer/index.html
+// The colour scheme is created to reflect the colours of antdesign. With this, the overall look
+// becomes a bit more coherent, as the two styling frameworks used (Fabric and antd) are different
+loadTheme({
+  palette: {
+    themePrimary: "#1890ff",
+    themeLighterAlt: "#f6fbff",
+    themeLighter: "#daedff",
+    themeLight: "#b9ddff",
+    themeTertiary: "#74bcff",
+    themeSecondary: "#339cff",
+    themeDarkAlt: "#1581e6",
+    themeDark: "#116dc2",
+    themeDarker: "#0d508f",
+    neutralLighterAlt: "#f8f8f8",
+    neutralLighter: "#f4f4f4",
+    neutralLight: "#eaeaea",
+    neutralQuaternaryAlt: "#dadada",
+    neutralQuaternary: "#d0d0d0",
+    neutralTertiaryAlt: "#c8c8c8",
+    neutralTertiary: "#595959",
+    neutralSecondary: "#373737",
+    neutralPrimaryAlt: "#2f2f2f",
+    neutralPrimary: "#000000",
+    neutralDark: "#151515",
+    black: "#0b0b0b",
+    white: "#ffffff"
+  }
+});
 
 class App extends Component<any, IAppState> {
   constructor(props: any) {

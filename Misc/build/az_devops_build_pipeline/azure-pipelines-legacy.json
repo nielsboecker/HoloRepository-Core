@@ -1,0 +1,691 @@
+{
+    "options": [
+        {
+            "enabled": true,
+            "definition": {
+                "id": "5d58cc01-7c75-450c-be18-a388ddb129ec"
+            },
+            "inputs": {
+                "branchFilters": "[\"+refs/heads/*\"]",
+                "additionalFields": "{}"
+            }
+        },
+        {
+            "enabled": false,
+            "definition": {
+                "id": "a9db38f9-9fdc-478c-b0f9-464221e58316"
+            },
+            "inputs": {
+                "workItemType": "Issue",
+                "assignToRequestor": "true",
+                "additionalFields": "{}"
+            }
+        }
+    ],
+    "triggers": [
+        {
+            "branchFilters": [
+                "+UI/*",
+                "+dev"
+            ],
+            "pathFilters": [],
+            "batchChanges": false,
+            "maxConcurrentBuildsPerBranch": 1,
+            "pollingInterval": 0,
+            "triggerType": 2
+        },
+        {
+            "branchFilters": [
+                "+UI/*",
+                "+dev",
+                "+master"
+            ],
+            "forks": {
+                "enabled": false,
+                "allowSecrets": false
+            },
+            "pathFilters": [],
+            "requireCommentsForNonTeamMembersOnly": false,
+            "isCommentRequiredForPullRequest": false,
+            "triggerType": 64
+        }
+    ],
+    "variables": {
+        "BuildConfiguration": {
+            "value": "release",
+            "allowOverride": true
+        },
+        "BuildPlatform": {
+            "value": "any cpu",
+            "allowOverride": true
+        },
+        "CI": {
+            "value": "true"
+        },
+        "system.debug": {
+            "value": "false",
+            "allowOverride": true
+        }
+    },
+    "properties": {},
+    "tags": [],
+    "_links": {
+        "self": {
+            "href": "https://dev.azure.com/MSGOSHHOLO/84bcb432-f279-452c-a53c-37df0f28baf0/_apis/build/Definitions/1?revision=58"
+        },
+        "web": {
+            "href": "https://dev.azure.com/MSGOSHHOLO/84bcb432-f279-452c-a53c-37df0f28baf0/_build/definition?definitionId=1"
+        },
+        "editor": {
+            "href": "https://dev.azure.com/MSGOSHHOLO/84bcb432-f279-452c-a53c-37df0f28baf0/_build/designer?id=1&_a=edit-build-definition"
+        },
+        "badge": {
+            "href": "https://dev.azure.com/MSGOSHHOLO/84bcb432-f279-452c-a53c-37df0f28baf0/_apis/build/status/1"
+        }
+    },
+    "buildNumberFormat": "$(date:yyyyMMdd)$(rev:.r)",
+    "description": "Build HoloRepository UI artefact",
+    "jobAuthorizationScope": 1,
+    "jobCancelTimeoutInMinutes": 5,
+    "badgeEnabled": true,
+    "process": {
+        "phases": [
+            {
+                "steps": [
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Use Node 12.6.x",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "31c75bbb-bcdf-4706-8d7c-4da6a1959bc2",
+                            "versionSpec": "0.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "versionSpec": "12.6.x",
+                            "checkLatest": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "npm install",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "fe47e961-9fa8-4106-8639-368c022d43ad",
+                            "versionSpec": "1.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "command": "install",
+                            "workingDir": "./HoloRepositoryUI/client",
+                            "verbose": "false",
+                            "customCommand": "",
+                            "customRegistry": "useNpmrc",
+                            "customFeed": "",
+                            "customEndpoint": "",
+                            "publishRegistry": "useExternalRegistry",
+                            "publishFeed": "",
+                            "publishPackageMetadata": "true",
+                            "publishEndpoint": ""
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": true,
+                        "alwaysRun": false,
+                        "displayName": "npm test",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "fe47e961-9fa8-4106-8639-368c022d43ad",
+                            "versionSpec": "1.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "command": "custom",
+                            "workingDir": "./HoloRepositoryUI/client",
+                            "verbose": "false",
+                            "customCommand": "test",
+                            "customRegistry": "useNpmrc",
+                            "customFeed": "",
+                            "customEndpoint": "",
+                            "publishRegistry": "useExternalRegistry",
+                            "publishFeed": "",
+                            "publishPackageMetadata": "true",
+                            "publishEndpoint": ""
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "npm build",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "fe47e961-9fa8-4106-8639-368c022d43ad",
+                            "versionSpec": "1.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "command": "custom",
+                            "workingDir": "./HoloRepositoryUI/client",
+                            "verbose": "false",
+                            "customCommand": "build",
+                            "customRegistry": "useNpmrc",
+                            "customFeed": "",
+                            "customEndpoint": "",
+                            "publishRegistry": "useExternalRegistry",
+                            "publishFeed": "",
+                            "publishPackageMetadata": "true",
+                            "publishEndpoint": ""
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "build",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "e28912f1-0114-4464-802a-a3a35437fd16",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "containerRegistry": "628c6d87-76d9-4ee5-9c21-f3e950984083",
+                            "repository": "holorepository-ui-client",
+                            "command": "build",
+                            "Dockerfile": "HoloRepositoryUI/client/Dockerfile",
+                            "buildContext": "HoloRepositoryUI",
+                            "tags": "holorepository-ui-client\n$(Build.BuildId)\nlatest",
+                            "arguments": "--build-arg REACT_APP_BACKEND_HOST=http://51.145.18.102 --build-arg REACT_APP_BACKEND_PORT=80 --build-arg REACT_APP_BACKEND_TIMEOUT=15000",
+                            "addPipelineData": "true"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "push",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "e28912f1-0114-4464-802a-a3a35437fd16",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "containerRegistry": "628c6d87-76d9-4ee5-9c21-f3e950984083",
+                            "repository": "holorepository-ui-client",
+                            "command": "push",
+                            "Dockerfile": "**/Dockerfile",
+                            "buildContext": "**",
+                            "tags": "$(Build.BuildId)\nholorepository-ui-client\nlatest",
+                            "arguments": "",
+                            "addPipelineData": "true"
+                        }
+                    }
+                ],
+                "name": "HoloRepositoryUI - Client",
+                "refName": "Phase_1",
+                "condition": "succeeded()",
+                "target": {
+                    "executionOptions": {
+                        "type": 0
+                    },
+                    "allowScriptsAuthAccessOption": false,
+                    "type": 1
+                },
+                "jobAuthorizationScope": 1
+            },
+            {
+                "steps": [
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Use Node 12.6.x",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "31c75bbb-bcdf-4706-8d7c-4da6a1959bc2",
+                            "versionSpec": "0.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "versionSpec": "12.6.x",
+                            "checkLatest": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "npm install",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "fe47e961-9fa8-4106-8639-368c022d43ad",
+                            "versionSpec": "1.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "command": "install",
+                            "workingDir": "./HoloRepositoryUI/server",
+                            "verbose": "false",
+                            "customCommand": "",
+                            "customRegistry": "useNpmrc",
+                            "customFeed": "",
+                            "customEndpoint": "",
+                            "publishRegistry": "useExternalRegistry",
+                            "publishFeed": "",
+                            "publishPackageMetadata": "true",
+                            "publishEndpoint": ""
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": true,
+                        "alwaysRun": false,
+                        "displayName": "npm test",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "fe47e961-9fa8-4106-8639-368c022d43ad",
+                            "versionSpec": "1.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "command": "custom",
+                            "workingDir": "./HoloRepositoryUI/server",
+                            "verbose": "false",
+                            "customCommand": "test",
+                            "customRegistry": "useNpmrc",
+                            "customFeed": "",
+                            "customEndpoint": "",
+                            "publishRegistry": "useExternalRegistry",
+                            "publishFeed": "",
+                            "publishPackageMetadata": "true",
+                            "publishEndpoint": ""
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "npm run compile",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "script": "# Can't just use the npm task for this, as that is limited to one package.json in one folder\n# whereas here we need to manually build the TypeScript code first.\n\ncd ./types\nnpm run build\n\ncd ../server\nnpm run compile\n\necho \"Success\"\nls -l ./dist",
+                            "workingDirectory": "HoloRepositoryUI",
+                            "failOnStderr": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "buildAndPush",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "e28912f1-0114-4464-802a-a3a35437fd16",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "containerRegistry": "628c6d87-76d9-4ee5-9c21-f3e950984083",
+                            "repository": "holorepository-ui-server",
+                            "command": "buildAndPush",
+                            "Dockerfile": "HoloRepositoryUI/server/Dockerfile",
+                            "buildContext": "HoloRepositoryUI",
+                            "tags": "holorepository-ui-server\n$(Build.BuildId)\nlatest",
+                            "arguments": "",
+                            "addPipelineData": "true"
+                        }
+                    }
+                ],
+                "name": "HoloRepositoryUI - Server",
+                "refName": "Job_1",
+                "condition": "succeeded()",
+                "target": {
+                    "executionOptions": {
+                        "type": 0
+                    },
+                    "allowScriptsAuthAccessOption": false,
+                    "type": 1
+                },
+                "jobAuthorizationScope": 1
+            },
+            {
+                "steps": [
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Use Python 3.7",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "33c63b11-352b-45a2-ba1b-54cb568a29ca",
+                            "versionSpec": "0.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "versionSpec": "3.7",
+                            "addToPath": "true",
+                            "architecture": "x64"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Command Line: install packages",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "script": "# Script to do the installation steps as described in HoloPipelines/README.md\n\necho \">>> Installing pip dependencies\"\npip install -r requirements.txt\npip install pytest pytest-cov pytest-mock\n\necho \">>> Installing apt packages\"\n# Note: this install seems to fail, but the tests still succeed as this dependency is not needed for them to run\nsudo apt-get update\n#sudo apt-get install libgdcm2.8 libgdcm-tools\n\necho \">>> Installing NPM packages\"\nsudo npm install -g obj2gltf",
+                            "workingDirectory": "HoloPipelines",
+                            "failOnStderr": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Command Line: run tests",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "script": "pytest --cov",
+                            "workingDirectory": "HoloPipelines",
+                            "failOnStderr": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "buildAndPush",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "e28912f1-0114-4464-802a-a3a35437fd16",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "containerRegistry": "628c6d87-76d9-4ee5-9c21-f3e950984083",
+                            "repository": "holorepository-pipelines",
+                            "command": "buildAndPush",
+                            "Dockerfile": "HoloPipelines/Dockerfile",
+                            "buildContext": "HoloPipelines",
+                            "tags": "$(Build.BuildId)\nlatest",
+                            "arguments": "",
+                            "addPipelineData": "true"
+                        }
+                    }
+                ],
+                "name": "HoloPipelines - Core",
+                "refName": "Job_3",
+                "condition": "succeeded()",
+                "target": {
+                    "executionOptions": {
+                        "type": 0
+                    },
+                    "allowScriptsAuthAccessOption": false,
+                    "type": 1
+                },
+                "jobAuthorizationScope": 1
+            },
+            {
+                "steps": [
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "dense_vnet_abdominal_ct: buildAndPush",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "e28912f1-0114-4464-802a-a3a35437fd16",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "containerRegistry": "628c6d87-76d9-4ee5-9c21-f3e950984083",
+                            "repository": "holopipelines-models",
+                            "command": "buildAndPush",
+                            "Dockerfile": "HoloPipelines/models/dense_vnet_abdominal_ct/Dockerfile",
+                            "buildContext": "**",
+                            "tags": "dense_vnet_abdominal_ct\n$(Build.BuildId)\nlatest",
+                            "arguments": "",
+                            "addPipelineData": "true"
+                        }
+                    }
+                ],
+                "name": "HoloPipelines - Models",
+                "refName": "Job_2",
+                "condition": "succeeded()",
+                "target": {
+                    "executionOptions": {
+                        "type": 0
+                    },
+                    "allowScriptsAuthAccessOption": false,
+                    "type": 1
+                },
+                "jobAuthorizationScope": 1
+            },
+            {
+                "steps": [
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "go get",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "34b37fdd-bbf7-4ef1-b37c-9652ca7bb355",
+                            "versionSpec": "0.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "command": "get",
+                            "customCommand": "",
+                            "arguments": "-d -t -v ./...",
+                            "workingDirectory": "./HoloStorageAccessor"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "go test",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "34b37fdd-bbf7-4ef1-b37c-9652ca7bb355",
+                            "versionSpec": "0.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "command": "test",
+                            "customCommand": "",
+                            "arguments": "./...",
+                            "workingDirectory": "./HoloStorageAccessor"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "buildAndPush",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "task": {
+                            "id": "e28912f1-0114-4464-802a-a3a35437fd16",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "containerRegistry": "628c6d87-76d9-4ee5-9c21-f3e950984083",
+                            "repository": "holostorage-accessor",
+                            "command": "buildAndPush",
+                            "Dockerfile": "./HoloStorageAccessor/Dockerfile",
+                            "buildContext": "**",
+                            "tags": "holo-storage-accessor\n$(Build.BuildId)\nlatest",
+                            "arguments": "",
+                            "addPipelineData": "true"
+                        }
+                    }
+                ],
+                "name": "HoloStorageAccessor",
+                "refName": "Job_4",
+                "condition": "succeeded()",
+                "target": {
+                    "executionOptions": {
+                        "type": 0
+                    },
+                    "allowScriptsAuthAccessOption": false,
+                    "type": 1
+                },
+                "jobAuthorizationScope": 1
+            }
+        ],
+        "type": 1
+    },
+    "repository": {
+        "properties": {
+            "apiUrl": "https://api.github.com/repos/nbckr/HoloRepository-Core",
+            "branchesUrl": "https://api.github.com/repos/nbckr/HoloRepository-Core/branches",
+            "cloneUrl": "https://github.com/nbckr/HoloRepository-Core.git",
+            "connectedServiceId": "de9cd3d4-1661-4241-b989-c0b4f346f2ea",
+            "defaultBranch": "dev",
+            "fullName": "nbckr/HoloRepository-Core",
+            "hasAdminPermissions": "True",
+            "isFork": "False",
+            "isPrivate": "False",
+            "lastUpdated": "08/28/2019 11:24:14",
+            "manageUrl": "https://github.com/nbckr/HoloRepository-Core",
+            "nodeId": "MDEwOlJlcG9zaXRvcnkxOTU5ODc1OTE=",
+            "ownerId": "11090412",
+            "orgName": "nbckr",
+            "refsUrl": "https://api.github.com/repos/nbckr/HoloRepository-Core/git/refs",
+            "safeRepository": "nbckr/HoloRepository-Core",
+            "shortName": "HoloRepository-Core",
+            "ownerAvatarUrl": "https://avatars2.githubusercontent.com/u/11090412?v=4",
+            "archived": "False",
+            "externalId": "195987591",
+            "ownerIsAUser": "True",
+            "checkoutNestedSubmodules": "false",
+            "cleanOptions": "0",
+            "fetchDepth": "0",
+            "gitLfsSupport": "false",
+            "reportBuildStatus": "false",
+            "skipSyncSource": "false",
+            "labelSourcesFormat": "$(build.buildNumber)",
+            "labelSources": "0"
+        },
+        "id": "nbckr/HoloRepository-Core",
+        "type": "GitHub",
+        "name": "nbckr/HoloRepository-Core",
+        "url": "https://github.com/nbckr/HoloRepository-Core.git",
+        "defaultBranch": "dev",
+        "clean": "false",
+        "checkoutSubmodules": false
+    },
+    "processParameters": {},
+    "quality": 1,
+    "authoredBy": {
+        "displayName": "Niels Boecker",
+        "url": "https://spsproduks1.vssps.visualstudio.com/Afffb33a4-0106-4648-8506-ac91c480a65e/_apis/Identities/58c459f6-aa6d-6f8e-b126-463d7601418d",
+        "_links": {
+            "avatar": {
+                "href": "https://dev.azure.com/MSGOSHHOLO/_apis/GraphProfile/MemberAvatars/aad.NThjNDU5ZjYtYWE2ZC03ZjhlLWIxMjYtNDYzZDc2MDE0MThk"
+            }
+        },
+        "id": "58c459f6-aa6d-6f8e-b126-463d7601418d",
+        "uniqueName": "ucabnbo@ucl.ac.uk",
+        "imageUrl": "https://dev.azure.com/MSGOSHHOLO/_apis/GraphProfile/MemberAvatars/aad.NThjNDU5ZjYtYWE2ZC03ZjhlLWIxMjYtNDYzZDc2MDE0MThk",
+        "descriptor": "aad.NThjNDU5ZjYtYWE2ZC03ZjhlLWIxMjYtNDYzZDc2MDE0MThk"
+    },
+    "drafts": [],
+    "queue": {
+        "_links": {
+            "self": {
+                "href": "https://dev.azure.com/MSGOSHHOLO/_apis/build/Queues/8"
+            }
+        },
+        "id": 8,
+        "name": "Hosted Ubuntu 1604",
+        "url": "https://dev.azure.com/MSGOSHHOLO/_apis/build/Queues/8",
+        "pool": {
+            "id": 8,
+            "name": "Hosted Ubuntu 1604",
+            "isHosted": true
+        }
+    },
+    "id": 1,
+    "name": "HoloRepository-Core",
+    "url": "https://dev.azure.com/MSGOSHHOLO/84bcb432-f279-452c-a53c-37df0f28baf0/_apis/build/Definitions/1?revision=58",
+    "uri": "vstfs:///Build/Definition/1",
+    "path": "\\",
+    "type": 2,
+    "queueStatus": 0,
+    "revision": 58,
+    "createdDate": "2019-08-28T13:27:32.180Z",
+    "project": {
+        "id": "84bcb432-f279-452c-a53c-37df0f28baf0",
+        "name": "HoloRepository",
+        "url": "https://dev.azure.com/MSGOSHHOLO/_apis/projects/84bcb432-f279-452c-a53c-37df0f28baf0",
+        "state": 1,
+        "revision": 15,
+        "visibility": 2,
+        "lastUpdateTime": "2019-08-11T13:49:11.153Z"
+    }
+}

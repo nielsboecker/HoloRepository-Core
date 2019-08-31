@@ -48,7 +48,11 @@ Use the following command to create a kubernetes cluster with rights to pull ima
 
 ```
 az aks create \
-    --resource-group <myResourceGroup> \ --name <aksName> \ --node-count 5 \ --service-principal <appId> \ --client-secret <password>  \
+    --resource-group <myResourceGroup> \ 
+    --name <aksName> \ 
+    --node-count 5 \ 
+    --service-principal <appId> \ 
+    --client-secret <password>  \
     --generate-ssh-keys
 ```
 
@@ -74,9 +78,14 @@ The access key to the blob storage should be kept secret. Use the following comm
 `kubectl create secret generic blobstorekey --from-literal=AZURE_STORAGE_ACCESS_KEY=<yourKey>`
 
 #### IP addresses for services
-Many of the IP Addresses for the Accessor and Pipelines etc requires an IP address.
+Some services (e.g. HoloRepository UI Server and Pipelines) requires configurations to the IP addresses of other components.
 
-First [deploy the application](###Apply-Kubernetes-configuration-to-cluster), and wait for the ip addresses to be assigned. Then change the configurations again to point to the ip addresses and apply the configurations again.
+To obtain the addresses for configuration, first [deploy the application](###Apply-Kubernetes-configuration-to-cluster) and wait for the ip addresses to be assigned. 
+
+Then update the configurations to the assigned ip addresses. 
+
+Finally, reapply the configurations to let it take effect.
+
 
 ### Apply Kubernetes configuration to cluster
 Connect to cluster using kubectl

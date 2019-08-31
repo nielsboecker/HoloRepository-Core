@@ -100,6 +100,11 @@ View deployment status
 
 `kubectl get services --watch` or `kubectl get pods --watch`
 
+## Updating components
+When there are new updates to the components, just delete the pods of the component and the new pods will spawn with the latest version of the component.
+
+`kubectl delete pods <pod-name>`
+
 ## References
 https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-acr
 

@@ -106,7 +106,7 @@ class HologramsDetailsList extends Component<
         <Fabric>
           {this.props.showFilters && (
             <div className="filters">
-              <Row>
+              <Row style={{ marginBottom: "40px" }}>
                 <Col span={12} style={{ padding: "0 24px" }}>
                   <div>
                     <Label htmlFor={filterSubjectId}>Filter by subject</Label>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, RouteComponentProps } from "@reach/router";
+import { Link, Redirect, RouteComponentProps } from "@reach/router";
 import {
   Dropdown,
   IDropdownOption,
@@ -102,13 +102,13 @@ class LoginPage extends Component<RouteComponentProps & PropsWithContext> {
 
   private _selectPractitioner = () => {
     if (this.selectedItem === "") {
-      this.selectedItem = options[0].key;
-    }
-
-    if (typeof this.selectedItem !== "number") {
-      const id = this.selectedItem.substring(0, this.selectedItem.indexOf("/"));
-      const pin = this.selectedItem.substring(this.selectedItem.indexOf("/") + 1);
-      this.props.context!.handleLogin(id, pin);
+      alert(`Please select the practitioner account!`);
+    } else {
+      if (typeof this.selectedItem !== "number") {
+        const id = this.selectedItem.substring(0, this.selectedItem.indexOf("/"));
+        const pin = this.selectedItem.substring(this.selectedItem.indexOf("/") + 1);
+        this.props.context!.handleLogin(id, pin);
+      }
     }
   };
 

@@ -31,14 +31,13 @@ import PipelineDetailBox from "../../components/app/PipelineDetailBox";
 import ProfileInformationPage from "../../components/app/ProfileInformationPage";
 import { IPatient } from "../../../../types";
 import { mountWithContextProvider } from "../../__test_utils__/MockContextProvider";
-
 import samplePatients from "../samples/samplePatients.json";
 import { wrapWithFormsy } from "../../__test_utils__/MockFormsy";
 import FileUploadStep from "../../components/app/new_hologram/upload/FileUploadStep";
 import { AppContext, IAppState, initialState } from "../../components/shared/AppState";
-
 import { IPractitioner } from "../../../../types";
 import samplePractitioner from "../samples/samplePractitionerWithLessInformation.json";
+import JobLogTerminal from "../../components/app/new_hologram/generate/JobLogTerminal";
 
 const contextWithoutPractitioner: IAppState = {
   ...initialState,
@@ -111,7 +110,18 @@ it("renders HologramsListPage without crashing", () => {
 });
 
 it("renders GenerationProcessingStep without crashing", () => {
-  shallow(<GenerationProcessingStep onComponentDidMount={jest.fn()} />);
+  shallow(
+    <GenerationProcessingStep
+      generateMetaData={jest.fn()}
+      onError={jest.fn()}
+      onGenerationFailure={jest.fn()}
+      onGenerationSuccess={jest.fn()}
+    />
+  );
+});
+
+it("renders JobLogTerminal without crashing", () => {
+  shallow(<JobLogTerminal jobId="" jobState="" />);
 });
 
 it("renders ImagingStudyDetailsCard without crashing", () => {

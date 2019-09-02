@@ -18,7 +18,8 @@ export interface IAppState {
   handlePipelinesChange: Function;
   handleDeleteHolograms: Function;
   handleDownloadHolograms: Function;
-  handleHologramCreated: Function;
+  handleHologramCreated_Upload: Function;
+  handleHologramCreated_Generate: Function;
   handleLogin: Function;
   handleLogout: Function;
 }
@@ -41,7 +42,8 @@ const initialState: IAppState = {
   handlePipelinesChange: () => {},
   handleDeleteHolograms: () => {},
   handleDownloadHolograms: () => {},
-  handleHologramCreated: () => {},
+  handleHologramCreated_Upload: () => {},
+  handleHologramCreated_Generate: () => {},
   handleLogin: () => {},
   handleLogout: () => {}
 };

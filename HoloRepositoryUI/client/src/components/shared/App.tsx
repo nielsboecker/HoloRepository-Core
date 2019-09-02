@@ -21,7 +21,8 @@ class App extends Component<any, IAppState> {
       handlePipelinesChange: this._handlePipelinesChange,
       handleDeleteHolograms: this._handleDeleteHolograms,
       handleDownloadHolograms: this._handleDownloadHolograms,
-      handleHologramCreated: this._handleHologramCreated,
+      handleHologramCreated_Upload: this._handleHologramCreated_Upload,
+      handleHologramCreated_Generate: this._handleHologramCreated_Generate,
       handleLogin: this._handleLogin,
       handleLogout: this._handleLogout
     };
@@ -172,7 +173,7 @@ class App extends Component<any, IAppState> {
     });
   };
 
-  private _handleHologramCreated = (hologram: IHologram) => {
+  private _handleHologramCreated_Upload = (hologram: IHologram) => {
     const pid = hologram.pid;
     const patient = this.state.patients[pid];
 
@@ -191,6 +192,13 @@ class App extends Component<any, IAppState> {
         [pid]: patient
       }
     });
+  };
+
+  private _handleHologramCreated_Generate = () => {
+    // A wrapper around private function to refresh all. This workaround is required, as the
+    // HoloPipelines currently can't return the newly generated hologram and thus require
+    // all holograms to be refreshed.
+    this._fetchHologramsForPatients();
   };
 
   private _getPidForHid = (hid: string): string | null => {

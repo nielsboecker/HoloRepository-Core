@@ -5,8 +5,12 @@ export class PipelinesService {
     return PipelinesClient.getJobsURL();
   };
 
-  public getJobStatusURL = (jid: string): string => {
-    return PipelinesClient.getJobStatusURL(jid);
+  public getJobStateURL = (jid: string): string => {
+    return PipelinesClient.getJobStateURL(jid);
+  };
+
+  public getJobLogURL = (jid: string): string => {
+    return PipelinesClient.getJobLogURL(jid);
   };
 
   public getPipelinesURL = (): string => {

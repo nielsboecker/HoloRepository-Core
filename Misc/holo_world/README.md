@@ -7,7 +7,7 @@ This folder contains demo data to setup HoloRepository and the README will docum
 ## Contents
 The following describes the contents provided in the demo.
 
-It consists of fhir data for the EHR FHIR server, Storage FHIR server and some dummy holograms for the blob storage.
+It consists of FHIR data for the EHR FHIR server, Storage FHIR server and some dummy holograms for the blob storage.
 
 | Folder       | Description                                |
 |--------------|--------------------------------------------|
@@ -22,8 +22,7 @@ It consists of fhir data for the EHR FHIR server, Storage FHIR server and some d
 - Configure name and resource group in `setup_az_blob_storage.sh`
     - Additional details on configuration can be found in the tool's README.md
 - Setup azblob
-    - `./setup_az_blob_storage.sh`
-- Go to `portal.azure.com` and get the access key to the service
+    - `./setup_az_blob_storage.sh` - Go to `portal.azure.com` and get the access key to the service
 
 #### Hologram Data Insertion
 - Go to `Misc/tools/az_blob_tool`
@@ -33,6 +32,12 @@ It consists of fhir data for the EHR FHIR server, Storage FHIR server and some d
     - `python az_blob_tool.py - upload-folder holograms ../../holo_world/storage_glb`
 
 ### HoloStorage FHIR and EHR FHIR Services
+#### Setup links in EHR Imaging Studies Resources
+> We currently host the dicom images on our blob storage. However when it goes down, you can self host the data. DOI: 10.13140/RG.2.2.28491.95521
+- For self-hosting data, change the configurations in `imagingstudy_links_change.py`
+- Configure the demo ImagingStudy FHIR resource links
+    - `python imagingstudy_links_change.py`
+
 #### Setup Azure FHIR service (EHR and HoloStorage)
 - Go to `Misc/Deployment/az_fhir_service`
 - Configure `config/ehr_fhir.cfg` and `config/holo_fhir.cfg`
@@ -51,6 +56,16 @@ It consists of fhir data for the EHR FHIR server, Storage FHIR server and some d
 
 ## HoloRepository Demo Data Breakdown
 The following describes the demo data that is created for the individual services.
+
+### Demo Imaging Studies Data
+1. left-renal-mass.zip
+2. left-scfe-pelvis-bone.zip
+3. left-scfe-pelvis-soft.zip
+4. normal-abdomen.zip
+5. normal-chest-lung.zip
+6. normal-chest-mediastinal.zip
+7. normal-pelvis-bone.zip
+8. normal-pelvis-soft.zip
 
 ### EHR FHIR Service Demo Data
 | ID   | Type    | Practitioner Link | ImagingStudy Link | Description                                       |

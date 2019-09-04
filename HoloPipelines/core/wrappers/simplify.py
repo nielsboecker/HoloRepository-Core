@@ -1,3 +1,8 @@
+"""
+Currently, this component is unused, Because when the 3D model goes though the simplify process
+the output looks weird. It seems like the textures outside are transparent,
+and only on the inside of surfaces, are visible
+"""
 import logging
 import subprocess
 

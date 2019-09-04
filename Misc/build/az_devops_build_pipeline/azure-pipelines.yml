@@ -48,6 +48,8 @@ jobs:
       verbose: false
       customCommand: build
 
+  # Note: Due to the way the client is built, the backend urls are baked into the client. 
+  #       Change the REACT_APP_BACKEND_HOST to where the holorepository-server is hosted.https://www.youtube.com/
   - task: Docker@2
     displayName: build
     inputs:

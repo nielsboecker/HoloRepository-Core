@@ -47,14 +47,13 @@ class JobLogTerminal extends Component<IJobLogTerminalProps, IJobLogTerminalStat
     // Note: This is a deprecated React hook, should be refactored to use more elegant solution
     if (nextProps.jobState !== this.state.lastJobState) {
       console.info(`New state: ${nextProps.jobState} => Updating logs`);
-      BackendServerService.getJobLogById(this.props.jobId)
-        .then(log => {
-          // As soon as any real log arrives, stop adding "dot dot dot"
-          clearInterval(this.idleIntervalId);
-          if (log) {
-            this.setState({ log });
-          }
-        });
+      BackendServerService.getJobLogById(this.props.jobId).then(log => {
+        // As soon as any real log arrives, stop adding "dot dot dot"
+        clearInterval(this.idleIntervalId);
+        if (log) {
+          this.setState({ log });
+        }
+      });
     }
   }
 }

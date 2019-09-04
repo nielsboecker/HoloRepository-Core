@@ -37,8 +37,8 @@ class ProfileInformationPage extends Component<RouteComponentProps & PropsWithCo
           <Divider>Contact details</Divider>
 
           <ul>
-            <li>Phone: {practitioner.phone || "Unknown"}</li>
-            <li>Mail: {practitioner.email || "Unknown"}</li>
+            <li className="phone">Phone: {practitioner.phone || "Unknown"}</li>
+            <li className="mail">Mail: {practitioner.email || "Unknown"}</li>
           </ul>
         </Row>
       </PlainContentContainer>

@@ -94,8 +94,8 @@ class GenerationProcessingStep extends Component<
     // in console. Can be ignored for now; the issue should rather be fixed in the HoloPipelines.
     if (this.state.jobId && !this.state.finished) {
       // @ts-ignore because it looks to TS like state.jobId would always be undefined
-      BackendServerService.getJobStateById(this.state.jobId)
-        .then((stateUpdate: IJobStateResponse) => {
+      BackendServerService.getJobStateById(this.state.jobId).then(
+        (stateUpdate: IJobStateResponse) => {
           console.log("Received job state update:", stateUpdate);
 
           // Handle edge case of late arriving data when the job is already cleaned in HoloPipelines
@@ -115,7 +115,8 @@ class GenerationProcessingStep extends Component<
               this.handleJobFinished();
             }
           }
-        });
+        }
+      );
     }
   };
 

@@ -58,15 +58,30 @@ It consists of FHIR data for the EHR FHIR server, Storage FHIR server and some d
 ## HoloRepository Demo Data Breakdown
 The following describes the demo data that is created for the individual services.
 
-### Demo Imaging Studies Data
-1. left-renal-mass.zip
-2. left-scfe-pelvis-bone.zip
-3. left-scfe-pelvis-soft.zip
-4. normal-abdomen.zip
-5. normal-chest-lung.zip
-6. normal-chest-mediastinal.zip
-7. normal-pelvis-bone.zip
-8. normal-pelvis-soft.zip
+### Demo Imaging Studies Data in DOI: 10.13140/RG.2.2.28491.95521
+
+| Name                                     | Type          |
+|------------------------------------------|---------------|
+| left-renal-mass.zip                      | DICOM         |
+| left-renal-mass.zip.preview.jpg          | Preview image |
+| left-scfe-pelvis-bone.zip                | DICOM         |
+| left-scfe-pelvis-bone.zip.preview.jpg    | Preview image |
+| left-scfe-pelvis-soft.zip                | DICOM         |
+| left-scfe-pelvis-soft.zip.preview.jpg    | Preview image |
+| normal-abdomen.zip                       | DICOM         |
+| normal-abdomen.zip.preview.jgp           | Preview image |
+| normal-chest-lung.zip                    | DICOM         |
+| normal-chest-lung.zip.preview.jpg        | Preview image |
+| normal-chest-mediastinal.zip             | DICOM         |
+| normal-chest-mediastinal.zip.preview.jpg | Preview image |
+| normal-pelvis-bone.zip                   | DICOM         |
+| normal-pelvis-bone.zip.preview.jpg       | Preview image |
+| normal-pelvis-soft.zip                   | DICOM         |
+| normal-pelvis-soft.zip.preview.jpg       | Preview image |
+
+
+> Note: Preview images must retain the `<dicom_file>.preview.jpg` syntax and hosted in the same path as the associated DICOM file.
+> HoloRepository UI implicitly looks for this preview image during runtime.
 
 ### EHR FHIR Service Demo Data
 | ID   | Type    | Practitioner Link | ImagingStudy Link | Description                                       |

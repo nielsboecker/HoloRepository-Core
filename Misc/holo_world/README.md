@@ -22,7 +22,8 @@ It consists of FHIR data for the EHR FHIR server, Storage FHIR server and some d
 - Configure name and resource group in `setup_az_blob_storage.sh`
     - Additional details on configuration can be found in the tool's README.md
 - Setup azblob
-    - `./setup_az_blob_storage.sh` - Go to `portal.azure.com` and get the access key to the service
+    - `./setup_az_blob_storage.sh`
+- Go to `portal.azure.com` and get the access key to the service
 
 #### Hologram Data Insertion
 - Go to `Misc/tools/az_blob_tool`

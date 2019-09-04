@@ -1,13 +1,16 @@
 import React, { Component } from "react";
-import { Link, Redirect, RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, navigate } from "@reach/router";
 import {
+  Dialog,
   Dropdown,
   IDropdownOption,
   TextField,
   PrimaryButton,
   IImageProps,
   ImageFit,
-  Image
+  Image,
+  DialogType,
+  DialogFooter
 } from "office-ui-fabric-react";
 import { Layout } from "antd";
 import appLogo from "../../assets/logo/2x/logo_and_font@2x.png";
@@ -27,7 +30,17 @@ const imageProps: IImageProps = {
   maximizeFrame: true
 };
 
-class LoginPage extends Component<RouteComponentProps & PropsWithContext> {
+export type LoginPageProps = RouteComponentProps & PropsWithContext;
+
+export interface ILoginPageState {
+  showErrorMessage: boolean;
+}
+
+class LoginPage extends Component<LoginPageProps, ILoginPageState> {
+  state = {
+    showErrorMessage: false
+  };
+
   selectedItem: string | number = "";
 
   backgroundStyle = {
@@ -83,31 +96,52 @@ class LoginPage extends Component<RouteComponentProps & PropsWithContext> {
                 justifyContent: "center"
               }}
             >
-              <Link to="/app/patients">
-                <PrimaryButton
-                  data-automation-id="login"
-                  text="Login"
-                  allowDisabledFocus={true}
-                  onClick={this._selectPractitioner}
-                />
-              </Link>
+              <PrimaryButton
+                data-automation-id="login"
+                text="Login"
+                allowDisabledFocus={true}
+                onClick={this._handlePractitionerLogin}
+              />
             </div>
           </div>
         </Layout.Content>
+
+        <Dialog
+          hidden={!this.state.showErrorMessage}
+          onDismiss={this._closeLoginErrorMessage}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: "Login failed",
+            subText: "Please select the practitioner account"
+          }}
+          modalProps={{
+            isBlocking: false,
+            styles: { main: { maxWidth: 450 } }
+          }}
+        >
+          <DialogFooter>
+            <PrimaryButton onClick={this._closeLoginErrorMessage} text="Okay" />
+          </DialogFooter>
+        </Dialog>
 
         <MainFooter style={this.backgroundStyle} />
       </Layout>
     );
   }
 
-  private _selectPractitioner = () => {
+  private _handlePractitionerLogin = () => {
     if (this.selectedItem === "") {
-      alert(`Please select the practitioner account!`);
+      this._showLoginErrorMessage();
     } else {
       if (typeof this.selectedItem !== "number") {
         const id = this.selectedItem.substring(0, this.selectedItem.indexOf("/"));
         const pin = this.selectedItem.substring(this.selectedItem.indexOf("/") + 1);
+
+        // Handle login in global state
         this.props.context!.handleLogin(id, pin);
+
+        // Redirect to patient page
+        navigate("/app/patients");
       }
     }
   };
@@ -117,6 +151,14 @@ class LoginPage extends Component<RouteComponentProps & PropsWithContext> {
     option?: IDropdownOption
   ): void => {
     this.selectedItem = option!.key;
+  };
+
+  private _showLoginErrorMessage = (): void => {
+    this.setState({ showErrorMessage: true });
+  };
+
+  private _closeLoginErrorMessage = (): void => {
+    this.setState({ showErrorMessage: false });
   };
 }
 

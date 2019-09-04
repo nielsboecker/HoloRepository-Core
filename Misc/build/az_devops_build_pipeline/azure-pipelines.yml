@@ -48,7 +48,7 @@ jobs:
       verbose: false
       customCommand: build
 
-  # Note: Due to the way the client is built, the backend urls are baked into the client. 
+  # Note: Due to the way the client is built, the backend urls are baked into the client.
   #       Change the REACT_APP_BACKEND_HOST to where the holorepository-server is hosted.https://www.youtube.com/
   - task: Docker@2
     displayName: build
@@ -103,13 +103,13 @@ jobs:
   - script: |
      # Can't just use the npm task for this, as that is limited to one package.json in one folder
      # whereas here we need to manually build the TypeScript code first.
-     
+
      cd ./types
      npm run build
-     
+
      cd ../server
      npm run compile
-     
+
      echo "Success"
      ls -l ./dist
     workingDirectory: HoloRepositoryUI
@@ -139,16 +139,16 @@ jobs:
 
   - script: |
      # Script to do the installation steps as described in HoloPipelines/README.md
-     
+
      echo ">>> Installing pip dependencies"
      pip install -r requirements.txt
      pip install pytest pytest-cov pytest-mock
-     
+
      echo ">>> Installing apt packages"
      # Note: this install seems to fail, but the tests still succeed as this dependency is not needed for them to run
      sudo apt-get update
      #sudo apt-get install libgdcm2.8 libgdcm-tools
-     
+
      echo ">>> Installing NPM packages"
      sudo npm install -g obj2gltf
     workingDirectory: HoloPipelines
@@ -202,7 +202,7 @@ jobs:
       command: test
       arguments: ./...
       workingDirectory: ./HoloStorageAccessor
-  
+
   - task: Docker@2
     displayName: buildAndPush
     inputs:

@@ -1,7 +1,17 @@
 """
-Currently, this component is unused, Because when the 3D model goes though the simplify process
-the output looks weird. It seems like the textures outside are transparent,
-and only on the inside of surfaces, are visible
+This module provides a wrapper around the simplify binary, which can be used
+in the pipelines to reduce the file size of OBJ files significantly.
+
+Currently, this component is unused, as it caused a strange inference effect
+when used in conjuntion with obj2gltf in the tool-chain. We conducted a more
+in-depth analysis in issue #97. In short, we believe that the intermediate OBJ
+files are inverted / have a wrong coordinate system. However, the issue will
+not be visible if these OBJ files are converted to GLB directly. It only shows
+when the OBJ is first simplified; in this case, the faces seem to be inverted.
+
+We disabled the step for now. Just by converting OBJ to GLB, acceptable file
+sizes of aroun 4 to 6 MB are achieved. Future work could analyse the issue
+further and re-enable the simplification step for each pipeline.
 """
 import logging
 import subprocess

@@ -1,3 +1,8 @@
+"""
+This module provides a wrapper around the obj2gltf binary, which is used in the
+pipelines to convert OBJ files to GLB format.
+"""
+
 import logging
 import subprocess
 

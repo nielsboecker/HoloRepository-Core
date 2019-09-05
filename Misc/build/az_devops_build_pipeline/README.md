@@ -12,9 +12,9 @@ The jobs include steps which push Docker images to an Azure Container Registry (
 for the Kubernetes deployment to use. To enable these steps, you will need to create
 such an ACR (see [Deployment
 README](https://github.com/nbckr/HoloRepository-Core/blob/master/Misc/deployment/az_kubes_setup/README.md)).
-Then, you will need to modify your Azure DevOps project settings: 
+Then, you will need to modify your Azure DevOps project settings:
 
-* Go to https://dev.azure.com/ucabnbo/<your-organisation>/_settings/ 
+* Go to https://dev.azure.com/ucabnbo/<your-organisation>/_settings/
 * Service Connections > New Service Connection > Docker Registry
 * Select "Azure Container Registry"
 * Select your ACR and enter a suitable connection name (to recreate our setup, name it "holocontainers")
@@ -26,16 +26,6 @@ Then, you will need to modify your Azure DevOps project settings:
 * Select "Existing Azure Pipelines YAML file"
 * Set path to `/Misc/build/azure-pipelines.yml`
 * Verify the imported YAML configuration and run the pipeline
-
-## Import JSON configuraton (legacy)
-
-We also include the JSON file configuration. Importing this will recreate the legacy
-Azure DevOps UI, which is more visual, but less in the spirit of infrastructure-as-code.
-
-* New > Import a Pipeline
-* Select `<project-root>/Misc/build/azure-pipelines-legacy.json`
-* Update "Agent pool" setting to your setup
-* Save and run the pipeline
 
 ## References
 

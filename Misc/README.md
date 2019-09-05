@@ -13,6 +13,12 @@ This directory contains a collection of tools and deployment scripts that were u
 | Synthetic Data Modifier | Modifies Synthea FHIR data to suit our testing requirements                         |
 | Orthanc Uploader        | Dicom uploader to Orthanc PACS (deprecated)                                         |
 
+## [Build Configuration](https://github.com/nbckr/HoloRepository-Core/tree/master/Misc/build)
+
+| Name                        | Description                                           |
+| --------------------------- | ----------------------------------------------------- |
+| Azure DevOps Build Pipeline | Configuration for a CI build pipeline on Azure DevOps |
+
 ## [Deployment Scripts](https://github.com/nbckr/HoloRepository-Core/tree/master/Misc/deployment)
 
 | Name                   | Description                                                |

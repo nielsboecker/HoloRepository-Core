@@ -15,6 +15,7 @@ from core.adapters.nifti_file import (
 from core.clients.http import download_and_unzip
 from .utils.shared_fixtures import (
     test_input_directory_path,
+    test_output_directory_path,
     create_output_directory,
     create_input_directory,
 )
@@ -25,8 +26,7 @@ normalised_nifti_file_zip_download_url = (
     "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip"
 )
 
-test_output_path = "./__test_output__"
-sample_output_nifti_file_path = f"{test_output_path}/out.nii"
+sample_output_nifti_file_path = f"{test_output_directory_path}/out.nii"
 
 
 @fixture

@@ -124,5 +124,6 @@ export interface IHologramCreationResponse_Generate {
  */
 export interface IJobStateResponse {
   state?: string;
+  age?: number;
   message?: string;
 }

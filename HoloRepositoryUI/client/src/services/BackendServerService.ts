@@ -1,6 +1,7 @@
 import BackendServerAxios, { routes } from "./BackendServerAxios";
 import {
   IHologram,
+  IJobStateResponse,
   IHologramCreationRequest_Generate,
   IHologramCreationRequest_Upload,
   IImagingStudy,
@@ -90,9 +91,16 @@ export class BackendServerService {
       .catch(handleError);
   }
 
-  public async generateHologram(requestData: IHologramCreationRequest_Generate): Promise<boolean> {
+  public async generateHologram(requestData: IHologramCreationRequest_Generate): Promise<string> {
     return BackendServerAxios.post(`${routes.pipelines}/generate`, requestData)
-      .then(response => response.status === 200 || response.status === 201)
+      .then(response => {
+        if (response.status !== 202 || !response.data.jid) {
+          throw new Error(
+            `Got invalid response ${response.status}: ${JSON.stringify(response.data)}`
+          );
+        }
+        return response.data.jid;
+      })
       .catch(handleError);
   }
 
@@ -110,6 +118,18 @@ export class BackendServerService {
     return BackendServerAxios.get<Record<string, IPipeline>>(routes.pipelines)
       .then(pipeline => pipeline.data as Record<string, IPipeline>)
       .then(pipelineDict => Object.values(pipelineDict))
+      .catch(handleError);
+  }
+
+  public async getJobStateById(jid: string): Promise<IJobStateResponse | null> {
+    return BackendServerAxios.get<string>(`${routes.pipelines}/${jid}/state`)
+      .then(response => response.data as IJobStateResponse)
+      .catch(handleError);
+  }
+
+  public async getJobLogById(jid: string): Promise<string | null> {
+    return BackendServerAxios.get<string>(`${routes.pipelines}/${jid}/log`)
+      .then(response => response.data as string)
       .catch(handleError);
   }
 }

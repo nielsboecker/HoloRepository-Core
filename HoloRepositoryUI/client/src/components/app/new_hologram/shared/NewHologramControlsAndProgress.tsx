@@ -24,7 +24,7 @@ class NewHologramControlsAndProgress extends Component<INewHologramControlsAndPr
           ))}
         </Steps>
 
-        <div className="steps-action" style={{ marginTop: "24px" }}>
+        <div className="steps-action" style={{ marginTop: "24px", height: "30px" }}>
           {current > 0 && (
             <div style={{ float: "left" }}>
               <DefaultButton text="Previous" onClick={() => onGoToPrevious()} />

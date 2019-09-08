@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { IImagingStudy, IPatient } from "../../../../../../types";
-import { IChoiceGroupOption, IDropdownOption } from "office-ui-fabric-react";
+import {
+  IChoiceGroupOption,
+  IDropdownOption,
+  MessageBar,
+  MessageBarType
+} from "office-ui-fabric-react";
 import { Col, Divider, Row } from "antd";
 import ImagingStudyDetailsCard from "./ImagingStudyDetailsCard";
 import { PropsWithContext, withAppContext } from "../../../shared/AppState";
@@ -36,6 +41,12 @@ class ImagingStudySelectionStep extends Component<
           />
 
           <Divider />
+
+          <MessageBar messageBarType={MessageBarType.warning} style={{ marginBottom: "10px" }}>
+            The system is currently not performing any input validation on the selected imaging
+            studies. Please ensure that the selected study depicts the correct body site for the
+            selected pipeline.
+          </MessageBar>
 
           {this.state.selectedPatient &&
           this.state.selectedPatient.imagingStudies &&

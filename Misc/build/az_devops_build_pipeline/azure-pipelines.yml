@@ -1,0 +1,215 @@
+# Push triggers
+trigger:
+- master
+- dev
+- UI/*
+- PIPELINE/*
+- STORAGE/*
+
+# PR triggers
+pr:
+- master
+- dev
+
+variables:
+  CI: true
+
+jobs:
+- job: holorepository_ui_client
+  displayName: HoloRepositoryUI - Client
+  pool:
+    vmImage: ubuntu-16.04
+  steps:
+  - task: NodeTool@0
+    displayName: 'Use Node 12.6.x'
+    inputs:
+      versionSpec: 12.6.x
+
+  - task: Npm@1
+    displayName: 'npm install'
+    inputs:
+      workingDir: ./HoloRepositoryUI/client
+      verbose: false
+
+  - task: Npm@1
+    displayName: 'npm test'
+    inputs:
+      command: custom
+      workingDir: ./HoloRepositoryUI/client
+      verbose: false
+      customCommand: test
+    continueOnError: true
+
+  - task: Npm@1
+    displayName: 'npm build'
+    inputs:
+      command: custom
+      workingDir: ./HoloRepositoryUI/client
+      verbose: false
+      customCommand: build
+
+  # Note: Due to the way the client is built, the backend urls are baked into the client.
+  #       Change the REACT_APP_BACKEND_HOST to where the holorepository-server is hosted.
+  - task: Docker@2
+    displayName: build
+    inputs:
+      containerRegistry: holocontainers
+      repository: 'holorepository-ui-client'
+      command: build
+      Dockerfile: HoloRepositoryUI/client/Dockerfile
+      buildContext: HoloRepositoryUI
+      tags: |
+       holorepository-ui-client
+       $(Build.BuildId)
+       latest
+      arguments: '--build-arg REACT_APP_BACKEND_HOST=http://51.145.18.102 --build-arg REACT_APP_BACKEND_PORT=80 --build-arg REACT_APP_BACKEND_TIMEOUT=15000'
+
+  - task: Docker@2
+    displayName: push
+    inputs:
+      containerRegistry: holocontainers
+      repository: 'holorepository-ui-client'
+      command: push
+      tags: |
+       $(Build.BuildId)
+       holorepository-ui-client
+       latest
+
+- job: holorepository_ui_server
+  displayName: HoloRepositoryUI - Server
+  pool:
+    vmImage: ubuntu-16.04
+  steps:
+  - task: NodeTool@0
+    displayName: 'Use Node 12.6.x'
+    inputs:
+      versionSpec: 12.6.x
+
+  - task: Npm@1
+    displayName: 'npm install'
+    inputs:
+      workingDir: ./HoloRepositoryUI/server
+      verbose: false
+
+  - task: Npm@1
+    displayName: 'npm test'
+    inputs:
+      command: custom
+      workingDir: ./HoloRepositoryUI/server
+      verbose: false
+      customCommand: test
+    continueOnError: true
+
+  - script: |
+     # Can't just use the npm task for this, as that is limited to one package.json in one folder
+     # whereas here we need to manually build the TypeScript code first.
+
+     cd ./types
+     npm run build
+
+     cd ../server
+     npm run compile
+
+     echo "Success"
+     ls -l ./dist
+    workingDirectory: HoloRepositoryUI
+    displayName: 'npm run compile'
+
+  - task: Docker@2
+    displayName: buildAndPush
+    inputs:
+      containerRegistry: holocontainers
+      repository: 'holorepository-ui-server'
+      Dockerfile: HoloRepositoryUI/server/Dockerfile
+      buildContext: HoloRepositoryUI
+      tags: |
+       holorepository-ui-server
+       $(Build.BuildId)
+       latest
+
+- job: holopipelines_core
+  displayName: HoloPipelines - Core
+  pool:
+    vmImage: ubuntu-16.04
+  steps:
+  - task: UsePythonVersion@0
+    displayName: 'Use Python 3.7'
+    inputs:
+      versionSpec: 3.7
+
+  - script: |
+     # Script to do the installation steps as described in HoloPipelines/README.md
+
+     echo ">>> Installing pip dependencies"
+     pip install -r requirements.txt
+     pip install pytest pytest-cov pytest-mock
+
+     echo ">>> Installing apt packages"
+     # Note: this install seems to fail, but the tests still succeed as this dependency is not needed for them to run
+     sudo apt-get update
+     #sudo apt-get install libgdcm2.8 libgdcm-tools
+
+     echo ">>> Installing NPM packages"
+     sudo npm install -g obj2gltf
+    workingDirectory: HoloPipelines
+    displayName: 'Command Line: install packages'
+
+  - script: 'pytest --cov'
+    workingDirectory: HoloPipelines
+    displayName: 'Command Line: run tests'
+
+  - task: Docker@2
+    displayName: buildAndPush
+    inputs:
+      containerRegistry: holocontainers
+      repository: 'holorepository-pipelines'
+      Dockerfile: HoloPipelines/Dockerfile
+      buildContext: HoloPipelines
+      tags: |
+       $(Build.BuildId)
+       latest
+
+- job: holopipelines_models
+  displayName: HoloPipelines - Models
+  pool:
+    vmImage: ubuntu-16.04
+  steps:
+  - task: Docker@2
+    displayName: 'dense_vnet_abdominal_ct: buildAndPush'
+    inputs:
+      containerRegistry: holocontainers
+      repository: 'holopipelines-models'
+      Dockerfile: 'HoloPipelines/models/dense_vnet_abdominal_ct/Dockerfile'
+      tags: |
+       dense_vnet_abdominal_ct
+       $(Build.BuildId)
+       latest
+
+- job: holostorage_accessor
+  displayName: HoloStorage Accessor
+  pool:
+    vmImage: ubuntu-16.04
+  steps:
+  - task: Go@0
+    displayName: 'go get'
+    inputs:
+      arguments: '-d -t -v ./...'
+      workingDirectory: ./HoloStorageAccessor
+
+  - task: Go@0
+    displayName: 'go test'
+    inputs:
+      command: test
+      arguments: ./...
+      workingDirectory: ./HoloStorageAccessor
+
+  - task: Docker@2
+    displayName: buildAndPush
+    inputs:
+      containerRegistry: holocontainers
+      repository: 'holostorage-accessor'
+      Dockerfile: ./HoloStorageAccessor/Dockerfile
+      tags: |
+       holo-storage-accessor
+       $(Build.BuildId)
+       latest

@@ -3,6 +3,11 @@
   <p align="center">
     A system for transforming medical imaging studies such as CT or MRI scans into 3-dimensional holograms, storing data on a cloud-based platform and making it available for other systems.
   </p>
+  
+  <p align="center">
+    Find out more on the <a href="https://fanbomeng97.github.io/HoloRepository-Website/#/">project website</a>.
+  </p>
+
   <p align="center">
     <a href="https://dev.azure.com/MSGOSHHOLO/HoloRepository/_build/latest?definitionId=1&branchName=dev">
       <img src="https://img.shields.io/azure-devops/build/MSGOSHHOLO/84bcb432-f279-452c-a53c-37df0f28baf0/1" alt="Build status"/>
@@ -34,6 +39,7 @@
   - [HoloRepository Demo application](#holorepository-demo-application)
   - [Other tools](#other-tools)
   - [Integration with other projects](#integration-with-other-projects)
+- [A word of warning](#a-word-of-warning)
 - [Code organisation](#code-organisation)
 - [Development](#development)
   - [Get started](#get-started)
@@ -66,7 +72,7 @@ With the HoloRepository project, we intend to build the technical base for a sea
 
 ## System overview
 
-![HoloRepository system overview](https://user-images.githubusercontent.com/11090412/62009929-4852bc00-b15c-11e9-9e2a-6d7f667a286e.png)
+![HoloRepository system overview](https://user-images.githubusercontent.com/11090412/63985867-7748ae80-cac9-11e9-82e1-74de31f486d7.png)
 
 The HoloRepository ecosystem consists of multiple sub-systems and remains open to future extensions. Currently, core components are:
 
@@ -101,6 +107,26 @@ Several scripts and tools were developed to help perform tasks, for instance tes
 ### Integration with other projects
 
 The system is designed to enable other systems to integrate. Some current projects plugging into the system are DepthVisor, Annotator and SyntheticDataGenerator.
+
+## A word of warning
+
+> The system is currently not performing any input validation on the selected imaging
+> studies. There are some known issues that occur when the input images are not fit for
+> the selected pipelines. For instance, when a pelvis DICOM input is selected with the
+> `lung_segmentation` pipeline, it will fail. When this is invoked from the UI, the
+> error handling and messages may not be conclusive.
+
+To ensure good results and avoid unexpected system behaviour, you have to manually make
+sure that the image study you select depicts the correct body site for the selected
+pipeline. With the current set of pipelines and sample data, the appropriate inputs
+which are guaranteed to succeed are:
+
+* `bone_segmentation`
+  * all inputs (chest, abdomen, pelvis)
+* `lung_segmentation`
+  * chest
+* `abdominal_organs_segmentation`
+  * abdomen
 
 ## Code organisation
 

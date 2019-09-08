@@ -31,13 +31,46 @@ import PipelineDetailBox from "../../components/app/PipelineDetailBox";
 import ProfileInformationPage from "../../components/app/ProfileInformationPage";
 import { IPatient } from "../../../../types";
 import { mountWithContextProvider } from "../../__test_utils__/MockContextProvider";
-
 import samplePatients from "../samples/samplePatients.json";
 import { wrapWithFormsy } from "../../__test_utils__/MockFormsy";
 import FileUploadStep from "../../components/app/new_hologram/upload/FileUploadStep";
+import { AppContext, IAppState, initialState } from "../../components/shared/AppState";
+import { IPractitioner } from "../../../../types";
+import samplePractitioner from "../samples/samplePractitionerWithLessInformation.json";
+import JobLogTerminal from "../../components/app/new_hologram/generate/JobLogTerminal";
+
+const contextWithoutPractitioner: IAppState = {
+  ...initialState,
+  loginWasInitiated: true
+};
+
+const contextWithoutLogin: IAppState = {
+  ...initialState
+};
+
+const contextWithLessInformation: IAppState = {
+  ...initialState,
+  practitioner: samplePractitioner as IPractitioner
+};
 
 it("renders AppContainer without crashing", () => {
   mountWithContextProvider(<AppContainer />);
+});
+
+it("renders AppContainer without crashing", () => {
+  mount(
+    <AppContext.Provider value={contextWithoutPractitioner}>
+      <AppContainer />)
+    </AppContext.Provider>
+  );
+});
+
+it("renders AppContainer without crashing", () => {
+  mount(
+    <AppContext.Provider value={contextWithoutLogin}>
+      <AppContainer />)
+    </AppContext.Provider>
+  );
 });
 
 it("renders ContentContainer without crashing", () => {
@@ -46,6 +79,10 @@ it("renders ContentContainer without crashing", () => {
 
 it("renders FilterStatusMessageBar without crashing", () => {
   shallow(<FilterStatusMessageBar totalCount={0} filteredCount={0} />);
+});
+
+it("renders FilterStatusMessageBar without crashing", () => {
+  shallow(<FilterStatusMessageBar totalCount={0} filteredCount={1} />);
 });
 
 it("renders MenuHeader without crashing", () => {
@@ -73,7 +110,18 @@ it("renders HologramsListPage without crashing", () => {
 });
 
 it("renders GenerationProcessingStep without crashing", () => {
-  shallow(<GenerationProcessingStep onComponentDidMount={jest.fn()} />);
+  shallow(
+    <GenerationProcessingStep
+      generateMetaData={jest.fn()}
+      onError={jest.fn()}
+      onGenerationFailure={jest.fn()}
+      onGenerationSuccess={jest.fn()}
+    />
+  );
+});
+
+it("renders JobLogTerminal without crashing", () => {
+  shallow(<JobLogTerminal jobId="" jobState="" />);
 });
 
 it("renders ImagingStudyDetailsCard without crashing", () => {
@@ -158,4 +206,12 @@ it("renders PipelineDetailBox without crashing", () => {
 
 it("renders ProfileInformationPage without crashing", () => {
   mountWithContextProvider(<ProfileInformationPage />);
+});
+
+it("renders ProfileInformationPage without crashing", () => {
+  mount(
+    <AppContext.Provider value={contextWithLessInformation}>
+      <ProfileInformationPage />)
+    </AppContext.Provider>
+  );
 });

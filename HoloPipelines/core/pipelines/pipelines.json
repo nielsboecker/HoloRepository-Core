@@ -15,10 +15,6 @@
       [
         "Image resolution",
         "Any"
-      ],
-      [
-        "Image data format",
-        "DICOM"
       ]
     ],
     "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_2_input.png",
@@ -40,10 +36,6 @@
       [
         "Image resolution",
         "Any"
-      ],
-      [
-        "Image data format",
-        "DICOM"
       ]
     ],
     "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_3_input.png",
@@ -56,8 +48,7 @@
     "inputConstraints": [
       ["Body site", "Abdominal area"],
       ["Imaging study type", "CT scan"],
-      ["Image resolution", "144 x 144"],
-      ["Image data format", "DICOM, NIfTI"]
+      ["Image resolution", "Any"]
     ],
     "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
     "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"

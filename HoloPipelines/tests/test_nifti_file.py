@@ -14,13 +14,13 @@ from core.adapters.nifti_file import (
 )
 from core.clients.http import download_and_unzip
 from .utils.shared_fixtures import (
-    test_input_path,
+    test_input_directory_path,
     create_output_directory,
     create_input_directory,
 )
 
 minimal_nifti_file_path = "./tests/utils/minimal.nii.gz"
-normalised_nifti_file_path = f"{test_input_path}/1103_3_glm.nii"
+normalised_nifti_file_path = f"{test_input_directory_path}/1103_3_glm.nii"
 normalised_nifti_file_zip_download_url = (
     "https://holoblob.blob.core.windows.net/test/1103_3_glm.nii.zip"
 )
@@ -35,7 +35,9 @@ def download_nifti_input_file(create_input_directory):
     Downloads a fairly large NIfTI file, which is already normalised.
     """
     if not os.path.isfile(normalised_nifti_file_path):
-        download_and_unzip(normalised_nifti_file_zip_download_url, test_input_path)
+        download_and_unzip(
+            normalised_nifti_file_zip_download_url, test_input_directory_path
+        )
 
 
 def test_read_nifti():

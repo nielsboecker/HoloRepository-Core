@@ -2,7 +2,7 @@
 This module contains provides a generic HTTP client with helper methods for
 fetching data from the web.
 """
-
+import io
 import logging
 from zipfile import ZipFile
 
@@ -26,7 +26,7 @@ def unzip_file(zipped_data: bytes, output_directory_path: str) -> None:
     """
     Unzips a file to a given directory.
     """
-    with ZipFile(bytes) as zip_file:
+    with ZipFile(io.BytesIO(zipped_data)) as zip_file:
         zip_file.extractall(output_directory_path)
         logging.info(f"Successfully extracted to '{output_directory_path}'")
 

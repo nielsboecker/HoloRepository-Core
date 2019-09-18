@@ -53,16 +53,21 @@ def init_create_job_state_root_directories() -> None:
 def create_directory_for_job(job_id: str) -> None:
     logging.info(f"Creating directory for job '{job_id}'")
     job_directory_path = get_directory_path_for_job(job_id)
-    os.mkdir(job_directory_path)
+    os.makedirs(job_directory_path, exist_ok=True)
 
     for subdirectory_path in get_subdirectories_paths_for_job(job_id):
         if not os.path.isdir(subdirectory_path):
-            os.mkdir(subdirectory_path)
+            os.makedirs(subdirectory_path, exist_ok=True)
 
 
 def move_job_to_finished_jobs_directory(job_id: str) -> None:
     old_path = get_directory_path_for_job(job_id)
     new_path = old_path.replace(jobs_root, finished_jobs_root)
+
+    # Handle edge cases where new_path already exists
+    if os.path.isdir(new_path):
+        shutil.rmtree(new_path)
+
     logging.info(f"Moving '{old_path}' to '{new_path}'")
     shutil.move(old_path, new_path)
 

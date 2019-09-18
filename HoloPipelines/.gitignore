@@ -4,6 +4,9 @@
 *.npy
 *.glb
 *.gltf
+__jobs__/
+__finished_jobs__/
 __test_input__/
 __test_output__/
-__jobs__/
+__test_jobs__/
+__test_finished_jobs__/

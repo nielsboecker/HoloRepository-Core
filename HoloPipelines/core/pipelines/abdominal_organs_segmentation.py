@@ -57,21 +57,23 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
 
     update_job_state(job_id, JobState.PREPROCESSING.name, logger)
     nifti_image = convert_dicom_np_ndarray_to_nifti_image(crop_dicom_image_array)
-    nifti_output_path = get_temp_file_path_for_job(job_id, "temp.nii")
-    write_nifti_image(nifti_image, nifti_output_path)
+    initial_nifti_output_file_path = get_temp_file_path_for_job(job_id, "temp.nii")
+    write_nifti_image(nifti_image, initial_nifti_output_file_path)
 
     update_job_state(job_id, JobState.PERFORMING_SEGMENTATION.name, logger)
-    segmented_output_file_path = get_temp_file_path_for_job(job_id, "segmented.nii.gz")
+    segmented_nifti_output_file_path = get_temp_file_path_for_job(
+        job_id, "segmented.nii.gz"
+    )
     niftynet.call_model(
         MODEL_ABDOMINAL_SEGMENTATION_HOST,
         MODEL_ABDOMINAL_SEGMENTATION_PORT,
-        nifti_output_path,
-        segmented_output_file_path,
+        initial_nifti_output_file_path,
+        segmented_nifti_output_file_path,
     )
 
     update_job_state(job_id, JobState.POSTPROCESSING.name, logger)
     segmented_array = read_nifti_as_np_array(
-        segmented_output_file_path, normalise=False
+        segmented_nifti_output_file_path, normalise=False
     )
     obj_output_path = get_temp_file_path_for_job(job_id, "temp.obj")
     verts, faces, norm = generate_mesh(segmented_array, hu_threshold)

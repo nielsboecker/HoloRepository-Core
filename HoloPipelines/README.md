@@ -173,8 +173,7 @@ In production environments, all variables in `.env` should be set by the CD work
 Testing is done using pytest:
 
 ```
-pip install pytest
-pip install pytest-cov
+pip install pytest pytest-mock pytest-cov
 ```
 
 Execute tests by running the following command in `HoloPipelines` directory:

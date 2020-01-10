@@ -52,5 +52,17 @@
     ],
     "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
     "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
+  },
+  "kidney_segmentation": {
+    "plid": "kidney_segmentation",
+    "title": "kidney segmentation",
+    "description": "This pipeline uses a pre-trained UNET neural network to segment kidney scans. The resulting model will provide a segmentation of the kidney and kidney tumors.",
+    "inputConstraints": [
+      ["Body site", "Abdominal area"],
+      ["Imaging study type", "CT scan"],
+      ["Image resolution", "Any"]
+    ],
+    "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
+    "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
   }
 }

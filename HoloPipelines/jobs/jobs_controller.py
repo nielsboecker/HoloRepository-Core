@@ -76,11 +76,12 @@ def init_job(job_request: dict) -> str:
     pipeline_id = job_request["plid"]
     input_endpoint = job_request["imagingStudyEndpoint"]
     medical_data = job_request["medicalData"]
+    pipeline_metadata = get_pipeline_metadata(pipeline_id)
 
     pipeline_module = load_pipeline_dynamically(pipeline_id)
     process_pool.apply_async(
         pipeline_module.run,
-        args=(job_id, input_endpoint, medical_data),
+        args=(job_id, pipeline_metadata, input_endpoint, medical_data),
         callback=job_success_callback,
         error_callback=job_error_callback,
     )

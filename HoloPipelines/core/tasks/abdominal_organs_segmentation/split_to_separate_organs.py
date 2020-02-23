@@ -14,7 +14,7 @@ from typing import Optional
 import numpy as np
 
 from core.adapters.glb_file import convert_obj_to_glb_and_write
-from core.adapters.obj_file import write_mesh_as_obj
+from core.adapters.obj_file import write_mesh_as_glb
 from core.services.marching_cubes import generate_mesh
 
 
@@ -59,6 +59,6 @@ def split_to_separate_organs(input: np.ndarray, output_directory_path: str) -> N
         obj_output_path = f"{output_directory_path}/Organ_{hu_value}.obj"
         glb_output_path = f"{output_directory_path}/Organ_{hu_value}.glb"
         verts, faces, norm = generate_mesh(organ_mask, threshold)
-        write_mesh_as_obj(verts, faces, norm, obj_output_path)
+        write_mesh_as_glb(verts, faces, norm, obj_output_path)
 
         convert_obj_to_glb_and_write(obj_output_path, glb_output_path)

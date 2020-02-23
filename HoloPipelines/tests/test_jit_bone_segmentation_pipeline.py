@@ -14,8 +14,9 @@ from tests.utils.shared_fixtures import (
 test_job_id = os.path.basename(__file__).replace(".py", "")
 
 imagingStudyEndpoint = (
-       # "https://holoblob.blob.core.windows.net/mock-pacs/Anonymized20191023.zip"
+#  "https://holoblob.blob.core.windows.net/mock-pacs/Anonymized20191023.zip"
     "https://holoblob.blob.core.windows.net/mock-pacs/normal-chest-mediastinal.zip"
+    # "https://holoblob.blob.core.windows.net/mock-pacs/normal-pelvis-soft.zip"
 )
 
 
@@ -25,6 +26,7 @@ def test_pipeline(
     mock_send_to_holostorage_accessor: mock.MagicMock,
     job_id: str,
 ):
+    bone_segmentation.run(job_id, imagingStudyEndpoint, sample_medical_data)
     bone_segmentation.run(job_id, imagingStudyEndpoint, sample_medical_data)
 
     mock_send_to_holostorage_accessor.assert_called_with(

@@ -2,22 +2,30 @@
 This module contains functionality related to writing a mesh to disk as an OBJ file.
 """
 import numpy as np
+import math
+
+import trimesh
+from trimesh import visual
 
 
-def write_mesh_as_obj(
-    verts: np.array, faces: np.array, norm: np.array, output_obj_file_path: str
+import logging
+
+def write_mesh_as_glb(
+    meshes, output_obj_file_path: str, metadata={}
 ) -> None:
-    # Workaround according to https://stackoverflow.com/questions/48844778/create-a-obj-file-from-3d-array-in-python
-    faces = faces + 1
+    scene = trimesh.Scene(metadata=metadata)
+    green = 1.0
+    index = 1
+    for mesh in meshes:
+        mesh2 = trimesh.Trimesh(vertices=mesh[0],
+                           faces=mesh[1],
+                           vertex_normals=mesh[2])
+        mesh2.visual.material = trimesh.visual.material.SimpleMaterial(diffuse=np.asarray([(green),(1.0-green),0,1]))
+        if len(metadata.keys()) > 0:
+            mesh2.metadata['name'] = metadata[index]
+        green = green - 0.125
+        scene.add_geometry(mesh2)
+        index +=1
 
-    with open(output_obj_file_path, "w") as obj_file:
-        for item in verts:
-            obj_file.write("v {0} {1} {2}\n".format(item[0], item[1], item[2]))
+    scene.export(output_obj_file_path)
 
-        for item in norm:
-            obj_file.write("vn {0} {1} {2}\n".format(item[0], item[1], item[2]))
-
-        for item in faces:
-            obj_file.write(
-                "f {0}//{0} {1}//{1} {2}//{2}\n".format(item[0], item[1], item[2])
-            )

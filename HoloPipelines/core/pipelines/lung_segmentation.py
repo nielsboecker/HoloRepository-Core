@@ -16,7 +16,7 @@ from core.adapters.nifti_file import (
     read_nifti_as_np_array,
     write_np_array_as_nifti_image,
 )
-from core.adapters.obj_file import write_mesh_as_obj
+from core.adapters.obj_file import write_mesh_as_glb
 from core.services.marching_cubes import generate_mesh
 from core.services.np_image_manipulation import downscale_and_conditionally_crop
 from core.tasks.shared.dispatch_output import dispatch_output
@@ -61,14 +61,11 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     )
 
     nifti_image_as_np_array = read_nifti_as_np_array(
-        generated_segmented_lung_nifti_path, normalise=False
+        generated_segmented_lung_nifti_path, normalise=True
     )
-    obj_output_path = get_temp_file_path_for_job(job_id, "temp.obj")
-    verts, faces, norm = generate_mesh(nifti_image_as_np_array, hu_threshold)
-    write_mesh_as_obj(verts, faces, norm, obj_output_path)
-
-    update_job_state(job_id, JobState.POSTPROCESSING.name, logger)
-    convert_obj_to_glb_and_write(obj_output_path, get_result_file_path_for_job(job_id))
+    obj_output_path = get_result_file_path_for_job(job_id)
+    meshes = [generate_mesh(nifti_image_as_np_array, hu_threshold)]
+    write_mesh_as_glb(meshes, obj_output_path)
 
     update_job_state(job_id, JobState.DISPATCHING_OUTPUT.name, logger)
     dispatch_output(job_id, this_plid, medical_data)

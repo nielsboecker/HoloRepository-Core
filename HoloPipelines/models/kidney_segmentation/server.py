@@ -6,9 +6,6 @@ from werkzeug.utils import secure_filename
 
 from model import kidney_model
 
-
-app = Flask(__name__)
-
 # The directory paths are given by the original model in the container
 UPLOAD_FOLDER = "./data"
 OUTPUT_FOLDER = "./predictions"
@@ -28,8 +25,6 @@ def file_format_is_allowed(filename):
 def filename_without_extension(filename):
     return filename.rsplit(".")[0]
 
-import sys
-
 @app.route("/model", methods=["POST"])
 def seg_file():
     if "file" not in request.files:
@@ -46,10 +41,7 @@ def seg_file():
         os.mkdir(os.path.join(app.config["UPLOAD_FOLDER"], foldername))
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], foldername, MODEL_FILENAME))
         # predict using model
-        print(foldername, file=sys.stderr)
-        # TODO model should be started before and only predict should be called here
-        model = kidney_model("kidney_model_miscnn", upload_folder=UPLOAD_FOLDER)
-        model.predict(foldername)
+        kidney_model.predict(foldername)
         # segmentation can now be found in output folder with the original filename
         return send_file(OUTPUT_FOLDER + "/" + file.filename), 200
     else:

@@ -13,7 +13,7 @@ from miscnn.neural_network.architecture.unet.standard import Architecture
 from miscnn.neural_network.model import Neural_Network
 from miscnn.neural_network.metrics import dice_soft, dice_crossentropy, tversky_loss
 
-class kidney_model():
+class Kidney_model():
     def __init__(self, saved_path, upload_folder="./"):
         interface = NIFTI_interface(pattern="case_00[0-9]*", 
                                     channels=1, classes=3)
@@ -43,3 +43,7 @@ class kidney_model():
     def predict(self, foldername):
         # predict the image called imaging.nii in the specified folder and saves the result in predictions/foldername.nii
         self.model.predict([foldername])
+
+
+
+kidney_model = Kidney_model("kidney_model_miscnn", upload_folder=UPLOAD_FOLDER)

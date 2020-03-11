@@ -22,7 +22,7 @@ def generate_mesh(
     volume = image_data.transpose((2, 1, 0))
 
     logging.info("Marching cubes: Calculating surface...")
-    verts, faces, norm, val = measure.marching_cubes(
+    verts, faces, norm, val = measure.marching_cubes_lewiner(
         volume, threshold, step_size=step_size, allow_degenerate=True
     )
     logging.info("Marching cubes: Calculating surface finished")

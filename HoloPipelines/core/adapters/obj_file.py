@@ -15,17 +15,19 @@ def write_mesh_as_glb(
 ) -> None:
     scene = trimesh.Scene(metadata=metadata)
     green = 1.0
+    alpha = 0.2
     index = 1
     for mesh in meshes:
         mesh2 = trimesh.Trimesh(vertices=mesh[0],
                            faces=mesh[1],
                            vertex_normals=mesh[2])
-        mesh2.visual.material = trimesh.visual.material.SimpleMaterial(diffuse=np.asarray([(green),(1.0-green),0,1]))
-        if len(metadata.keys()) > 0:
-            mesh2.metadata['name'] = metadata[index]
-        green = green - 0.125
+        
+        mesh2.visual.material = trimesh.visual.material.SimpleMaterial(diffuse=np.asarray([(1.0-green),(1.0-green),(green),alpha]))
+        green = green - 1
+        alpha = alpha + 0.8
+        mesh2.apply_transform(trimesh.transformations.rotation_matrix(90,(0,0,1)))
         scene.add_geometry(mesh2)
         index +=1
+    scene.export(output_obj_file_path);
 
-    scene.export(output_obj_file_path)
 

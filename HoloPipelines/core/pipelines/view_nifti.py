@@ -38,51 +38,25 @@ hu_threshold = 0
 
 def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     logger = get_logger_for_job(job_id)
-    nifti_image_as_np_array1 = read_nifti_as_np_array(
-        "./basal_ganglia_seg.nii", normalise=True
-    )
-    nifti_image_as_np_array2 = read_nifti_as_np_array(
-        "./brain_stem_seg.nii", normalise=True
-    )
-    nifti_image_as_np_array3 = read_nifti_as_np_array(
-        "./cerebellum_seg.nii", normalise=True
-    )
-    nifti_image_as_np_array4 = read_nifti_as_np_array(
-        "./cerebrospinal_fluid_in_the_extracerebral_space_seg.nii", normalise=True
-    )
+
     nifti_image_as_np_array5 = read_nifti_as_np_array(
         "./cortical_gray_matter_seg.nii", normalise=True
     )
-    nifti_image_as_np_array6 = read_nifti_as_np_array(
-        "./ventricles_seg.nii", normalise=True
-    )
-    nifti_image_as_np_array7 = read_nifti_as_np_array(
+
+    nifti_image_as_np_array1 = read_nifti_as_np_array(
         "./white_matter_lesions_seg.nii", normalise=True
     )
-    nifti_image_as_np_array8 = read_nifti_as_np_array(
-        "./white_matter_seg.nii", normalise=True
-    )
+
 
     obj_output_path = get_result_file_path_for_job(job_id)
     segment = []
-    segment.append(generate_mesh(nifti_image_as_np_array1, hu_threshold))
-    segment.append(generate_mesh(nifti_image_as_np_array2, hu_threshold))
-    segment.append(generate_mesh(nifti_image_as_np_array3, hu_threshold))
-    segment.append(generate_mesh(nifti_image_as_np_array4, hu_threshold))
+
     segment.append(generate_mesh(nifti_image_as_np_array5, hu_threshold))
-    segment.append(generate_mesh(nifti_image_as_np_array6, hu_threshold))
-    segment.append(generate_mesh(nifti_image_as_np_array7, hu_threshold))
-    segment.append(generate_mesh(nifti_image_as_np_array8, hu_threshold))
+    segment.append(generate_mesh(nifti_image_as_np_array1, hu_threshold))
 
     write_mesh_as_glb(segment, obj_output_path,{
     1: "cortical_gray_matter",
     2: "basal_ganglia",
-    3: "white_matter",
-    4: "white_matter_lesions",
-    5: "cerebrospinal_fluid_in_the_extracerebral_space",
-    6: "ventricles",
-    7: "cerebellum",
-    8: "brain_stem"
 })
 
     update_job_state(job_id, JobState.DISPATCHING_OUTPUT.name, logger)

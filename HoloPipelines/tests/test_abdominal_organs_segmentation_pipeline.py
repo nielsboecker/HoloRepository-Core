@@ -7,6 +7,7 @@ import pytest
 from pytest import fixture
 
 from core.pipelines import abdominal_organs_segmentation
+from core.pipelines import pipelines_controller
 from jobs import jobs_io
 from tests.utils.input_data import sample_medical_data
 from tests.utils.shared_fixtures import (
@@ -57,12 +58,14 @@ def test_pipeline(
     Tests the abdominal_organs_segmentation pipeline.
     Note that the Niftynet call and the HoloStorageAccessor call are mocked out.
     """
-    abdominal_organs_segmentation.run(job_id, imagingStudyEndpoint, sample_medical_data)
+    metadata = pipelines_controller.get_pipeline_metadata("bone_segmentation")
+    abdominal_organs_segmentation.run(job_id, metadata, imagingStudyEndpoint, sample_medical_data)
 
     mock_call_niftynet_model.assert_called_once()
 
     mock_send_to_holostorage_accessor.assert_called_with(
         job_id=job_id,
+        pipeline_metadata=metadata,
         plid="abdominal_organs_segmentation",
         medical_data=sample_medical_data,
     )

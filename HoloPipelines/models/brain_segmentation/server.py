@@ -1,5 +1,4 @@
 import os
-import subprocess
 from flask import Flask, request, send_file
 from werkzeug.utils import secure_filename
 
@@ -19,10 +18,10 @@ app.config["OUTPUT_FOLDER"] = OUTPUT_FOLDER
 def file_format_is_allowed(filename):
     return "." in filename and filename.split(".", 1)[1].lower() == ALLOWED_EXTENSION
 
+
 def filename_without_extension(filename):
     return filename.rsplit(".")[0]
 
-import sys
 
 @app.route("/model", methods=["POST"])
 def seg_file():
@@ -36,8 +35,6 @@ def seg_file():
             # TODO check each file is uploaded once exactly
             if filename in ["FLAIR.nii.gz", "IR.nii.gz", "T1.nii.gz"]:
                 file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-                print("-"*50, file=sys.stderr)
-                print("saving file", file=sys.stderr)
             else:
                 return "Unknown filename uploaded", 400
         else:
@@ -45,9 +42,9 @@ def seg_file():
 
     # predict using model
     # TODO where to store model in global app state?
-    brain_model.predict(app.config["UPLOAD_FOLDER"], app.config["OUTPUT_FOLDER"])
-    # segmentation can now be found in output folder titled segmentation.nii.gz
-    return send_file(os.path.join(app.config["OUTPUT_FOLDER"], "segmentation.nii.gz")), 200
+    output_file_path = brain_model.predict(app.config["UPLOAD_FOLDER"], app.config["OUTPUT_FOLDER"])
+    # segmentation can now be found in output folder titled segmentated.nii.gz
+    return send_file(output_file_path), 200
 
 
 if __name__ == "__main__":

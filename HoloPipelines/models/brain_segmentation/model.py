@@ -1,12 +1,13 @@
-import tensorflow as tf
 import os
+
 import numpy as np
 import SimpleITK as sitk
+import tensorflow as tf
 
-from mrbrains.utils import re_arrange_array
-from mrbrains.models import cnn_3d_segmentation_1, resnet_3d_segmentation_1
-from mrbrains.utils import get_loss, batch_norm_3d, get_dsc
 from mrbrains.data import Subjects
+from mrbrains.models import cnn_3d_segmentation_1, resnet_3d_segmentation_1
+from mrbrains.utils import batch_norm_3d, get_dsc, get_loss, re_arrange_array
+
 
 class Brain_model():
     def __init__(self, saved_path):
@@ -14,7 +15,6 @@ class Brain_model():
         pz = self.patch_size[0]
         py = self.patch_size[1]
         px = self.patch_size[2]
-        checkpoint = 0
         self.x_flair = tf.placeholder(dtype=tf.float32, shape=[None,pz,py,px,1])
         self.x_t1 = tf.placeholder(dtype=tf.float32, shape=[None,pz,py,px,1])
         self.x_ir = tf.placeholder(dtype=tf.float32, shape=[None,pz,py,px,1])
@@ -81,14 +81,15 @@ class Brain_model():
                     tmp_label = re_arrange_array(tmp_label, tmp_shape, "output")
                     pred_array[:,z:z+pz,y:y2,x:x2] += tmp_label
 
-        # save prediction in OUTPUT_FOLDER/segmentation.nii.gz
+        # save prediction in OUTPUT_FOLDER/segmented.nii.gz
         pred_array = pred_array/8
         pred_array = np.squeeze(pred_array)
         pred_array = np.argmax(pred_array, axis=3).astype(np.float32)
         result_img = sitk.GetImageFromArray(pred_array)
         result_img.CopyInformation(flair_img)
-        img_path = os.path.join(output_folder, "segmentation.nii.gz")
+        img_path = os.path.join(output_folder, "segmented.nii.gz")
         sitk.WriteImage(result_img, img_path)
+        return img_path
 
 
 # Singleton to prevent problems with cudnn when running on laptop with GPU

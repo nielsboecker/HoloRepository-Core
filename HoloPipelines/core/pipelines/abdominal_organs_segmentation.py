@@ -78,8 +78,8 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
     )
     obj_output_path = get_result_file_path_for_job(job_id)
     print(obj_output_path)
-    verts, faces, norm = generate_mesh(segmented_array, hu_threshold)
-    write_mesh_as_glb(verts, faces, norm, obj_output_path)
+    meshes = [generate_mesh(segmented_array, hu_threshold)]
+    write_mesh_as_glb(meshes,obj_output_path)
 
     update_job_state(job_id, JobState.DISPATCHING_OUTPUT.name, logger)
     dispatch_output(job_id, this_plid, medical_data)

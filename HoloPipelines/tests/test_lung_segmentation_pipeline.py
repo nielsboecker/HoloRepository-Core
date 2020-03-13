@@ -29,5 +29,5 @@ def test_pipeline(
     lung_segmentation.run(job_id, metadata, imagingStudyEndpoint, sample_medical_data)
 
     mock_send_to_holostorage_accessor.assert_called_with(
-        job_id=job_id, pipeline_metadata=metadata, plid="lung_segmentation", medical_data=sample_medical_data
+        job_id=job_id, plid="lung_segmentation", medical_data=sample_medical_data
     )

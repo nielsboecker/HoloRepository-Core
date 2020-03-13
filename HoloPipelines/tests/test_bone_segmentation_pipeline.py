@@ -29,5 +29,5 @@ def test_pipeline(
     metadata = pipelines_controller.get_pipeline_metadata("bone_segmentation")
     bone_segmentation.run(job_id, metadata, imagingStudyEndpoint, sample_medical_data)
     mock_send_to_holostorage_accessor.assert_called_with(
-        job_id=job_id, pipeline_metadata=metadata, plid="bone_segmentation", medical_data=sample_medical_data
+        job_id=job_id, plid="bone_segmentation", medical_data=sample_medical_data
     )

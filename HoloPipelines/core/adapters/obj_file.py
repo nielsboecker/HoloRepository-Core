@@ -28,6 +28,6 @@ def write_mesh_as_glb(
         mesh2.apply_transform(trimesh.transformations.rotation_matrix(90,(0,0,1)))
         scene.add_geometry(mesh2)
         index +=1
-    scene.export(output_obj_file_path);
+    scene.export(output_obj_file_path)
 
 

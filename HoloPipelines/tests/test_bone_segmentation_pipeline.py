@@ -5,6 +5,7 @@ from unittest import mock
 import pytest
 
 from core.pipelines import bone_segmentation
+from core.pipelines import pipelines_controller
 from tests.utils.input_data import sample_medical_data
 from tests.utils.shared_fixtures import (
     patch_jobs_io_and_create_dirs,
@@ -24,8 +25,8 @@ def test_pipeline(
     mock_send_to_holostorage_accessor: mock.MagicMock,
     job_id: str,
 ):
-    bone_segmentation.run(job_id, imagingStudyEndpoint, sample_medical_data)
-
+    metadata = pipelines_controller.get_pipeline_metadata("bone_segmentation")
+    bone_segmentation.run(job_id, metadata, imagingStudyEndpoint, sample_medical_data)
     mock_send_to_holostorage_accessor.assert_called_with(
-        job_id=job_id, plid="bone_segmentation", medical_data=sample_medical_data
+        job_id=job_id, pipeline_metadata=metadata, plid="bone_segmentation", medical_data=sample_medical_data
     )

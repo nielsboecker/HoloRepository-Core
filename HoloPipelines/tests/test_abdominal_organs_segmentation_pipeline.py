@@ -65,7 +65,6 @@ def test_pipeline(
 
     mock_send_to_holostorage_accessor.assert_called_with(
         job_id=job_id,
-        pipeline_metadata=metadata,
         plid="abdominal_organs_segmentation",
         medical_data=sample_medical_data,
     )

@@ -52,5 +52,16 @@
     ],
     "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
     "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
+  },
+  "brain_segmentation": {
+    "plid": "brain_segmentation",
+    "title": "brain segmentation",
+    "description": "TODO",
+    "inputConstraints": [
+      ["Body site", ""],
+      ["Imaging study type", "MRI: T1, FLAIR, IR"]
+      ],
+    "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
+    "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
   }
 }

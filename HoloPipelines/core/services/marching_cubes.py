@@ -8,6 +8,8 @@ from typing import Tuple
 import numpy as np
 from skimage import measure
 
+from numba import jit
+
 
 def generate_mesh(
     image_data: np.ndarray, threshold=300, step_size=1
@@ -23,4 +25,5 @@ def generate_mesh(
     verts, faces, norm, val = measure.marching_cubes_lewiner(
         volume, threshold, step_size=step_size, allow_degenerate=True
     )
-    return verts, faces, norm
+    logging.info("Marching cubes: Calculating surface finished")
+    return (verts, faces, norm)

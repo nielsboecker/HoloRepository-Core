@@ -17,13 +17,13 @@ from core.adapters.dicom_file import (
     read_dicom_as_np_ndarray_and_normalise,
     flip_numpy_array_dimensions_y_only,
 )
-from core.adapters.glb_file import convert_obj_to_glb_and_write
+
 from core.adapters.nifti_file import (
     convert_dicom_np_ndarray_to_nifti_image,
     read_nifti_as_np_array,
     write_nifti_image,
 )
-from core.adapters.obj_file import write_mesh_as_glb
+from core.adapters.glb_file import write_mesh_as_glb
 from core.clients import niftynet
 from core.services.marching_cubes import generate_mesh
 from core.services.np_image_manipulation import downscale_and_conditionally_crop

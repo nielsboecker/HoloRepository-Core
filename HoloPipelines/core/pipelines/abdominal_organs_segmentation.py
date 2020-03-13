@@ -24,7 +24,7 @@ from core.adapters.nifti_file import (
     write_nifti_image,
 )
 from core.adapters.glb_file import write_mesh_as_glb
-from core.clients import niftynet
+from core.clients import http
 from core.services.marching_cubes import generate_mesh
 from core.services.np_image_manipulation import downscale_and_conditionally_crop
 from core.tasks.shared.dispatch_output import dispatch_output
@@ -65,7 +65,7 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
     segmented_nifti_output_file_path = get_temp_file_path_for_job(
         job_id, "segmented.nii.gz"
     )
-    niftynet.call_model(
+    http.post_file(
         MODEL_ABDOMINAL_SEGMENTATION_HOST,
         MODEL_ABDOMINAL_SEGMENTATION_PORT,
         initial_nifti_output_file_path,

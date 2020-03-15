@@ -12,20 +12,14 @@ from mrbrains.utils import batch_norm_3d, get_dsc, get_loss, re_arrange_array
 class Brain_model():
     def __init__(self, saved_path):
         self.patch_size = [8, 24, 24]
-        pz = self.patch_size[0]
-        py = self.patch_size[1]
-        px = self.patch_size[2]
-        self.x_flair = tf.placeholder(dtype=tf.float32, shape=[None,pz,py,px,1])
-        self.x_t1 = tf.placeholder(dtype=tf.float32, shape=[None,pz,py,px,1])
-        self.x_ir = tf.placeholder(dtype=tf.float32, shape=[None,pz,py,px,1])
-        y_gt = tf.placeholder(dtype=tf.float32, shape=[None,pz,py,px,11])
-        x = tf.concat(values=(self.x_flair,self.x_t1,self.x_ir), axis=4, name="input/concat")
-        # build model, for now just use train session
-        self.net = self.build_model(inputs=x, labels=y_gt)
         self.sess = tf.Session()
-        saver = tf.train.Saver()
-        checkpoint_path = "C:/Users/carlo/Desktop/mrbrains18/train/run_1/checkpoints/run_1-0"
-        saver.restore(self.sess, saved_path)
+        tf.saved_model.loader.load(self.sess, [tf.saved_model.tag_constants.SERVING], saved_path)
+        graph = tf.get_default_graph()
+        # get the input and output tensors
+        self.output = graph.get_tensor_by_name("cnn_3d_1/output/softmax:0")
+        self.x_flair = graph.get_tensor_by_name('Placeholder:0')
+        self.x_t1 = graph.get_tensor_by_name('Placeholder_1:0')
+        self.x_ir = graph.get_tensor_by_name('Placeholder_2:0')
 
     def build_model(self, inputs, labels):
         x = batch_norm_3d(inputs=inputs,name="input/batch_norm")
@@ -73,7 +67,7 @@ class Brain_model():
                     tmp_t1 = re_arrange_array(tmp_t1, tmp_shape, "input")
                     tmp_ir = ir_array[:,z:z+pz,y:y2,x:x2]
                     tmp_ir = re_arrange_array(tmp_ir, tmp_shape, "input")
-                    tmp_label = self.sess.run(self.net["output"], feed_dict={\
+                    tmp_label = self.sess.run(self.output, feed_dict={\
                         self.x_flair: tmp_flair,
                         self.x_t1: tmp_t1,
                         self.x_ir: tmp_ir})
@@ -91,7 +85,10 @@ class Brain_model():
         sitk.WriteImage(result_img, img_path)
         return img_path
 
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.sess.close()
+
 
 # Singleton to prevent problems with cudnn when running on laptop with GPU
-SAVED_MODEL_PATH = "./saved_model/run_1-0"
+SAVED_MODEL_PATH = "./saved_model/"
 brain_model = Brain_model(SAVED_MODEL_PATH)

@@ -25,7 +25,7 @@ def filename_without_extension(filename):
 
 @app.route("/model", methods=["POST"])
 def seg_file():
-    files = request.files.getlist("files[]")
+    files = request.files.getlist("file[]")
     if len(files) != 3:
         return "Wrong number of files uploaded", 400
     for file in files:
@@ -48,4 +48,4 @@ def seg_file():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="127.0.0.1")
+    app.run(debug=False, host="127.0.0.1", port=5002)

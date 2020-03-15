@@ -29,19 +29,18 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
     update_job_state(job_id, JobState.FETCHING_INPUT.name, logger)
     nifti_directory_path = get_input_directory_path_for_job(job_id)
     fetch_and_unzip(input_endpoint, nifti_directory_path)
-
-    # TODO is unzipped file deleted or kept?
     # TODO check correct files exist in directory?
+    # TODO for testing append folder name, should extract files into different path, need to change unzip
+    nifti_input_files_path = os.path.join(nifti_directory_path, "brain_segmentation")
 
     update_job_state(job_id, JobState.PREPROCESSING.name, logger)
     # TODO perform preprocessing
-    nifti_input_files_path = nifti_directory_path
 
     update_job_state(job_id, JobState.PERFORMING_SEGMENTATION.name, logger)
     segmented_nifti_output_file_path = get_temp_file_path_for_job(
         job_id, "segmented.nii.gz"
     )
-    http.post_file(
+    http.post_files(
         MODEL_BRAIN_SEGMENTATION_HOST,
         MODEL_BRAIN_SEGMENTATION_PORT,
         nifti_input_files_path,

@@ -27,6 +27,7 @@ services:
       - holostorage-accessor
     environment:
       - MODEL_ABDOMINAL_SEGMENTATION_HOST=http://holopipelines-models__dense_vnet_abdominal_ct
+      - MODEL_BRAIN_SEGMENTATION_HOST=http://holopipelines-models__brain_segmentation
       - HOLOSTORAGE_ACCESSOR_HOST=http://holostorage-accessor
   holostorage-accessor:
     build: ./HoloStorageAccessor
@@ -37,3 +38,7 @@ services:
     build: ./HoloPipelines/models/dense_vnet_abdominal_ct
     ports:
       - "5000:5000"
+  holopipelines-models__brain_segmentation:
+    build: ./HoloPipeslines/models/dense_vnet_abdominal_ct
+    ports:
+      - "5000:5002"

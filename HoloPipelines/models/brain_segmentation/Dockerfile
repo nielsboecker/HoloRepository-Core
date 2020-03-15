@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 
 # Set variables. Change the port number to the correct port
 ARG APP_DIR=/usr/src/app
-ARG PORT=5000
+ARG PORT=5002
 
 # Update Software repository, install package and clean the package
 RUN apt-get update  && \
@@ -13,7 +13,7 @@ RUN apt-get update  && \
 # Copy the flask script into the container and set the working directory
 RUN mkdir -p ${APP_DIR}
 WORKDIR ${APP_DIR}
-COPY server.py test.py ./
+COPY server.py model.py test.py ./
 
 # Copy the requirements file in to image for pip download
 COPY requirements.txt ./
@@ -28,8 +28,9 @@ RUN mkdir data
 RUN mkdir prediction
 RUN mkdir saved_model
 
-# Copy saved model
-COPY saved_model/* ./saved_model/
+# Copy other necessary files
+ADD saved_model ./saved_model
+ADD mrbrains ./mrbrains
 
 # Expose the chosen port
 EXPOSE ${PORT}
@@ -38,4 +39,4 @@ EXPOSE ${PORT}
 ENTRYPOINT ["gunicorn"]
 
 # Start server
-CMD ["--workers","4","--bind", "0.0.0.0:5000", "server:app"]
+CMD ["--workers","4","--bind", "0.0.0.0:5002", "server:app"]

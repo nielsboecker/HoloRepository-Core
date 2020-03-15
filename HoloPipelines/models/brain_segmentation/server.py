@@ -22,6 +22,9 @@ def file_format_is_allowed(filename):
 def filename_without_extension(filename):
     return filename.rsplit(".")[0]
 
+@app.route("/test", methods=["GET"])
+def test():
+    return "HELLO WORLD"
 
 @app.route("/model", methods=["POST"])
 def seg_file():

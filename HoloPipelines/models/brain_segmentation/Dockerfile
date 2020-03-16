@@ -39,4 +39,4 @@ EXPOSE ${PORT}
 ENTRYPOINT ["gunicorn"]
 
 # Start server
-CMD ["--workers","1","--bind", "0.0.0.0:5002", "--timeout", "1800", "server:app"]
+CMD ["--workers","1","--bind", "0.0.0.0:5002", "--timeout", "18000", "server:app"]

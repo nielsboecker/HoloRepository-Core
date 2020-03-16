@@ -52,12 +52,17 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
         segmented_nifti_output_file_path, normalise=False
     )
 
+    # TODO for now just use two of the segments
+    segmented_array = segmented_array[0:2]
+
     # transform numpy matrix according to metadata dict
-    segmented_array = seperate_segmentation(segmented_array)
+    meshes = [generate_mesh(segment, 0) for segment in seperate_segmentation(segmented_array)]
 
     obj_output_path = get_result_file_path_for_job(job_id)
+    # TODO do something for colours
+    colours = [[0,0.3,1.0,0.2],[1.0,1.0,0.0,1.0]]]
     # TODO add metadata and test this
-    write_mesh_as_glb(segmented_array, obj_output_path)
+    write_mesh_as_glb(meshes, obj_output_path, colours)
 
     update_job_state(job_id, JobState.DISPATCHING_OUTPUT.name, logger)
     dispatch_output(job_id, this_plid, medical_data)

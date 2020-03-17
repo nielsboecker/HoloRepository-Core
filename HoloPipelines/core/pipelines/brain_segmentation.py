@@ -60,7 +60,7 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
 
     obj_output_path = get_result_file_path_for_job(job_id)
     # TODO do something for colours
-    colours = [[0,0.3,1.0,0.2],[1.0,1.0,0.0,1.0]]]
+    colours = [[0,0.3,1.0,0.2],[1.0,1.0,0.0,1.0]]
     # TODO add metadata and test this
     write_mesh_as_glb(meshes, obj_output_path, colours)
 

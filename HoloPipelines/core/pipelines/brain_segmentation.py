@@ -7,6 +7,7 @@ import sys
 from config import MODEL_BRAIN_SEGMENTATION_HOST, MODEL_BRAIN_SEGMENTATION_PORT
 from core.adapters.nifti_file import read_nifti_as_np_array
 from core.adapters.glb_file import write_mesh_as_glb
+from core.services.marching_cubes import generate_mesh
 from core.services.np_image_manipulation import seperate_segmentation
 from core.clients import http
 from core.tasks.shared.dispatch_output import dispatch_output
@@ -49,19 +50,16 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
 
     update_job_state(job_id, JobState.POSTPROCESSING.name, logger)
     segmented_array = read_nifti_as_np_array(
-        segmented_nifti_output_file_path, normalise=False
+        segmented_nifti_output_file_path, normalise=True
     )
 
     # TODO for now just use two of the segments
-    segmented_array = segmented_array[0:2]
-
-    # transform numpy matrix according to metadata dict
-    meshes = [generate_mesh(segment, 0) for segment in seperate_segmentation(segmented_array)]
+    meshes = [generate_mesh(segment, 0) for segment in seperate_segmentation(segmented_array, unique_values=[1,5])]
 
     obj_output_path = get_result_file_path_for_job(job_id)
     # TODO do something for colours
     colours = [[0,0.3,1.0,0.2],[1.0,1.0,0.0,1.0]]
-    # TODO add metadata and test this
+    # TODO add metadata?
     write_mesh_as_glb(meshes, obj_output_path, colours)
 
     update_job_state(job_id, JobState.DISPATCHING_OUTPUT.name, logger)

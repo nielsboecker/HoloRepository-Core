@@ -24,6 +24,7 @@ services:
       - "3100:3100"
     links:
       - holopipelines-models__dense_vnet_abdominal_ct
+      - holopipelines-models__brain_segmentation
       - holostorage-accessor
     environment:
       - MODEL_ABDOMINAL_SEGMENTATION_HOST=http://holopipelines-models__dense_vnet_abdominal_ct

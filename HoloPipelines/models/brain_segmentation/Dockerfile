@@ -18,6 +18,8 @@ COPY server.py model.py test.py ./
 # Copy the requirements file in to image for pip download
 COPY requirements.txt ./
 
+COPY segmented.nii.gz ./
+
 # Install Requirements
 RUN pip3 install --upgrade pip setuptools
 RUN pip3 install wheel

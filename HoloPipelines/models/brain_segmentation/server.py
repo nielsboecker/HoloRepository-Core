@@ -30,10 +30,6 @@ def file_format_is_allowed(filename):
 def filename_without_extension(filename):
     return filename.rsplit(".")[0]
 
-@app.route("/hello")
-def hello():
-    logging.info("Received hello world")
-    return "Hello world"
 
 @app.route("/model", methods=["POST"])
 def seg_file():
@@ -53,7 +49,6 @@ def seg_file():
             return "file does not have required extension", 400
 
     # predict using model
-    # TODO where to store model in global app state?
     try:
         logging.info("Starting segmentation...")
         output_file_path = brain_model.predict(app.config["UPLOAD_FOLDER"], app.config["OUTPUT_FOLDER"])
@@ -61,7 +56,7 @@ def seg_file():
     except:
         logging.info("An error occured, while performing segmentation")
         return "An error occured, while performing segmentation", 500
-    # segmentation can now be found in output folder titled segmentated.nii.gz
+    # segmentation can now be found in output folder titled segmented.nii.gz
     return send_file(output_file_path), 200
 
 

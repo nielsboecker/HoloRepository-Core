@@ -77,7 +77,7 @@ def post_files(
         tmp_path = os.path.join(input_files_path, filename)
         files.append(("file[]", open(tmp_path, "rb")))
     response = requests.post(
-        model_endpoint, files=files, timeout=300
+        model_endpoint, files=files, timeout=POST_REQUEST_TIMEOUT
     )
     if response.status_code != 200:
         raise Exception(f"HTTP response {response.status_code}: {response.content}")

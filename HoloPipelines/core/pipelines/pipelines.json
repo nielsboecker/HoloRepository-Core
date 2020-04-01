@@ -52,5 +52,17 @@
     ],
     "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
     "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
+  },
+  "mesh_generation_only": {
+    "plid": "mesh_generation_only",
+    "title": "Mesh generation from existing segmentation file.",
+    "description": "This pipeline only creates a 3D object from an existing 3D segmentation file.",
+    "inputConstraints": [
+      ["Body site", "Any"],
+      ["Imaging study type", "Any"],
+      ["Image resolution", "Any"]
+    ],
+    "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
+    "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
   }
 }

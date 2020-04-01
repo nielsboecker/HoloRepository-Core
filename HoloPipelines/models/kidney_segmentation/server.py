@@ -1,9 +1,5 @@
 import os
-import subprocess
-
 from flask import Flask, request, send_file
-from werkzeug.utils import secure_filename
-
 from model import kidney_model
 
 # The directory paths are given by the original model in the container
@@ -19,8 +15,10 @@ app.config["OUTPUT_FOLDER"] = OUTPUT_FOLDER
 
 # model = kidney_model("kidney_model_miscnn", upload_folder=UPLOAD_FOLDER)
 
+
 def file_format_is_allowed(filename):
     return "." in filename and filename.split(".", 1)[1].lower() == ALLOWED_EXTENSION
+
 
 def filename_without_extension(filename):
     return filename.rsplit(".")[0]
@@ -41,9 +39,9 @@ def seg_file():
         os.mkdir(os.path.join(app.config["UPLOAD_FOLDER"], foldername))
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], foldername, MODEL_FILENAME))
         # predict using model
-        kidney_model.predict(foldername)
+        kidney_model.predict(foldername, app.config["OUTPUT_FOLDER"])
         # segmentation can now be found in output folder with the original filename
-        return send_file(OUTPUT_FOLDER + "/" + file.filename), 200
+        return send_file(app.config["OUTPUT_FOLDER"] + "/" + file.filename), 200
     else:
         return "file does not have required extension", 400
 

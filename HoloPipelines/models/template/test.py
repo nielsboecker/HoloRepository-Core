@@ -1,6 +1,4 @@
-import tarfile
 import unittest
-import requests
 from server import app
 
 
@@ -10,7 +8,6 @@ class FlaskTestCase(unittest.TestCase):
         tester = app.test_client(self)
         response = tester.post("/model")
         self.assertEqual(response.status_code, 400)
-    
     # Add more test cases here
 
 

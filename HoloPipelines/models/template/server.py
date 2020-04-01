@@ -1,6 +1,8 @@
 import os
 from flask import Flask, request, send_file
 from werkzeug.utils import secure_filename
+# import your model here
+from model import template_model
 
 
 app = Flask(__name__)
@@ -36,8 +38,8 @@ def seg_file():
         # Save posted file at specified path
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
-        # Add your model code here
-
+        # Use your model here for segmentation
+        template_model.predict(app.config["UPLOAD_FOLDER"], app.config["OUTPUT_FOLDER"])
 
         # Return segmentation file
         return send_file(OUTPUT_FOLDER + "/" + filename), 200

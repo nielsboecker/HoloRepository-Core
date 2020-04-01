@@ -46,9 +46,18 @@
     "title": "Abdominal organs segmentation",
     "description": "This pipeline uses a pre-trained dense VNET neural network to segment abdominal CT scans. The resulting model will provide a segmentation of 8 different organs in the abdominal area.",
     "inputConstraints": [
-      ["Body site", "Abdominal area"],
-      ["Imaging study type", "CT scan"],
-      ["Image resolution", "Any"]
+      [
+        "Body site",
+        "Abdominal area"
+      ],
+      [
+        "Imaging study type",
+        "CT scan"
+      ],
+      [
+        "Image resolution",
+        "Any"
+      ]
     ],
     "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
     "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
@@ -58,9 +67,35 @@
     "title": "Mesh generation from existing segmentation file.",
     "description": "This pipeline only creates a 3D object from an existing 3D segmentation file.",
     "inputConstraints": [
-      ["Body site", "Any"],
-      ["Imaging study type", "Any"],
-      ["Image resolution", "Any"]
+      [
+        "Body site",
+        "Any"
+      ],
+      [
+        "Imaging study type",
+        "Any"
+      ]
+    ],
+    "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
+    "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
+  },
+  "kidney_segmentation": {
+    "plid": "kidney_segmentation",
+    "title": "kidney segmentation",
+    "description": "This pipeline uses a pre-trained UNET neural network to segment kidney scans. The resulting model will provide a segmentation of the kidney and kidney tumors.",
+    "inputConstraints": [
+      [
+        "Body site",
+        "Abdominal area"
+      ],
+      [
+        "Imaging study type",
+        "CT scan"
+      ],
+      [
+        "Image resolution",
+        "Any"
+      ]
     ],
     "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
     "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"

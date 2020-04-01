@@ -77,4 +77,4 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
 
 
 if __name__ == "__main__":
-    run(sys.argv[1], sys.argv[2], sys.argv[3])
+    run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])

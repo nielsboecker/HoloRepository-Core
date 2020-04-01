@@ -8,6 +8,7 @@ Xinyang Feng, Jie Yang, Andrew F. Laine, Elsa D. Angelini
 """
 
 import os
+import sys
 
 from core.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 
@@ -71,3 +72,7 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
     dispatch_output(job_id, this_plid, medical_data)
 
     update_job_state(job_id, JobState.FINISHED.name, logger)
+
+
+if __name__ == "__main__":
+    run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])

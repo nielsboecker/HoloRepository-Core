@@ -56,4 +56,4 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
 
 
 if __name__ == "__main__":
-    run(sys.argv[1], sys.argv[2], sys.argv[3])
+    run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])

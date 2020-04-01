@@ -9,7 +9,6 @@ import sys
 from config import MODEL_KIDNEY_SEGMENTATION_HOST, MODEL_KIDNEY_SEGMENTATION_PORT
 from core.adapters.dicom_file import (
     read_dicom_as_np_ndarray_and_normalise,
-    flip_numpy_array_dimensions_y_only,
 )
 from core.adapters.glb_file import convert_obj_to_glb_and_write
 from core.adapters.nifti_file import (
@@ -18,9 +17,8 @@ from core.adapters.nifti_file import (
     write_nifti_image,
 )
 from core.adapters.obj_file import write_mesh_as_obj
-from core.clients import niftynet
+from core.clients import http
 from core.services.marching_cubes import generate_mesh
-from core.services.np_image_manipulation import downscale_and_conditionally_crop
 from core.tasks.shared.dispatch_output import dispatch_output
 from core.tasks.shared.receive_input import fetch_and_unzip
 from jobs.jobs_io import (
@@ -47,7 +45,7 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     dicom_image_array = read_dicom_as_np_ndarray_and_normalise(dicom_directory_path)
 
     update_job_state(job_id, JobState.PREPROCESSING.name, logger)
-    nifti_image = convert_dicom_np_ndarray_to_nifti_image(crop_dicom_image_array)
+    nifti_image = convert_dicom_np_ndarray_to_nifti_image(dicom_image_array)
     initial_nifti_output_file_path = get_temp_file_path_for_job(job_id, "temp.nii")
     write_nifti_image(nifti_image, initial_nifti_output_file_path)
 
@@ -55,8 +53,8 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     segmented_nifti_output_file_path = get_temp_file_path_for_job(
         job_id, "segmented.nii.gz"
     )
-    # TODO the model used is not created with niftynet, through containerization it has the same API, maybe rename the client
-    niftynet.call_model(
+
+    http.post_file(
         MODEL_KIDNEY_SEGMENTATION_HOST,
         MODEL_KIDNEY_SEGMENTATION_PORT,
         initial_nifti_output_file_path,

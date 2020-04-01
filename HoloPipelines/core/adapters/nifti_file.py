@@ -48,7 +48,6 @@ def extract_np_array_from_nifti_image_and_normalise(
     )
     spacing = np.array(list(spacing))
     spacing = np.flip(spacing)
-    logging.info(spacing)
 
 
     # calculate resize factor

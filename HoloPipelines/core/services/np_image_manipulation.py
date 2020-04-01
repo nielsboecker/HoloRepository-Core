@@ -79,3 +79,18 @@ def downscale_and_conditionally_crop(
    #     logging.info("Array not divisible by 8, image cropped")
 
     return image
+
+
+def seperate_segmentation(data: np.ndarray, unique_values: list = []) -> np.ndarray:
+    """
+    Seperate unique values into a new dimension. If no unique values are
+    given, np.unique() will be used.
+    """
+    if not unique_values:
+        unique_values = np.unique(data)
+    result = np.zeros((len(unique_values), ) + data.shape)
+    for i, value in enumerate(unique_values):
+        temp = np.array(data)
+        temp[temp != value] = 0
+        result[i] = temp
+    return result

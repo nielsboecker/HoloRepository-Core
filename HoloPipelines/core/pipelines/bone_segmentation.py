@@ -27,6 +27,23 @@ this_plid = os.path.basename(__file__).replace(".py", "")
 bone_hu_threshold = 300
 
 
+def read_input(directory_path: str) -> np.ndarray:
+    dicom_image: np.ndarray = read_dicom_as_np_ndarray_and_normalise(
+        dicom_directory_path
+    )
+    return dicom_image
+
+
+def preprocess_input(dicom_image: np.ndarray) -> np.ndarray:
+    downscaled_image = downscale_and_conditionally_crop(dicom_image)
+    return downscaled_image
+
+
+def segment_input(dicom_image: np.ndarray) -> list:
+    meshes = [generate_mesh(dicom_image, bone_hu_threshold)]
+    return meshes
+
+
 def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data: dict) -> None:
     logger = get_logger_for_job(job_id)
     update_job_state(job_id, JobState.STARTED.name, logger)
@@ -36,16 +53,15 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
     fetch_and_unzip(input_endpoint, dicom_directory_path)
 
     update_job_state(job_id, JobState.READING_INPUT.name, logger)
-    dicom_image: np.ndarray = read_dicom_as_np_ndarray_and_normalise(
-        dicom_directory_path
-    )
+    dicom_image = read_input(directory_path)
 
     update_job_state(job_id, JobState.PREPROCESSING.name, logger)
-    downscaled_image = downscale_and_conditionally_crop(dicom_image)
+    dicom_image = preprocess_input(dicom_image)
 
     update_job_state(job_id, JobState.PERFORMING_SEGMENTATION.name, logger)
     obj_output_path = get_result_file_path_for_job(job_id)
-    meshes = [generate_mesh(downscaled_image, bone_hu_threshold)]
+    meshes = segment_input(dicom_image)
+
     update_job_state(job_id, JobState.POSTPROCESSING.name, logger)
     write_mesh_as_glb(meshes, obj_output_path)
 

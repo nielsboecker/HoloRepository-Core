@@ -7,9 +7,7 @@ import os
 import sys
 
 from config import MODEL_KIDNEY_SEGMENTATION_HOST, MODEL_KIDNEY_SEGMENTATION_PORT
-from core.adapters.dicom_file import (
-    read_dicom_as_np_ndarray_and_normalise,
-)
+from core.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
 from core.adapters.glb_file import convert_obj_to_glb_and_write
 from core.adapters.nifti_file import (
     convert_dicom_np_ndarray_to_nifti_image,
@@ -77,4 +75,4 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
 
 
 if __name__ == "__main__":
-    run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    run(sys.argv[1], sys.argv[2], sys.argv[3])

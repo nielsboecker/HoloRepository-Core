@@ -41,7 +41,7 @@ this_plid = os.path.basename(__file__).replace(".py", "")
 hu_threshold = 0
 
 
-def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data: dict) -> None:
+def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     logger = get_logger_for_job(job_id)
     update_job_state(job_id, JobState.STARTED.name, logger)
 
@@ -52,7 +52,7 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
     update_job_state(job_id, JobState.READING_INPUT.name, logger)
     dicom_image_array = read_dicom_as_np_ndarray_and_normalise(dicom_directory_path)
     # NOTE: Numpy array is flipped in the Y axis here as this is the specific image input for the NiftyNet model
-   # dicom_image_array = flip_numpy_array_dimensions_y_only(dicom_image_array)
+    # dicom_image_array = flip_numpy_array_dimensions_y_only(dicom_image_array)
     crop_dicom_image_array = downscale_and_conditionally_crop(dicom_image_array)
     crop_dicom_image_array = flip_numpy_array_dimensions_y_only(crop_dicom_image_array)
 
@@ -79,7 +79,7 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
     obj_output_path = get_result_file_path_for_job(job_id)
     print(obj_output_path)
     meshes = [generate_mesh(segmented_array, hu_threshold)]
-    write_mesh_as_glb(meshes,obj_output_path)
+    write_mesh_as_glb(meshes, obj_output_path)
 
     update_job_state(job_id, JobState.DISPATCHING_OUTPUT.name, logger)
     dispatch_output(job_id, this_plid, medical_data)
@@ -88,4 +88,4 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
 
 
 if __name__ == "__main__":
-    run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    run(sys.argv[1], sys.argv[2], sys.argv[3])

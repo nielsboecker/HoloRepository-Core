@@ -24,16 +24,6 @@ def get_pipelines_ids_list() -> list:
     return list(get_pipelines_dict().keys())
 
 
-def get_pipeline_metadata(plid: str) -> dict:
-    """
-    :return: dict containing the metadata of the pipeline as defined in "pipelines.json". If no metadata exists, an empty dict is returned.
-    """
-    try:
-        return get_pipelines_dict()[plid]["metadata"]
-    except KeyError:
-        return {}
-
-
 def load_pipeline_dynamically(plid: str) -> Any:
     """
     Loads and returns a pipeline module dynamically, which can then be invoked by its

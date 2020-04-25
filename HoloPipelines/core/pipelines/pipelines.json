@@ -82,7 +82,7 @@
   "kidney_segmentation": {
     "plid": "kidney_segmentation",
     "title": "kidney segmentation",
-    "description": "This pipeline uses a pre-trained UNET neural network to segment kidney scans. The resulting model will provide a segmentation of the kidney and kidney tumors.",
+    "description": "This pipeline uses a pre-trained Unet neural network to segment kidney scans. The resulting model will provide a segmentation of the kidney and kidney tumors.",
     "inputConstraints": [
       [
         "Body site",

@@ -23,7 +23,7 @@ from jobs.jobs_state import JobState, update_job_state
 this_plid = os.path.basename(__file__).replace(".py", "")
 
 
-def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data: dict) -> None:
+def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     logger = get_logger_for_job(job_id)
     update_job_state(job_id, JobState.STARTED.name, logger)
 
@@ -35,7 +35,6 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
     nifti_input_files_path = os.path.join(nifti_directory_path, "brain_segmentation")
 
     update_job_state(job_id, JobState.PREPROCESSING.name, logger)
-    # TODO perform preprocessing
 
     update_job_state(job_id, JobState.PERFORMING_SEGMENTATION.name, logger)
     segmented_nifti_output_file_path = get_temp_file_path_for_job(
@@ -54,11 +53,14 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
     )
 
     # TODO for now just use two of the segments
-    meshes = [generate_mesh(segment, 0) for segment in seperate_segmentation(segmented_array, unique_values=[1,5])]
+    meshes = [
+        generate_mesh(segment, 0)
+        for segment in seperate_segmentation(segmented_array, unique_values=[1, 5])
+    ]
 
     obj_output_path = get_result_file_path_for_job(job_id)
     # TODO do something for colours
-    colours = [[0,0.3,1.0,0.2],[1.0,1.0,0.0,1.0]]
+    colours = [[0, 0.3, 1.0, 0.2], [1.0, 1.0, 0.0, 1.0]]
     # TODO add metadata?
     write_mesh_as_glb(meshes, obj_output_path, colours)
 
@@ -69,4 +71,4 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
 
 
 if __name__ == "__main__":
-    run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    run(sys.argv[1], sys.argv[2], sys.argv[3])

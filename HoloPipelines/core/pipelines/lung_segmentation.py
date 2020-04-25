@@ -37,7 +37,7 @@ this_plid = os.path.basename(__file__).replace(".py", "")
 hu_threshold = 0
 
 
-def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data: dict) -> None:
+def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     logger = get_logger_for_job(job_id)
     update_job_state(job_id, JobState.STARTED.name, logger)
 
@@ -75,4 +75,4 @@ def run(job_id: str, pipeline_metadata: dict, input_endpoint: str, medical_data:
 
 
 if __name__ == "__main__":
-    run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    run(sys.argv[1], sys.argv[2], sys.argv[3])

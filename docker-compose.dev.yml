@@ -37,3 +37,19 @@ services:
     build: ./HoloPipelines/models/dense_vnet_abdominal_ct
     ports:
       - "5000:5000"
+  holosynthaccess-client:
+    build:
+      context: ./HoloSynthAccess 
+      dockerfile: ./client/Dockerfile
+      args:
+        - SYNTH_BACKEND_HOST=http://localhost
+        - SYNTH_BACKEND_PORT=3005
+        - SYNTH_BACKEND_TIMEOUT=15000
+    ports:
+      - "3005:3005"
+  holosynthaccess-server:
+    build:
+      context: ./HoloSynthAccess
+      dockerfile: ./server/Dockerfile
+    ports:
+      - "3006:3006"

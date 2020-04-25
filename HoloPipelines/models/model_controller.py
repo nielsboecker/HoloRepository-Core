@@ -28,7 +28,5 @@ def get_model_dict(modelname: str) -> dict:
     """
     :param modelname: Name of the model as written in models.json
     :return: dict containing the dictionairy for the specified model
-    try:
-        return get_models_dict()[modelname]
-    except:
-        raise Exception("Could not find {} in model.json".format(modelname))
+    """
+    return get_models_dict()[modelname]

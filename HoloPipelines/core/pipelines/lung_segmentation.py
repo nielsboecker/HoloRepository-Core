@@ -49,24 +49,22 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     image_data_np_ndarray = read_dicom_as_np_ndarray_and_normalise(dicom_directory_path)
 
     update_job_state(job_id, JobState.PREPROCESSING.name, logger)
-    nifti_image = convert_dicom_np_ndarray_to_nifti_image(image_data_np_ndarray)
-    downscaled_image = downscale_and_conditionally_crop(nifti_image.dataobj)
-
-    nifti_output_file_path = get_temp_file_path_for_job(job_id, "temp.nii")
-    write_np_array_as_nifti_image(downscaled_image, nifti_output_file_path)
+    # TODO no preprocessing step
 
     update_job_state(job_id, JobState.PERFORMING_SEGMENTATION.name, logger)
-    output_nifti_directory_path = get_temp_file_path_for_job(job_id, "")
-    generated_segmented_lung_nifti_path = perform_lung_segmentation(
-        nifti_output_file_path, output_nifti_directory_path
-    )
+    segmented_lung, segmented_airway = perform_lung_segmentation(image_data_np_ndarray)
 
-    nifti_image_as_np_array = read_nifti_as_np_array(
-        generated_segmented_lung_nifti_path, normalise=True
-    )
+    update_job_state(job_id, JobState.POSTPROCESSING.name, logger)
+    meshes = [
+        generate_mesh(segmented_lung, hu_threshold),
+        generate_mesh(segmented_airway, hu_threshold),
+    ]
+
     obj_output_path = get_result_file_path_for_job(job_id)
-    meshes = [generate_mesh(nifti_image_as_np_array, hu_threshold)]
-    write_mesh_as_glb(meshes, obj_output_path)
+
+    # TODO currently colours are hard coded for airway and lung
+    colours = [[0, 0.3, 1.0, 0.2], [1.0, 1.0, 0.0, 1.0]]
+    write_mesh_as_glb(meshes, obj_output_path, colours)
 
     update_job_state(job_id, JobState.DISPATCHING_OUTPUT.name, logger)
     dispatch_output(job_id, this_plid, medical_data)

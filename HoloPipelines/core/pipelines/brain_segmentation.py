@@ -55,7 +55,7 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     # TODO for now just use two of the segments
     meshes = [
         generate_mesh(segment, 0)
-        for segment in seperate_segmentation(segmented_array, unique_values=[1, 5])
+        for segment in seperate_segmentation(segmented_array, unique_values=[1, 4])
     ]
 
     obj_output_path = get_result_file_path_for_job(job_id)

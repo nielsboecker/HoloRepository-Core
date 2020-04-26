@@ -1,0 +1,21 @@
+.searchAPIContainer { grid-area: searchAPI; }
+.searchLocalContainer { grid-area: searchLocal; }
+.table { grid-area: table; }
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'searchLocal searchAPI '
+    'table table ';
+  grid-gap: 10px;
+  background-color: #746090;
+  padding:10px;
+  grid-template-rows: 1fr 9fr;
+}
+
+.grid-container > div{
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding:5px 0;
+  font-size: 15px;
+}

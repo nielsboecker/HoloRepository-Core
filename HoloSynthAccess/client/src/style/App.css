@@ -1,0 +1,24 @@
+.header-container { grid-area: header; }
+.main-container { grid-area: main; }
+
+
+.canvas {
+  display: grid;
+  grid-template-areas:
+    'header header'
+    'main main ';
+  grid-gap: 1px;
+  background-color: #746090;
+  padding: 1px;
+  height:100vh;
+  width: 100vw;
+  grid-template-rows: 1fr 7fr;
+}
+
+.header-container {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+  height:10vh;
+}

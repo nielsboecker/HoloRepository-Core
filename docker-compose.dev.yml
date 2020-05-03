@@ -43,3 +43,17 @@ services:
     build: ./HoloPipelines/models/brain_segmentation
     ports:
       - "5002:5002"
+  holosynthaccess-client:
+    build:
+      context: ./HoloSynthAccess 
+      dockerfile: ./client/Dockerfile
+    env_file: ./HoloSynthAccess/client/.env.local
+    ports:
+      - "3005:3005"
+  holosynthaccess-server:
+    build:
+      context: ./HoloSynthAccess
+      dockerfile: ./server/Dockerfile
+    env_file: ./HoloSynthAccess/server/.env
+    ports:
+      - "3006:3006"

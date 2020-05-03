@@ -1,6 +1,6 @@
 {
     "contained": {
-        "address": "normal-pelvis-bone.zip",
+        "address": "https://holoblob.blob.core.windows.net/mock-pacs/normal-pelvis-bone.zip",
         "connectionType": {
             "code": "direct-project",
             "system": "http://terminology.hl7.org/CodeSystem/endpoint-connection-type"

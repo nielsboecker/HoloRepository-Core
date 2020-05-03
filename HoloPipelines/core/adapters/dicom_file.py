@@ -4,12 +4,15 @@ This module contains functionality related to reading and transforming DICOM fil
 
 import logging
 import os
+from multiprocessing.pool import ThreadPool
 from typing import List
 
 import SimpleITK as sitk
 import numpy as np
 import pydicom
 import scipy.ndimage
+import pirt.interp
+from numba import njit,jit
 
 
 def read_dicom_dataset(input_directory_path: str) -> List[pydicom.dataset.FileDataset]:
@@ -52,8 +55,18 @@ def read_dicom_pixels_as_np_ndarray(input_file_path: str) -> np.ndarray:
     dicom_name = reader.GetGDCMSeriesFileNames(input_file_path)
     reader.SetFileNames(dicom_name)
 
-    image = reader.Execute()
-    numpy_array_image = sitk.GetArrayFromImage(image)
+    # image = reader.Execute()
+    #
+    # numpy_array_image = sitk.GetArrayFromImage(image)
+    # fixed_numpy_array_image = flip_numpy_array_dimensions(numpy_array_image)
+
+    p = ThreadPool()
+    result = p.map(load_file, dicom_name)
+    p.close()
+    p.join()
+    result = np.asarray(result)
+
+    numpy_array_image = result
     fixed_numpy_array_image = flip_numpy_array_dimensions(numpy_array_image)
 
     return fixed_numpy_array_image
@@ -80,7 +93,6 @@ def flip_numpy_array_dimensions_y_only(array: np.ndarray) -> np.ndarray:
     """
     array = np.flip(array, 1)
     return array
-
 
 def normalise_dicom(dicom_image_array: np.ndarray, input_file_path: str) -> np.ndarray:
     """
@@ -126,12 +138,26 @@ def normalise_dicom(dicom_image_array: np.ndarray, input_file_path: str) -> np.n
     real_resize_factor = new_shape / dicom_image_array.shape
     real_resize_factor = np.flip(real_resize_factor, 0)
 
-    dicom_image_array = scipy.ndimage.interpolation.zoom(
-        dicom_image_array, real_resize_factor
-    )
+    dicom_image_array = normalizetest(dicom_image_array, real_resize_factor)
     logging.info(f"Shape after normalising: {dicom_image_array.shape}")
 
     return dicom_image_array
+
+
+def load_file(path):
+    file_reader = sitk.ImageFileReader()
+    file_reader.SetFileName(path)
+    image = file_reader.Execute()
+    image_np = sitk.GetArrayFromImage(image)
+    return np.squeeze(image_np)
+
+
+
+@jit
+def normalizetest( dicom_image_array, real_resize_factor):
+    return pirt.interp.zoom(
+        dicom_image_array, np.ndarray.tolist(real_resize_factor), order=0
+    )
 
 
 def read_dicom_as_np_ndarray_and_normalise(input_directory_path: str) -> np.ndarray:

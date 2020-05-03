@@ -8,6 +8,7 @@ import logging
 import nibabel
 import numpy as np
 import scipy.ndimage
+import pirt.interp
 
 
 def extract_np_array_from_nifti_image(
@@ -46,6 +47,8 @@ def extract_np_array_from_nifti_image_and_normalise(
         ),
     )
     spacing = np.array(list(spacing))
+    spacing = np.flip(spacing)
+
 
     # calculate resize factor
     new_spacing = [1, 1, 1]
@@ -54,8 +57,8 @@ def extract_np_array_from_nifti_image_and_normalise(
     new_shape = np.round(new_real_shape)
     real_resize_factor = new_shape / image_data_as_np_array.shape[:3]
 
-    image_data_as_np_array = scipy.ndimage.interpolation.zoom(
-        image_data_as_np_array, real_resize_factor
+    image_data_as_np_array = pirt.interp.zoom(
+        image_data_as_np_array,np.ndarray.tolist(real_resize_factor)
     )
 
     logging.info("Shape before resampling\t" + repr(original_shape))

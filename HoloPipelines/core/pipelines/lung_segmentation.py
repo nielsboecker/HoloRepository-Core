@@ -8,15 +8,16 @@ Xinyang Feng, Jie Yang, Andrew F. Laine, Elsa D. Angelini
 """
 
 import os
+import sys
 
 from core.adapters.dicom_file import read_dicom_as_np_ndarray_and_normalise
-from core.adapters.glb_file import convert_obj_to_glb_and_write
+
 from core.adapters.nifti_file import (
     convert_dicom_np_ndarray_to_nifti_image,
     read_nifti_as_np_array,
     write_np_array_as_nifti_image,
 )
-from core.adapters.obj_file import write_mesh_as_obj
+from core.adapters.glb_file import write_mesh_as_glb
 from core.services.marching_cubes import generate_mesh
 from core.services.np_image_manipulation import downscale_and_conditionally_crop
 from core.tasks.shared.dispatch_output import dispatch_output
@@ -48,29 +49,28 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     image_data_np_ndarray = read_dicom_as_np_ndarray_and_normalise(dicom_directory_path)
 
     update_job_state(job_id, JobState.PREPROCESSING.name, logger)
-    nifti_image = convert_dicom_np_ndarray_to_nifti_image(image_data_np_ndarray)
-    downscaled_image = downscale_and_conditionally_crop(nifti_image.dataobj)
-
-    nifti_output_file_path = get_temp_file_path_for_job(job_id, "temp.nii")
-    write_np_array_as_nifti_image(downscaled_image, nifti_output_file_path)
+    # TODO no preprocessing step
 
     update_job_state(job_id, JobState.PERFORMING_SEGMENTATION.name, logger)
-    output_nifti_directory_path = get_temp_file_path_for_job(job_id, "")
-    generated_segmented_lung_nifti_path = perform_lung_segmentation(
-        nifti_output_file_path, output_nifti_directory_path
-    )
-
-    nifti_image_as_np_array = read_nifti_as_np_array(
-        generated_segmented_lung_nifti_path, normalise=False
-    )
-    obj_output_path = get_temp_file_path_for_job(job_id, "temp.obj")
-    verts, faces, norm = generate_mesh(nifti_image_as_np_array, hu_threshold)
-    write_mesh_as_obj(verts, faces, norm, obj_output_path)
+    segmented_lung, segmented_airway = perform_lung_segmentation(image_data_np_ndarray)
 
     update_job_state(job_id, JobState.POSTPROCESSING.name, logger)
-    convert_obj_to_glb_and_write(obj_output_path, get_result_file_path_for_job(job_id))
+    meshes = [
+        generate_mesh(segmented_lung, hu_threshold),
+        generate_mesh(segmented_airway, hu_threshold),
+    ]
+
+    obj_output_path = get_result_file_path_for_job(job_id)
+
+    # TODO currently colours are hard coded for airway and lung
+    colours = [[0, 0.3, 1.0, 0.2], [1.0, 1.0, 0.0, 1.0]]
+    write_mesh_as_glb(meshes, obj_output_path, colours)
 
     update_job_state(job_id, JobState.DISPATCHING_OUTPUT.name, logger)
     dispatch_output(job_id, this_plid, medical_data)
 
     update_job_state(job_id, JobState.FINISHED.name, logger)
+
+
+if __name__ == "__main__":
+    run(sys.argv[1], sys.argv[2], sys.argv[3])

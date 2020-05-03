@@ -17,14 +17,14 @@ from core.adapters.dicom_file import (
     read_dicom_as_np_ndarray_and_normalise,
     flip_numpy_array_dimensions_y_only,
 )
-from core.adapters.glb_file import convert_obj_to_glb_and_write
+
 from core.adapters.nifti_file import (
     convert_dicom_np_ndarray_to_nifti_image,
     read_nifti_as_np_array,
     write_nifti_image,
 )
-from core.adapters.obj_file import write_mesh_as_obj
-from core.clients import niftynet
+from core.adapters.glb_file import write_mesh_as_glb
+from core.clients import http
 from core.services.marching_cubes import generate_mesh
 from core.services.np_image_manipulation import downscale_and_conditionally_crop
 from core.tasks.shared.dispatch_output import dispatch_output
@@ -52,8 +52,9 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     update_job_state(job_id, JobState.READING_INPUT.name, logger)
     dicom_image_array = read_dicom_as_np_ndarray_and_normalise(dicom_directory_path)
     # NOTE: Numpy array is flipped in the Y axis here as this is the specific image input for the NiftyNet model
-    dicom_image_array = flip_numpy_array_dimensions_y_only(dicom_image_array)
+    # dicom_image_array = flip_numpy_array_dimensions_y_only(dicom_image_array)
     crop_dicom_image_array = downscale_and_conditionally_crop(dicom_image_array)
+    crop_dicom_image_array = flip_numpy_array_dimensions_y_only(crop_dicom_image_array)
 
     update_job_state(job_id, JobState.PREPROCESSING.name, logger)
     nifti_image = convert_dicom_np_ndarray_to_nifti_image(crop_dicom_image_array)
@@ -64,7 +65,7 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     segmented_nifti_output_file_path = get_temp_file_path_for_job(
         job_id, "segmented.nii.gz"
     )
-    niftynet.call_model(
+    http.post_file(
         MODEL_ABDOMINAL_SEGMENTATION_HOST,
         MODEL_ABDOMINAL_SEGMENTATION_PORT,
         initial_nifti_output_file_path,
@@ -75,10 +76,10 @@ def run(job_id: str, input_endpoint: str, medical_data: dict) -> None:
     segmented_array = read_nifti_as_np_array(
         segmented_nifti_output_file_path, normalise=False
     )
-    obj_output_path = get_temp_file_path_for_job(job_id, "temp.obj")
-    verts, faces, norm = generate_mesh(segmented_array, hu_threshold)
-    write_mesh_as_obj(verts, faces, norm, obj_output_path)
-    convert_obj_to_glb_and_write(obj_output_path, get_result_file_path_for_job(job_id))
+    obj_output_path = get_result_file_path_for_job(job_id)
+    print(obj_output_path)
+    meshes = [generate_mesh(segmented_array, hu_threshold)]
+    write_mesh_as_glb(meshes, obj_output_path)
 
     update_job_state(job_id, JobState.DISPATCHING_OUTPUT.name, logger)
     dispatch_output(job_id, this_plid, medical_data)

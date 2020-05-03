@@ -1,0 +1,72 @@
+{
+    "brain_segmentation": {
+        "segmentation_dict": {
+            "cortical_gray_matter": 1,
+            "basal_ganglia": 2,
+            "white_matter": 3,
+            "white_matter_lesion": 4,
+            "cerebrospinal_fluid_in_the_extracerebral_space": 5,
+            "ventricles": 6,
+            "cerebellum": 7,
+            "brain_stem": 8,
+            "infarcation": 9,
+            "other": 10
+        },
+        "filetypes": [
+            "directory of DICOM files",
+            "Compressed NIfTI file"
+        ],
+        "required_modalities": [
+            "T2-FLAIR",
+            "T1",
+            "T1-IR"
+        ]
+    },
+    "abdominal_segmentation": {
+        "segmentation_dict": {
+            "spleen": 1,
+            "left_kidney": 2,
+            "gallbladder": 3,
+            "esophagus": 4,
+            "liver": 5,
+            "stomach": 6,
+            "pancreas": 7,
+            "duodenum": 8
+        },
+        "filetypes": [
+            "directory of DICOM files",
+            "Compressed NIfTI file"
+        ]
+    },
+    "kidney_segmentation": {
+        "segmentation_dict": {
+            "kidneys": 1,
+            "kidney_tumour": 2
+        },
+        "filetypes": [
+            "directory of DICOM files",
+            "Compressed NIfTI file"
+        ],
+        "required_modalities": [],
+        "optional_modalities": []
+    },
+    "lung_segmentation": {
+        "segmentation_dict": {
+            "lung": 1,
+            "airway": 2
+        },
+        "filetypes": [
+            "directory of DICOM files",
+            "Compressed NIfTI file"
+        ]
+    },
+    "bone_segmentation": {
+        "segmentation_dict": {
+            "bones": 1
+        },
+        "filetypes": [
+            "directory of DICOM files",
+            "Compressed NIfTI file"
+        ]
+    }
+}

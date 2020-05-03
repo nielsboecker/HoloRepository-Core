@@ -46,9 +46,73 @@
     "title": "Abdominal organs segmentation",
     "description": "This pipeline uses a pre-trained dense VNET neural network to segment abdominal CT scans. The resulting model will provide a segmentation of 8 different organs in the abdominal area.",
     "inputConstraints": [
-      ["Body site", "Abdominal area"],
-      ["Imaging study type", "CT scan"],
-      ["Image resolution", "Any"]
+      [
+        "Body site",
+        "Abdominal area"
+      ],
+      [
+        "Imaging study type",
+        "CT scan"
+      ],
+      [
+        "Image resolution",
+        "Any"
+      ]
+    ],
+    "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
+    "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
+  },
+  "mesh_generation_only": {
+    "plid": "mesh_generation_only",
+    "title": "Mesh generation from existing segmentation file.",
+    "description": "This pipeline only creates a 3D object from an existing 3D segmentation file.",
+    "inputConstraints": [
+      [
+        "Body site",
+        "Any"
+      ],
+      [
+        "Imaging study type",
+        "Any"
+      ]
+    ],
+    "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
+    "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
+  },
+  "kidney_segmentation": {
+    "plid": "kidney_segmentation",
+    "title": "kidney segmentation",
+    "description": "This pipeline uses a pre-trained Unet neural network to segment kidney scans. The resulting model will provide a segmentation of the kidney and kidney tumors.",
+    "inputConstraints": [
+      [
+        "Body site",
+        "Abdominal area"
+      ],
+      [
+        "Imaging study type",
+        "CT scan"
+      ],
+      [
+        "Image resolution",
+        "Any"
+      ]
+    ],
+    "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
+    "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
+  },
+  "brain_segmentation": {
+    "plid": "brain_segmentation",
+    "title": "brain segmentation",
+    "description": "TODO",
+    "inputConstraints": [
+      [
+        "Body site",
+        ""
+      ],
+      [
+        "Imaging study type",
+        "MRI: T1, FLAIR, IR"
+      ]
     ],
     "inputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_input.png",
     "outputExampleImageUrl": "https://holoblob.blob.core.windows.net/test/pipeline_1_output.png"
